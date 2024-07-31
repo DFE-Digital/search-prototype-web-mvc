@@ -1,0 +1,64 @@
+﻿@model Dfe.Data.SearchPrototype.Web.Models.SearchResultsViewModel
+
+@{
+    ViewData["Title"] = "Search Results";
+    var searchKeyWord = ViewBag.SearchQuery as string;
+}
+
+@* search component *@
+<form method="get" action="@Url.Action("Index", "home")">
+    <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
+        <govuk-input-label is-page-heading="true" class="govuk-label--l">Search</govuk-input-label>
+        <govuk-input-hint>Search establishments and check their performance</govuk-input-hint>
+        <govuk-input-suffix style="padding: 0px">
+            <button style="border: none">
+                <svg class="gem-c-search__icon" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                    <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="currentColor" stroke-width="3"></circle>
+                    <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="currentColor" stroke-width="3"></line>
+                </svg>
+            </button>
+        </govuk-input-suffix>
+    </govuk-input>
+</form>
+@* end of search component *@
+
+@* display results *@
+
+@if (Model != null)
+{
+    @if (Model.HasResults)
+    {
+        @* list results component to be inserted as partial view*@
+        <div class="govuk-grid-column-two-thirds">
+            <h3 class="govuk-heading-m">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
+            <hr />
+            <ul style="list-style: none">
+                @foreach (var searchItem in Model.SearchItems!)
+                {
+                    <li>
+                        <h4>
+                            <a href="/">
+                                @searchItem.Name</a>
+                        </h4>
+                    </li>
+                    <li>
+                        <strong>URN:  </strong>@searchItem.Urn
+                    </li>
+                    <li>
+                        <strong>Address: </strong> @searchItem.AddressAsString()
+                    </li>
+                    <li>
+                        <strong>Type of establishment: </strong> @searchItem.EstablishmentType
+                        <hr />
+                    </li>
+                }
+            </ul>
+        </div>
+        @*  end of list component *@
+    }
+    else
+    {
+        <p>Sorry no results found please amend your search criteria</p>
+    }
+}
+@* end of display results *@

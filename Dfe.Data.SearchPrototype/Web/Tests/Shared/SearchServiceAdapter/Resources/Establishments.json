@@ -1,0 +1,41 @@
+{
+  "establishments": [
+
+    {
+      "urn": "123456",
+      "name": "Goose Academy",
+      "address": {
+        "street": "Goose Street",
+        "locality": "Goose Locality",
+        "address3": "Goose Address 3",
+        "town": "Goose Town",
+        "postcode": "GOO OSE"
+      },
+      "establishmentType": "Academy"
+    },
+    {
+      "urn": "234567",
+      "name": "Horse Academy",
+      "address": {
+        "street": "Horse Street",
+        "locality": "Horse Locality",
+        "address3": "Horse Address 3",
+        "town": "Horse Town",
+        "postcode": "HOR SEE"
+      },
+      "establishmentType": "Academy"
+    },
+    {
+      "urn": "345678",
+      "name": "Duck School",
+      "address": {
+        "street": "Duck Street",
+        "locality": "Duck Locality",
+        "address3": "Duck Address 3",
+        "town": "Duck Town",
+        "postcode": "DUU CKK"
+      },
+      "establishmentType": "Community School"
+    }
+  ]
+}
