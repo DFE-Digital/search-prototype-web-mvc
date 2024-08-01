@@ -20,8 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DfE.Data.ComponentLibrary.Infrastructure.CognitiveSearch" Version="2.0.37-beta-CI-20240610-104522" />
-		<PackageReference Include="DfE.Data.ComponentLibrary.CrossCuttingConcerns.Json" Version="2.0.37-beta-CI-20240610-104522" />
+		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.0" />
 		<PackageReference Include="Dfe.Data.SearchPrototype" Version="1.0.0" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.0" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.0" />
