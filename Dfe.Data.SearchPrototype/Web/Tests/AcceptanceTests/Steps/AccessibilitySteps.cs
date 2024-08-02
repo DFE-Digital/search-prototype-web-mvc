@@ -5,14 +5,19 @@ using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests;
 using Dfe.Data.SearchPrototype.Web.Tests.PageObjectModel;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using OpenQA.Selenium.Remote;
+using System.Net.Http;
 using TechTalk.SpecFlow;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
 {
-    [Binding]
+
+        [Binding]
     public sealed class AccessibilitySteps : IClassFixture<WebApplicationFactoryFixture<Program>>
     {
         private readonly AccessibilityOptions _options;
@@ -20,6 +25,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
         private readonly IWebDriverContext _driverContext;
         private readonly SearchPage _searchPage;
         private readonly WebDriverSessionOptions _sessionOptions;
+        private readonly HttpClient _httpClient;
+        private readonly WebApplicationFactoryFixture<Program> _factory;
 
         private Dictionary<string, string> _pageNameToUrlConverter = new Dictionary<string, string>()
         {
@@ -36,7 +43,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
             WebDriverSessionOptions sessionOptions
         )
         {
-            factory.CreateDefaultClient();
+            _factory = factory;
+            _httpClient = _factory.CreateDefaultClient();
 
             _driverContext = driverContext;
             _searchPage = searchPage;
