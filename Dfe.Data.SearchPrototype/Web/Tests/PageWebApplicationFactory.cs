@@ -1,8 +1,8 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Options;
+using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Resources;
-using DfE.Data.ComponentLibrary.Infrastructure.CognitiveSearch.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +34,7 @@ public sealed class PageWebApplicationFactory : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             // remove any services that need overriding with test configuration
-            services.RemoveAll<IOptions<AzureSearchClientOptions>>();
+            services.RemoveAll<IOptions<SearchByKeywordClientOptions>>();
 
             services.RemoveAll<ISearchServiceAdapter>();
 
@@ -47,7 +47,7 @@ public sealed class PageWebApplicationFactory : WebApplicationFactory<Program>
             services.AddOptions<DummySearchServiceAdapterOptions>().Configure(
                 (options) => options.FileName = TestConfiguration["dummySearchServiceAdapter:fileName"]);
 
-            services.AddOptions<AzureSearchClientOptions>().Configure(
+            services.AddOptions<SearchByKeywordClientOptions>().Configure(
                 (options) => options.Credentials = TestConfiguration["azureSearchClientOptions:credentials"]);
 
         });

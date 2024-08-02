@@ -41,7 +41,8 @@ public class EstablishmentTestDouble
             urn: GetEstablishmentIdentifierFake(),
             name: GetEstablishmentNameFake(),
             address: address,
-            establishmentType: GetEstablishmentTypeFake()
+            establishmentType: GetEstablishmentTypeFake(),
+            new EducationPhase("", "", "")
             );
     }
 }
