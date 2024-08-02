@@ -1,49 +1,66 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests.Extensions;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Resources;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests
 {
-    public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint>
-        where TEntryPoint : class
+    /// <summary>
+    /// Factory for bootstrapping the web application in memory for functional end to end tests.
+    /// </summary>
+    /// <typeparam name="TEntryPoint">
+    /// The entry point to use for invoking the system under test.
+    /// </typeparam>
+    public sealed class WebApplicationFactoryFixture<TEntryPoint> :
+        WebApplicationFactory<TEntryPoint> where TEntryPoint : class
     {
-        private const string _LocalhostBaseAddress = "https://localhost";
-        private IWebHost _host;
+        private IHost? _host;
 
-        public string RootUri { get; private set; }
-
-        public WebApplicationFactoryFixture()
+        /// <summary>
+        /// Gives the fixture an opportunity to configure the application before it gets built
+        /// using the default service dependencies and with the prescribed web host url.
+        /// </summary>
+        /// <param name="builder">The <see cref="IWebHostBuilder"/> for the application.</param>
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            ClientOptions.BaseAddress = new Uri(_LocalhostBaseAddress);
-            // Breaking change while migrating from 2.2 to 3.1, TestServer was not called anymore
-            CreateServer(CreateWebHostBuilder());
+            builder.UseUrlsWithAvailablePort();
+            builder.ConfigureServices(services =>
+                ConfigureServices(services));
         }
 
-        protected override TestServer CreateServer(IWebHostBuilder builder)
+        /// <summary>
+        /// Creates the <see cref="IHost"/> with the bootstrapped application in <paramref name="builder"/>.
+        /// This is only called for applications using <see cref="IHostBuilder"/>. The builder sets-up the
+        /// Kestrel web server to be used by the web host.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHostBuilder"/> used to create the host.</param>
+        /// <returns>The <see cref="IHost"/> with the bootstrapped application.</returns>
+        protected override IHost CreateHost(IHostBuilder builder)
         {
-            builder.ConfigureServices(services => ConfigureServices(services));
             _host = builder.Build();
-            _host.Start();
-            RootUri = _host.ServerFeatures.Get<IServerAddressesFeature>().Addresses.LastOrDefault();
-            // not used but needed in the CreateServer method logic
-            return new TestServer(new WebHostBuilder().UseStartup<TEntryPoint>());
+
+            builder.ConfigureWebHost(webHostBuilder =>
+                webHostBuilder.UseKestrel());
+
+            var host = builder.Build();
+            host.Start();
+
+            return _host;
         }
 
-        protected override IWebHostBuilder CreateWebHostBuilder()
-        {
-            var builder = WebHost.CreateDefaultBuilder(Array.Empty<string>());
-            builder.UseStartup<TEntryPoint>();
-            return builder;
-        }
-
+        /// <summary>
+        /// Configures the additional service dependencies we want to
+        /// override, notably the dummy search service adapter.
+        /// </summary>
+        /// <param name="services">
+        /// The contract for a collection of application services.
+        /// </param>
         private void ConfigureServices(IServiceCollection services)
         {
             // Remove registration of the default ISearchServiceAdapter (i.e. CognitiveSearchServiceAdapter).
@@ -71,6 +88,13 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests
                     options.FileName = fileName);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or
+        /// resetting unmanaged resources, in this case the IHost instance.
+        /// </summary>
+        /// <param name="disposing">
+        /// Flag to notify whether GC managed disposal is under way.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -80,54 +104,4 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests
             }
         }
     }
-
-    //public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
-    //{
-    //    public string HostUrl { get; set; } = "http://127.0.0.1:80"; // Default.
-
-    //    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    //    {
-    //        builder.UseUrls(HostUrl);
-    //        builder.ConfigureServices(services => ConfigureServices(services));
-    //    }
-
-    //    protected override IHost CreateHost(IHostBuilder builder)
-    //    {
-    //        IHost testHost = builder.Build();
-
-    //        builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-
-    //        var host = builder.Build();
-    //        host.Start();
-
-    //        return testHost;
-    //    }
-
-    //    private void ConfigureServices(IServiceCollection services)
-    //    {
-    //        // Remove registration of the default ISearchServiceAdapter (i.e. CognitiveSearchServiceAdapter).
-    //        var searchServiceAdapterDescriptor =
-    //                services.SingleOrDefault(
-    //                    serviceDescriptor => serviceDescriptor.ServiceType ==
-    //                        typeof(ISearchServiceAdapter));
-
-    //        services.Remove(searchServiceAdapterDescriptor!);
-
-    //        // Register our dummy search service adapter.
-    //        services.AddSingleton<IJsonFileLoader, JsonFileLoader>();
-    //        services.AddScoped(
-    //            typeof(ISearchServiceAdapter),
-    //            typeof(DummySearchServiceAdapter<Infrastructure.Establishment>));
-
-    //        string fileName =
-    //            new ConfigurationBuilder()
-    //                    .SetBasePath(Directory.GetCurrentDirectory())
-    //                        .AddJsonFile("appsettings.test.json", false)
-    //                            .Build()["dummySearchServiceAdapter:fileName"]!;
-
-    //        services.AddOptions<DummySearchServiceAdapterOptions>()
-    //            .Configure((options) =>
-    //                options.FileName = fileName);
-    //    }
-    //}
 }
