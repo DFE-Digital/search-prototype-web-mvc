@@ -34,6 +34,8 @@ builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEst
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Establishment>, AzureSearchResultToEstablishmentMapper>();
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, EducationPhase>, AzureSearchResultToEducationPhaseMapper>();
 
+
+
 builder.Services.AddSingleton<IMapper<EstablishmentResults, SearchByKeywordResponse>, ResultsToResponseMapper>();
 
 builder.Services.AddOptions<SearchSettingsOptions>("establishments")

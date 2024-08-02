@@ -1,4 +1,7 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Microsoft.AspNetCore.Http;
+
+namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
 /// A view model representation of a single search result.
@@ -21,6 +24,15 @@ public class EstablishmentViewModel
     /// Establishment type.
     /// </summary>
     public string EstablishmentType {  get; init; } = string.Empty;
+    /// <summary>
+    /// Establishment status code.
+    /// </summary>
+    public StatusCode EstablishmentStatusCode { get; init; }
+    /// <summary>
+    /// Establishment status displayed as user friendly string
+    /// </summary>
+    public string EstablishmentStatusAsString =>
+        EstablishmentStatusCode == StatusCode.Open ? "Open" : EstablishmentStatusCode == StatusCode.Closed ? "Closed" : "Unknown";
     /// <summary>
     /// Establishment address.
     /// </summary>

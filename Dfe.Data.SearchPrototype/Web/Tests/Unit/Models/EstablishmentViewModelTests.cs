@@ -1,4 +1,5 @@
-﻿using Dfe.Data.SearchPrototype.Web.Models;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using FluentAssertions;
 using Xunit;
@@ -52,4 +53,19 @@ public class EstablishmentViewModelTests
         result.Should().Be(expected);
     }
 
+    [Theory]
+    [InlineData(StatusCode.Open, "Open")]
+    [InlineData(StatusCode.Closed, "Closed")]
+    [InlineData(StatusCode.Unknown, "Unknown")]
+    public void EstablishmentStatusAsString_ReturnsOpen(StatusCode statusCode, string expected)
+    {
+        EstablishmentViewModel establishmentViewModel = new()
+        {
+            Urn = EstablishmentViewModelTestDouble.GetEstablishmentIdentifierFake(),
+            Name = EstablishmentViewModelTestDouble.GetEstablishmentNameFake(),
+            EstablishmentStatusCode = statusCode
+        };
+        var result = establishmentViewModel.EstablishmentStatusAsString;
+        result.Should().Be(expected);
+    }
 }
