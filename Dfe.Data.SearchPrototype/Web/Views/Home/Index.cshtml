@@ -38,7 +38,8 @@
                     <li>
                         <h4>
                             <a href="/">
-                                @searchItem.Name</a>
+                                @searchItem.Name
+                            </a>
                         </h4>
                     </li>
                     <li>
@@ -49,12 +50,15 @@
                     </li>
                     <li>
                         <strong>Type of establishment: </strong> @searchItem.EstablishmentType
-                        
                     </li>
                     <li>
                         <strong>Status: </strong> @searchItem.EstablishmentStatusAsString
+                    </li>
+                    <li>
+                        <strong>Education phase: </strong> @searchItem.EducationPhaseAsString
                         <hr />
                     </li>
+
                 }
             </ul>
         </div>
