@@ -31,24 +31,33 @@ public class EstablishmentViewModelTests
         result.Should().Be(expected);
     }
 
-    [Fact]
-    public void AddressAsString_NullLocality_ReturnsFormattedString()
+    [Theory]
+    [InlineData(null, "fakeLocality", "", "fakeTown", "FakePostCode", "fakeLocality, fakeTown, FakePostCode")]
+    [InlineData(null, "", null, "fakeTown", "FakePostCode", "fakeTown, FakePostCode")]
+    [InlineData("fakeStreet", null, "", null, "FakePostCode", "fakeStreet, FakePostCode")]
+    [InlineData("", null, null, null, null, "")]
+    [InlineData(null, null, null, null, null, "")]
+    public void AddressAsString_NullAddressValues_ReturnsFormattedString(
+         string street, string locality, string address3, string town, string postcode, string expectedString)
     {
+        // arrange
         EstablishmentViewModel establishmentViewModel = new()
         {
             Urn = EstablishmentViewModelTestDouble.GetEstablishmentIdentifierFake(),
             Name = EstablishmentViewModelTestDouble.GetEstablishmentNameFake(),
             Address = new()
             {
-                Street = "street",
-                Address3 = "address3",
-                Town = "town",
-                Postcode = "postcode",
+                Street = street,
+                Locality = locality,
+                Address3 = address3,
+                Town = town,
+                Postcode = postcode
             }
         };
-        var expected = "street, address3, town, postcode";
+        var expected = expectedString;
+        // act
         var result = establishmentViewModel.AddressAsString();
-
+        // assert
         Assert.Equal(expected, result);
         result.Should().Be(expected);
     }
