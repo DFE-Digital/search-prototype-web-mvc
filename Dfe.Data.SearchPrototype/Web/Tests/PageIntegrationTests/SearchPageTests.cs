@@ -55,7 +55,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             document.GetElementText(SearchPage.SearchHeading.Criteria).Should().Be("Search");
             
-            document.GetElementText(SearchPage.SearchSubHeading.Criteria).Should().Be("Search establishments and check their performance");
+            document.GetElementText(SearchPage.SearchSubHeading.Criteria).Should().Be("Search establishments");
             
             document.GetMultipleElements(SearchPage.SearchInput.Criteria).Count().Should().Be(1);
             
