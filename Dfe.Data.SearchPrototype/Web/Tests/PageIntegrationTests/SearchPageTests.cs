@@ -29,7 +29,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         [Fact]
         public async Task Search_Title_IsDisplayed()
         {
-            var response = await _factory.CreateClient().GetAsync(uri);
+            var response = await _client.GetAsync(uri);
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
@@ -39,7 +39,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         [Fact]
         public async Task Header_Link_IsDisplayed()
         {
-            var response = await _factory.CreateClient().GetAsync(uri);
+            var response = await _client.GetAsync(uri);
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
@@ -49,13 +49,13 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         [Fact]
         public async Task Search_Establishment_IsDisplayed() 
         {
-            var response = await _factory.CreateClient().GetAsync(uri);
+            var response = await _client.GetAsync(uri);
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
             document.GetElementText(SearchPage.SearchHeading.Criteria).Should().Be("Search");
             
-            document.GetElementText(SearchPage.SearchSubHeading.Criteria).Should().Be("Search establishments and check their performance");
+            document.GetElementText(SearchPage.SearchSubHeading.Criteria).Should().Be("Search establishments");
             
             document.GetMultipleElements(SearchPage.SearchInput.Criteria).Count().Should().Be(1);
             
@@ -65,10 +65,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         [Fact]
         public async Task Search_ByName_ReturnsSingleResult()
         {
-            var response = await _factory.CreateClient().GetAsync(uri);
+            var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
+            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
             var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
             var formResponse = await _client.SendAsync(
@@ -93,7 +93,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         [Fact]
         public async Task Search_ByName_ReturnsMultipleResults()
         {
-            var response = await _factory.CreateClient().GetAsync(uri);
+            var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
             var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
@@ -123,7 +123,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         [InlineData("boo")]
         public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
         {
-            var response = await _factory.CreateClient().GetAsync(uri);
+            var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
             var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");

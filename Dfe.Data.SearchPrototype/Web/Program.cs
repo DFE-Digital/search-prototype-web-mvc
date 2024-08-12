@@ -33,14 +33,11 @@ builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsView
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Address>, AzureSearchResultToAddressMapper>();
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Establishment>, AzureSearchResultToEstablishmentMapper>();
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, EducationPhase>, AzureSearchResultToEducationPhaseMapper>();
-
 builder.Services.AddSingleton<IMapper<EstablishmentResults, SearchByKeywordResponse>, ResultsToResponseMapper>();
-
 builder.Services.AddOptions<SearchSettingsOptions>("establishments")
     .Configure<IConfiguration>(
         (settings, configuration) =>
             configuration.GetSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
-
 builder.Services.AddScoped<ISearchOptionsFactory, SearchOptionsFactory>();
 //
 //

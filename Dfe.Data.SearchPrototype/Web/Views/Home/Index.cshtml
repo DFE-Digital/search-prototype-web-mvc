@@ -9,7 +9,7 @@
 <form method="get" action="@Url.Action("Index", "home")">
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l">Search</govuk-input-label>
-        <govuk-input-hint>Search establishments and check their performance</govuk-input-hint>
+        <govuk-input-hint>Search establishments</govuk-input-hint>
         <govuk-input-suffix style="padding: 0px">
             <button style="border: none">
                 <svg class="gem-c-search__icon" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -38,7 +38,8 @@
                     <li>
                         <h4>
                             <a href="/">
-                                @searchItem.Name</a>
+                                @searchItem.Name
+                            </a>
                         </h4>
                     </li>
                     <li>
@@ -49,8 +50,15 @@
                     </li>
                     <li>
                         <strong>Type of establishment: </strong> @searchItem.EstablishmentType
+                    </li>
+                    <li>
+                        <strong>Status: </strong> @searchItem.EstablishmentStatusAsString
+                    </li>
+                    <li>
+                        <strong>Education phase: </strong> @searchItem.EducationPhaseAsString
                         <hr />
                     </li>
+
                 }
             </ul>
         </div>

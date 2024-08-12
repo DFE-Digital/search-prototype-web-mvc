@@ -32,7 +32,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
                         (string)establishmentToken["address"]!["town"]!,
                         (string)establishmentToken["address"]!["postcode"]!),
                     (string)establishmentToken["establishmentType"]!,
-                    new EducationPhase("", "", ""));
+                    new EducationPhase(
+                        (string)establishmentToken["educationPhase"]!["isPrimary"]!, 
+                        (string)establishmentToken["educationPhase"]!["isSecondary"]!,
+                        (string)establishmentToken["educationPhase"]!["isPost16"]!),
+                    establishmentStatusCode : StatusCode.Closed)  ;
 
             return new EstablishmentResults(establishments);
         }
