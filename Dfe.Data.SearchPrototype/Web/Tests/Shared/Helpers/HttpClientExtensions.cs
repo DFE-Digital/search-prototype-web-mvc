@@ -1,5 +1,4 @@
 ﻿using AngleSharp.Html.Dom;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers
