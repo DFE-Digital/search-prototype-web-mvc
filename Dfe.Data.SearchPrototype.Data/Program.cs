@@ -18,7 +18,7 @@ class Program
         //Azure Cognitive Search service details
         string serviceName = "s123d01-aisearch";
         string apiKey = "";
-        string indexName = "test-index";
+        string indexName = "establishments";
         string filePath = @"C:\SearchPrototypeData\GIASextract\edubasealldata20240807.csv";
         var records = new List<dynamic>();
 
@@ -50,14 +50,12 @@ class Program
                         ESTABLISHMENTNAME = record.EstablishmentName,
                         TOWN = record.Town,
                         TYPEOFESTABLISHMENTNAME = record.TypeOfEstablishmentName,
-                        ISPRIMARY = "",
-                        ISSECONDARY = "",
-                        ISPOST16 = "",
                         STREET = record.Street,
                         LOCALITY = record.Locality,
                         ADDRESS3 = record.Address3,
                         POSTCODE = record.Postcode,
-                        ESTABLISHMENTSTATUSCODE = record.EstablishmentStatusCode
+                        ESTABLISHMENTSTATUSCODE = record.EstablishmentStatusCode,
+                        PHASEOFEDUCATION = record.PhaseOfEducation,
                     })
                 };
 

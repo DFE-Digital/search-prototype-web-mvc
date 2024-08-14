@@ -34,7 +34,7 @@ builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsView
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Address>, AzureSearchResultToAddressMapper>();
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Models.Establishment>, AzureSearchResultToEstablishmentMapper>();
 builder.Services.AddSingleton<IMapper<EstablishmentResults, SearchByKeywordResponse>, ResultsToResponseMapper>();
-builder.Services.AddOptions<SearchSettingsOptions>("test-index")
+builder.Services.AddOptions<SearchSettingsOptions>("establishments")
     .Configure<IConfiguration>(
         (settings, configuration) =>
             configuration.GetRequiredSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
