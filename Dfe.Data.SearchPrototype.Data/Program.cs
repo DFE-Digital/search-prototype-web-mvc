@@ -54,7 +54,7 @@ class Program
                         LOCALITY = record.Locality,
                         ADDRESS3 = record.Address3,
                         POSTCODE = record.Postcode,
-                        ESTABLISHMENTSTATUSCODE = record.EstablishmentStatusCode,
+                        ESTABLISHMENTSTATUSNAME = record.EstablishmentStatusName,
                         PHASEOFEDUCATION = record.PhaseOfEducation,
                     })
                 };
