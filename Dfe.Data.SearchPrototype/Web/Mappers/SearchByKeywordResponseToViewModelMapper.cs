@@ -44,7 +44,7 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
                     },
                     PhaseOfEducation = establishment.PhaseOfEducation,
                     EstablishmentType = establishment.EstablishmentType,
-                    EstablishmentStatusCode = establishment.EstablishmentStatusCode
+                    EstablishmentStatusName = establishment.EstablishmentStatusName
                 });
             }
         }

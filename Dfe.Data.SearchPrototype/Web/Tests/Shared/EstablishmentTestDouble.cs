@@ -32,8 +32,8 @@ public class EstablishmentTestDouble
     private static string GetEstablishmentTypeFake() =>
         new Faker().Random.Word();
 
-    private static EstablishmentStatusCode GetEstablishmentStatusCodeFake() =>
-       (EstablishmentStatusCode)new Faker().Random.Int(0, 1);
+    private static string GetEstablishmentStatusNameFake() =>
+       new Faker().Random.Word();
 
     public static Establishment Create()
     {
@@ -50,7 +50,7 @@ public class EstablishmentTestDouble
             address: address,
             establishmentType: GetEstablishmentTypeFake(),
             phaseOfEducation: GetEstablishmentPhaseOfEducationFake(),
-            establishmentStatusCode: GetEstablishmentStatusCodeFake()
+            establishmentStatusName: GetEstablishmentStatusNameFake()
 
             );
     }

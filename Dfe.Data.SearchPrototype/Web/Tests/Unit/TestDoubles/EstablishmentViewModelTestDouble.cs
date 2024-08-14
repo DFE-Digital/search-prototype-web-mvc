@@ -27,6 +27,8 @@ public static class EstablishmentViewModelTestDouble
         new Faker().Address.ZipCode();
     private static string GetEstablishmentPhaseOfEducation() =>
         new Faker().Random.Word();
+    private static string GetEstablishmentStatusNameFake() =>
+       new Faker().Random.Word();
     public static EstablishmentViewModel Create()
     {
         return new()
@@ -41,7 +43,8 @@ public static class EstablishmentViewModelTestDouble
                 Address3 = GetEstablishmentAddress3Fake(),
                 Town = GetEstablishmentTownFake(),
                 Postcode = GetEstablishmentPostcodeFake()
-            }
+            },
+            EstablishmentStatusName = GetEstablishmentStatusNameFake()
         };
     }
 }

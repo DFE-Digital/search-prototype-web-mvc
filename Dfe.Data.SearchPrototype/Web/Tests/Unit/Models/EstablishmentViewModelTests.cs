@@ -62,20 +62,4 @@ public class EstablishmentViewModelTests
         Assert.Equal(expected, result);
         result.Should().Be(expected);
     }
-
-    [Theory]
-    [InlineData(EstablishmentStatusCode.Open, "Open")]
-    [InlineData(EstablishmentStatusCode.Closed, "Closed")]
-    [InlineData(EstablishmentStatusCode.Unknown, "Unknown")]
-    public void EstablishmentStatusAsString_ReturnsOpen(EstablishmentStatusCode statusCode, string expected)
-    {
-        EstablishmentViewModel establishmentViewModel = new()
-        {
-            Urn = EstablishmentViewModelTestDouble.GetEstablishmentIdentifierFake(),
-            Name = EstablishmentViewModelTestDouble.GetEstablishmentNameFake(),
-            EstablishmentStatusCode = statusCode
-        };
-        var result = establishmentViewModel.EstablishmentStatusAsString;
-        result.Should().Be(expected);
-    }
 }

@@ -32,12 +32,7 @@ public class EstablishmentViewModel
     /// <summary>
     /// Establishment status code.
     /// </summary>
-    public EstablishmentStatusCode EstablishmentStatusCode { get; init; }
-    /// <summary>
-    /// Establishment status displayed as user friendly string
-    /// </summary>
-    public string EstablishmentStatusAsString =>
-        EstablishmentStatusCode == EstablishmentStatusCode.Open ? "Open" : EstablishmentStatusCode == EstablishmentStatusCode.Closed ? "Closed" : "Unknown";
+    public string EstablishmentStatusName { get; init; } = string.Empty;
     /// <summary>
     /// Establishment address.
     /// </summary>
