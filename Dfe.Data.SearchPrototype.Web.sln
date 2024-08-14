@@ -15,6 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{817BDDF4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Data.SearchPrototype.Web.Tests", "Dfe.Data.SearchPrototype\Web\Tests\Dfe.Data.SearchPrototype.Web.Tests.csproj", "{727282C5-F3A8-454B-9B2B-0F3CAFDCD608}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Data.SearchPrototype.Data", "Dfe.Data.SearchPrototype.Data\Dfe.Data.SearchPrototype.Data.csproj", "{E1359E8C-EC11-4051-81CE-57D2371813A0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44BD67B1-6B75-4D49-923E-617098401C78} = {44BD67B1-6B75-4D49-923E-617098401C78}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +34,10 @@ Global
 		{727282C5-F3A8-454B-9B2B-0F3CAFDCD608}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{727282C5-F3A8-454B-9B2B-0F3CAFDCD608}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{727282C5-F3A8-454B-9B2B-0F3CAFDCD608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1359E8C-EC11-4051-81CE-57D2371813A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1359E8C-EC11-4051-81CE-57D2371813A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1359E8C-EC11-4051-81CE-57D2371813A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1359E8C-EC11-4051-81CE-57D2371813A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
