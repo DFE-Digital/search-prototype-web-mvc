@@ -32,9 +32,7 @@ public class SearchByKeywordResponseToViewModelMapperTests
             Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].Address.Town, viewModelResults.SearchItems[i].Address.Town);
             Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].Address.Postcode, viewModelResults.SearchItems[i].Address.Postcode);
             Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].EstablishmentType, viewModelResults.SearchItems[i].EstablishmentType);
-            Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].EducationPhase.IsPrimary, viewModelResults.SearchItems[i].EducationPhase.IsPrimary);
-            Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].EducationPhase.IsSecondary, viewModelResults.SearchItems[i].EducationPhase.IsSecondary);
-            Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].EducationPhase.IsPost16, viewModelResults.SearchItems[i].EducationPhase.IsPost16);
+            Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].PhaseOfEducation, viewModelResults.SearchItems[i].PhaseOfEducation);
             Assert.Equal(establishmentResults.EstablishmentResults.ToList()[i].EstablishmentStatusCode, viewModelResults.SearchItems[i].EstablishmentStatusCode);
 
         }

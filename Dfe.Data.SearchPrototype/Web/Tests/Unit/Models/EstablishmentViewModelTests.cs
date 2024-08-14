@@ -1,4 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using FluentAssertions;
@@ -63,10 +64,10 @@ public class EstablishmentViewModelTests
     }
 
     [Theory]
-    [InlineData(StatusCode.Open, "Open")]
-    [InlineData(StatusCode.Closed, "Closed")]
-    [InlineData(StatusCode.Unknown, "Unknown")]
-    public void EstablishmentStatusAsString_ReturnsOpen(StatusCode statusCode, string expected)
+    [InlineData(EstablishmentStatusCode.Open, "Open")]
+    [InlineData(EstablishmentStatusCode.Closed, "Closed")]
+    [InlineData(EstablishmentStatusCode.Unknown, "Unknown")]
+    public void EstablishmentStatusAsString_ReturnsOpen(EstablishmentStatusCode statusCode, string expected)
     {
         EstablishmentViewModel establishmentViewModel = new()
         {
@@ -75,32 +76,6 @@ public class EstablishmentViewModelTests
             EstablishmentStatusCode = statusCode
         };
         var result = establishmentViewModel.EstablishmentStatusAsString;
-        result.Should().Be(expected);
-    }
-
-    [Theory]
-    [InlineData(true, true, true, "Primary, Secondary, 16 plus")]
-    [InlineData(false, true, true, "Secondary, 16 plus")]
-    [InlineData(true, false, false, "Primary")]
-    [InlineData(false, true, false, "Secondary")]
-    [InlineData(false, false, true, "16 plus")]
-    [InlineData(false, false, false, "")]
-    public void EducationPhaseAsString_ReturnsFormattedString(bool isPrimary, bool isSecondary, bool isPost16, string expected)
-    {
-        EstablishmentViewModel establishmentViewModel = new()
-        {
-            Urn = EstablishmentViewModelTestDouble.GetEstablishmentIdentifierFake(),
-            Name = EstablishmentViewModelTestDouble.GetEstablishmentNameFake(),
-            EducationPhase = new()
-            {
-                IsPrimary = isPrimary,
-                IsSecondary = isSecondary,
-                IsPost16 = isPost16
-            }
-        };
-
-        var result = establishmentViewModel.EducationPhaseAsString;
-
         result.Should().Be(expected);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Resources;
 using Newtonsoft.Json.Linq;
 
@@ -32,11 +33,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
                         (string)establishmentToken["address"]!["town"]!,
                         (string)establishmentToken["address"]!["postcode"]!),
                     (string)establishmentToken["establishmentType"]!,
-                    new EducationPhase(
-                        (string)establishmentToken["educationPhase"]!["isPrimary"]!, 
-                        (string)establishmentToken["educationPhase"]!["isSecondary"]!,
-                        (string)establishmentToken["educationPhase"]!["isPost16"]!),
-                    establishmentStatusCode : StatusCode.Closed)  ;
+                        (string)establishmentToken["phaseOfEducation"]!,
+                    establishmentStatusCode : EstablishmentStatusCode.Closed);
 
             return new EstablishmentResults(establishments);
         }

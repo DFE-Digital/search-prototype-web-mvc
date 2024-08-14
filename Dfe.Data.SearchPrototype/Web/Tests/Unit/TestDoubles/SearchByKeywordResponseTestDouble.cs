@@ -1,4 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;

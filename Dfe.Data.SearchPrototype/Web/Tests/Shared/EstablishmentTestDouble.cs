@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
@@ -26,13 +27,13 @@ public class EstablishmentTestDouble
     private static string GetEstablishmentPostcodeFake() =>
         new Faker().Address.ZipCode();
 
-    private static string GetEstablishmentEducationPhaseFake() =>
-       new Faker().Random.Int(0, 1).ToString();
+    private static string GetEstablishmentPhaseOfEducationFake() =>
+       new Faker().Random.Word();
     private static string GetEstablishmentTypeFake() =>
         new Faker().Random.Word();
 
-    private static StatusCode GetEstablishmentStatusCodeFake() =>
-       (StatusCode)new Faker().Random.Int(0, 1);
+    private static EstablishmentStatusCode GetEstablishmentStatusCodeFake() =>
+       (EstablishmentStatusCode)new Faker().Random.Int(0, 1);
 
     public static Establishment Create()
     {
@@ -43,17 +44,12 @@ public class EstablishmentTestDouble
             town: GetEstablishmentTownFake(),
             postcode: GetEstablishmentPostcodeFake());
 
-        EducationPhase educationPhase = new(
-           isPrimary: GetEstablishmentEducationPhaseFake(),
-           isSecondary: GetEstablishmentEducationPhaseFake(),
-           isPost16: GetEstablishmentEducationPhaseFake());
-
         return new(
             urn: GetEstablishmentIdentifierFake(),
             name: GetEstablishmentNameFake(),
             address: address,
             establishmentType: GetEstablishmentTypeFake(),
-            educationPhase: educationPhase,
+            phaseOfEducation: GetEstablishmentPhaseOfEducationFake(),
             establishmentStatusCode: GetEstablishmentStatusCodeFake()
 
             );

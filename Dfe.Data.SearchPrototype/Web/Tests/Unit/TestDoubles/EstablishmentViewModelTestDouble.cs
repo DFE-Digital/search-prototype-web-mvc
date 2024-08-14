@@ -25,13 +25,15 @@ public static class EstablishmentViewModelTestDouble
 
     private static string GetEstablishmentPostcodeFake() =>
         new Faker().Address.ZipCode();
-
+    private static string GetEstablishmentPhaseOfEducation() =>
+        new Faker().Random.Word();
     public static EstablishmentViewModel Create()
     {
         return new()
         {
             Urn = GetEstablishmentIdentifierFake(),
             Name = GetEstablishmentNameFake(),
+            PhaseOfEducation = GetEstablishmentPhaseOfEducation(),
             Address = new()
             {
                 Street = GetEstablishmentStreetFake(),
