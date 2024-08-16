@@ -19,6 +19,6 @@ public static class SearchByKeywordResponseTestDouble
 
     public static SearchByKeywordResponse CreateWithNoResults()
     {
-        return new SearchByKeywordResponse(null);
+        return new SearchByKeywordResponse(null!);
     }
 }
