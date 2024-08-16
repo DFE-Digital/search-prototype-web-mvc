@@ -14,6 +14,7 @@ using GovUk.Frontend.AspNetCore;
 using SearchForEstablishments = Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Infrastructure = Dfe.Data.SearchPrototype.Infrastructure;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,14 +31,13 @@ builder.Services.AddScoped<IUseCase<SearchByKeywordRequest, SearchByKeywordRespo
 builder.Services.AddSingleton(typeof(IMapper<Response<SearchResults<Infrastructure.Establishment>>, EstablishmentResults>), typeof(AzureSearchResponseToEstablishmentResultMapper));
 builder.Services.AddSingleton<IMapper<SearchSettingsOptions, SearchOptions>, SearchOptionsToAzureOptionsMapper>();
 builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsViewModel>, SearchByKeywordResponseToViewModelMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Address>, AzureSearchResultToAddressMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Establishment>, AzureSearchResultToEstablishmentMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, EducationPhase>, AzureSearchResultToEducationPhaseMapper>();
+builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Address>, AzureSearchResultToAddressMapper>();
+builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Models.Establishment>, AzureSearchResultToEstablishmentMapper>();
 builder.Services.AddSingleton<IMapper<EstablishmentResults, SearchByKeywordResponse>, ResultsToResponseMapper>();
 builder.Services.AddOptions<SearchSettingsOptions>("establishments")
     .Configure<IConfiguration>(
         (settings, configuration) =>
-            configuration.GetSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
+            configuration.GetRequiredSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
 builder.Services.AddScoped<ISearchOptionsFactory, SearchOptionsFactory>();
 //
 //
