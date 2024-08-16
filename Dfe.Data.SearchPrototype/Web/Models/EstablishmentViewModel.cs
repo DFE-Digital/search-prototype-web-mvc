@@ -1,5 +1,4 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
-using Microsoft.AspNetCore.Http;
 
 namespace Dfe.Data.SearchPrototype.Web.Models;
 
