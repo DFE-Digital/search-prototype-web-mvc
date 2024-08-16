@@ -7,7 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Data.SearchPrototype.We
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{817BDDF4-CC85-4533-ABC3-61794642A991}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\Dfe.Data.Common.Infrastructure.CognitiveSearch.1.0.0.nupkg = NuGet\Dfe.Data.Common.Infrastructure.CognitiveSearch.1.0.0.nupkg
 		NuGet\Dfe.Data.SearchPrototype.1.0.0.nupkg = NuGet\Dfe.Data.SearchPrototype.1.0.0.nupkg
 		NuGet\Dfe.Data.SearchPrototype.Common.1.0.0.nupkg = NuGet\Dfe.Data.SearchPrototype.Common.1.0.0.nupkg
 		NuGet\Dfe.Data.SearchPrototype.Infrastructure.1.0.0.nupkg = NuGet\Dfe.Data.SearchPrototype.Infrastructure.1.0.0.nupkg
