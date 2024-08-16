@@ -5,13 +5,6 @@ VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Data.SearchPrototype.Web", "Dfe.Data.SearchPrototype\Web\Dfe.Data.SearchPrototype.Web.csproj", "{44BD67B1-6B75-4D49-923E-617098401C78}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{817BDDF4-CC85-4533-ABC3-61794642A991}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Dfe.Data.SearchPrototype.1.0.0.nupkg = NuGet\Dfe.Data.SearchPrototype.1.0.0.nupkg
-		NuGet\Dfe.Data.SearchPrototype.Common.1.0.0.nupkg = NuGet\Dfe.Data.SearchPrototype.Common.1.0.0.nupkg
-		NuGet\Dfe.Data.SearchPrototype.Infrastructure.1.0.0.nupkg = NuGet\Dfe.Data.SearchPrototype.Infrastructure.1.0.0.nupkg
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Data.SearchPrototype.Web.Tests", "Dfe.Data.SearchPrototype\Web\Tests\Dfe.Data.SearchPrototype.Web.Tests.csproj", "{727282C5-F3A8-454B-9B2B-0F3CAFDCD608}"
 EndProject
 Global
