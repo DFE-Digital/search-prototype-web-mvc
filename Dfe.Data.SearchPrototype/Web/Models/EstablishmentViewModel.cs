@@ -26,23 +26,11 @@ public class EstablishmentViewModel
     /// <summary>
     /// Establishment education phase
     /// </summary>
-    public EducationPhaseViewModel EducationPhase { get; init; } = new();
-    /// <summary>
-    /// Establishment education phase
-    /// </summary>
-    /// <returns>
-    /// Education phase formatted as a display-friendly string
-    /// </returns>
-    public string EducationPhaseAsString => EducationPhase.EducationPhaseAsString();
+    public string PhaseOfEducation { get; init; } = string.Empty;
     /// <summary>
     /// Establishment status code.
     /// </summary>
-    public StatusCode EstablishmentStatusCode { get; init; }
-    /// <summary>
-    /// Establishment status displayed as user friendly string
-    /// </summary>
-    public string EstablishmentStatusAsString =>
-        EstablishmentStatusCode == StatusCode.Open ? "Open" : EstablishmentStatusCode == StatusCode.Closed ? "Closed" : "Unknown";
+    public string EstablishmentStatusName { get; init; } = string.Empty;
     /// <summary>
     /// Establishment address.
     /// </summary>

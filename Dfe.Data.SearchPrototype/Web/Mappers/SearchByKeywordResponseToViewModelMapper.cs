@@ -42,15 +42,9 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
                         Address3 = establishment.Address.Address3,
                         Postcode = establishment.Address.Postcode
                     },
-                    EducationPhase = new EducationPhaseViewModel()
-                    {
-                        IsPrimary = establishment.EducationPhase.IsPrimary,
-                        IsSecondary = establishment.EducationPhase.IsSecondary,
-                        IsPost16 = establishment.EducationPhase.IsPost16
-                    },
-
+                    PhaseOfEducation = establishment.PhaseOfEducation,
                     EstablishmentType = establishment.EstablishmentType,
-                    EstablishmentStatusCode = establishment.EstablishmentStatusCode
+                    EstablishmentStatusName = establishment.EstablishmentStatusName
                 });
             }
         }

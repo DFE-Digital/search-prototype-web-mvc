@@ -1,4 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
@@ -18,6 +19,6 @@ public static class SearchByKeywordResponseTestDouble
 
     public static SearchByKeywordResponse CreateWithNoResults()
     {
-        return new SearchByKeywordResponse(null);
+        return new SearchByKeywordResponse(null!);
     }
 }
