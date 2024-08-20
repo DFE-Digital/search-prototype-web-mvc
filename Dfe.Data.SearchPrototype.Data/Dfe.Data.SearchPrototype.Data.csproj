@@ -9,8 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.0.1" />
-    <PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.0" />
-    <PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
