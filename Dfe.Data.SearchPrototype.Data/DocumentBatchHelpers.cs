@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Dfe.Data.SearchPrototype.Data.Configuration;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace Dfe.Data.SearchPrototype.Data;
@@ -38,14 +39,19 @@ class DocumentBatchHelpers
     }
 
 
-    public static async Task SendBatchToSearchService(string serviceName, string apiKey, string indexName, string json)
+    public static async Task SendBatchToSearchService(AzureSearchServiceDetails searchDetails, string json)
     {
-        var requestUri = $"https://{serviceName}.search.windows.net/indexes/{indexName}/docs/index?api-version=2020-06-30";
+        if (!searchDetails.IsValidServiceConfiguration)
+        {
+            throw new InvalidOperationException("Search details configuration missing");
+        }
+
+        var requestUri = $"https://{searchDetails.ServiceName}.search.windows.net/indexes/{searchDetails.IndexName}/docs/index?api-version=2020-06-30";
         var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
         {
             Content = new StringContent(json, Encoding.UTF8, "application/json")
         };
-        request.Headers.Add("api-key", apiKey);
+        request.Headers.Add("api-key", searchDetails.ApiKey);
 
         try
         {

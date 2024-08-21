@@ -1,26 +1,31 @@
 ﻿using Dfe.Data.SearchPrototype.Data;
+using Dfe.Data.SearchPrototype.Data.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 
 class Program
 {
-    private const int BatchSize = 1000;
-
     static async Task Main(string[] args)
     {
-        //Azure Cognitive Search service details
-        string serviceName = "s123d01-aisearch";
-        string apiKey = "";
-        string indexName = "establishments";
-        //Local csv file path
-        string filePath = @"C:\SearchPrototypeData\GIASextract\edubasealldata20240807.csv";
+        //configuration
+        HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
-        var records = GetData.ReadRecordsFromCsv(filePath);
+        builder.Configuration.Sources.Clear();
 
-        var batches = DocumentBatchHelpers.SplitDataIntoBatches(records, BatchSize);
-        foreach (var batch in batches)
-        {
-            string json = DocumentBatchHelpers.ConvertBatchToJson(batch);
-            await DocumentBatchHelpers.SendBatchToSearchService(serviceName, apiKey, indexName, json);
-        }
+        builder.Configuration
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddUserSecrets<Program>();
+
+        AzureSearchServiceDetails searchDetails = new();
+
+        builder.Configuration.GetRequiredSection(nameof(AzureSearchServiceDetails)).Bind(searchDetails);
+
+        using IHost host = builder.Build();
+
+        //run app
+        await ManageData.ExtractAndUploadData(searchDetails, builder);
     }
 }
 
