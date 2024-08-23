@@ -5,10 +5,18 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <UserSecretsId>249e493f-5b02-48f8-a841-53cfc2e439f8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.1" />
+		<PackageReference Include="Dfe.Data.SearchPrototype" Version="1.0.1" />
+		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.1" />
+		<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.1" />
+	</ItemGroup>                        
 
 </Project>
