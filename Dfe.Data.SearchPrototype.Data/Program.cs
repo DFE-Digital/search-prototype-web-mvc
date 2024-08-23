@@ -25,7 +25,7 @@ class Program
         using IHost host = builder.Build();
 
         //run app
-        await ManageData.ExtractAndUploadData(searchDetails, builder);
+        await ManageData.ExtractAndUploadData(searchDetails, builder.Configuration["filePath"]!);
     }
 }
 

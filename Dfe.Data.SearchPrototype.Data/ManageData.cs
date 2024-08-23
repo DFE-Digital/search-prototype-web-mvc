@@ -1,4 +1,5 @@
-﻿using Dfe.Data.SearchPrototype.Data.Configuration;
+﻿using CsvHelper;
+using Dfe.Data.SearchPrototype.Data.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,24 @@ namespace Dfe.Data.SearchPrototype.Data;
 public class ManageData
 {
     private const int BatchSize = 1000;
-    public static async Task ExtractAndUploadData(AzureSearchServiceDetails searchDetails, HostApplicationBuilder builder)
+    public static async Task ExtractAndUploadData(AzureSearchServiceDetails searchDetails, string filePath)
     {
-        var records = GetData.ReadRecordsFromCsv(builder.Configuration["filePath"]!);
-
-        var batches = DocumentBatchHelpers.SplitDataIntoBatches(records, BatchSize);
-        foreach (var batch in batches)
+        try
         {
-            string json = DocumentBatchHelpers.ConvertBatchToJson(batch);
+            var records = GetData.ReadRecordsFromCsv(filePath);
 
-            await DocumentBatchHelpers.SendBatchToSearchService(
-               searchDetails, json);
+            var batches = DocumentBatchHelpers.SplitDataIntoBatches(records, BatchSize); ;
+            foreach (var batch in batches)
+            {
+                string json = DocumentBatchHelpers.ConvertBatchToJson(batch);
+
+                await DocumentBatchHelpers.SendBatchToSearchService(
+                   searchDetails, json);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
         }
     }
 }

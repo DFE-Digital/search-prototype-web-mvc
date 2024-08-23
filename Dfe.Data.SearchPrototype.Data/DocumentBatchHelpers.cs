@@ -10,6 +10,8 @@ class DocumentBatchHelpers
 
     public static IEnumerable<IEnumerable<dynamic>> SplitDataIntoBatches(IEnumerable<dynamic> source, int batchSize)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         var list = source.ToList();
         for (int i = 0; i < list.Count; i += batchSize)
         {
@@ -37,7 +39,6 @@ class DocumentBatchHelpers
         };
         return JsonConvert.SerializeObject(jsonDocuments, Formatting.Indented);
     }
-
 
     public static async Task SendBatchToSearchService(AzureSearchServiceDetails searchDetails, string json)
     {
