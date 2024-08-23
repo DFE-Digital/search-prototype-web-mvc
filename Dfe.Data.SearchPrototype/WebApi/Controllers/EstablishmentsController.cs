@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dfe.Data.SearchPrototype.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("establishments")]
     public class EstablishmentsController : ControllerBase
     {
         private readonly ILogger<EstablishmentsController> _logger;
@@ -20,10 +20,10 @@ namespace Dfe.Data.SearchPrototype.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetEstablishments([FromQuery] EstablishmentsRequest request)
         {
-            var request = new SearchByKeywordRequest("leeds", "establishments");
-            var response = await _searchByKeywordUseCase.HandleRequest(request);
+            var searchByKeywordRequest = new SearchByKeywordRequest(request.SearchKeyword, "establishments");
+            var response = await _searchByKeywordUseCase.HandleRequest(searchByKeywordRequest);
 
             return Ok(response);
         }
