@@ -1,0 +1,6 @@
+@Dfe.Data.SearchPrototype.WebApi_HostAddress = http://localhost:5022
+
+GET {{Dfe.Data.SearchPrototype.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
