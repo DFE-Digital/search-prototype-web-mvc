@@ -19,19 +19,40 @@
             </button>
         </govuk-input-suffix>
     </govuk-input>
-</form>
 @* end of search component *@
 
 @* display results *@
 
 @if (Model != null)
 {
-    @if (Model.HasResults)
-    {
-        @* list results component to be inserted as partial view*@
-        <div class="govuk-grid-column-two-thirds">
-            <h3 class="govuk-heading-m">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
-            <hr />
+    <div class="govuk-grid-column-one-third">
+        <h3>Facets</h3>
+        @if (Model.Facets is not null && Model.Facets.Any())
+        {
+            @foreach (var facet in Model.Facets)
+            {
+                <h4>@facet.Name</h4>
+                <ul>
+                    @foreach (var facetItem in facet.Values)
+                    {
+                        <li>
+                            [@(facetItem.IsSelected ? "X" : " ")] @facetItem.Value (@facetItem.Count)
+                        </li>
+                    }
+                </ul>
+            }
+        }
+        else
+        {
+            <p>No facets available</p>
+        }
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+        <h3 class="govuk-heading-m">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
+        <hr/>
+        @if (Model.HasResults)
+        {
             <ul style="list-style: none">
                 @foreach (var searchItem in Model.SearchItems!)
                 {
@@ -43,7 +64,7 @@
                         </h4>
                     </li>
                     <li>
-                        <strong>URN:  </strong>@searchItem.Urn
+                        <strong>URN: </strong>@searchItem.Urn
                     </li>
                     <li>
                         <strong>Address: </strong> @searchItem.AddressAsString()
@@ -56,17 +77,18 @@
                     </li>
                     <li>
                         <strong>Education phase: </strong> @searchItem.PhaseOfEducation
-                        <hr />
+                        <hr/>
                     </li>
-
                 }
             </ul>
-        </div>
-        @*  end of list component *@
-    }
-    else
-    {
-        <p>Sorry no results found please amend your search criteria</p>
-    }
+        }
+        else
+        {
+            <p> Sorry no results found please amend your search criteria</p>
+        }
+    </div>
+    @*  end of list component *@
 }
 @* end of display results *@
+
+</form>
