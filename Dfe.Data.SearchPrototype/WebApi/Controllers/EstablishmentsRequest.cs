@@ -2,5 +2,5 @@
 
 public sealed class EstablishmentsRequest
 {
-    public string SearchKeyword { get; set; }
+    public string? SearchKeyword { get; set; }
 }

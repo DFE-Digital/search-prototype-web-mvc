@@ -22,6 +22,13 @@ namespace Dfe.Data.SearchPrototype.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEstablishments([FromQuery] EstablishmentsRequest request)
         {
+            // Per Dfe.Data.SearchPrototype.SearchForEstablishments.SearchContext,
+            // the search keyword is required and must not be null or whitespace.
+            if (string.IsNullOrWhiteSpace(request.SearchKeyword))
+            {
+                return BadRequest();
+            }
+
             var searchByKeywordRequest = new SearchByKeywordRequest(request.SearchKeyword, "establishments");
             var response = await _searchByKeywordUseCase.HandleRequest(searchByKeywordRequest);
 
