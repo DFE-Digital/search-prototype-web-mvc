@@ -25,6 +25,9 @@ class DocumentBatchHelpers
         {
             value = batch.Select(record => new
             {
+                // Variable names are important here, and must be synchronised with names used on cognitive search (left)
+                // and the auto-generated properties based on CSV column names (right)
+                // COG_SEARCH_INDEX_NAME = record.SpreadsheetColumnName
                 id = record.URN,
                 ESTABLISHMENTNAME = record.EstablishmentName,
                 TOWN = record.Town,
