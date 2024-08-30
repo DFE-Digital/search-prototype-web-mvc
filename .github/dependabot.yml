@@ -7,7 +7,7 @@ version: 2
 
 registries:
   github-nuget:
-    type: npm-registry
+    type: nuget-feed
     url: https://nuget.pkg.github.com/dfe-digital/index.json
     token: "${{secrets.DEPENDABOT_PAT}}"
 
