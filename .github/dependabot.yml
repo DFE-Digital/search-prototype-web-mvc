@@ -4,12 +4,31 @@
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
 version: 2
+
+registries:
+  github-nuget:
+    type: npm-registry
+    url: https://nuget.pkg.github.com/dfe-digital/index.json
+    token: "${{secrets.DEPENDABOT_PAT}}"
+
+  official-nuget:
+    type: nuget-feed
+    url: https://api.nuget.org/v3/index.json
+
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    commit-message:
+      prefix: "[github-action] "
+
   - package-ecosystem: "nuget"
+    registries:
+      - github-nuget
+      - official-nuget
     directory: "/"
     schedule:
       interval: "daily"
+    commit-message:
+      prefix: "[nuget] "
