@@ -22,7 +22,7 @@
 	
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.1.2" />
-	<PackageReference Include="Bogus" Version="34.0.2" />
+	<PackageReference Include="Bogus" Version="35.6.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
 	<PackageReference Include="Deque.AxeCore.Selenium" Version="4.9.1" />
 	<PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
