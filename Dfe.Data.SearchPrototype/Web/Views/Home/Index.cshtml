@@ -52,11 +52,11 @@
         </div>
         @* end of filters *@
         @* display results *@
-        <div class="govuk-grid-column-two-thirds">
-            <h3 class="govuk-heading-m">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
-            <hr />
-            @if (Model.HasResults)
-            {
+        @if (Model.HasResults)
+        {
+            <div class="govuk-grid-column-two-thirds" id="results">
+                <h3 class="govuk-heading-m">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
+                <hr />
                 <ul style="list-style: none">
                     @foreach (var searchItem in Model.SearchItems!)
                     {
@@ -85,12 +85,14 @@
                         </li>
                     }
                 </ul>
-            }
-            else
-            {
+            </div>
+        }
+        else
+        {
+            <div class="govuk-grid-column-two-thirds" id="no-results">
                 <p> Sorry no results found please amend your search criteria</p>
-            }
-        </div>
+            </div>
+        }
         @*  end of list component *@
     }
     @* end of display results *@

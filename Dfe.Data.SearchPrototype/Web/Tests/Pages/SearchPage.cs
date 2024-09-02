@@ -20,5 +20,6 @@ public sealed class SearchPage : BasePage
     public static By SearchButton => By.CssSelector("#main-content form button");
     public static By SearchResultsNumber => By.CssSelector(".govuk-heading-m");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
-    public static By SearchNoResultText => By.CssSelector("#main-content form + p");
+    public static By SearchNoResultText => By.CssSelector("#no-results");
+    public static string AS_SearchNoResultText => "#no-results";
 }

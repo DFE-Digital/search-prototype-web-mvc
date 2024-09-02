@@ -58,7 +58,11 @@ public static class HtmlHelpers
                 throw new ArgumentNullException($"Multiple elements not found with selector {cssSelector}");
     }
 
-    public static string GetElementText(this IParentNode document, string cssSelector) => document.GetElement(cssSelector).TextContent.Trim();
+    public static string GetElementText(this IParentNode document, string cssSelector)
+    {
+        var elementNeeded = document.GetElement(cssSelector);
+        return elementNeeded.TextContent.Trim();
+    }
 
     public static string? GetElementLinkValue(this IParentNode document, string cssSelector) => document.GetElement(cssSelector).GetAttribute("href");
 
