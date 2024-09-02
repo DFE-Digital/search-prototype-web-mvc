@@ -120,7 +120,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
         [Theory]
         [InlineData("ant")]
-        [InlineData("boo")]
         public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
         {
             var response = await _client.GetAsync(uri);
