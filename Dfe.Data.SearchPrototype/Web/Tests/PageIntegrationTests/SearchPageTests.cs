@@ -86,7 +86,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-            resultsPage.GetElementText(SearchPage.SearchResultsNumber.Criteria).Should().Contain("Result");
+            resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!.TextContent.Should().Contain("Result");
             resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().Be(1);
         }
 

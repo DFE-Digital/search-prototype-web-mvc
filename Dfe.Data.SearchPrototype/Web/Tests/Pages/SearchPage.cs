@@ -16,9 +16,9 @@ public sealed class SearchPage : BasePage
     public static By SearchSubHeading => By.CssSelector("#searchKeyWord-hint");
     public By SearchHiddenDiv => By.CssSelector("#searchKeyWord + div");
     public static By SearchInput => By.CssSelector("#searchKeyWord");
-    public static By SearchForm => By.CssSelector("#main-content form");
-    public static By SearchButton => By.CssSelector("#main-content form button");
-    public static By SearchResultsNumber => By.CssSelector(".govuk-heading-m");
+    public static By SearchForm => By.CssSelector("#search-establishments");
+    public static By SearchButton => By.CssSelector("#search-establishments button");
+    public static By SearchResultsNumber => By.CssSelector("#results");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
     public static By SearchNoResultText => By.CssSelector("#no-results");
     public static string AS_SearchNoResultText => "#no-results";

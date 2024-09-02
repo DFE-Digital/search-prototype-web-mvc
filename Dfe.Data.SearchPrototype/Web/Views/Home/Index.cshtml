@@ -6,7 +6,7 @@
 }
 
 @* search component *@
-<form method="get" action="@Url.Action("Index", "home")">
+<form method="get" action="@Url.Action("Index", "home")" id="search-establishments">
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l">Search</govuk-input-label>
         <govuk-input-hint>Search establishments</govuk-input-hint>
