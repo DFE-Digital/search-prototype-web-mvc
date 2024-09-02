@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.1" />
+	<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.2" />
   </ItemGroup>
 	    
   <ItemGroup>

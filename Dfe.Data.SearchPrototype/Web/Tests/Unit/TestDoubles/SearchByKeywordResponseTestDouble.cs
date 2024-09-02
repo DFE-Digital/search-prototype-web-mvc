@@ -13,8 +13,13 @@ public static class SearchByKeywordResponseTestDouble
         {
             establishmentResults.Add(EstablishmentTestDouble.Create());
         }
-        return new SearchByKeywordResponse(establishmentResults);
-       
+
+        List<EstablishmentFacet> facetResults = new();
+        for (int i = 0; i < new Bogus.Faker().Random.Int(1, 10); i++)
+        {
+            facetResults.Add(EstablishmentFacetTestDouble.Create());
+        }
+        return new SearchByKeywordResponse(establishmentResults, facetResults);
     }
 
     public static SearchByKeywordResponse CreateWithNoResults()
