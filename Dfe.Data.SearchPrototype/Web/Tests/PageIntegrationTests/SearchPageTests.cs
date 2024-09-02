@@ -90,33 +90,33 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().Be(1);
         }
 
-        //[Fact]
-        //public async Task Search_ByName_ReturnsMultipleResults()
-        //{
-        //    var response = await _client.GetAsync(uri);
-        //    var document = await HtmlHelpers.GetDocumentAsync(response);
+        [Fact]
+        public async Task Search_ByName_ReturnsMultipleResults()
+        {
+            var response = await _client.GetAsync(uri);
+            var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        //    var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-        //    var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
+            var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
-        //    var formResponse = await _client.SendAsync(
-        //        formElement,
-        //        formButton,
-        //        new Dictionary<string, string>
-        //        {
-        //            ["searchKeyWord"] = "Academy"
-        //        });
+            var formResponse = await _client.SendAsync(
+                formElement,
+                formButton,
+                new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "Academy"
+                });
 
-        //    _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
-        //    _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
+            _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
+            _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
 
-        //    var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        //    _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
+            _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-        //    resultsPage.GetElementText(SearchPage.SearchResultsNumber.Criteria).Should().Contain("Results");
-        //    resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().BeGreaterThan(1);
-        //}
+            resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!.TextContent.Should().Contain("Results");
+            resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().BeGreaterThan(1);
+        }
 
         [Theory]
         [InlineData("ant")]
@@ -150,8 +150,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
 
             // using Anglesharp
-            var somethingElse = resultsPage.QuerySelector(SearchPage.AS_SearchNoResultText).TextContent;
-            somethingElse.Should().Contain("Sorry no results found please amend your search criteria");
+            resultsPage.QuerySelector(SearchPage.AS_SearchNoResultText)!.TextContent.Should().Contain("Sorry no results found please amend your search criteria");
         }
     }
 }
