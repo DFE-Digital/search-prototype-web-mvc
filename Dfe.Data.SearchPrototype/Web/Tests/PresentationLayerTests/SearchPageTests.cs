@@ -1,56 +1,75 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
+using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.Web.Tests.PageObjectModel;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 
-public class SearchPageTests : IClassFixture<PageWebApplicationFactoryMockUseCase>
+public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private const string uri = "http://localhost:5000";
-    private readonly HttpClient _client;
-    private readonly ITestOutputHelper _logger;
     private readonly WebApplicationFactory<Program> _factory;
 
-    public SearchPageTests(PageWebApplicationFactoryMockUseCase factory, ITestOutputHelper logger)
+    public SearchPageTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = true
-        });
-        _logger = logger;
     }
 
     [Fact]
-    public async Task Search_ByName_ReturnsMultipleResults()
+    public async Task Search_ByName_WithMultipleResults()
     {
-        var response = await _client.GetAsync(uri);
+        var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
+        var client = HostWithMockUseCaseWithResponse(useCaseResponse)
+            .CreateClient();
+
+        var response = await client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
+        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
 
-        var formResponse = await _client.SendAsync(
-            formElement,
-            formButton,
+        var formResponse = await client.SendAsync(
+            formElement!,
+            formButton!,
             new Dictionary<string, string>
             {
-                ["searchKeyWord"] = "Academy"
+                ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
             });
-
-        _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
-        _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
+        resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!
+            .TextContent.Should().Contain("Results");
+        resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria)
+            .Count().Should().Be(useCaseResponse.EstablishmentResults.Count);
+    }
 
-        resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!.TextContent.Should().Contain("Results");
-        resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().BeGreaterThan(1);
+    private WebApplicationFactory<Program> HostWithMockUseCaseWithResponse(SearchByKeywordResponse response)
+    {
+        var useCase = new SearchByKeywordUseCaseMockBuilder()
+            .WithHandleRequestReturnValue(response)
+            .Create();
+
+        return _factory.WithWebHostBuilder(
+            (IWebHostBuilder builder) =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.RemoveAll<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>>();
+                    services.AddScoped<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>>(provider => useCase);
+                });
+            }
+        );
     }
 }

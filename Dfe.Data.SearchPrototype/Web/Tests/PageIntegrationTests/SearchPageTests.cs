@@ -149,7 +149,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
 
             // using Anglesharp
-            resultsPage.QuerySelector(SearchPage.AS_SearchNoResultText)!.TextContent.Should().Contain("Sorry no results found please amend your search criteria");
+            resultsPage.GetElement(SearchPage.SearchNoResultText.Criteria)!.TextContent.Should().Contain("Sorry no results found please amend your search criteria");
         }
     }
 }

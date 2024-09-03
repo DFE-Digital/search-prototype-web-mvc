@@ -1,24 +1,35 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+﻿using Azure.Search.Documents.Models;
+using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
 public static class SearchByKeywordResponseTestDouble
 {
     public static SearchByKeywordResponse Create()
     {
         List<Establishment> establishmentResults = new();
-        for (int i = 0; i < new Bogus.Faker().Random.Int(1, 10); i++)
+        for (int i = 0; i < new Bogus.Faker().Random.Int(2, 10); i++)
         {
             establishmentResults.Add(EstablishmentTestDouble.Create());
         }
 
         List<EstablishmentFacet> facetResults = new();
-        for (int i = 0; i < new Bogus.Faker().Random.Int(1, 10); i++)
+        for (int i = 0; i < new Bogus.Faker().Random.Int(2, 10); i++)
         {
             facetResults.Add(EstablishmentFacetTestDouble.Create());
         }
+        return new SearchByKeywordResponse(establishmentResults, facetResults);
+    }
+
+    public static SearchByKeywordResponse CreateWithOneResult()
+    {
+        List<Establishment> establishmentResults = new() {
+           EstablishmentTestDouble.Create()
+        };
+        List<EstablishmentFacet> facetResults = new() {
+            EstablishmentFacetTestDouble.Create()
+        };
         return new SearchByKeywordResponse(establishmentResults, facetResults);
     }
 
