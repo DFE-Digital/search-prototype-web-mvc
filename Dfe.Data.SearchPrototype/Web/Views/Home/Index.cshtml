@@ -37,7 +37,7 @@
                             </govuk-checkboxes-fieldset-legend>
                             @foreach (var facetItem in facet.Values)
                             {
-                                <govuk-checkboxes-item value="@facetItem.Value" checked="@facetItem.IsSelected">
+                                <govuk-checkboxes-item value="@facetItem.Value">
                                     @facetItem.Value (@facetItem.Count)
                                 </govuk-checkboxes-item>
                             }
