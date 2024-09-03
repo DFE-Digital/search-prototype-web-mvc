@@ -22,7 +22,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
 
             IEnumerable<Establishment> establishments =
                 from establishmentToken in establishmentsObject["establishments"]
-                where establishmentToken["name"]!.ToString().Contains(searchContext.SearchKeyword)
+                where (establishmentToken["name"]!.ToString() + "*").Contains(searchContext.SearchKeyword)
                 select new Establishment(
                     (string)establishmentToken["urn"]!,
                     (string)establishmentToken["name"]!,
