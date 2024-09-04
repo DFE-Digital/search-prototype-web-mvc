@@ -60,9 +60,6 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyWord + "*", "establishments"));
 
-        // Currently returns just the establishment data/results.
-        // Once this also starts returning the facets too, we will need to
-        // update the mapper to map the facets also.
         SearchResultsViewModel viewModel = _mapper.MapFrom(response);
         return View(viewModel);
     }

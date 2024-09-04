@@ -12,7 +12,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
     public class SearchPageTests : IClassFixture<PageWebApplicationFactory>
     {
         private const string uri = "http://localhost:5000";
-        private readonly HttpClient _client; 
+        private readonly HttpClient _client;
         private readonly ITestOutputHelper _logger;
         private readonly WebApplicationFactory<Program> _factory;
 
@@ -47,18 +47,18 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         }
 
         [Fact]
-        public async Task Search_Establishment_IsDisplayed() 
+        public async Task Search_Establishment_IsDisplayed()
         {
             var response = await _client.GetAsync(uri);
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
             document.GetElementText(SearchPage.SearchHeading.Criteria).Should().Be("Search");
-            
+
             document.GetElementText(SearchPage.SearchSubHeading.Criteria).Should().Be("Search establishments");
-            
+
             document.GetMultipleElements(SearchPage.SearchInput.Criteria).Count().Should().Be(1);
-            
+
             document.GetMultipleElements(SearchPage.SearchButton.Criteria).Count().Should().Be(1);
         }
 
@@ -148,8 +148,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var thingToTest = resultsPage.GetElementText(SearchPage.SearchNoResultText.Criteria);
             thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
 
-            // using Anglesharp
-            resultsPage.GetElement(SearchPage.SearchNoResultText.Criteria)!.TextContent.Should().Contain("Sorry no results found please amend your search criteria");
         }
     }
 }

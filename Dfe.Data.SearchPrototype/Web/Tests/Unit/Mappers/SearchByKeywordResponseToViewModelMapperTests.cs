@@ -46,19 +46,6 @@ public class SearchByKeywordResponseToViewModelMapperTests
         // act.
         SearchResultsViewModel viewModelResults = _serviceModelToViewModelMapper.MapFrom(response);
 
-        // assert - get rid of this in favourt of thr foreach below
-        //for(int i = 0; i < response.EstablishmentFacetResults?.Count; i++) // for each FacetedField (e.g. Phase of education)
-        //{
-        //    Assert.Equal(response.EstablishmentFacetResults.ToList()[i].Name, viewModelResults.Facets![i].Name); // the name has been mapped correctly
-
-        //    foreach(var expectedFacet in response.EstablishmentFacetResults.ToList()[i].Results) // for each facet (value) within this faceted field (e.g. 'primary')
-        //    {
-        //        var equivalentFacet = viewModelResults.Facets[i].Values.Where(x => x.Value == expectedFacet.Value).First(); // find the equivalent facet in the mapped response
-        //        Assert.NotNull(equivalentFacet);
-        //        Assert.Equal(expectedFacet.Count, equivalentFacet.Count);
-        //    }
-        //}
-
         // assert
         foreach (var facetedField in response.EstablishmentFacetResults!) // for each FacetedField (e.g. Phase of education)
         {
