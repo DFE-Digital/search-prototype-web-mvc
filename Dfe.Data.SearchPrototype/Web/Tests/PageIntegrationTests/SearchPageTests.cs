@@ -88,14 +88,16 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
+            var urn = 345678;
+
             resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Be("1 Result");
             resultsPage.GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria).Count().Should().Be(1);
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentName.Criteria).Should().Be("Duck School");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentUrn.Criteria).Should().Contain("345678");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentAddress.Criteria).Should().Contain("Duck Street, Duck Locality, Duck Address 3, Duck Town, DUU CKK");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentType.Criteria).Should().Contain("Community School");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentStatus.Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentPhase.Criteria).Should().Contain("Primary");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentName(urn).Criteria).Should().Be("Duck School");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentUrn(urn).Criteria).Should().Contain("345678");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentAddress(urn).Criteria).Should().Contain("Duck Street, Duck Locality, Duck Address 3, Duck Town, DUU CKK");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentType(urn).Criteria).Should().Contain("Community School");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentStatus(urn).Criteria).Should().Contain("Open");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentPhase(urn).Criteria).Should().Contain("Primary");
         }
         
         [Fact]
@@ -125,19 +127,23 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Be("2 Results");
             resultsPage.GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria).Count().Should().Be(2);
 
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentName.Criteria).Should().Be("Goose Academy");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentUrn.Criteria).Should().Contain("123456");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentAddress.Criteria).Should().Contain("Goose Street, Goose Locality, Goose Address 3, Goose Town, GOO OSE");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentType.Criteria).Should().Contain("Academy");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentStatus.Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentPhase.Criteria).Should().Contain("Secondary");
+            var urn = 123456;
 
-            resultsPage.GetElementText(SearchResultsPage.SecondResultEstablishmentName.Criteria).Should().Be("Horse Academy");
-            resultsPage.GetElementText(SearchResultsPage.SecondResultEstablishmentUrn.Criteria).Should().Contain("234567");
-            resultsPage.GetElementText(SearchResultsPage.SecondResultEstablishmentAddress.Criteria).Should().Contain("Horse Street, Horse Locality, Horse Address 3, Horse Town, HOR SEE");
-            resultsPage.GetElementText(SearchResultsPage.SecondResultEstablishmentType.Criteria).Should().Contain("Academy");
-            resultsPage.GetElementText(SearchResultsPage.SecondResultEstablishmentStatus.Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(SearchResultsPage.SecondResultEstablishmentPhase.Criteria).Should().Contain("Post 16");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentName(urn).Criteria).Should().Be("Goose Academy");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentUrn(urn).Criteria).Should().Contain("123456");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentAddress(urn).Criteria).Should().Contain("Goose Street, Goose Locality, Goose Address 3, Goose Town, GOO OSE");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentType(urn).Criteria).Should().Contain("Academy");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentStatus(urn).Criteria).Should().Contain("Open");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentPhase(urn).Criteria).Should().Contain("Secondary");
+
+            urn = 234567;
+
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentName(urn).Criteria).Should().Be("Horse Academy");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentUrn(urn).Criteria).Should().Contain("234567");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentAddress(urn).Criteria).Should().Contain("Horse Street, Horse Locality, Horse Address 3, Horse Town, HOR SEE");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentType(urn).Criteria).Should().Contain("Academy");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentStatus(urn).Criteria).Should().Contain("Open");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentPhase(urn).Criteria).Should().Contain("Post 16");
         }
         
         [Theory]

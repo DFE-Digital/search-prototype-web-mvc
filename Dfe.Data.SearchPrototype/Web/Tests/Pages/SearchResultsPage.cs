@@ -13,17 +13,11 @@ public sealed class SearchResultsPage : BasePage
     public static By SearchResultsNumber => By.CssSelector("#search-results-count");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
     public static By SearchNoResultText => By.CssSelector("#main-content form + p");
-    public static By FirstResultEstablishmentName => By.CssSelector("ul li h4 a");
-    public static By FirstResultEstablishmentUrn => By.CssSelector("ul li:nth-of-type(2)");
-    public static By FirstResultEstablishmentAddress => By.CssSelector("ul li:nth-of-type(3)");
-    public static By FirstResultEstablishmentType => By.CssSelector("ul li:nth-of-type(4)");
-    public static By FirstResultEstablishmentStatus => By.CssSelector("ul li:nth-of-type(5)");
-    public static By FirstResultEstablishmentPhase => By.CssSelector("ul li:nth-of-type(6)");
-    public static By SecondResultEstablishmentName => By.CssSelector("ul li:nth-of-type(7)");
-    public static By SecondResultEstablishmentUrn => By.CssSelector("ul li:nth-of-type(8)");
-    public static By SecondResultEstablishmentAddress => By.CssSelector("ul li:nth-of-type(9)");
-    public static By SecondResultEstablishmentType => By.CssSelector("ul li:nth-of-type(10)");
-    public static By SecondResultEstablishmentStatus => By.CssSelector("ul li:nth-of-type(11)");
-    public static By SecondResultEstablishmentPhase => By.CssSelector("ul li:nth-of-type(12)");
+    public static By SearchResultEstablishmentName(int urn) => By.CssSelector($"#name-{urn}");
+    public static By SearchResultEstablishmentUrn(int urn) => By.CssSelector($"#urn-{urn}");
+    public static By SearchResultEstablishmentAddress(int urn) => By.CssSelector($"#address-{urn}");
+    public static By SearchResultEstablishmentType(int urn) => By.CssSelector($"#establishment-type-{urn}");
+    public static By SearchResultEstablishmentStatus(int urn) => By.CssSelector($"#establishment-status-{urn}");
+    public static By SearchResultEstablishmentPhase(int urn) => By.CssSelector($"#education-phase-{urn}");
 
 }
