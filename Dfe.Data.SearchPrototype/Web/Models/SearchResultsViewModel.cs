@@ -8,29 +8,7 @@ public class SearchResultsViewModel
     /// <summary>
     /// View model representation of the available facets.
     /// </summary> 
-    public List<Facet>? Facets { get; set; } = new();
-    //public List<Facet>? Facets { get; set; } = new()
-    //{
-    //    new Facet("Establishment status", new FacetValue[]
-    //    {
-    //        new("Open, but proposed to close", 150, true),
-    //        new("Open", 2543, true),
-    //        new("Closed", 2001, false),
-    //        new("Proposed to open", 73, true),
-    //        new("Proposed to close", 25, false),
-    //        new("Closed by the department", 3, false)
-    //    }),
-    //    new Facet("Type of establishment", new FacetValue[]
-    //    {
-    //        new("Academy converter", 42, true),
-    //        new("Academy sponsor led", 14, true),
-    //        new("Academy special converter", 6263, false),
-    //        new("Academy special sponsor led", 2555, true),
-    //        new("Academy special", 2551, false),
-    //        new("Academy 16-19 sponsor led", 773, false)
-    //    }),
-    //};
-
+    public List<Facet>? Facets { get; set; }
     /// <summary>
     /// View model representation of aggregated search results.
     /// </summary>
