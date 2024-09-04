@@ -35,7 +35,7 @@
 	<PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.34.0" />
 	<PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
 	<PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
-	<PackageReference Include="WireMock.Net" Version="1.5.58" />
+	<PackageReference Include="WireMock.Net" Version="1.6.2" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
