@@ -9,10 +9,10 @@ public sealed class SearchPage : BasePage
     {
     }
 
-    public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
-    public static By Heading => By.CssSelector("header div div:nth-of-type(2) a");
-    public static By HomeLink => By.CssSelector("nav a");
-    public static By SearchHeading => By.CssSelector("h1 label");
+    public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("#service-name"));
+    public static By Heading => By.CssSelector("#service-name");
+    public static By HomeLink => By.CssSelector("#home-link");
+    public static By SearchHeading => By.CssSelector("#page-heading");
     public static By SearchSubHeading => By.CssSelector("#searchKeyWord-hint");
     public By SearchHiddenDiv => By.CssSelector("#searchKeyWord + div");
     public static By SearchInput => By.CssSelector("#searchKeyWord");

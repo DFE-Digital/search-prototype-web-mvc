@@ -88,7 +88,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-            resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Contain("Result");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Be("1 Result");
             resultsPage.GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria).Count().Should().Be(1);
             resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentName.Criteria).Should().Be("Duck School");
             resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentUrn.Criteria).Should().Contain("345678");
@@ -122,7 +122,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-            resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Contain("Results");
+            resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Be("2 Results");
             resultsPage.GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria).Count().Should().Be(2);
 
             resultsPage.GetElementText(SearchResultsPage.FirstResultEstablishmentName.Criteria).Should().Be("Goose Academy");

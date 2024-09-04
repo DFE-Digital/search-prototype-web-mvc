@@ -10,7 +10,7 @@ public sealed class SearchResultsPage : BasePage
 
     //TODO: Add ids when they are implemented into web
 
-    public static By SearchResultsNumber => By.CssSelector("#results");
+    public static By SearchResultsNumber => By.CssSelector("#search-results-count");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
     public static By SearchNoResultText => By.CssSelector("#main-content form + p");
     public static By FirstResultEstablishmentName => By.CssSelector("ul li h4 a");

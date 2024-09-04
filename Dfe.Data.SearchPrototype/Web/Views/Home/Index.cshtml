@@ -8,7 +8,7 @@
 @* search component *@
 <form method="get" action="@Url.Action("Index", "home")" id="search-establishments">
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
-        <govuk-input-label is-page-heading="true" class="govuk-label--l">Search</govuk-input-label>
+        <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
         <govuk-input-hint>Search establishments</govuk-input-hint>
         <govuk-input-suffix style="padding: 0px">
             <button style="border: none">
@@ -30,7 +30,7 @@
     {
         @* list results component to be inserted as partial view*@
         <div class="govuk-grid-column-two-thirds" id="results">
-            <h3 class="govuk-heading-m">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
+            <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
             <hr />
             <ul style="list-style: none">
                 @foreach (var searchItem in Model.SearchItems!)
