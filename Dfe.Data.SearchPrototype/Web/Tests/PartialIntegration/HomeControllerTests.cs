@@ -23,7 +23,7 @@ public class HomeControllerTests
         var stubSearchResults = EstablishmentResultsTestDouble.Create();
         _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchContext>()))
             .ReturnsAsync(stubSearchResults);
-        var useCase = new SearchByKeywordUseCase(_searchServiceAdapterMock.Object, new ResultsToResponseMapper());
+        var useCase = new SearchByKeywordUseCase(_searchServiceAdapterMock.Object);
         var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper());
 
         // act
@@ -43,7 +43,7 @@ public class HomeControllerTests
         // arrange
         _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchContext>()))
             .ReturnsAsync(EstablishmentResultsTestDouble.CreateWithNoResults());
-        var useCase = new SearchByKeywordUseCase(_searchServiceAdapterMock.Object, new ResultsToResponseMapper());
+        var useCase = new SearchByKeywordUseCase(_searchServiceAdapterMock.Object);
         var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper());
 
         // act

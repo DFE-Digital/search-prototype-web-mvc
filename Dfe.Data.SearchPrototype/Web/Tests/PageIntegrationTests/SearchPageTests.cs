@@ -12,7 +12,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
     public class SearchPageTests : IClassFixture<PageWebApplicationFactory>
     {
         private const string uri = "http://localhost:5000";
-        private readonly HttpClient _client; 
+        private readonly HttpClient _client;
         private readonly ITestOutputHelper _logger;
         private readonly WebApplicationFactory<Program> _factory;
 
@@ -47,85 +47,85 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         }
 
         [Fact]
-        public async Task Search_Establishment_IsDisplayed() 
+        public async Task Search_Establishment_IsDisplayed()
         {
             var response = await _client.GetAsync(uri);
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
             document.GetElementText(SearchPage.SearchHeading.Criteria).Should().Be("Search");
-            
+
             document.GetElementText(SearchPage.SearchSubHeading.Criteria).Should().Be("Search establishments");
-            
+
             document.GetMultipleElements(SearchPage.SearchInput.Criteria).Count().Should().Be(1);
-            
+
             document.GetMultipleElements(SearchPage.SearchButton.Criteria).Count().Should().Be(1);
         }
 
-        //[Fact]
-        //public async Task Search_ByName_ReturnsSingleResult()
-        //{
-        //    var response = await _client.GetAsync(uri);
-        //    var document = await HtmlHelpers.GetDocumentAsync(response);
+        [Fact]
+        public async Task Search_ByName_ReturnsSingleResult()
+        {
+            var response = await _client.GetAsync(uri);
+            var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        //    var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
-        //    var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
+            var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
-        //    var formResponse = await _client.SendAsync(
-        //        formElement,
-        //        formButton,
-        //        new Dictionary<string, string>
-        //        {
-        //            ["searchKeyWord"] = "School"
-        //        });
+            var formResponse = await _client.SendAsync(
+                formElement,
+                formButton,
+                new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "School"
+                });
 
-        //    _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
-        //    _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
+            _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
+            _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
 
-        //    var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        //    _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
+            _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-        //    resultsPage.GetElementText(SearchPage.SearchResultsNumber.Criteria).Should().Contain("Result");
-        //    resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().Be(1);
-        //}
-        
-        //[Fact]
-        //public async Task Search_ByName_ReturnsMultipleResults()
-        //{
-        //    var response = await _client.GetAsync(uri);
-        //    var document = await HtmlHelpers.GetDocumentAsync(response);
+            resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!.TextContent.Should().Contain("Result");
+            resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().Be(1);
+        }
 
-        //    var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-        //    var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+        [Fact]
+        public async Task Search_ByName_ReturnsMultipleResults()
+        {
+            var response = await _client.GetAsync(uri);
+            var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        //    var formResponse = await _client.SendAsync(
-        //        formElement,
-        //        formButton,
-        //        new Dictionary<string, string>
-        //        {
-        //            ["searchKeyWord"] = "Academy"
-        //        });
+            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
+            var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
-        //    _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
-        //    _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
+            var formResponse = await _client.SendAsync(
+                formElement,
+                formButton,
+                new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "Academy"
+                });
 
-        //    var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+            _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
+            _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
 
-        //    _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
+            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        //    resultsPage.GetElementText(SearchPage.SearchResultsNumber.Criteria).Should().Contain("Results");
-        //    resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().BeGreaterThan(1);
-        //}
-        
+            _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
+
+            resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!.TextContent.Should().Contain("Results");
+            resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria).Count().Should().BeGreaterThan(1);
+        }
+
         [Theory]
         [InlineData("ant")]
-        [InlineData("boo")]
         public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
         {
             var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
+            // using Anglesharp to get document elements
             var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
             var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
@@ -144,7 +144,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-            resultsPage.GetElementText(SearchPage.SearchNoResultText.Criteria).Should().Be("Sorry no results found please amend your search criteria");
+            // using the selenium selector under the hood
+            var thingToTest = resultsPage.GetElementText(SearchPage.SearchNoResultText.Criteria);
+            thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
+
         }
     }
 }

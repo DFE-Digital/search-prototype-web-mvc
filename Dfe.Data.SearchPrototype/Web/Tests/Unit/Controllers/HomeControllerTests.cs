@@ -4,6 +4,8 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +25,14 @@ public class HomeControllerTests
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
         SearchByKeywordResponse response = new(new List<Establishment>().AsReadOnly());
-        Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> mockUseCase =
-            SearchByKeywordUseCaseTestDouble.MockFor(response);
+        IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
+            new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
-        HomeController controller = new(mockLogger.Object, mockUseCase.Object, mockMapper.Object);
+        HomeController controller = new(mockLogger.Object, mockUseCase, mockMapper.Object);
 
         IActionResult result = await controller.Index("KDM");
 
-        mockUseCase.Verify(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()), Times.Once());
+        Mock.Get(mockUseCase).Verify(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()), Times.Once());
     }
 
     [Fact]
@@ -40,10 +42,10 @@ public class HomeControllerTests
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
         SearchByKeywordResponse response = new(new List<Establishment>().AsReadOnly());
-        Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> mockUseCase =
-            SearchByKeywordUseCaseTestDouble.MockFor(response);
+        IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
+            new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
-        HomeController controller = new(mockLogger.Object, mockUseCase.Object, mockMapper.Object);
+        HomeController controller = new(mockLogger.Object, mockUseCase, mockMapper.Object);
 
         IActionResult result = await controller.Index("KDM");
 
@@ -55,13 +57,13 @@ public class HomeControllerTests
     {
         // arrange
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
-        Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> mockUseCase =
-            SearchByKeywordUseCaseTestDouble.DefaultMock();
+        IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
+            new SearchByKeywordUseCaseMockBuilder().Create();
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
             SearchResultsToViewModelMapperTestDouble.DefaultMock();
 
         //act
-        HomeController controller = new HomeController(mockLogger.Object, mockUseCase.Object, mockMapper.Object);
+        HomeController controller = new HomeController(mockLogger.Object, mockUseCase, mockMapper.Object);
         IActionResult result = await controller.Index(null!);
 
         // assert

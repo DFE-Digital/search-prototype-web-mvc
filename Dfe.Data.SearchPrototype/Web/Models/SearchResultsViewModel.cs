@@ -6,6 +6,10 @@
 public class SearchResultsViewModel
 {
     /// <summary>
+    /// View model representation of the available facets.
+    /// </summary> 
+    public List<Facet>? Facets { get; set; }
+    /// <summary>
     /// View model representation of aggregated search results.
     /// </summary>
     public List<EstablishmentViewModel>? SearchItems { get; set; }
@@ -21,4 +25,4 @@ public class SearchResultsViewModel
     /// Property determining the number of search results.
     /// </summary>
     public int SearchResultsCount => SearchItems?.Count ?? 0;
- }
+}
