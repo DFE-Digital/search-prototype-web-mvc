@@ -3,7 +3,6 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
-using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers;
