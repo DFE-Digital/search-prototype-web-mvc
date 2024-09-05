@@ -55,6 +55,41 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
             .Count().Should().Be(useCaseResponse.EstablishmentResults.Count);
     }
 
+    [Fact]
+    public async Task Search_ByName_WithFacetedResults()
+    {
+        var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
+        var client = HostWithMockUseCaseWithResponse(useCaseResponse)
+            .CreateClient();
+
+        var response = await client.GetAsync(uri);
+        var document = await HtmlHelpers.GetDocumentAsync(response);
+
+        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
+        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
+
+        var formResponse = await client.SendAsync(
+            formElement!,
+            formButton!,
+            new Dictionary<string, string>
+            {
+                ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
+            });
+
+        var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+
+        var filtersHeading = resultsPage.QuerySelector(SearchPage.FiltersHeading.Criteria);
+        filtersHeading.Should().NotBeNull();
+        filtersHeading!.TextContent.Should().Be("Filters");
+
+        var expectedFacetNames = useCaseResponse.EstablishmentFacetResults.Select(f => f.Name).ToArray();
+        foreach (var facetName in expectedFacetNames)
+        {
+            resultsPage.QuerySelector(facetName).Should().NotBeNull();
+        }
+
+    }
+
     private WebApplicationFactory<Program> HostWithMockUseCaseWithResponse(SearchByKeywordResponse response)
     {
         var useCase = new SearchByKeywordUseCaseMockBuilder()

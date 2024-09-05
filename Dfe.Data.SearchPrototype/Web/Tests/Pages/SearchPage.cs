@@ -21,4 +21,5 @@ public sealed class SearchPage : BasePage
     public static By SearchResultsNumber => By.CssSelector("#results");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
     public static By SearchNoResultText => By.CssSelector("#no-results");
+    public static By FiltersHeading => By.CssSelector("#filters-heading");
 }

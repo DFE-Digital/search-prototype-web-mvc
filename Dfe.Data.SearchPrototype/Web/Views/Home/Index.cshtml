@@ -25,14 +25,14 @@
     @if (Model != null)
     {
         <div class="govuk-grid-column-one-third">
-            <h3>Filters</h3>
+            <h3 id="filters-heading">Filters</h3>
             @if (Model.Facets is not null && Model.Facets.Any())
             {
                 @foreach (var facet in Model.Facets)
                 {
                     <govuk-checkboxes name="@facet.Name">
                         <govuk-checkboxes-fieldset>
-                            <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
+                            <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s" id=@facet.Name>
                                 @facet.Name
                             </govuk-checkboxes-fieldset-legend>
                             @foreach (var facetItem in facet.Values)
