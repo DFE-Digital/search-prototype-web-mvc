@@ -45,10 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.3" />
-  </ItemGroup>
-	    
-  <ItemGroup>
     <None Update="appsettings.test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
