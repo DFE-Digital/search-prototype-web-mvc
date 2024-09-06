@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddScoped(typeof(ISearchServiceAdapter), typeof(CognitiveSearchServiceAdapter<Infrastructure.Establishment>));
 builder.Services.AddScoped<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>, SearchByKeywordUseCase>();
-builder.Services.AddSingleton(typeof(IMapper<Pageable<SearchResults<Infrastructure.Establishment>>, EstablishmentResults>), typeof(PageableSearchResultsToEstablishmentResultsMapper));
+builder.Services.AddSingleton(typeof(IMapper<Pageable<SearchResult<Infrastructure.Establishment>>, EstablishmentResults>), typeof(PageableSearchResultsToEstablishmentResultsMapper));
 builder.Services.AddSingleton<IMapper<SearchSettingsOptions, SearchOptions>, SearchOptionsToAzureOptionsMapper>();
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Address>, AzureSearchResultToAddressMapper>();
 builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Models.Establishment>, AzureSearchResultToEstablishmentMapper>();
