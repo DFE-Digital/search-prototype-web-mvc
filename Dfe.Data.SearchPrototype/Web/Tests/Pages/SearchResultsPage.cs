@@ -12,7 +12,7 @@ public sealed class SearchResultsPage : BasePage
 
     public static By SearchResultsNumber => By.CssSelector("#search-results-count");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
-    public static By SearchNoResultText => By.CssSelector("#main-content form + p");
+    public static By SearchNoResultText => By.CssSelector("#no-results");
     public static By SearchResultEstablishmentName(int urn) => By.CssSelector($"#name-{urn}");
     public static By SearchResultEstablishmentUrn(int urn) => By.CssSelector($"#urn-{urn}");
     public static By SearchResultEstablishmentAddress(int urn) => By.CssSelector($"#address-{urn}");
