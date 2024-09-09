@@ -1,21 +1,11 @@
-using Azure;
-using Azure.Search.Documents;
-using Azure.Search.Documents.Models;
-using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
-using Dfe.Data.SearchPrototype.Infrastructure.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure.Options;
-using Dfe.Data.SearchPrototype.Infrastructure.Options.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using GovUk.Frontend.AspNetCore;
-using SearchForEstablishments = Dfe.Data.SearchPrototype.SearchForEstablishments;
-using Infrastructure = Dfe.Data.SearchPrototype.Infrastructure;
-using Dfe.Data.Common.Infrastructure.CognitiveSearch;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -26,19 +16,14 @@ builder.Services.AddGovUkFrontend();
 //
 //
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddScoped(typeof(ISearchServiceAdapter), typeof(CognitiveSearchServiceAdapter<Infrastructure.Establishment>));
-builder.Services.AddScoped<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>, SearchByKeywordUseCase>();
-builder.Services.AddSingleton(typeof(IMapper<Response<SearchResults<Infrastructure.Establishment>>, EstablishmentResults>), typeof(AzureSearchResponseToEstablishmentResultMapper));
-builder.Services.AddSingleton<IMapper<SearchSettingsOptions, SearchOptions>, SearchOptionsToAzureOptionsMapper>();
+builder.Services.AddCognitiveSearchAdaptorServices();
+builder.Services.AddSearchForEstablishmentServices();
+
 builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsViewModel>, SearchByKeywordResponseToViewModelMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Address>, AzureSearchResultToAddressMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, SearchForEstablishments.Models.Establishment>, AzureSearchResultToEstablishmentMapper>();
-builder.Services.AddSingleton<IMapper<EstablishmentResults, SearchByKeywordResponse>, ResultsToResponseMapper>();
 builder.Services.AddOptions<SearchSettingsOptions>("establishments")
     .Configure<IConfiguration>(
         (settings, configuration) =>
             configuration.GetRequiredSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
-builder.Services.AddScoped<ISearchOptionsFactory, SearchOptionsFactory>();
 //
 //
 // End of IOC container registrations

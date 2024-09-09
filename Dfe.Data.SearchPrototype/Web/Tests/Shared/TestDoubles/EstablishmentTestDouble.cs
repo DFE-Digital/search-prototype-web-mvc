@@ -2,7 +2,7 @@
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Shared;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
 public class EstablishmentTestDouble
 {

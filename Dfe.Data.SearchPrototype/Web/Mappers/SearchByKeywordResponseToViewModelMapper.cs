@@ -48,6 +48,22 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
                 });
             }
         }
+        if (input.EstablishmentFacetResults != null)
+        {
+            viewModel.Facets = new();
+
+            foreach (var facet in input.EstablishmentFacetResults)
+            {
+                var facetValues = facet.Results.Select(
+                    result => new FacetValue(
+                          Value: result.Value,
+                          Count: result.Count
+                        )).ToArray();
+
+                viewModel.Facets.Add(new Facet(Name: facet.Name,
+                                               Values: facetValues));
+            };
+        }
         return viewModel;
     }
 }
