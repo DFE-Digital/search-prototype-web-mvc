@@ -28,7 +28,7 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
         if (input.EstablishmentResults != null)
         {
             viewModel.SearchItems = new();
-            foreach (var establishment in input.EstablishmentResults)
+            foreach (var establishment in input.EstablishmentResults.Establishments)
             {
                 viewModel.SearchItems.Add(new EstablishmentViewModel
                 {
@@ -52,7 +52,7 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
         {
             viewModel.Facets = new();
 
-            foreach (var facet in input.EstablishmentFacetResults)
+            foreach (var facet in input.EstablishmentFacetResults.Facets)
             {
                 var facetValues = facet.Results.Select(
                     result => new FacetValue(

@@ -52,7 +52,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
         resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Contain("Results");
         resultsPage.GetMultipleElements(SearchPage.SearchResultLinks.Criteria)
-            .Count().Should().Be(useCaseResponse.EstablishmentResults.Count);
+            .Count().Should().Be(useCaseResponse.EstablishmentResults.Establishments.Count);
     }
 
     private WebApplicationFactory<Program> HostWithMockUseCaseWithResponse(SearchByKeywordResponse response)

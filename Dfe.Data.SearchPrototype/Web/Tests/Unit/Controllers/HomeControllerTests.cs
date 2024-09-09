@@ -24,7 +24,7 @@ public class HomeControllerTests
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
-        SearchByKeywordResponse response = new(new List<Establishment>().AsReadOnly());
+        SearchByKeywordResponse response = new(status: SearchResponseStatus.Success) {EstablishmentResults = new EstablishmentResults(new List<Establishment>())};
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
@@ -41,7 +41,7 @@ public class HomeControllerTests
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
-        SearchByKeywordResponse response = new(new List<Establishment>().AsReadOnly());
+        SearchByKeywordResponse response = new(status: SearchResponseStatus.Success) {EstablishmentResults = new(new List<Establishment>()) };
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 

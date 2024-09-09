@@ -14,7 +14,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
             _jsonFileLoader = jsonFileLoader;
         }
 
-        public async Task<EstablishmentResults> SearchAsync(SearchContext searchContext)
+        public async Task<SearchResults> SearchAsync(SearchContext searchContext)
         {
             string json = await _jsonFileLoader.LoadJsonFile();
 
@@ -36,7 +36,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
                     (string)establishmentToken["phaseOfEducation"]!,
                     (string)establishmentToken["establishmentStatusName"]!);
 
-            return new EstablishmentResults(establishments);
+            return new SearchResults()
+            {
+                Establishments = new EstablishmentResults(establishments)
+            };
         }
     }
 }

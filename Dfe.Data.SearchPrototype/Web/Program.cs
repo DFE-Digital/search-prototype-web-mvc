@@ -1,8 +1,10 @@
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
+using Dfe.Data.SearchPrototype.Infrastructure.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using GovUk.Frontend.AspNetCore;
@@ -18,6 +20,8 @@ builder.Services.AddGovUkFrontend();
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddCognitiveSearchAdaptorServices();
 builder.Services.AddSearchForEstablishmentServices();
+
+builder.Services.AddSingleton<IMapper<Dictionary<string, IList<Azure.Search.Documents.Models.FacetResult>>, EstablishmentFacets>, AzureFacetResultToEstablishmentFacetsMapper>();
 
 builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsViewModel>, SearchByKeywordResponseToViewModelMapper>();
 builder.Services.AddOptions<SearchSettingsOptions>("establishments")
