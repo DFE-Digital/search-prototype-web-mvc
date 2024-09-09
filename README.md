@@ -1,4 +1,10 @@
+This solution uses the SearchPrototype application package to surface the results of a keyword search through both a Web MVC project and an API.
 # data.search-prototype-web-mvc
+Web MVC frontend host for search-prototype application.
+## data.search-prototype-data
+Project responsible for pushing data from a local file to Azure Search AI service. Refer to README file within the project for more information
+## data.search-prototype-webApi
+Project created to surface the results of a keyword search through an API.
 ## Using The Nuget Packages From Your Development Machine
 Some Nuget packages referenced by this repository are served under the DfE-Digital organisation.
 The be able to use these Nuget Packages (and others) you must configure your development machine to have a new NuGet Package Source.
