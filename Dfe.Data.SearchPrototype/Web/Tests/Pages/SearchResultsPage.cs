@@ -8,8 +8,6 @@ public sealed class SearchResultsPage : BasePage
 {
     public SearchResultsPage(IWebDriverContext driverContext) : base(driverContext) { }
 
-    //TODO: Add ids when they are implemented into web
-
     public static By SearchResultsNumber => By.CssSelector("#search-results-count");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
     public static By SearchNoResultText => By.CssSelector("#no-results");
