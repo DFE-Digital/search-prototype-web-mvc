@@ -24,32 +24,36 @@
     @* filters *@
     @if (Model != null)
     {
-        <div class="govuk-grid-column-one-third">
-            <h3 id="filters-heading">Filters</h3>
-            @if (Model.Facets is not null && Model.Facets.Any())
-            {
-                @foreach (var facet in Model.Facets)
+        @if (Model.HasResults)
+        {
+            <div id="filters-container" class="govuk-grid-column-one-third">
+                <h3 id="filters-heading">Filters</h3>
+                @if (Model.Facets is not null && Model.Facets.Any())
                 {
-                    <govuk-checkboxes name="@facet.Name">
-                        <govuk-checkboxes-fieldset>
-                            <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
-                                @facet.Name
-                            </govuk-checkboxes-fieldset-legend>
-                            @foreach (var facetItem in facet.Values)
-                            {
-                                <govuk-checkboxes-item value="@facetItem.Value">
-                                    @facetItem.Value (@facetItem.Count)
-                                </govuk-checkboxes-item>
-                            }
-                        </govuk-checkboxes-fieldset>
-                    </govuk-checkboxes>
+                    @foreach (var facet in Model.Facets)
+                    {
+                        <govuk-checkboxes name="@facet.Name">
+                            <govuk-checkboxes-fieldset>
+                                <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
+                                    @facet.Name
+                                </govuk-checkboxes-fieldset-legend>
+                                @foreach (var facetItem in facet.Values)
+                                {
+                                    <govuk-checkboxes-item value="@facetItem.Value">
+                                        @facetItem.Value (@facetItem.Count)
+                                    </govuk-checkboxes-item>
+                                }
+                            </govuk-checkboxes-fieldset>
+                        </govuk-checkboxes>
+                    }
+
                 }
-            }
-            else
-            {
-                <p>No filters available</p>
-            }
-        </div>
+                else
+                {
+                    <p>No filters available</p>
+                }
+            </div>
+        }
         @* end of filters *@
         @* display results *@
         @if (Model.HasResults)
