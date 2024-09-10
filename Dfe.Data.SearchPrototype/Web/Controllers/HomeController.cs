@@ -58,7 +58,7 @@ public class HomeController : Controller
 
         SearchByKeywordResponse response =
             await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyWord + "*", "establishments"));
+                new SearchByKeywordRequest(searchKeyWord + "*"));
 
         SearchResultsViewModel viewModel = _mapper.MapFrom(response);
         return View(viewModel);

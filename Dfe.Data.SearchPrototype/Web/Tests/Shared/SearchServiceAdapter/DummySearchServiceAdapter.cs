@@ -14,7 +14,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
             _jsonFileLoader = jsonFileLoader;
         }
 
-        public async Task<SearchResults> SearchAsync(SearchContext searchContext)
+        public async Task<SearchResults> SearchAsync(SearchRequest searchRequest)
         {
             string json = await _jsonFileLoader.LoadJsonFile();
 
@@ -22,7 +22,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
 
             IEnumerable<Establishment> establishments =
                 from establishmentToken in establishmentsObject["establishments"]
-                where (establishmentToken["name"]!.ToString()+"*").Contains(searchContext.SearchKeyword)
+                where (establishmentToken["name"]!.ToString()+"*").Contains(searchRequest.SearchKeyword)
                 select new Establishment(
                     (string)establishmentToken["urn"]!,
                     (string)establishmentToken["name"]!,

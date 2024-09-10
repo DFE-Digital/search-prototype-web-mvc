@@ -1,5 +1,7 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+﻿using Dfe.Data.SearchPrototype.Infrastructure.Tests.TestDoubles.Shared;
+using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
+using Dfe.Data.SearchPrototype.Tests.SearchForEstablishments.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
@@ -22,9 +24,11 @@ public class HomeControllerTests
     {
         // arrange
         var stubSearchResults = new SearchResults() { Establishments = EstablishmentResultsTestDouble.Create() };
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchContext>()))
+        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchRequest>()))
             .ReturnsAsync(stubSearchResults);
-        var useCase = new SearchByKeywordUseCase(_searchServiceAdapterMock.Object);
+        var useCase = new SearchByKeywordUseCase(
+            _searchServiceAdapterMock.Object,
+            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
         var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper());
 
         // act
@@ -43,9 +47,11 @@ public class HomeControllerTests
     {
         // arrange
         var stubSearchResults = new SearchResults() { Establishments = EstablishmentResultsTestDouble.CreateWithNoResults() };
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchContext>()))
+        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchRequest>()))
             .ReturnsAsync(stubSearchResults);
-        var useCase = new SearchByKeywordUseCase(_searchServiceAdapterMock.Object);
+        var useCase = new SearchByKeywordUseCase(
+            _searchServiceAdapterMock.Object,
+            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
         var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper());
 
         // act
