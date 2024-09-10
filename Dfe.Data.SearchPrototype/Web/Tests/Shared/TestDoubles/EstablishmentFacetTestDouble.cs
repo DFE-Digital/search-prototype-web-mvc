@@ -6,8 +6,14 @@ public static class EstablishmentFacetTestDouble
 {
     public static EstablishmentFacet Create()
     {
-        var facetResultList = new List<FacetResult>() { new("primary", 10), new("secondary", 5), new("post 16", 2) };
-        return new EstablishmentFacet("Education phase", facetResultList);
+        var faker = new Bogus.Faker();
+        var facetResults = new List<FacetResult>();
+        var facetValuesCount = new Bogus.Faker().Random.Int(1, 10);
+        for (int i = 0; i < facetValuesCount; i++)
+        {
+            var facetResult = new FacetResult(faker.Name.JobTitle(), faker.Random.Int(1, 10));
+            facetResults.Add(facetResult);
+        }
+        return new EstablishmentFacet(new Bogus.Faker().Name.JobType(), facetResults);
     }
 }
-

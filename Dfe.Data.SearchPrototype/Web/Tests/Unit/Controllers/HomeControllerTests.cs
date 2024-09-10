@@ -4,7 +4,6 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Models;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using FluentAssertions;
@@ -14,7 +13,6 @@ using Moq;
 using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Controllers;
-
 
 public class HomeControllerTests
 {
