@@ -7,7 +7,7 @@ Project responsible for pushing data from a local file to Azure Search AI servic
 Project created to surface the results of a keyword search through an API.
 ## Using The Nuget Packages From Your Development Machine
 Some Nuget packages referenced by this repository are served under the DfE-Digital organisation.
-The be able to use these Nuget Packages (and others) you must configure your development machine to have a new NuGet Package Source.
+To be able to use these Nuget Packages (and others) you must configure your development machine to have a new NuGet Package Source.
 To do this, you must first create a PAT token that has at least __read access for packages__.
 
 > **NEVER commit your PAT token to GitHub or any other VCS !**
