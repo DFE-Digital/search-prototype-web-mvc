@@ -1,4 +1,4 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
 using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests.Extensions;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Options;
@@ -75,7 +75,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests
             services.AddSingleton<IJsonFileLoader, JsonFileLoader>();
             services.AddScoped(
                 typeof(ISearchServiceAdapter),
-                typeof(DummySearchServiceAdapter<Infrastructure.Establishment>));
+                typeof(DummySearchServiceAdapter<Infrastructure.DataTransferObjects.Establishment>));
 
             string fileName =
                 new ConfigurationBuilder()

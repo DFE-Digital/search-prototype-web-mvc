@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.1" />
+		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.2-2" />
 		<PackageReference Include="Dfe.Data.SearchPrototype" Version="1.0.0" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.0" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.0" />

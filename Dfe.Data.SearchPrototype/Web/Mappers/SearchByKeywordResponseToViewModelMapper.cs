@@ -1,5 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Models;
 
 namespace Dfe.Data.SearchPrototype.Web.Mappers;
@@ -50,7 +50,7 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
         }
         if (input.EstablishmentFacetResults != null)
         {
-            viewModel.Facets = new();
+            viewModel.Facets = [];
 
             foreach (var facet in input.EstablishmentFacetResults.Facets)
             {
@@ -60,8 +60,8 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
                           Count: result.Count
                         )).ToArray();
 
-                viewModel.Facets.Add(new Facet(Name: facet.Name,
-                                               Values: facetValues));
+                viewModel.Facets.Add(
+                    new Facet(Name: facet.Name, Values: facetValues));
             };
         }
         return viewModel;

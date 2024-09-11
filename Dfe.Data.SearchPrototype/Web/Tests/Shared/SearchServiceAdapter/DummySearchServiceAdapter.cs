@@ -1,4 +1,4 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Resources;
 using Newtonsoft.Json.Linq;
@@ -14,7 +14,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
             _jsonFileLoader = jsonFileLoader;
         }
 
-        public async Task<SearchResults> SearchAsync(SearchRequest searchRequest)
+        public async Task<SearchResults> SearchAsync(SearchServiceAdapterRequest searchServiceAdapterRequest)
         {
             string json = await _jsonFileLoader.LoadJsonFile();
 
@@ -22,7 +22,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
 
             IEnumerable<Establishment> establishments =
                 from establishmentToken in establishmentsObject["establishments"]
-                where (establishmentToken["name"]!.ToString()+"*").Contains(searchRequest.SearchKeyword)
+                where (establishmentToken["name"]!+"*").Contains(searchServiceAdapterRequest.SearchKeyword)
                 select new Establishment(
                     (string)establishmentToken["urn"]!,
                     (string)establishmentToken["name"]!,

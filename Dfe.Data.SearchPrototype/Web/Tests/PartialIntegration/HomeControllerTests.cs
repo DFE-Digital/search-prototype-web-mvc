@@ -1,5 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Infrastructure.Tests.TestDoubles.Shared;
-using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Tests.SearchForEstablishments.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Controllers;
@@ -24,7 +25,7 @@ public class HomeControllerTests
     {
         // arrange
         var stubSearchResults = new SearchResults() { Establishments = EstablishmentResultsTestDouble.Create() };
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchRequest>()))
+        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchServiceAdapterRequest>()))
             .ReturnsAsync(stubSearchResults);
         var useCase = new SearchByKeywordUseCase(
             _searchServiceAdapterMock.Object,
@@ -47,7 +48,7 @@ public class HomeControllerTests
     {
         // arrange
         var stubSearchResults = new SearchResults() { Establishments = EstablishmentResultsTestDouble.CreateWithNoResults() };
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchRequest>()))
+        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchServiceAdapterRequest>()))
             .ReturnsAsync(stubSearchResults);
         var useCase = new SearchByKeywordUseCase(
             _searchServiceAdapterMock.Object,
