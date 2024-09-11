@@ -12,12 +12,8 @@
         "postcode": "GOO OSE"
       },
       "establishmentType": "Academy",
-      "educationPhase": {
-        "isPrimary": "1",
-        "isSecondary": "0",
-        "isPost16": "1"
-      },
-      " establishmentStatusCode": "1"
+      "phaseOfEducation": "Secondary",
+      "establishmentStatusName": "Open"
     },
     {
       "urn": "234567",
@@ -30,12 +26,8 @@
         "postcode": "HOR SEE"
       },
       "establishmentType": "Academy",
-      "educationPhase": {
-        "isPrimary": "1",
-        "isSecondary": "0",
-        "isPost16": "1"
-      },
-      " establishmentStatusCode": "1"
+      "phaseOfEducation": "Post 16",
+      "establishmentStatusName": "Open"
     },
     {
       "urn": "345678",
@@ -48,12 +40,8 @@
         "postcode": "DUU CKK"
       },
       "establishmentType": "Community School",
-      "educationPhase": {
-        "isPrimary": "1",
-        "isSecondary": "0",
-        "isPost16": "1"
-      },
-      " establishmentStatusCode": "1"
+      "phaseOfEducation": "Primary",
+      "establishmentStatusName": "Open"
     }
   ]
 }

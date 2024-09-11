@@ -1,6 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.PageObjectModel;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
 public abstract class BasePage
 {

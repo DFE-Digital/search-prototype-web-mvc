@@ -1,7 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 using OpenQA.Selenium;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.PageObjectModel;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
 public sealed class SearchPage : BasePage
 {
