@@ -3,7 +3,6 @@ using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Extensions;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests;
-using Dfe.Data.SearchPrototype.Web.Tests.PageObjectModel;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting;
@@ -13,11 +12,12 @@ using System.Net.Http;
 using TechTalk.SpecFlow;
 using Xunit;
 using Xunit.Abstractions;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
 {
 
-        [Binding]
+    [Binding]
     public sealed class AccessibilitySteps : IClassFixture<WebApplicationFactoryFixture<Program>>
     {
         private readonly AccessibilityOptions _options;
