@@ -2,9 +2,9 @@
 using AngleSharp.Html.Dom;
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
-using Dfe.Data.SearchPrototype.Web.Tests.PageObjectModel;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
