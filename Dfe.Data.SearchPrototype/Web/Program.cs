@@ -51,4 +51,7 @@ app.MapControllerRoute(
 
 app.Run();
 
-public partial class Program { }
+namespace Dfe.Data.SearchPrototype.Web
+{
+    public partial class Program { }
+}

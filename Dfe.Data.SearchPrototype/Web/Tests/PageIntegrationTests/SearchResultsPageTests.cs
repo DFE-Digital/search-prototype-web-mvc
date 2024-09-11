@@ -7,16 +7,18 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 using Xunit.Abstractions;
 
+using Dfe.Data.SearchPrototype.Web;
+
 namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 {
-    public class SearchResultsPageTests : IClassFixture<PageWebApplicationFactory>
+    public class SearchResultsPageTests : IClassFixture<PageWebApplicationFactory<Program>>
     {
         private const string uri = "http://localhost:5000";
         private readonly HttpClient _client;
         private readonly ITestOutputHelper _logger;
         private readonly WebApplicationFactory<Program> _factory;
 
-        public SearchResultsPageTests(PageWebApplicationFactory factory, ITestOutputHelper logger)
+        public SearchResultsPageTests(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions

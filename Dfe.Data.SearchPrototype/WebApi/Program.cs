@@ -1,18 +1,7 @@
-using Azure.Search.Documents.Models;
-using Azure.Search.Documents;
-using Azure;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
-using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
-using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Options.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.Infrastructure;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
+using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
-using Infrastructure = Dfe.Data.SearchPrototype.Infrastructure;
-using Models = Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,3 +43,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+namespace Dfe.Data.SearchPrototype.WebApi
+{
+    public partial class Program { }
+}
