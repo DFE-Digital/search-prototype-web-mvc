@@ -18,7 +18,8 @@ public sealed class SearchPage : BasePage
     public static By SearchInput => By.CssSelector("#searchKeyWord");
     public static By SearchForm => By.CssSelector("#search-establishments");
     public static By SearchButton => By.CssSelector("#search-establishments button");
-    public static By SearchResultsNumber => By.CssSelector("#results");
+    public static By SearchResultsContainer => By.CssSelector("#results");
+    public static By SearchResultsNumber => By.CssSelector("#search-results-count");
     public static By SearchResultLinks => By.CssSelector("ul li h4 a");
     public static By SearchNoResultText => By.CssSelector("#no-results");
     public static By FiltersHeading => By.CssSelector("#filters-heading");

@@ -147,7 +147,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             // using the selenium selector under the hood
             var thingToTest = resultsPage.GetElementText(SearchPage.SearchNoResultText.Criteria);
             thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
-
         }
     }
 }
