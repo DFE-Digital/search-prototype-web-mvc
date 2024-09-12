@@ -9,7 +9,7 @@ public static class SearchByKeywordCriteriaTestDouble
         return new SearchByKeywordCriteria()
         {
             Facets = ["FACET1", "FACET2", "FACET3"],
-            SearchFields = ["FIELD1", "FIELD2", "FILED3"]
+            SearchFields = ["FIELD1", "FIELD2", "FIELD3"]
         };
     }
 }
