@@ -8,8 +8,8 @@ public static class SearchByKeywordCriteriaTestDouble
     {
         return new SearchByKeywordCriteria()
         {
-            Facets = new List<string>() { },
-            SearchFields = new List<string>() { }
+            Facets = ["FACET1", "FACET2", "FACET3"],
+            SearchFields = ["FIELD1", "FIELD2", "FILED3"]
         };
     }
 }
