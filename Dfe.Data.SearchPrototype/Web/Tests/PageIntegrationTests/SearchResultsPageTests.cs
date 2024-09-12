@@ -1,7 +1,7 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
-using Dfe.Data.SearchPrototype.Web.Tests.PageObjectModel;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
@@ -9,14 +9,14 @@ using Xunit.Abstractions;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 {
-    public class SearchPageTests : IClassFixture<PageWebApplicationFactory>
+    public class SearchResultsPageTests : IClassFixture<PageWebApplicationFactory>
     {
         private const string uri = "http://localhost:5000";
         private readonly HttpClient _client;
         private readonly ITestOutputHelper _logger;
         private readonly WebApplicationFactory<Program> _factory;
 
-        public SearchPageTests(PageWebApplicationFactory factory, ITestOutputHelper logger)
+        public SearchResultsPageTests(PageWebApplicationFactory factory, ITestOutputHelper logger)
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -147,7 +147,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             // using the selenium selector under the hood
             var thingToTest = resultsPage.GetElementText(SearchPage.SearchNoResultText.Criteria);
             thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
-
         }
     }
 }

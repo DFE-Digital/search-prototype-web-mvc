@@ -14,7 +14,6 @@ using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Controllers;
 
-
 public class HomeControllerTests
 {
     [Fact]

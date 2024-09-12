@@ -16,7 +16,7 @@ public static class SearchByKeywordResponseTestDouble
         List<EstablishmentFacet> facetResults = new();
         for (int i = 0; i < new Bogus.Faker().Random.Int(2, 10); i++)
         {
-            facetResults.Add(EstablishmentFacetTestDouble.Create());
+            facetResults.Add(EstablishmentFacetTestDouble.Create(i.ToString()));
         }
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
