@@ -1,5 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Models;
 
 namespace Dfe.Data.SearchPrototype.Web.Mappers;
@@ -28,7 +28,7 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
         if (input.EstablishmentResults != null)
         {
             viewModel.SearchItems = new();
-            foreach (var establishment in input.EstablishmentResults)
+            foreach (var establishment in input.EstablishmentResults.Establishments)
             {
                 viewModel.SearchItems.Add(new EstablishmentViewModel
                 {
@@ -50,9 +50,9 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
         }
         if (input.EstablishmentFacetResults != null)
         {
-            viewModel.Facets = new();
+            viewModel.Facets = [];
 
-            foreach (var facet in input.EstablishmentFacetResults)
+            foreach (var facet in input.EstablishmentFacetResults.Facets)
             {
                 var facetValues = facet.Results.Select(
                     result => new FacetValue(
@@ -60,8 +60,8 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
                           Count: result.Count
                         )).ToArray();
 
-                viewModel.Facets.Add(new Facet(Name: facet.Name,
-                                               Values: facetValues));
+                viewModel.Facets.Add(
+                    new Facet(Name: facet.Name, Values: facetValues));
             };
         }
         return viewModel;

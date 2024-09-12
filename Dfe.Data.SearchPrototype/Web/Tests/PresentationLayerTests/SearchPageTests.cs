@@ -1,7 +1,7 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
-using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
@@ -118,7 +118,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
             .TextContent.Should().Contain("Results");
         resultsPage.QuerySelector(SearchPage.SearchResultsContainer.Criteria)!
             .GetMultipleElements(SearchPage.SearchResultLinks.Criteria)
-            .Count().Should().Be(useCaseResponse.EstablishmentResults.Count);
+            .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 
     [Fact]
@@ -149,7 +149,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
         filtersHeading.Should().NotBeNull();
         filtersHeading!.TextContent.Should().Be("Filters");
 
-        var expectedFacetNames = useCaseResponse.EstablishmentFacetResults!.Select(f => f.Name).ToArray();
+        var expectedFacetNames = useCaseResponse.EstablishmentFacetResults!.Facets.Select(f => f.Name).ToArray();
         var resultFacetNames = resultsPage.GetElementsByTagName("legend").Select(x => x.InnerHtml.Trim());
         foreach (var facetName in expectedFacetNames)
         {
