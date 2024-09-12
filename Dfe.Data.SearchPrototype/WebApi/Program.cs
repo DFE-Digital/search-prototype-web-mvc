@@ -1,17 +1,6 @@
-using Azure.Search.Documents.Models;
-using Azure.Search.Documents;
-using Azure;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
-using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
-using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Options.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.Infrastructure;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
-using Infrastructure = Dfe.Data.SearchPrototype.Infrastructure;
-using Models = Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,13 +16,9 @@ builder.Services.AddSwaggerGen();
 //
 //
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddCognitiveSearchAdaptorServices();
+builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();
 
-builder.Services.AddOptions<SearchSettingsOptions>("establishments")
-    .Configure<IConfiguration>(
-        (settings, configuration) =>
-            configuration.GetRequiredSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
 //
 //
 // End of IOC container registrations
