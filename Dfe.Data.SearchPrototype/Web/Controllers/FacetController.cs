@@ -16,10 +16,10 @@ public class FacetController : Controller
     {
         List<TestFacet> testFacets =
         [
-            new(){ Name = "FACET_1", IsSelected= false},
-            new(){ Name = "FACET_2", IsSelected= false},
-            new(){ Name = "FACET_3", IsSelected= false},
-            new(){ Name = "FACET_4", IsSelected= false}
+            new(){ Name = "FACET_1", IsSelected = false },
+            new(){ Name = "FACET_2", IsSelected = false },
+            new(){ Name = "FACET_3", IsSelected = false },
+            new(){ Name = "FACET_4", IsSelected = false }
         ];
 
         FacetsViewModel model = new()
