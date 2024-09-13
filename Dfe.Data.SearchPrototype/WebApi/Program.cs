@@ -1,5 +1,6 @@
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Infrastructure;
+using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 
 
@@ -39,3 +40,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+namespace Dfe.Data.SearchPrototype.WebApi
+{
+    public partial class Program { }
+}

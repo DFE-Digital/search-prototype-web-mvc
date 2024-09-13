@@ -13,10 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Xunit;
+using Dfe.Data.SearchPrototype.Web;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 
-public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
+public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.SearchPrototype.Web.Program>>
 {
     private const string uri = "http://localhost:5000";
     private Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> _useCase = new();
