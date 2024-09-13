@@ -28,38 +28,36 @@
         {
             <div id="filters-container" class="govuk-grid-column-one-third">
                 <h3 id="filters-heading">Filters</h3>
+                <button type="submit" class="govuk-button" data-module="govuk-button">
+                    Apply filters
+                </button>
                 @if (Model.Facets is not null && Model.Facets.Any())
                 {
                     for (int j = 0; j < Model.Facets.Count; j++)
                     {
-                        <div id="filters-container" class="govuk-grid-column-one-third">
-                            <div class="govuk-form-group">
-                                <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-                                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                                        <h1 class="govuk-fieldset__heading">
-                                            @Model.Facets[j].Name
-                                        </h1>
-                                    </legend>
-                                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                                        @for (int i = 0; i < Model.Facets[j].Values.Count; i++)
-                                        {
-                                            <div class="govuk-checkboxes__item">
-                                                @Html.CheckBoxFor(r => Model.Facets[j].Values[i].IsSelected, new { @class = "govuk-checkboxes__input" })
-                                                <label class="govuk-label govuk-checkboxes__label" for="waste">
-                                                    @Model.Facets[j].Values[i].Value
-                                                </label>
-                                                @Html.HiddenFor(h => @Model.Facets[j].Values[i].Value)
-                                            </div>
-                                        }
-                                    </div>
-                                    <hr />
-                                </fieldset>
-                            </div>
-                         </div>
+                        <div class="govuk-form-group">
+                            <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                                    <h1 class="govuk-fieldset__heading">
+                                        @Model.Facets[j].Name
+                                    </h1>
+                                </legend>
+                                <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                                    @for (int i = 0; i < Model.Facets[j].Values.Count; i++)
+                                    {
+                                        <div class="govuk-checkboxes__item">
+                                            @Html.CheckBoxFor(r => Model.Facets[j].Values[i].IsSelected, new { @class = "govuk-checkboxes__input" })
+                                            <label class="govuk-label govuk-checkboxes__label" for="waste">
+                                                @Model.Facets[j].Values[i].Value
+                                            </label>
+                                            @Html.HiddenFor(h => @Model.Facets[j].Values[i].Value)
+                                        </div>
+                                    }
+                                </div>
+                                <hr />
+                            </fieldset>
+                        </div>
                     }
-                    <button type="submit" class="govuk-button" data-module="govuk-button">
-                        Apply filters
-                    </button>
                 }
                 else
                 {
