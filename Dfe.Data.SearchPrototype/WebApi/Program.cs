@@ -3,6 +3,7 @@ using Dfe.Data.SearchPrototype.Infrastructure;
 using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,13 +17,9 @@ builder.Services.AddSwaggerGen();
 //
 //
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddCognitiveSearchAdaptorServices();
+builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();
 
-builder.Services.AddOptions<SearchSettingsOptions>("establishments")
-    .Configure<IConfiguration>(
-        (settings, configuration) =>
-            configuration.GetRequiredSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
 //
 //
 // End of IOC container registrations
