@@ -1,0 +1,26 @@
+﻿@model FacetsViewModel
+@{
+    ViewData["Title"] = "FacetTest";
+}
+<hr />
+
+@using (Html.BeginForm("GetFacets", "Facet"))
+{
+    <div id="filters-container" class="govuk-grid-column-one-third">
+    <h3 id="filters-heading">Filters</h3>
+        @for (int i = 0; i < Model.TestFacets.Count; i++)
+        {
+            <div>
+                @Html.CheckBoxFor(r => Model.TestFacets[i].IsSelected)
+                <label>  @Model.TestFacets[i].Name</label>
+
+                @Html.HiddenFor(h => @Model.TestFacets[i].Name)
+            </div>
+        }
+        <hr />
+
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+            Apply filters
+        </button>
+    </div>
+}
