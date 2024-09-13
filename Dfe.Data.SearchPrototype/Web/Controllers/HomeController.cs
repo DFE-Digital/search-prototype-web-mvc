@@ -1,6 +1,6 @@
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
 using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -58,7 +58,7 @@ public class HomeController : Controller
 
         SearchByKeywordResponse response =
             await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyWord + "*", "establishments"));
+                new SearchByKeywordRequest(searchKeyWord + "*"));
 
         SearchResultsViewModel viewModel = _mapper.MapFrom(response);
         return View(viewModel);

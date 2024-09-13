@@ -1,11 +1,12 @@
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
-using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using GovUk.Frontend.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,14 +17,9 @@ builder.Services.AddGovUkFrontend();
 //
 //
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddCognitiveSearchAdaptorServices();
+builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();
-
 builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsViewModel>, SearchByKeywordResponseToViewModelMapper>();
-builder.Services.AddOptions<SearchSettingsOptions>("establishments")
-    .Configure<IConfiguration>(
-        (settings, configuration) =>
-            configuration.GetRequiredSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
 //
 //
 // End of IOC container registrations
@@ -51,4 +47,7 @@ app.MapControllerRoute(
 
 app.Run();
 
-public partial class Program { }
+namespace Dfe.Data.SearchPrototype.Web
+{
+    public partial class Program { }
+}

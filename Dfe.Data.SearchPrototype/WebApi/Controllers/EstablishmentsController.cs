@@ -1,5 +1,5 @@
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
-using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Data.SearchPrototype.WebApi.Controllers
@@ -29,7 +29,7 @@ namespace Dfe.Data.SearchPrototype.WebApi.Controllers
                 return BadRequest();
             }
 
-            var searchByKeywordRequest = new SearchByKeywordRequest(request.SearchKeyword, "establishments");
+            var searchByKeywordRequest = new SearchByKeywordRequest(request.SearchKeyword);
             var response = await _searchByKeywordUseCase.HandleRequest(searchByKeywordRequest);
 
             return Ok(response);

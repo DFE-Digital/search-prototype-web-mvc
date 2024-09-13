@@ -1,5 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.SearchForEstablishments;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
@@ -22,18 +22,18 @@ public class SearchByKeywordResponseToViewModelMapperTests
         SearchResultsViewModel viewModelResults = _serviceModelToViewModelMapper.MapFrom(response);
 
         // assert.
-        for (int i = 0; i < response.EstablishmentResults?.Count; i++)
+        for (int i = 0; i < response.EstablishmentResults!.Establishments?.Count; i++)
         {
-            Assert.Equal(response.EstablishmentResults.ToList()[i].Urn, viewModelResults.SearchItems![i].Urn);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].Name, viewModelResults.SearchItems[i].Name);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].Address.Street, viewModelResults.SearchItems[i].Address.Street);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].Address.Locality, viewModelResults.SearchItems[i].Address.Locality);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].Address.Address3, viewModelResults.SearchItems[i].Address.Address3);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].Address.Town, viewModelResults.SearchItems[i].Address.Town);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].Address.Postcode, viewModelResults.SearchItems[i].Address.Postcode);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].EstablishmentType, viewModelResults.SearchItems[i].EstablishmentType);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].PhaseOfEducation, viewModelResults.SearchItems[i].PhaseOfEducation);
-            Assert.Equal(response.EstablishmentResults.ToList()[i].EstablishmentStatusName, viewModelResults.SearchItems[i].EstablishmentStatusName);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].Urn, viewModelResults.SearchItems![i].Urn);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].Name, viewModelResults.SearchItems[i].Name);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].Address.Street, viewModelResults.SearchItems[i].Address.Street);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].Address.Locality, viewModelResults.SearchItems[i].Address.Locality);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].Address.Address3, viewModelResults.SearchItems[i].Address.Address3);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].Address.Town, viewModelResults.SearchItems[i].Address.Town);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].Address.Postcode, viewModelResults.SearchItems[i].Address.Postcode);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].EstablishmentType, viewModelResults.SearchItems[i].EstablishmentType);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].PhaseOfEducation, viewModelResults.SearchItems[i].PhaseOfEducation);
+            Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].EstablishmentStatusName, viewModelResults.SearchItems[i].EstablishmentStatusName);
         }
     }
 
@@ -47,7 +47,7 @@ public class SearchByKeywordResponseToViewModelMapperTests
         SearchResultsViewModel viewModelResults = _serviceModelToViewModelMapper.MapFrom(response);
 
         // assert
-        foreach (var facetedField in response.EstablishmentFacetResults!) // for each FacetedField (e.g. Phase of education)
+        foreach (var facetedField in response.EstablishmentFacetResults!.Facets!) // for each FacetedField (e.g. Phase of education)
         {
             var equivalentFacetedField = viewModelResults.Facets!.Where(x => x.Name == facetedField.Name).First();
             Assert.NotNull(equivalentFacetedField); // the name has been mapped correctly
