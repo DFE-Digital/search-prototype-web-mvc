@@ -6,7 +6,8 @@
 }
 
 @* search component *@
-<form method="get" action="@Url.Action("Index", "home")" id="search-establishments">
+@using (Html.BeginForm("SearchWithFilters", "Home"))
+{
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
         <govuk-input-hint>Search establishments</govuk-input-hint>
@@ -20,7 +21,6 @@
         </govuk-input-suffix>
     </govuk-input>
     @* end of search component *@
-
     @* filters *@
     @if (Model != null)
     {
@@ -30,23 +30,36 @@
                 <h3 id="filters-heading">Filters</h3>
                 @if (Model.Facets is not null && Model.Facets.Any())
                 {
-                    @foreach (var facet in Model.Facets)
+                    for (int j = 0; j < Model.Facets.Count; j++)
                     {
-                        <govuk-checkboxes name="@facet.Name">
-                            <govuk-checkboxes-fieldset>
-                                <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
-                                    @facet.Name
-                                </govuk-checkboxes-fieldset-legend>
-                                @foreach (var facetItem in facet.Values)
-                                {
-                                    <govuk-checkboxes-item value="@facetItem.Value">
-                                        @facetItem.Value (@facetItem.Count)
-                                    </govuk-checkboxes-item>
-                                }
-                            </govuk-checkboxes-fieldset>
-                        </govuk-checkboxes>
+                        <div id="filters-container" class="govuk-grid-column-one-third">
+                            <div class="govuk-form-group">
+                                <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+                                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                        <h1 class="govuk-fieldset__heading">
+                                            @Model.Facets[j].Name
+                                        </h1>
+                                    </legend>
+                                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                                        @for (int i = 0; i < Model.Facets[j].Values.Count; i++)
+                                        {
+                                            <div class="govuk-checkboxes__item">
+                                                @Html.CheckBoxFor(r => Model.Facets[j].Values[i].IsSelected, new { @class = "govuk-checkboxes__input" })
+                                                <label class="govuk-label govuk-checkboxes__label" for="waste">
+                                                    @Model.Facets[j].Values[i].Value
+                                                </label>
+                                                @Html.HiddenFor(h => @Model.Facets[j].Values[i].Value)
+                                            </div>
+                                        }
+                                    </div>
+                                    <hr />
+                                </fieldset>
+                            </div>
+                         </div>
                     }
-
+                    <button type="submit" class="govuk-button" data-module="govuk-button">
+                        Apply filters
+                    </button>
                 }
                 else
                 {
@@ -102,4 +115,4 @@
     }
     @* end of display results *@
 
-</form>
+}

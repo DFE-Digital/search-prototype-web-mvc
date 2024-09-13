@@ -57,8 +57,10 @@ public class SearchByKeywordResponseToViewModelMapper : IMapper<SearchByKeywordR
                 var facetValues = facet.Results.Select(
                     result => new FacetValue(
                           Value: result.Value,
-                          Count: result.Count
-                        )).ToArray();
+                          Count: result.Count,
+                          IsSelected: false
+                        ))
+                    .ToList();
 
                 viewModel.Facets.Add(
                     new Facet(Name: facet.Name, Values: facetValues));
