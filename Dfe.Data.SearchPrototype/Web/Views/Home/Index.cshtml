@@ -36,10 +36,18 @@
                     for (int j = 0; j < Model.Facets.Count; j++)
                     {
                         <div class="govuk-form-group">
+                            <input data-val="true" 
+                                aria-hidden='true'
+                                data-val-required="The Name field is required."
+                                id=@String.Format("Facets_{0}__Name",j)
+                                name=@String.Format("Facets[{0}].Name",j)
+                                type="hidden"
+                                value="@Model.Facets[j].Name">
+                            @* @Html.HiddenFor(searchResultViewModel => @Model.Facets[j].Name) *@
                             <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
                                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                                     <h1 class="govuk-fieldset__heading">
-                                        @Html.HiddenFor(searchResultViewModel => @Model.Facets[j].Name)
+                                        @Model.Facets[j].Name
                                     </h1>
                                 </legend>
                                 <div class="govuk-checkboxes" data-module="govuk-checkboxes">
