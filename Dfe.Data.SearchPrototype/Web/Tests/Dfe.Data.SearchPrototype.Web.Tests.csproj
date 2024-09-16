@@ -26,7 +26,7 @@
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
 	<PackageReference Include="Deque.AxeCore.Selenium" Version="4.9.1" />
 	<PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
-	<PackageReference Include="FluentAssertions" Version="6.2.0" />
+	<PackageReference Include="FluentAssertions" Version="6.12.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
     <PackageReference Include="Moq" Version="4.20.70" />
