@@ -1,17 +1,7 @@
-using Azure.Search.Documents.Models;
-using Azure.Search.Documents;
-using Azure;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
-using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
-using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Options.Mappers;
-using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.Infrastructure;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
+using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
-using Infrastructure = Dfe.Data.SearchPrototype.Infrastructure;
-using Models = Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,18 +17,9 @@ builder.Services.AddSwaggerGen();
 //
 //
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddScoped(typeof(ISearchServiceAdapter), typeof(CognitiveSearchServiceAdapter<Infrastructure.Establishment>));
-builder.Services.AddScoped<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>, SearchByKeywordUseCase>();
-builder.Services.AddSingleton(typeof(IMapper<Pageable<SearchResults<Infrastructure.Establishment>>, EstablishmentResults>), typeof(PageableSearchResultsToEstablishmentResultsMapper));
-builder.Services.AddSingleton<IMapper<SearchSettingsOptions, SearchOptions>, SearchOptionsToAzureOptionsMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Address>, AzureSearchResultToAddressMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Models.Establishment>, AzureSearchResultToEstablishmentMapper>();
-//builder.Services.AddSingleton<IMapper<EstablishmentResults, SearchByKeywordResponse>, ResultsToResponseMapper>();
-builder.Services.AddOptions<SearchSettingsOptions>("establishments")
-    .Configure<IConfiguration>(
-        (settings, configuration) =>
-            configuration.GetRequiredSection("SearchEstablishment:SearchSettingsOptions").Bind(settings));
-builder.Services.AddScoped<ISearchOptionsFactory, SearchOptionsFactory>();
+builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
+builder.Services.AddSearchForEstablishmentServices();
+
 //
 //
 // End of IOC container registrations
@@ -59,3 +40,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+namespace Dfe.Data.SearchPrototype.WebApi
+{
+    public partial class Program { }
+}
