@@ -15,14 +15,22 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <returns></returns>
         public IList<FilterRequest> MapFrom(Dictionary<string, List<string>> input)
         {
-            List<FilterRequest> filterRequest = [];
+            List<FilterRequest> filterRequests = [];
 
-            foreach (var item in input)
+            foreach (KeyValuePair<string, List<string>> filterResult in input)
             {
-                filterRequest.Add(new FilterRequest(item.Key, item.Value.ToList<object>()));
+                filterRequests.Add(MapFromFilterRequestViewModel(filterResult));
             }
 
-            return filterRequest;
+            return filterRequests;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filterRequest"></param>
+        /// <returns></returns>
+        private static FilterRequest MapFromFilterRequestViewModel(KeyValuePair<string, List<string>> filterRequest) =>
+            new(filterRequest.Key, [filterRequest.Value]);
     }
 }

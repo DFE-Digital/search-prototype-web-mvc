@@ -69,28 +69,27 @@ public class HomeController : Controller
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="searchKeyWord"></param>
-    /// <param name="viewModelResponse"></param>
+    /// <param name="searchRequestViewModel"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> SearchWithFilters(
-        string searchKeyWord, Dictionary<string, List<string>> selectedFacets)
+    public async Task<IActionResult> SearchWithFilters(SearchRequestViewModel searchRequestViewModel)
     {
-        ViewBag.SearchQuery = searchKeyWord;
-        SearchByKeywordResponse response = null;
+        ViewBag.SearchQuery = searchRequestViewModel.SearchKeyword;
+        SearchByKeywordResponse response = null!;
 
-        if (selectedFacets != null && selectedFacets.Any())
+        if (searchRequestViewModel.HasSelectedFacets())
         {
-            IList<FilterRequest> filterRequests = _requestMapper.MapFrom(selectedFacets);
+            IList<FilterRequest> filterRequests =
+                _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets);
 
             // Mapper
             response =
                 await _searchByKeywordUseCase.HandleRequest(
-                    new SearchByKeywordRequest(searchKeyWord + "*", filterRequests));
+                    new SearchByKeywordRequest(searchRequestViewModel.SearchKeyword + "*", filterRequests));
         }
         else
         {
-            return await Index(searchKeyWord);
+            return await Index(searchRequestViewModel.SearchKeyword!);
         }
 
         return View("Index", _responseMapper.MapFrom(response));

@@ -26,3 +26,21 @@ public class SearchResultsViewModel
     /// </summary>
     public int SearchResultsCount => SearchItems?.Count ?? 0;
 }
+
+public class SearchRequestViewModel
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? SearchKeyword { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public Dictionary<string, List<string>>? SelectedFacets { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool HasSelectedFacets() => SelectedFacets != null && SelectedFacets.Any();
+}
