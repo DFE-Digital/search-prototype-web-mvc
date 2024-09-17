@@ -1,4 +1,6 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
 /// A view model representation of search results defining view logic predicated on the status of the results.
@@ -25,4 +27,12 @@ public class SearchResultsViewModel
     /// Property determining the number of search results.
     /// </summary>
     public int SearchResultsCount => SearchItems?.Count ?? 0;
+}
+
+public class SearchRequestModel
+{
+    public string? SearchKeyword { get; set; }
+
+    //[BindProperty(Name = "selectedFacets")]
+    public Dictionary<string, List<string>>? SelectedFacets { get; set; }
 }

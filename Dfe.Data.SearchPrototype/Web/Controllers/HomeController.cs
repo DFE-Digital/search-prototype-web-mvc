@@ -70,15 +70,14 @@ public class HomeController : Controller
     /// <param name="viewModelResponse"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> SearchWithFilters(
-        string searchKeyWord, Dictionary<string, List<string>> selectedFacets)
+    public async Task<IActionResult> SearchWithFilters(SearchRequestModel searchRequestModel)
     {
-        ViewBag.SearchQuery = searchKeyWord;
+        ViewBag.SearchQuery = searchRequestModel.SearchKeyword;
 
         // TODO: we need to add the filter response to the use-case request.....
         SearchByKeywordResponse response =
             await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyWord + "*"));
+                new SearchByKeywordRequest(searchRequestModel.SearchKeyword + "*"));
 
         return View("Index", _mapper.MapFrom(response));
     }
