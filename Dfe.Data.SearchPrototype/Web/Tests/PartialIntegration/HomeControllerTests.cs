@@ -30,7 +30,7 @@ public class HomeControllerTests
         var useCase = new SearchByKeywordUseCase(
             _searchServiceAdapterMock.Object,
             IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
-        var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper(), new ViewModelFacetsToFilterRequestMapper());
+        var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper(), new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
         IActionResult result = await controller.Index("searchTerm");
@@ -53,7 +53,7 @@ public class HomeControllerTests
         var useCase = new SearchByKeywordUseCase(
             _searchServiceAdapterMock.Object,
             IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
-        var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper(), new ViewModelFacetsToFilterRequestMapper());
+        var controller = new HomeController(_logger.Object, useCase, new SearchByKeywordResponseToViewModelMapper(), new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
         IActionResult result = await controller.Index("searchTerm");

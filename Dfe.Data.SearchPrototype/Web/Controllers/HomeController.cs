@@ -14,7 +14,7 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
     private readonly IMapper<SearchByKeywordResponse, SearchResultsViewModel> _responseMapper;
-    private readonly IMapper<List<Facet>?, IList<FilterRequest>> _requestMapper;
+    private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
 
     /// <summary>
     /// The following dependencies include the use-case which orchestrates the search functionality,
@@ -36,7 +36,7 @@ public class HomeController : Controller
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
         IMapper<SearchByKeywordResponse, SearchResultsViewModel> responseMapper,
-        IMapper<List<Facet>?, IList<FilterRequest>> requestMapper)
+        IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> requestMapper)
     {
         _logger = logger;
         _searchByKeywordUseCase = searchByKeywordUseCase;
@@ -79,9 +79,9 @@ public class HomeController : Controller
         ViewBag.SearchQuery = searchKeyWord;
         SearchByKeywordResponse response = null;
 
-        if (viewModelResponse.Facets != null && viewModelResponse.Facets.Any())
+        if (selectedFacets != null && selectedFacets.Any())
         {
-            IList<FilterRequest> filterRequests = _requestMapper.MapFrom(viewModelResponse.Facets);
+            IList<FilterRequest> filterRequests = _requestMapper.MapFrom(selectedFacets);
 
             // Mapper
             response =

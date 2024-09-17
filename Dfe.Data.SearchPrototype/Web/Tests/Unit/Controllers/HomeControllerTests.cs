@@ -22,8 +22,8 @@ public class HomeControllerTests
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockResponseMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
-        Mock<IMapper<List<Facet>?, IList<FilterRequest>>> mockRequestMapper =
-            ViewModelFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
+        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+            ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
 
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success) {EstablishmentResults = new EstablishmentResults(new List<Establishment>())};
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
@@ -42,8 +42,8 @@ public class HomeControllerTests
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockResponseMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
-        Mock<IMapper<List<Facet>?, IList<FilterRequest>>> mockRequestMapper =
-            ViewModelFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
+        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+            ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success) {EstablishmentResults = new(new List<Establishment>()) };
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
@@ -64,8 +64,8 @@ public class HomeControllerTests
             new SearchByKeywordUseCaseMockBuilder().Create();
         Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockResponseMapper =
             SearchResultsToViewModelMapperTestDouble.DefaultMock();
-        Mock<IMapper<List<Facet>?, IList<FilterRequest>>> mockRequestMapper =
-            ViewModelFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
+        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+            ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
 
         //act
         HomeController controller = new HomeController(mockLogger.Object, mockUseCase, mockResponseMapper.Object, mockRequestMapper.Object);

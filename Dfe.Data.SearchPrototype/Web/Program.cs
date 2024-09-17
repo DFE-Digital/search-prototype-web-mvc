@@ -20,7 +20,7 @@ builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();
 builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsViewModel>, SearchByKeywordResponseToViewModelMapper>();
-builder.Services.AddSingleton<IMapper<List<Facet>?, IList<FilterRequest>>, ViewModelFacetsToFilterRequestMapper>();
+builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>, ViewModelSelectedFacetsToFilterRequestMapper>();
 //
 //
 // End of IOC container registrations
