@@ -33,12 +33,14 @@ public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
     [Fact]
     public async Task SearchEstablishments()
     {
+        // all searches have to have the '*' added for now - this needs to go to the top of the list for refactor
         var queryUrl = "/establishments?SearchKeyword=School*";
         var response = await _client.GetAsync(uri+queryUrl);
 
         response.EnsureSuccessStatusCode();
         var results = response.Content.ReadAsStringAsync();
 
+        // test whatever you want toabout the results  here
 
     }
 }
