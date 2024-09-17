@@ -29,4 +29,16 @@ public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
 
         response.EnsureSuccessStatusCode();
     }
+
+    [Fact]
+    public async Task SearchEstablishments()
+    {
+        var queryUrl = "/establishments?SearchKeyword=School*";
+        var response = await _client.GetAsync(uri+queryUrl);
+
+        response.EnsureSuccessStatusCode();
+        var results = response.Content.ReadAsStringAsync();
+
+
+    }
 }
