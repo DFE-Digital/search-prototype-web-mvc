@@ -6,7 +6,7 @@
 }
 
 @* search component *@
-@using (Html.BeginForm("SearchWithFilters", "Home"))
+@using (Html.BeginForm("SearchWithFilters", "Home", FormMethod.Post, new {id="search-establishments"}))
 {
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
@@ -33,31 +33,22 @@
                 </button>
                 @if (Model.Facets is not null && Model.Facets.Any())
                 {
-                    for (int j = 0; j < Model.Facets.Count; j++)
+                    foreach (var facet in Model.Facets)
                     {
-                        <div class="govuk-form-group">
-                            <input type="hidden" asp-for="@Model.Facets[j].Name"/>
-                            <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                                    <h1 class="govuk-fieldset__heading">
-                                        @Model.Facets[j].Name
-                                    </h1>
-                                </legend>
-                                <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                                    @for (int i = 0; i < Model.Facets[j].Values.Count; i++)
-                                    {
-                                        <div class="govuk-checkboxes__item">
-                                            <input type="checkbox" asp-for="@Model.Facets[j].Values[i].IsSelected" class="govuk-checkboxes__input"/>
-                                            <label class="govuk-label govuk-checkboxes__label" for="waste">
-                                                @Model.Facets[j].Values[i].Value
-                                            </label>
-                                            <input type="hidden" asp-for="@Model.Facets[j].Values[i].Value"/>
-                                        </div>
-                                    }
-                                </div>
-                                <hr />
-                            </fieldset>
-                        </div>
+                        <govuk-checkboxes name="selectedFacets[@facet.Name]">
+                            <govuk-checkboxes-fieldset>
+                                <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--s">
+                                    @facet.Name
+                                </govuk-checkboxes-fieldset-legend>
+
+                                @foreach (var facetValue in facet.Values)
+                                {
+                                    <govuk-checkboxes-item value="@facetValue.Value">
+                                        @facetValue.Value
+                                    </govuk-checkboxes-item>
+                                }
+                            </govuk-checkboxes-fieldset>
+                        </govuk-checkboxes>
                     }
                 }
                 else

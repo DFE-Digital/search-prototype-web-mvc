@@ -71,7 +71,7 @@ public class HomeController : Controller
     /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> SearchWithFilters(
-        string searchKeyWord, SearchResultsViewModel viewModelResponse)
+        string searchKeyWord, Dictionary<string, List<string>> selectedFacets)
     {
         ViewBag.SearchQuery = searchKeyWord;
 
