@@ -20,13 +20,16 @@ public class HomeControllerTests
     public async Task Index_SearchKeyword_CallUseCase()
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
-        Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
+        Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockResponseMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
+        Mock<IMapper<List<Facet>?, IList<FilterRequest>>> mockRequestMapper =
+            ViewModelFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
+
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success) {EstablishmentResults = new EstablishmentResults(new List<Establishment>())};
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
-        HomeController controller = new(mockLogger.Object, mockUseCase, mockMapper.Object);
+        HomeController controller = new(mockLogger.Object, mockUseCase, mockResponseMapper.Object, mockRequestMapper.Object);
 
         IActionResult result = await controller.Index("KDM");
 
@@ -37,17 +40,19 @@ public class HomeControllerTests
     public async Task Index_SearchKeyword_CallMapper()
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
-        Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
+        Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockResponseMapper =
             SearchResultsToViewModelMapperTestDouble.MockFor(new SearchResultsViewModel());
+        Mock<IMapper<List<Facet>?, IList<FilterRequest>>> mockRequestMapper =
+            ViewModelFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success) {EstablishmentResults = new(new List<Establishment>()) };
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
-        HomeController controller = new(mockLogger.Object, mockUseCase, mockMapper.Object);
+        HomeController controller = new(mockLogger.Object, mockUseCase, mockResponseMapper.Object, mockRequestMapper.Object);
 
         IActionResult result = await controller.Index("KDM");
 
-        mockMapper.Verify(mapper => mapper.MapFrom(It.IsAny<SearchByKeywordResponse>()), Times.Once());
+        mockResponseMapper.Verify(mapper => mapper.MapFrom(It.IsAny<SearchByKeywordResponse>()), Times.Once());
     }
 
     [Fact]
@@ -57,11 +62,13 @@ public class HomeControllerTests
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().Create();
-        Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockMapper =
+        Mock<IMapper<SearchByKeywordResponse, SearchResultsViewModel>> mockResponseMapper =
             SearchResultsToViewModelMapperTestDouble.DefaultMock();
+        Mock<IMapper<List<Facet>?, IList<FilterRequest>>> mockRequestMapper =
+            ViewModelFacetsToFilterRequestMapperTestDouble.MockFor(new List<FilterRequest>());
 
         //act
-        HomeController controller = new HomeController(mockLogger.Object, mockUseCase, mockMapper.Object);
+        HomeController controller = new HomeController(mockLogger.Object, mockUseCase, mockResponseMapper.Object, mockRequestMapper.Object);
         IActionResult result = await controller.Index(null!);
 
         // assert

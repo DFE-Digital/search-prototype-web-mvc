@@ -6,7 +6,7 @@
 }
 
 @* search component *@
-@using (Html.BeginForm("SearchWithFilters", "Home", FormMethod.Post, new {id="search-establishments"}))
+@using (Html.BeginForm("SearchWithFilters", "Home", FormMethod.Post, new { id = "search-establishments" }))
 {
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
@@ -62,9 +62,7 @@
         @if (Model.HasResults)
         {
             <div class="govuk-grid-column-two-thirds" id="results">
-                <h3 class="govuk-heading-m" id="search-results-count">
-                    @Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")
-                </h3>
+                <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
                 <hr />
                 <ul style="list-style: none">
                     @foreach (var searchItem in Model.SearchItems!)
@@ -97,14 +95,12 @@
             </div>
         }
         else
-
         {
             <div class="govuk-grid-column-two-thirds" id="no-results">
-                <p> Sorry no results found please amend your search criteria</p>
+                <p>Sorry no results found please amend your search criteria</p>
             </div>
         }
         @*  end of list component *@
     }
     @* end of display results *@
-
 }

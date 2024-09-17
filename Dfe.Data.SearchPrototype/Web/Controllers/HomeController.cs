@@ -13,7 +13,8 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
-    private readonly IMapper<SearchByKeywordResponse, SearchResultsViewModel> _mapper;
+    private readonly IMapper<SearchByKeywordResponse, SearchResultsViewModel> _responseMapper;
+    private readonly IMapper<List<Facet>?, IList<FilterRequest>> _requestMapper;
 
     /// <summary>
     /// The following dependencies include the use-case which orchestrates the search functionality,
@@ -34,11 +35,13 @@ public class HomeController : Controller
     public HomeController(
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
-        IMapper<SearchByKeywordResponse, SearchResultsViewModel> mapper)
+        IMapper<SearchByKeywordResponse, SearchResultsViewModel> responseMapper,
+        IMapper<List<Facet>?, IList<FilterRequest>> requestMapper)
     {
         _logger = logger;
         _searchByKeywordUseCase = searchByKeywordUseCase;
-        _mapper = mapper;
+        _responseMapper = responseMapper;
+        _requestMapper = requestMapper;
     }
 
     /// <summary>
@@ -60,7 +63,7 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyWord + "*"));
 
-        return View(_mapper.MapFrom(response));
+        return View("Index", _responseMapper.MapFrom(response));
     }
 
     /// <summary>
@@ -74,12 +77,22 @@ public class HomeController : Controller
         string searchKeyWord, Dictionary<string, List<string>> selectedFacets)
     {
         ViewBag.SearchQuery = searchKeyWord;
+        SearchByKeywordResponse response = null;
 
-        // TODO: we need to add the filter response to the use-case request.....
-        SearchByKeywordResponse response =
-            await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyWord + "*"));
+        if (viewModelResponse.Facets != null && viewModelResponse.Facets.Any())
+        {
+            IList<FilterRequest> filterRequests = _requestMapper.MapFrom(viewModelResponse.Facets);
 
-        return View("Index", _mapper.MapFrom(response));
+            // Mapper
+            response =
+                await _searchByKeywordUseCase.HandleRequest(
+                    new SearchByKeywordRequest(searchKeyWord + "*", filterRequests));
+        }
+        else
+        {
+            return await Index(searchKeyWord);
+        }
+
+        return View("Index", _responseMapper.MapFrom(response));
     }
 }
