@@ -40,7 +40,7 @@ public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var results = response.Content.ReadAsStringAsync();
 
-        // test whatever you want toabout the results  here
+        // test whatever you want to about the results here
 
     }
 }
