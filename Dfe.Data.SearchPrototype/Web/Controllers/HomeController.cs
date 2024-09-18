@@ -1,7 +1,9 @@
+using Azure;
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
+using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +17,7 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
     private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
-    private readonly IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
+    private readonly IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
 
     /// <summary>
@@ -38,7 +40,7 @@ public class HomeController : Controller
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
         IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-        IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?> establishmentFacetsToFacetsViewModelMapper,
+        IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> establishmentFacetsToFacetsViewModelMapper,
         IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> requestMapper)
     {
         _logger = logger;
@@ -68,14 +70,10 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
 
-        ViewModels.SearchResults viewModel = new() {
-            SearchItems =
-                _establishmentResultsToEstablishmentsViewModelMapper
-                    .MapFrom(response.EstablishmentResults),
-            Facets =
-                    _establishmentFacetsToFacetsViewModelMapper
-                        .MapFrom((response.EstablishmentFacetResults, null))
-        };
+        ViewModels.SearchResults viewModel =
+               CreateViewModel(
+                   response.EstablishmentResults,
+                   new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults));
 
         return View("Index", viewModel);
     }
@@ -98,18 +96,26 @@ public class HomeController : Controller
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
                         filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
 
-            ViewModels.SearchResults viewModel = new() {
-                SearchItems =
-                    _establishmentResultsToEstablishmentsViewModelMapper
-                        .MapFrom(response.EstablishmentResults),
-                Facets =
-                    _establishmentFacetsToFacetsViewModelMapper
-                        .MapFrom((response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets))
-            };
+            ViewModels.SearchResults viewModel =
+                CreateViewModel(
+                    response.EstablishmentResults,
+                    new EstablishmentFacetsMapperRequest(
+                        response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
 
             return View("Index", viewModel);
         }
 
         return await Index(searchRequestViewModel.SearchKeyword!);
     }
+
+    private ViewModels.SearchResults CreateViewModel(EstablishmentResults establishmentResults, EstablishmentFacetsMapperRequest facetMapperRequest) =>
+        new()
+        {
+            SearchItems =
+                    _establishmentResultsToEstablishmentsViewModelMapper
+                        .MapFrom(establishmentResults),
+            Facets =
+                    _establishmentFacetsToFacetsViewModelMapper
+                        .MapFrom(facetMapperRequest)
+        };
 }

@@ -22,7 +22,7 @@ builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();
 builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<ViewModels.Establishment>?>, EstablishmentResultsToEstablishmentsViewModelMapper>();
-builder.Services.AddSingleton<IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?>, EstablishmentFacetsToFacetsViewModelMapper>();
+builder.Services.AddSingleton<IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>, EstablishmentFacetsToFacetsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>, ViewModelSelectedFacetsToFilterRequestMapper>();
 //
 //

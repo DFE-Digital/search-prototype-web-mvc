@@ -7,7 +7,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class EstablishmentFacetsToFacetsViewModelMapper : IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?>
+    public sealed class EstablishmentFacetsToFacetsViewModelMapper : IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>
     {
         /// <summary>
         /// 
@@ -18,33 +18,43 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <returns>
         /// 
         /// </returns>
-        public List<Facet>? MapFrom((EstablishmentFacets?, Dictionary<string, List<string>>?) input)
+        public List<Facet>? MapFrom(EstablishmentFacetsMapperRequest input)
         {
             List<Facet>? facetItems = null;
 
-            if (input.Item1?.Facets != null)
+            if (input.EstablishmentFacets != null)
             {
                 facetItems = [];
 
-                foreach (EstablishmentFacet facet in input.Item1.Facets)
+                foreach (EstablishmentFacet establishmentFacet in input.EstablishmentFacets.Facets)
                 {
                     List<FacetValue> facetValues =
-                        facet.Results.Select(
+                        establishmentFacet.Results.Select(
                             result =>
                                 new FacetValue(
                                     Value: result.Value,
                                     Count: result.Count,
                                     IsSelected:
-                                        input.Item2?.ContainsKey(facet.Name) == true &&
-                                            input.Item2[facet.Name].Any(selectedValue => result.Value == selectedValue))
+                                        input.SelectedFacets?.ContainsKey(establishmentFacet.Name) == true &&
+                                            input.SelectedFacets[establishmentFacet.Name].Any(selectedValue => result.Value == selectedValue))
                                 )
                                 .ToList();
 
-                    facetItems.Add(new Facet(Name: facet.Name, Values: facetValues));
+                    facetItems.Add(new Facet(Name: establishmentFacet.Name, Values: facetValues));
                 }
             }
 
             return facetItems;
+        }
+    }
+    public class EstablishmentFacetsMapperRequest
+    {
+        public EstablishmentFacets? EstablishmentFacets { get; }
+        public Dictionary<string, List<string>>? SelectedFacets { get; }
+        public EstablishmentFacetsMapperRequest(EstablishmentFacets? establishmentFacets, Dictionary<string, List<string>>? selectedFacets = null)
+        {
+            EstablishmentFacets = establishmentFacets;
+            SelectedFacets = selectedFacets;
         }
     }
 }

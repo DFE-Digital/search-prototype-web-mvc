@@ -9,7 +9,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers;
 
 public class SearchByKeywordResponseToViewModelMapperTests
 {
-    private readonly IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?> _establishmentFacetsToFacetsViewModelMapper
+    private readonly IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper
         = new EstablishmentFacetsToFacetsViewModelMapper();
 
     private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper
