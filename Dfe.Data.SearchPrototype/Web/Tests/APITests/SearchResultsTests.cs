@@ -2,12 +2,16 @@
 using Dfe.Data.SearchPrototype.Web.Tests;
 using Xunit.Abstractions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
+using System.Text.Json.Serialization;
+using FluentAssertions;
 
 namespace Dfe.Data.SearchPrototype.WebApi.Tests.APITests;
 
 public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
 {
-    private const string uri = "http://localhost:80";
+    private const string SEARCHKEYWORD_ENDPOINT = "/establishments?SearchKeyword=";
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _logger;
     private readonly PageWebApplicationFactory<Program> _factory;
@@ -25,22 +29,45 @@ public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
     [Fact]
     public async Task GetSwaggerPage()
     {
-        var response = await _client.GetAsync(uri + "/swagger/index.html");
+        var response = await _client.GetAsync("/swagger/index.html");
 
         response.EnsureSuccessStatusCode();
+    }
+
+    [Theory]
+    [InlineData("Academy", 2)]
+    [InlineData("School", 1)]
+    public async Task GET_Search_Returns_ExpectedNumber_Of_Results(string query, int resultsInt)
+    {
+        // all searches have to have the '*' added for now - this needs to go to the top of the list for refactor
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}*");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var jsonString = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
+        
+        jsonString.EstablishmentResults.Establishments.Should().HaveCount(resultsInt);
     }
 
     [Fact]
-    public async Task SearchEstablishments()
+    public async Task GET_Search_Returns_EstablishmentData()
     {
-        // all searches have to have the '*' added for now - this needs to go to the top of the list for refactor
-        var queryUrl = "/establishments?SearchKeyword=School*";
-        var response = await _client.GetAsync(uri+queryUrl);
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Academy*");
 
-        response.EnsureSuccessStatusCode();
-        var results = response.Content.ReadAsStringAsync();
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var results = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
 
-        // test whatever you want to about the results here
-
+        results.EstablishmentResults.Establishments.First().Urn.Should().Be("123456");
     }
+}
+
+public class SearchResultsJson
+{
+    [JsonPropertyName("establishmentResults")]
+    public EstablishmentSearchResults EstablishmentResults { get; set; }
+}
+
+public class EstablishmentSearchResults
+{
+    [JsonPropertyName("establishments")]
+    public IEnumerable<Establishment> Establishments { get; set; }
 }
