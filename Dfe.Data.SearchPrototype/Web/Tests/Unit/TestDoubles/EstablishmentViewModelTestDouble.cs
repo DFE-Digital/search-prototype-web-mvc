@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 
@@ -29,7 +29,7 @@ public static class EstablishmentViewModelTestDouble
         new Faker().Random.Word();
     private static string GetEstablishmentStatusNameFake() =>
        new Faker().Random.Word();
-    public static EstablishmentViewModel Create()
+    public static Establishment Create()
     {
         return new()
         {

@@ -1,7 +1,4 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-using Dfe.Data.SearchPrototype.Web.Models;
-using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using FluentAssertions;
 using Xunit;
 
@@ -12,7 +9,7 @@ public class EstablishmentViewModelTests
     [Fact]
     public void AddressAsString_ReturnsFormattedString()
     {
-        EstablishmentViewModel establishmentViewModel = new()
+        ViewModels.Establishment establishmentViewModel = new()
         {
             Urn = EstablishmentViewModelTestDouble.GetEstablishmentIdentifierFake(),
             Name = EstablishmentViewModelTestDouble.GetEstablishmentNameFake(),
@@ -42,7 +39,7 @@ public class EstablishmentViewModelTests
          string street, string locality, string address3, string town, string postcode, string expectedString)
     {
         // arrange
-        EstablishmentViewModel establishmentViewModel = new()
+        ViewModels.Establishment establishmentViewModel = new()
         {
             Urn = EstablishmentViewModelTestDouble.GetEstablishmentIdentifierFake(),
             Name = EstablishmentViewModelTestDouble.GetEstablishmentNameFake(),

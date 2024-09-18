@@ -9,6 +9,7 @@ public static class EstablishmentFacetTestDouble
         var faker = new Bogus.Faker();
         var facetResults = new List<FacetResult>();
         var facetValuesCount = new Bogus.Faker().Random.Int(1, 10);
+
         for (int i = 0; i < facetValuesCount; i++)
         {
             var facetResult = new FacetResult(faker.Name.JobTitle(), faker.Random.Int(1, 10));

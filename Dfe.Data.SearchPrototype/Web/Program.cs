@@ -3,9 +3,11 @@ using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.ViewModels;
 using GovUk.Frontend.AspNetCore;
+using ViewModels = Dfe.Data.SearchPrototype.Web.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,8 @@ builder.Services.AddGovUkFrontend();
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();
-builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsViewModel>, SearchByKeywordResponseToViewModelMapper>();
+builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<ViewModels.Establishment>?>, EstablishmentResultsToEstablishmentsViewModelMapper>();
+builder.Services.AddSingleton<IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?>, EstablishmentFacetsToFacetsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>, ViewModelSelectedFacetsToFilterRequestMapper>();
 //
 //

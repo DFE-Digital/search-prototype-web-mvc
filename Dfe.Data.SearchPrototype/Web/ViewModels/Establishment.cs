@@ -1,11 +1,9 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments;
-
-namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿namespace Dfe.Data.SearchPrototype.Web.ViewModels;
 
 /// <summary>
 /// A view model representation of a single search result.
 /// </summary>
-public class EstablishmentViewModel
+public class Establishment
 {
     /// <summary>
     /// Establishment Urn.
@@ -18,7 +16,7 @@ public class EstablishmentViewModel
     /// <summary>
     /// Establishment address.
     /// </summary>
-    public AddressViewModel Address { get; init; } = new();
+    public Address Address { get; init; } = new();
     /// <summary>
     /// Establishment type.
     /// </summary>

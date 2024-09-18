@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿namespace Dfe.Data.SearchPrototype.Web.ViewModels;
 
 /// <summary>
 /// 

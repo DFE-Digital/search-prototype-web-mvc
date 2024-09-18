@@ -1,18 +1,18 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿namespace Dfe.Data.SearchPrototype.Web.ViewModels;
 
 /// <summary>
 /// A view model representation of search results defining view logic predicated on the status of the results.
 /// </summary>
-public class SearchResultsViewModel
+public class SearchResults
 {
     /// <summary>
     /// View model representation of the available facets.
-    /// </summary> 
+    /// </summary>
     public List<Facet>? Facets { get; set; }
     /// <summary>
     /// View model representation of aggregated search results.
     /// </summary>
-    public List<EstablishmentViewModel>? SearchItems { get; set; }
+    public List<Establishment>? SearchItems { get; set; }
     /// <summary>
     /// Property determining whether we have at least one search result.
     /// </summary>
@@ -25,22 +25,4 @@ public class SearchResultsViewModel
     /// Property determining the number of search results.
     /// </summary>
     public int SearchResultsCount => SearchItems?.Count ?? 0;
-}
-
-public class SearchRequestViewModel
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string? SearchKeyword { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public Dictionary<string, List<string>>? SelectedFacets { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool HasSelectedFacets() => SelectedFacets != null && SelectedFacets.Any();
 }

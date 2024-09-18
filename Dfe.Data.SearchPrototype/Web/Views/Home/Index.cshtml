@@ -1,4 +1,4 @@
-﻿@model Dfe.Data.SearchPrototype.Web.Models.SearchResultsViewModel
+﻿@model Dfe.Data.SearchPrototype.Web.ViewModels.SearchResults
 
 @{
     ViewData["Title"] = "Search Results";
@@ -43,8 +43,8 @@
 
                                 @foreach (var facetValue in facet.Values)
                                 {
-                                    <govuk-checkboxes-item value="@facetValue.Value">
-                                        @facetValue.Value
+                                    <govuk-checkboxes-item checked="@facetValue.IsSelected" value="@facetValue.Value">
+                                        @facetValue.Value (@facetValue.Count)
                                     </govuk-checkboxes-item>
                                 }
                             </govuk-checkboxes-fieldset>

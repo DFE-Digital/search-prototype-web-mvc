@@ -1,7 +1,8 @@
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
-using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
+using Dfe.Data.SearchPrototype.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Data.SearchPrototype.Web.Controllers;
@@ -13,7 +14,8 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
-    private readonly IMapper<SearchByKeywordResponse, SearchResultsViewModel> _responseMapper;
+    private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
+    private readonly IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
 
     /// <summary>
@@ -35,12 +37,14 @@ public class HomeController : Controller
     public HomeController(
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
-        IMapper<SearchByKeywordResponse, SearchResultsViewModel> responseMapper,
+        IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
+        IMapper<(EstablishmentFacets?, Dictionary<string, List<string>>?), List<Facet>?> establishmentFacetsToFacetsViewModelMapper,
         IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> requestMapper)
     {
         _logger = logger;
         _searchByKeywordUseCase = searchByKeywordUseCase;
-        _responseMapper = responseMapper;
+        _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
+        _establishmentFacetsToFacetsViewModelMapper = establishmentFacetsToFacetsViewModelMapper;
         _requestMapper = requestMapper;
     }
 
@@ -57,13 +61,23 @@ public class HomeController : Controller
         {
             return View();
         }
+
         ViewBag.SearchQuery = searchKeyWord;
 
         SearchByKeywordResponse response =
             await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyWord + "*"));
+                new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
 
-        return View("Index", _responseMapper.MapFrom(response));
+        ViewModels.SearchResults viewModel = new() {
+            SearchItems =
+                _establishmentResultsToEstablishmentsViewModelMapper
+                    .MapFrom(response.EstablishmentResults),
+            Facets =
+                    _establishmentFacetsToFacetsViewModelMapper
+                        .MapFrom((response.EstablishmentFacetResults, null))
+        };
+
+        return View("Index", viewModel);
     }
 
     /// <summary>
@@ -72,26 +86,30 @@ public class HomeController : Controller
     /// <param name="searchRequestViewModel"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> SearchWithFilters(SearchRequestViewModel searchRequestViewModel)
+    public async Task<IActionResult> SearchWithFilters(SearchRequest searchRequestViewModel)
     {
         ViewBag.SearchQuery = searchRequestViewModel.SearchKeyword;
-        SearchByKeywordResponse response = null!;
 
         if (searchRequestViewModel.HasSelectedFacets())
         {
-            IList<FilterRequest> filterRequests =
-                _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets);
-
-            // Mapper
-            response =
+            SearchByKeywordResponse response =
                 await _searchByKeywordUseCase.HandleRequest(
-                    new SearchByKeywordRequest(searchRequestViewModel.SearchKeyword + "*", filterRequests));
-        }
-        else
-        {
-            return await Index(searchRequestViewModel.SearchKeyword!);
+                    new SearchByKeywordRequest(
+                        searchKeyword: searchRequestViewModel.SearchKeyword + "*",
+                        filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
+
+            ViewModels.SearchResults viewModel = new() {
+                SearchItems =
+                    _establishmentResultsToEstablishmentsViewModelMapper
+                        .MapFrom(response.EstablishmentResults),
+                Facets =
+                    _establishmentFacetsToFacetsViewModelMapper
+                        .MapFrom((response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets))
+            };
+
+            return View("Index", viewModel);
         }
 
-        return View("Index", _responseMapper.MapFrom(response));
+        return await Index(searchRequestViewModel.SearchKeyword!);
     }
 }

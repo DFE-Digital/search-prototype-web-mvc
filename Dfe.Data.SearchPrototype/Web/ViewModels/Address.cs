@@ -1,9 +1,9 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿namespace Dfe.Data.SearchPrototype.Web.ViewModels;
 
 /// <summary>
 /// A view model representation of an address from a single search result.
 /// </summary>
-public class AddressViewModel
+public class Address
 {
     /// <summary>
     /// First line of the address
