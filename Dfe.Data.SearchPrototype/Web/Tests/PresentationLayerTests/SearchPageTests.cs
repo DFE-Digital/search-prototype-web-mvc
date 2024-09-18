@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Xunit;
 using Dfe.Data.SearchPrototype.Web;
+using Dfe.Data.SearchPrototype.Web.Tests.Pages.Search;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 
@@ -53,9 +54,9 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        resultsPage.QuerySelector(SearchPage.SearchNoResultText.Criteria)!
+        resultsPage.QuerySelector(SearchResultsPage.SearchNoResultText.Criteria)!
             .TextContent.Should().Contain("Sorry no results found please amend your search criteria");
-        resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!
+        resultsPage.QuerySelector(SearchResultsPage.SearchResultsNumber.Criteria)!
             .Should().BeNull();
         resultsPage.GetElementById("filters-container").Should().BeNull();
     }
@@ -84,10 +85,10 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!
+        resultsPage.QuerySelector(SearchResultsPage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Be("1 Result");
-        resultsPage.QuerySelector(SearchPage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(SearchPage.SearchResultLinks.Criteria)
+        resultsPage.QuerySelector(SearchResultsPage.SearchResultsContainer.Criteria)!
+            .GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria)
             .Count().Should().Be(1);
     }
 
@@ -115,10 +116,10 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        resultsPage.QuerySelector(SearchPage.SearchResultsNumber.Criteria)!
+        resultsPage.QuerySelector(SearchResultsPage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Contain("Results");
-        resultsPage.QuerySelector(SearchPage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(SearchPage.SearchResultLinks.Criteria)
+        resultsPage.QuerySelector(SearchResultsPage.SearchResultsContainer.Criteria)!
+            .GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria)
             .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 
@@ -146,7 +147,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        var filtersHeading = resultsPage.QuerySelector(SearchPage.FiltersHeading.Criteria);
+        var filtersHeading = resultsPage.QuerySelector(SearchResultsPage.FiltersHeading.Criteria);
         filtersHeading.Should().NotBeNull();
         filtersHeading!.TextContent.Should().Be("Filters");
 

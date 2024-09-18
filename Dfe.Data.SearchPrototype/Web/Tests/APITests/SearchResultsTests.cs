@@ -56,18 +56,24 @@ public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
 
-        results.EstablishmentResults.Establishments.First().Urn.Should().Be("123456");
+        results.EstablishmentResults!.Establishments!.First().Urn.Should().Be("123456");
+        results.EstablishmentResults!.Establishments!.First().Name.Should().Be("Goose Academy");
+        //TODO: address
+        //results.EstablishmentResults.Establishments.First().Address.Should().Be("123456");
+        results.EstablishmentResults!.Establishments!.First().EstablishmentType.Should().Be("Academy");
+        results.EstablishmentResults!.Establishments!.First().EstablishmentStatusName.Should().Be("Open");
+        results.EstablishmentResults!.Establishments!.First().PhaseOfEducation.Should().Be("Secondary");
     }
 }
 
 public class SearchResultsJson
 {
     [JsonPropertyName("establishmentResults")]
-    public EstablishmentSearchResults EstablishmentResults { get; set; }
+    public EstablishmentSearchResults? EstablishmentResults { get; set; }
 }
 
 public class EstablishmentSearchResults
 {
     [JsonPropertyName("establishments")]
-    public IEnumerable<Establishment> Establishments { get; set; }
+    public IEnumerable<Establishment>? Establishments { get; set; }
 }
