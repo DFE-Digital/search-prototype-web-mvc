@@ -17,4 +17,8 @@ public static class EstablishmentFacetTestDouble
         }
         return new EstablishmentFacet(new Bogus.Faker().Name.JobType() + uniqueNumber, facetResults);
     }
+
+    public static EstablishmentFacet CreateWith(
+        string facetName, string facetResultValue, int facetResultCount) =>
+            new (facetName, [new FacetResult(facetResultValue, facetResultCount)]);
 }
