@@ -47,10 +47,31 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
             return facetItems;
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class EstablishmentFacetsMapperRequest
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public EstablishmentFacets? EstablishmentFacets { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Dictionary<string, List<string>>? SelectedFacets { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="establishmentFacets">
+        /// 
+        /// </param>
+        /// <param name="selectedFacets">
+        /// 
+        /// </param>
         public EstablishmentFacetsMapperRequest(EstablishmentFacets? establishmentFacets, Dictionary<string, List<string>>? selectedFacets = null)
         {
             EstablishmentFacets = establishmentFacets;

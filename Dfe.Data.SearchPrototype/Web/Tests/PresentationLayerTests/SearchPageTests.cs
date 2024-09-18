@@ -121,42 +121,42 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
             .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 
-    //[Fact]
-    //public async Task Search_ByKeyword_WithFacetedResults()
-    //{
-    //    var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
-    //    _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
-    //        .ReturnsAsync(useCaseResponse);
-    //    var client = CreateHost().CreateClient();
+    [Fact]
+    public async Task Search_ByKeyword_WithFacetedResults()
+    {
+        var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
+        _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
+            .ReturnsAsync(useCaseResponse);
+        var client = CreateHost().CreateClient();
 
-    //    var response = await client.GetAsync(uri);
-    //    var document = await HtmlHelpers.GetDocumentAsync(response);
+        var response = await client.GetAsync(uri);
+        var document = await HtmlHelpers.GetDocumentAsync(response);
 
-    //    var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
-    //    var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
+        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
+        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
 
-    //    var formResponse = await client.SendAsync(
-    //        formElement!,
-    //        formButton!,
-    //        new Dictionary<string, string>
-    //        {
-    //            ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
-    //        });
+        var formResponse = await client.SendAsync(
+            formElement!,
+            formButton!,
+            new Dictionary<string, string>
+            {
+                ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
+            });
 
-    //    var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+        var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-    //    var filtersHeading = resultsPage.QuerySelector(SearchPage.FiltersHeading.Criteria);
-    //    filtersHeading.Should().NotBeNull();
-    //    filtersHeading!.TextContent.Should().Be("Filters");
+        var filtersHeading = resultsPage.QuerySelector(SearchPage.FiltersHeading.Criteria);
+        filtersHeading.Should().NotBeNull();
+        filtersHeading!.TextContent.Should().Be("Filters");
 
-    //    var expectedFacetNames = useCaseResponse.EstablishmentFacetResults!.Facets.Select(f => f.Name).ToArray();
-    //    var resultFacetNames = resultsPage.GetElementsByTagName("legend").Select(x => x.InnerHtml.Trim());
+        var expectedFacetNames = useCaseResponse.EstablishmentFacetResults!.Facets.Select(f => f.Name).ToArray();
+        var resultFacetNames = resultsPage.GetElementsByTagName("legend").Select(x => x.InnerHtml.Trim());
 
-    //    foreach (var facetName in expectedFacetNames)
-    //    {
-    //        resultFacetNames.Where(x => x == facetName).First().Should().NotBeNull();
-    //    }
-    //}
+        foreach (var facetName in expectedFacetNames)
+        {
+            resultFacetNames.Where(x => x == facetName).First().Should().NotBeNull();
+        }
+    }
 
     private WebApplicationFactory<Program> CreateHost()
     {

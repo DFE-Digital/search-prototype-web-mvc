@@ -20,6 +20,7 @@ public class HomeController : Controller
     private readonly IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
 
+
     /// <summary>
     /// The following dependencies include the use-case which orchestrates the search functionality,
     /// and the mapper which transforms from the use-case response to the view model.
@@ -81,8 +82,12 @@ public class HomeController : Controller
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="searchRequestViewModel"></param>
-    /// <returns></returns>
+    /// <param name="searchRequestViewModel">
+    /// 
+    /// </param>
+    /// <returns>
+    /// 
+    /// </returns>
     [HttpPost]
     public async Task<IActionResult> SearchWithFilters(SearchRequest searchRequestViewModel)
     {
@@ -94,7 +99,7 @@ public class HomeController : Controller
                 await _searchByKeywordUseCase.HandleRequest(
                     new SearchByKeywordRequest(
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
-                        filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
+                        filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
             ViewModels.SearchResults viewModel =
                 CreateViewModel(
@@ -108,14 +113,23 @@ public class HomeController : Controller
         return await Index(searchRequestViewModel.SearchKeyword!);
     }
 
-    private ViewModels.SearchResults CreateViewModel(EstablishmentResults establishmentResults, EstablishmentFacetsMapperRequest facetMapperRequest) =>
-        new()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="establishmentResults">
+    /// 
+    /// </param>
+    /// <param name="facetMapperRequest">
+    /// 
+    /// </param>
+    /// <returns>
+    /// 
+    /// </returns>
+    private ViewModels.SearchResults CreateViewModel(
+        EstablishmentResults? establishmentResults,
+        EstablishmentFacetsMapperRequest facetMapperRequest) => new()
         {
-            SearchItems =
-                    _establishmentResultsToEstablishmentsViewModelMapper
-                        .MapFrom(establishmentResults),
-            Facets =
-                    _establishmentFacetsToFacetsViewModelMapper
-                        .MapFrom(facetMapperRequest)
+            SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(establishmentResults),
+            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(facetMapperRequest)
         };
 }
