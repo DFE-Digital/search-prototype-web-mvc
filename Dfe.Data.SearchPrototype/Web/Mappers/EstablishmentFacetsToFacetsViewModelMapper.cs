@@ -36,7 +36,8 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
                                     Count: result.Count,
                                     IsSelected:
                                         input.SelectedFacets?.ContainsKey(establishmentFacet.Name) == true &&
-                                            input.SelectedFacets[establishmentFacet.Name].Any(selectedValue => result.Value == selectedValue))
+                                            input.SelectedFacets[establishmentFacet.Name]
+                                                .Any(selectedValue => result.Value == selectedValue))
                                 )
                                 .ToList();
 
@@ -72,7 +73,9 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <param name="selectedFacets">
         /// 
         /// </param>
-        public EstablishmentFacetsMapperRequest(EstablishmentFacets? establishmentFacets, Dictionary<string, List<string>>? selectedFacets = null)
+        public EstablishmentFacetsMapperRequest(
+            EstablishmentFacets? establishmentFacets,
+            Dictionary<string, List<string>>? selectedFacets = null)
         {
             EstablishmentFacets = establishmentFacets;
             SelectedFacets = selectedFacets;

@@ -1,6 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Infrastructure.Tests.TestDoubles.Shared;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Tests.SearchForEstablishments.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
@@ -18,32 +19,33 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration;
 public class HomeControllerTests
 {
     private readonly Mock<ILogger<HomeController>> _logger = new();
-    private readonly Mock<ISearchServiceAdapter> _searchServiceAdapterMock = new();
 
     [Fact]
     public async Task Index_WithSearchTerm_ReturnsModel()
     {
         // arrange
-        var stubSearchResults = new SearchForEstablishments.Models.SearchResults() { Establishments = EstablishmentResultsTestDouble.Create() };
-        
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchServiceAdapterRequest>()))
-            .ReturnsAsync(stubSearchResults);
-        var useCase = new SearchByKeywordUseCase(
-            _searchServiceAdapterMock.Object,
+        SearchForEstablishments.Models.SearchResults stubSearchResults = new() {
+            Establishments = EstablishmentResultsTestDouble.Create() };
+
+        ISearchServiceAdapter mockSearchServiceAdapter =
+            SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
+
+        SearchByKeywordUseCase useCase = new (
+            mockSearchServiceAdapter,
             IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
-        
-        var controller =
-            new HomeController(_logger.Object, useCase,
-            new EstablishmentResultsToEstablishmentsViewModelMapper(),
-            new EstablishmentFacetsToFacetsViewModelMapper(),
-            new ViewModelSelectedFacetsToFilterRequestMapper());
+
+        HomeController controller =
+            new(_logger.Object, useCase,
+                new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                new EstablishmentFacetsToFacetsViewModelMapper(),
+                new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
         IActionResult result = await controller.Index("searchTerm");
 
         // assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<SearchResults>(viewResult.Model);
+        ViewResult viewResult = Assert.IsType<ViewResult>(result);
+        ViewModels.SearchResults viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
 
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
@@ -54,27 +56,28 @@ public class HomeControllerTests
     public async Task Index_WithNoResults_ReturnsNoSearchResultsOnModel()
     {
         // arrange
-        var stubSearchResults = new SearchForEstablishments.Models.SearchResults() { Establishments = EstablishmentResultsTestDouble.CreateWithNoResults() };
-        
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchServiceAdapterRequest>()))
-            .ReturnsAsync(stubSearchResults);
-        
-        var useCase = new SearchByKeywordUseCase(
-            _searchServiceAdapterMock.Object,
-            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+        SearchForEstablishments.Models.SearchResults stubSearchResults = new() {
+            Establishments = EstablishmentResultsTestDouble.CreateWithNoResults() };
 
-        var controller =
-            new HomeController(_logger.Object, useCase,
-            new EstablishmentResultsToEstablishmentsViewModelMapper(),
-            new EstablishmentFacetsToFacetsViewModelMapper(),
-            new ViewModelSelectedFacetsToFilterRequestMapper());
+        ISearchServiceAdapter mockSearchServiceAdapter =
+             SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
+
+        SearchByKeywordUseCase useCase =
+            new (mockSearchServiceAdapter,
+                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+
+        HomeController controller =
+            new(_logger.Object, useCase,
+                new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                new EstablishmentFacetsToFacetsViewModelMapper(),
+                new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
         IActionResult result = await controller.Index("searchTerm");
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
 
         viewModel.SearchItems.Should().BeEmpty();
         viewModel.HasResults.Should().BeFalse();
@@ -85,18 +88,18 @@ public class HomeControllerTests
     public async Task SearchWithFilters_WithSearchRequestAndNoMatchingSelectedFacets_ReturnsModelNoFacetsSelected()
     {
         // arrange
-        var stubSearchResults =
-            new SearchForEstablishments.Models.SearchResults() {
+        SearchForEstablishments.Models.SearchResults stubSearchResults =
+            new () {
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.Create()
             };
-        
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchServiceAdapterRequest>()))
-            .ReturnsAsync(stubSearchResults);
-        
-        var useCase = new SearchByKeywordUseCase(
-            _searchServiceAdapterMock.Object,
-            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+
+        ISearchServiceAdapter mockSearchServiceAdapter =
+             SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
+
+        SearchByKeywordUseCase useCase =
+            new (mockSearchServiceAdapter,
+                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
         
         var controller =
             new HomeController(_logger.Object, useCase,
@@ -115,7 +118,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
@@ -128,25 +131,24 @@ public class HomeControllerTests
         // arrange
         const string FacetValueKey = "Facet_1";
 
-        var stubSearchResults =
-            new SearchForEstablishments.Models.SearchResults()
-            {
+        SearchForEstablishments.Models.SearchResults stubSearchResults =
+            new(){
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.CreateWithNoResults()
             };
 
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchServiceAdapterRequest>()))
-            .ReturnsAsync(stubSearchResults);
+        ISearchServiceAdapter mockSearchServiceAdapter =
+             SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
 
-        var useCase = new SearchByKeywordUseCase(
-            _searchServiceAdapterMock.Object,
-            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+        SearchByKeywordUseCase useCase =
+            new (mockSearchServiceAdapter,
+                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
-        var controller =
-            new HomeController(_logger.Object, useCase,
-            new EstablishmentResultsToEstablishmentsViewModelMapper(),
-            new EstablishmentFacetsToFacetsViewModelMapper(),
-            new ViewModelSelectedFacetsToFilterRequestMapper());
+        HomeController controller =
+            new (_logger.Object, useCase,
+                new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                new EstablishmentFacetsToFacetsViewModelMapper(),
+                new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
         IActionResult result =
@@ -159,7 +161,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
@@ -172,22 +174,21 @@ public class HomeControllerTests
         // arrange
         const string FacetValueKey = "Facet_1";
 
-        var testEstablishmentFacet =
+        EstablishmentFacet testEstablishmentFacet =
             EstablishmentFacetTestDouble.CreateWith(
                 facetName: FacetValueKey, facetResultValue: FacetValueKey, facetResultCount: 1);
 
-        var stubSearchResults =
-            new SearchForEstablishments.Models.SearchResults()
-            {
+        SearchForEstablishments.Models.SearchResults stubSearchResults =
+            new(){
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.CreateWith([testEstablishmentFacet])
             };
 
-        _searchServiceAdapterMock.Setup(adapter => adapter.SearchAsync(It.IsAny<SearchServiceAdapterRequest>()))
-            .ReturnsAsync(stubSearchResults);
+        ISearchServiceAdapter mockSearchServiceAdapter =
+             SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
 
-        var useCase = new SearchByKeywordUseCase(
-            _searchServiceAdapterMock.Object,
+        SearchByKeywordUseCase useCase = new(
+            mockSearchServiceAdapter,
             IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
         var controller =
@@ -207,7 +208,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
         
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
