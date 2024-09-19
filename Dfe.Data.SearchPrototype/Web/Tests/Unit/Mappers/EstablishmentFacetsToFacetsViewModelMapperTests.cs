@@ -1,4 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.ViewModels;
@@ -18,7 +19,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             var response = SearchByKeywordResponseTestDouble.Create();
 
             // act.
-            SearchResults viewModelResults = new(){
+            SearchResults viewModelResults = new()
+            {
                 Facets =
                     _establishmentFacetsToFacetsViewModelMapper.MapFrom(
                         new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults))
@@ -37,6 +39,24 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
                     Assert.Equal(expectedFacet.Count, equivalentFacet.Count);
                 }
             }
+        }
+
+        [Fact]
+        public void Mapper_NoFacetsResults_ReturnNullViewModel_NullFacets()
+        {
+            // arrange.
+            SearchByKeywordResponse response = SearchByKeywordResponseTestDouble.CreateWithNoResults();
+
+            // act.
+            SearchResults viewModelResults = new()
+            {
+                Facets =
+                    _establishmentFacetsToFacetsViewModelMapper.MapFrom(
+                        new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults))
+            };
+
+            // assert.
+            Assert.Null(viewModelResults.Facets);
         }
     }
 }
