@@ -32,9 +32,17 @@ public class HomeController : Controller
     /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.UseCase.IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>
     /// defined within, and injected by the IOC container (defined within program.cs)
     /// </param>
-    /// <param name="mapper">
+    /// <param name="establishmentResultsToEstablishmentsViewModelMapper">
     /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<EstablishmentResults, SearchByKeywordResponse>
     /// defined within, and injected by the IOC container (defined within program.cs)
+    /// </param>
+    /// <param name="establishmentFacetsToFacetsViewModelMapper">
+    /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>
+    /// defined within, and injected by the IOC container (defined within program.cs) used to map all facets and pre-selections from the response to the view model.
+    /// </param>
+    /// <param name="requestMapper">
+    /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>
+    /// defined within, and injected by the IOC container (defined within program.cs) used to map the user input to a list of <see cref="FilterRequest"/> request types.
     /// </param>
     public HomeController(
         ILogger<HomeController> logger,
@@ -79,20 +87,22 @@ public class HomeController : Controller
     }
 
     /// <summary>
-    /// 
+    /// The action method that composes the view model based on the <see cref="SearchRequest"/> posted from for apply
+    /// filters submission which includes the search keyword and selected facet values used to apply filtering.
     /// </summary>
     /// <param name="searchRequestViewModel">
-    /// 
+    /// Encapsulates the search keyword and selected facets used to apply filtering.
     /// </param>
     /// <returns>
-    /// 
+    /// An IActionResult contract that represents the result of this action method.
     /// </returns>
     [HttpPost]
     public async Task<IActionResult> SearchWithFilters(SearchRequest searchRequestViewModel)
     {
         ViewBag.SearchQuery = searchRequestViewModel.SearchKeyword;
 
-        if (searchRequestViewModel.HasSelectedFacets())
+        if (searchRequestViewModel.HasSearchKeyWord &&
+            searchRequestViewModel.HasSelectedFacets)
         {
             SearchByKeywordResponse response =
                 await _searchByKeywordUseCase.HandleRequest(
@@ -113,21 +123,25 @@ public class HomeController : Controller
     }
 
     /// <summary>
-    /// 
+    /// Factory method for creating the required <see cref="ViewModels.SearchResults"/> view model
+    /// based on the service response and the previously selected (if any) facets which are
+    /// reinstated via the mappings provisioned.
     /// </summary>
     /// <param name="establishmentResults">
-    /// 
+    /// Encapsulates the aggregation of <see cref="SearchForEstablishments.Models.Establishment" />
+    /// types returned from the underlying search system.
     /// </param>
     /// <param name="facetMapperRequest">
-    /// 
+    /// Encapsulates the request objects necessary to attempt a valid mapping
+    /// of the required collection of <see cref="Facet"/> view models.
     /// </param>
     /// <returns>
-    /// 
+    /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
+    /// establishment result and facet result mappers.
     /// </returns>
     private ViewModels.SearchResults CreateViewModel(
         EstablishmentResults? establishmentResults,
-        EstablishmentFacetsMapperRequest facetMapperRequest) => new()
-        {
+        EstablishmentFacetsMapperRequest facetMapperRequest) => new(){
             SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(establishmentResults),
             Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(facetMapperRequest)
         };

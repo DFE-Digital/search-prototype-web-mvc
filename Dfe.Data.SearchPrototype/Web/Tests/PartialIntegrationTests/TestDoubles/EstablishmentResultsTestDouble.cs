@@ -1,7 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
+namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests.TestDoubles;
 
 public static class EstablishmentResultsTestDouble
 {
