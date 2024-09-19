@@ -92,7 +92,8 @@ public class HomeController : Controller
     {
         ViewBag.SearchQuery = searchRequestViewModel.SearchKeyword;
 
-        if (searchRequestViewModel.HasSelectedFacets())
+        if (searchRequestViewModel.HasSearchKeyWord &&
+            searchRequestViewModel.HasSelectedFacets)
         {
             SearchByKeywordResponse response =
                 await _searchByKeywordUseCase.HandleRequest(
@@ -126,8 +127,7 @@ public class HomeController : Controller
     /// </returns>
     private ViewModels.SearchResults CreateViewModel(
         EstablishmentResults? establishmentResults,
-        EstablishmentFacetsMapperRequest facetMapperRequest) => new()
-        {
+        EstablishmentFacetsMapperRequest facetMapperRequest) => new(){
             SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(establishmentResults),
             Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(facetMapperRequest)
         };

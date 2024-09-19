@@ -15,5 +15,10 @@ public class SearchRequest
     /// <summary>
     /// 
     /// </summary>
-    public bool HasSelectedFacets() => SelectedFacets?.Count > 0;
+    public bool HasSelectedFacets => SelectedFacets?.Count > 0;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool HasSearchKeyWord => !string.IsNullOrWhiteSpace(SearchKeyword);
 }

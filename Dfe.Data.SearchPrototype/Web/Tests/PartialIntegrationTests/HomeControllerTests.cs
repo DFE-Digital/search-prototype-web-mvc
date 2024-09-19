@@ -5,7 +5,7 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Tests.SearchForEstablishments.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
+using Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.ViewModels;
 using FluentAssertions;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration;
+namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests;
 
 public class HomeControllerTests
 {
