@@ -50,7 +50,8 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
     }
 
     /// <summary>
-    /// 
+    /// Encapsulates the request objects necessary to attempt a valid mapping
+    /// of the required collection of <see cref="Facet"/> view models.
     /// </summary>
     public class EstablishmentFacetsMapperRequest
     {

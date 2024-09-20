@@ -39,4 +39,21 @@ public class EstablishmentResultsToEstablishmentsViewModelMapperTests
             Assert.Equal(response.EstablishmentResults.Establishments.ToList()[i].EstablishmentStatusName, viewModelResults.SearchItems[i].EstablishmentStatusName);
         }
     }
+
+    [Fact]
+    public void Mapper_NoEstablishmentsResults_ReturnNullViewModel_NullEstablishments()
+    {
+        // arrange.
+        var response = SearchByKeywordResponseTestDouble.CreateWithNoResults();
+
+        // act.
+        var viewModelResults = new ViewModels.SearchResults()
+        {
+            SearchItems =
+                _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults)
+        };
+
+        // assert.
+        Assert.Null(viewModelResults.SearchItems);
+    }
 }
