@@ -18,6 +18,7 @@ builder.Services.AddGovUkFrontend();
 // Start of IOC container registrations
 //
 //
+builder.Services.AddDefaultSearchFilterServices(builder.Configuration);
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();

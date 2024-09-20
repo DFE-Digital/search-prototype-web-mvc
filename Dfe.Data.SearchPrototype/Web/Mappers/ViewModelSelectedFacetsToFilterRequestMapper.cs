@@ -15,7 +15,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <returns></returns>
         public IList<FilterRequest> MapFrom(Dictionary<string, List<string>> input)
         {
-            List<FilterRequest> filterRequests = [];
+            List<FilterRequest> filterRequests = new();
 
             foreach (KeyValuePair<string, List<string>> filterResult in input)
             {
@@ -31,6 +31,6 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <param name="filterRequest"></param>
         /// <returns></returns>
         private static FilterRequest MapFromFilterRequestViewModel(
-            KeyValuePair<string, List<string>> filterRequest) => new(filterRequest.Key, [filterRequest.Value]);
+            KeyValuePair<string, List<string>> filterRequest) => new(filterRequest.Key, filterRequest.Value.Cast<object>().ToList());
     }
 }
