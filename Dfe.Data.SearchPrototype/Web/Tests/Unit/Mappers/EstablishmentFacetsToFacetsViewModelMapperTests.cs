@@ -90,7 +90,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
                    
                     EstablishmentFacetTestDouble.CreateWith("PHASEOFEDUCATION", "Primary", 2),
                     EstablishmentFacetTestDouble.CreateWith("ESTABLISHMENTSTATUS", "Open", 21),
-                    //EstablishmentFacetTestDouble.CreateWith("ESTABLISHMENTSTATUS", "Closed", 21)
                 }),
                 SearchResponseStatus.Success);
             
@@ -106,28 +105,15 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
                     _establishmentFacetsToFacetsViewModelMapper.MapFrom(
                         new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults, selectedFacets))
             };
-            // check selected 
+ 
             // assert
-            var facetValues = viewModelResults.Facets.Find(f => f.Name == "PHASEOFEDUCATION").Values;
+            var facetValues = viewModelResults.Facets!.Find(f => f.Name == "PHASEOFEDUCATION")!.Values;
             var facetValue = Assert.Single(facetValues);
             Assert.False(facetValue.IsSelected);
             Assert.Equal("Primary", facetValue.Value);
 
-            var facetValues2 = viewModelResults.Facets.Find(f => f.Name == "ESTABLISHMENTSTATUS").Values;
+            var facetValues2 = viewModelResults.Facets.Find(f => f.Name == "ESTABLISHMENTSTATUS")!.Values;
             Assert.True(facetValues2.Single(f => f.Value == "Open").IsSelected);
-            //Assert.True(facetValues2.Single(f => f.Value == "Closed").IsSelected);
-            //foreach (var viewModelFacet in viewModelResults.Facets!) // for each FacetedField (e.g. Phase of education)
-            //{
-            //    var equivalentFacetedField = viewModelResults.Facets!.First(facet => facet.Name == viewModelFacet.Name);
-            //    Assert.NotNull(equivalentFacetedField); // the name has been mapped correctly
-
-            //    foreach (var expectedFacet in viewModelFacet.Results) // for each facet (value) within this faceted field (e.g. 'primary')
-            //    {
-            //        var equivalentFacet = equivalentFacetedField.Values.First(facetValue => facetValue.Value == expectedFacet.Value); // find the equivalent facet in the mapped response
-            //        Assert.NotNull(equivalentFacet);
-            //        Assert.Equal(expectedFacet.IsSelected, equivalentFacet.IsSelected);
-            //    }
-            //}
         }
     }
 }
