@@ -22,14 +22,13 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
     private Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> _useCase = new();
 
     private readonly WebApplicationFactory<Program> _factory;
-
-    public SearchPageTests(WebApplicationFactory<Program> factory)
+        public SearchPageTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
     }
 
     [Fact]
-    public async Task Search_ByKeyword_WithNoEstablishmentResultsAndNoFacets()
+    public async Task Search_ByKeyword_WithNoEstablishmentResultsAndNoFacets_ShowsNoResultsText()
     {
         var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWithNoResults();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
@@ -60,7 +59,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async Task Search_ByKeyword_WithSingleEstablishmentResult()
+    public async Task Search_ByKeyword_WithSingleEstablishmentResult_Shows1ResultText()
     {
         var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWithOneResult();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
@@ -91,7 +90,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async Task Search_ByKeyword_WithMultipleEstablishmentResults()
+    public async Task Search_ByKeyword_WithMultipleEstablishmentResults_ShowsResults()
     {
         var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
@@ -122,7 +121,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async Task Search_ByKeyword_WithFacetedResults()
+    public async Task Search_ByKeyword_WithFacetedResults_ShowsFacets()
     {
         var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
