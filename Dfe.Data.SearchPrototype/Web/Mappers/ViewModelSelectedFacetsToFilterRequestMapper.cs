@@ -31,6 +31,6 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <param name="filterRequest"></param>
         /// <returns></returns>
         private static FilterRequest MapFromFilterRequestViewModel(
-            KeyValuePair<string, List<string>> filterRequest) => new(filterRequest.Key, [filterRequest.Value]);
+            KeyValuePair<string, List<string>> filterRequest) => new(filterRequest.Key, filterRequest.Value.Cast<object>().ToList());
     }
 }
