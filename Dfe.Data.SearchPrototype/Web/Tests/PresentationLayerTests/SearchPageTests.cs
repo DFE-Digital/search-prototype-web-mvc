@@ -149,12 +149,20 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Program>>
         filtersHeading.Should().NotBeNull();
         filtersHeading!.TextContent.Should().Be("Filters");
 
-        var expectedFacetNames = useCaseResponse.EstablishmentFacetResults!.Facets.Select(f => f.Name).ToArray();
+        var expectedFacets = useCaseResponse.EstablishmentFacetResults!.Facets;
         var resultFacetNames = resultsPage.GetElementsByTagName("legend").Select(x => x.InnerHtml.Trim());
 
-        foreach (var facetName in expectedFacetNames)
+        foreach (var expectedFacet in expectedFacets)
         {
-            resultFacetNames.Where(x => x == facetName).First().Should().NotBeNull();
+            var facetInputElements = resultsPage.All
+                .Where(element => element.Id != null && element.Id.Contains($"selectedFacets_{expectedFacet.Name}"))
+                .Select(e => e as IHtmlInputElement);
+
+            foreach(var expectedFacetValue in expectedFacet.Results)
+            {
+                var matchedFacet = facetInputElements.Single(inputElement => inputElement!.Value == expectedFacetValue.Value);
+                matchedFacet.Should().NotBeNull();
+            }
         }
     }
 
