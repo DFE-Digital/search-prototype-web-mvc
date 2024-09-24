@@ -6,17 +6,18 @@ using Newtonsoft.Json;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using System.Text.Json.Serialization;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 
 namespace Dfe.Data.SearchPrototype.WebApi.Tests.APITests;
 
-public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
+public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>>
 {
     private const string SEARCHKEYWORD_ENDPOINT = "/establishments?SearchKeyword=";
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _logger;
     private readonly PageWebApplicationFactory<Program> _factory;
 
-    public SearchResults(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
+    public ApiSearchResults(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
     {
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
@@ -44,8 +45,8 @@ public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var jsonString = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
-        
-        jsonString.EstablishmentResults.Establishments.Should().HaveCount(resultsInt);
+
+        jsonString.EstablishmentResults!.Establishments.Should().HaveCount(resultsInt);
     }
 
     [Fact]
@@ -58,11 +59,44 @@ public class SearchResults : IClassFixture<PageWebApplicationFactory<Program>>
 
         results.EstablishmentResults!.Establishments!.First().Urn.Should().Be("123456");
         results.EstablishmentResults!.Establishments!.First().Name.Should().Be("Goose Academy");
-        //TODO: address
-        //results.EstablishmentResults.Establishments.First().Address.Should().Be("123456");
+        results.EstablishmentResults.Establishments!.First().Address.Street.Should().Be("Goose Street");
+        results.EstablishmentResults.Establishments!.First().Address.Locality.Should().Be("Goose Locality");
+        results.EstablishmentResults.Establishments!.First().Address.Address3.Should().Be("Goose Address 3");
+        results.EstablishmentResults.Establishments!.First().Address.Town.Should().Be("Goose Town");
+        results.EstablishmentResults.Establishments!.First().Address.Postcode.Should().Be("GOO OSE");
         results.EstablishmentResults!.Establishments!.First().EstablishmentType.Should().Be("Academy");
         results.EstablishmentResults!.Establishments!.First().EstablishmentStatusName.Should().Be("Open");
         results.EstablishmentResults!.Establishments!.First().PhaseOfEducation.Should().Be("Secondary");
+    }
+
+    [Fact]
+    public async Task GET_Search_NoMatch_Returns_NoEstablishmentData()
+    {
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Antony*");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var results = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
+
+        results.EstablishmentResults!.Establishments.Should().HaveCount(0);
+    }
+    
+    [Fact]
+    public async Task GET_Search_SpecialCharacter_Returns_NoEstablishmentData()
+    {
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}!*");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var results = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
+
+        results.EstablishmentResults!.Establishments.Should().HaveCount(0);
+    }
+    
+    [Fact]
+    public async Task GET_Search_NoSearchTerm_Returns_400()
+    {
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}");
+
+        response.StatusCode.Should().Be((System.Net.HttpStatusCode)StatusCodes.Status400BadRequest);
     }
 }
 
