@@ -2,7 +2,7 @@
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
 {
-    public static class FacetsSelectedViewModelTestDouble
+    public static class FacetsSelectedModelTestDouble
     {
         public static string GetFacetKeyFake() => new Faker().Company.CompanyName();
         public static string GetFacetValueFake() => new Faker().Company.CompanyName();

@@ -16,7 +16,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
             return mockMapper;
         }
 
-        public static Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> DefaultMock() =>
-            new Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>>();
+        public static Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> DefaultMock() => new();
     }
 }

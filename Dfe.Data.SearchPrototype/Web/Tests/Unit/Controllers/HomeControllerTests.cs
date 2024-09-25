@@ -3,7 +3,6 @@ using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Controllers;
-using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Models;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using Dfe.Data.SearchPrototype.Web.Mappers;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Controllers;
 
@@ -26,7 +26,7 @@ public class HomeControllerTests
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            EstablishmentFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -60,7 +60,7 @@ public class HomeControllerTests
            EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            EstablishmentFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -95,7 +95,7 @@ public class HomeControllerTests
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            EstablishmentFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -131,7 +131,7 @@ public class HomeControllerTests
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            EstablishmentFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -159,7 +159,7 @@ public class HomeControllerTests
     }
 
     [Fact]
-    public async Task SearchWithFilters_NoSearchKeywordOnSearchRequest_NullViewModel()
+    public async Task SearchWithFilters_NoSearckKeywordOnSearchRequest_NullViewModel()
     {
         // arrange
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
@@ -174,7 +174,7 @@ public class HomeControllerTests
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            EstablishmentFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -219,7 +219,7 @@ public class HomeControllerTests
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            EstablishmentFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);

@@ -5,7 +5,7 @@ using Moq;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
 {
-    public static class EstablishmentFacetsToFacetsViewModelMapperTestDouble
+    public static class FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble
     {
         public static Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> MockFor(List<Facet>? viewModel)
         {
@@ -17,7 +17,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
             return mockMapper;
         }
 
-        public static Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> DefaultMock() =>
-            new Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>>();
+        public static Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> DefaultMock() => new();
     }
 }

@@ -9,9 +9,9 @@ using SearchResults = Dfe.Data.SearchPrototype.Web.Models.SearchResults;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 {
-    public sealed class EstablishmentFacetsToFacetsViewModelMapperTests
+    public sealed class FacetsAndSelectedFacetsToFacetsViewModelMapperTests
     {
-        private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper
+        private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper
             = new FacetsAndSelectedFacetsToFacetsViewModelMapper();
 
         [Fact]
@@ -24,7 +24,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             SearchResults viewModelResults = new()
             {
                 Facets =
-                    _establishmentFacetsToFacetsViewModelMapper.MapFrom(
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(
                         new FacetsAndSelectedFacets(response.EstablishmentFacetResults))
             };
 
@@ -53,7 +53,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             SearchResults viewModelResults = new()
             {
                 Facets =
-                    _establishmentFacetsToFacetsViewModelMapper.MapFrom(
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(
                         new FacetsAndSelectedFacets(response.EstablishmentFacetResults))
             };
 
@@ -71,7 +71,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             SearchResults viewModelResults = new()
             {
                 Facets =
-                    _establishmentFacetsToFacetsViewModelMapper.MapFrom(
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(
                         new FacetsAndSelectedFacets(response.EstablishmentFacetResults))
             };
 
@@ -87,12 +87,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
                 new EstablishmentFacets(
                 new List<EstablishmentFacet>()
                 {
-                   
                     EstablishmentFacetTestDouble.CreateWith("PHASEOFEDUCATION", "Primary", 2),
                     EstablishmentFacetTestDouble.CreateWith("ESTABLISHMENTSTATUS", "Open", 21),
                 }),
                 SearchResponseStatus.Success);
-            
+   
             Dictionary<string, List<string>>? selectedFacets = new() {
                 {"PHASEOFEDUCATION",new List<string>{ } },
                 {"ESTABLISHMENTSTATUS", new List<string> {"Open", "Closed"}}
@@ -102,10 +101,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             SearchResults viewModelResults = new()
             {
                 Facets =
-                    _establishmentFacetsToFacetsViewModelMapper.MapFrom(
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(
                         new FacetsAndSelectedFacets(response.EstablishmentFacetResults, selectedFacets))
             };
- 
+
             // assert
             var facetValues = viewModelResults.Facets!.Find(f => f.Name == "PHASEOFEDUCATION")!.Values;
             var facetValue = Assert.Single(facetValues);
@@ -113,7 +112,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             Assert.Equal("Primary", facetValue.Value);
 
             var facetValues2 = viewModelResults.Facets.Find(f => f.Name == "ESTABLISHMENTSTATUS")!.Values;
-            Assert.True(facetValues2.Single(f => f.Value == "Open").IsSelected);
+            Assert.True(facetValues2.Single(facetValue => facetValue.Value == "Open").IsSelected);
         }
     }
 }

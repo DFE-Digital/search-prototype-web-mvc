@@ -16,8 +16,8 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
     private readonly IMapper<EstablishmentResults?, List<Models.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
-    private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
-    private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
+    private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
+    private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _selectedFacetsToFilterRequestsMapper;
 
     /// <summary>
     /// The following dependencies include the use-case which orchestrates the search functionality,
@@ -35,8 +35,8 @@ public class HomeController : Controller
     /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<EstablishmentResults, SearchByKeywordResponse>
     /// defined within, and injected by the IOC container (defined within program.cs)
     /// </param>
-    /// <param name="establishmentFacetsToFacetsViewModelMapper">
-    /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>
+    /// <param name="facetsAndSelectedFacetsToFacetsViewModelMapper">
+    /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<FacetsAndSelectedFacets, List<Facet>?>
     /// defined within, and injected by the IOC container (defined within program.cs) used to map all facets and pre-selections from the response to the view model.
     /// </param>
     /// <param name="requestMapper">
@@ -47,14 +47,14 @@ public class HomeController : Controller
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
         IMapper<EstablishmentResults?, List<Models.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-        IMapper<FacetsAndSelectedFacets, List<Facet>?> establishmentFacetsToFacetsViewModelMapper,
-        IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> requestMapper)
+        IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper,
+        IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> selectedFacetsToFilterRequestsMapper)
     {
         _logger = logger;
         _searchByKeywordUseCase = searchByKeywordUseCase;
         _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
-        _establishmentFacetsToFacetsViewModelMapper = establishmentFacetsToFacetsViewModelMapper;
-        _requestMapper = requestMapper;
+        _facetsAndSelectedFacetsToFacetsViewModelMapper = facetsAndSelectedFacetsToFacetsViewModelMapper;
+        _selectedFacetsToFilterRequestsMapper = selectedFacetsToFilterRequestsMapper;
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class HomeController : Controller
                 await _searchByKeywordUseCase.HandleRequest(
                     new SearchByKeywordRequest(
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
-                        filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
+                        filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
             Models.SearchResults viewModel =
                 CreateViewModel(
@@ -144,6 +144,6 @@ public class HomeController : Controller
         FacetsAndSelectedFacets facetsAndSelectedFacets) => new()
         {
             SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(establishmentResults),
-            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(facetsAndSelectedFacets)
+            Facets = _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(facetsAndSelectedFacets)
         };
 }
