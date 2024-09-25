@@ -157,9 +157,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-            // using the selenium selector under the hood
-            var thingToTest = resultsPage.GetElementText(SearchResultsPage.SearchNoResultText.Criteria);
-            thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
+            resultsPage.GetElementText(SearchResultsPage.SearchNoResultText.Criteria).Should().Contain("Sorry no results found please amend your search criteria");
         }
     }
 }
