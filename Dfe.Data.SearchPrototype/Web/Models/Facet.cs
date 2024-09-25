@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.ViewModels;
+﻿namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
 /// Value object used to encapsulate the Facet view model.

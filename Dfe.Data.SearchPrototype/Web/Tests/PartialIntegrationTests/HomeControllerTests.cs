@@ -7,7 +7,7 @@ using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
-using Dfe.Data.SearchPrototype.Web.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -45,7 +45,7 @@ public class HomeControllerTests
 
         // assert
         ViewResult viewResult = Assert.IsType<ViewResult>(result);
-        ViewModels.SearchResults viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
+        Models.SearchResults viewModel = Assert.IsType<Models.SearchResults>(viewResult.Model);
 
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
@@ -77,7 +77,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<Models.SearchResults>(viewResult.Model);
 
         viewModel.SearchItems.Should().BeEmpty();
         viewModel.HasResults.Should().BeFalse();
@@ -118,7 +118,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<Models.SearchResults>(viewResult.Model);
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
@@ -161,7 +161,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<Models.SearchResults>(viewResult.Model);
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
@@ -208,7 +208,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<ViewModels.SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<Models.SearchResults>(viewResult.Model);
         
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();

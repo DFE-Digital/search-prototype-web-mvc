@@ -6,7 +6,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class EstablishmentResultsToEstablishmentsViewModelMapper : IMapper<EstablishmentResults?, List<ViewModels.Establishment>?>
+    public sealed class EstablishmentResultsToEstablishmentsViewModelMapper : IMapper<EstablishmentResults?, List<Models.Establishment>?>
     {
         /// <summary>
         /// 
@@ -17,9 +17,9 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <returns>
         /// 
         /// </returns>
-        public List<ViewModels.Establishment>? MapFrom(EstablishmentResults? input)
+        public List<Models.Establishment>? MapFrom(EstablishmentResults? input)
         {
-            List<ViewModels.Establishment>? searchItems = null;
+            List<Models.Establishment>? searchItems = null;
 
             if (input != null)
             {
@@ -27,11 +27,11 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
 
                 foreach (var establishment in input.Establishments)
                 {
-                    searchItems.Add(new ViewModels.Establishment
+                    searchItems.Add(new Models.Establishment
                     {
                         Urn = establishment.Urn,
                         Name = establishment.Name,
-                        Address = new ViewModels.Address()
+                        Address = new Models.Address()
                         {
                             Street = establishment.Address.Street,
                             Locality = establishment.Address.Locality,

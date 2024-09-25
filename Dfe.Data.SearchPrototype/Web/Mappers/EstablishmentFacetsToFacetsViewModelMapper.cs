@@ -1,6 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-using Dfe.Data.SearchPrototype.Web.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models;
 
 namespace Dfe.Data.SearchPrototype.Web.Mappers
 {

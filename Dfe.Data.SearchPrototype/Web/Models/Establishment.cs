@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.ViewModels;
+﻿namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
 /// A view model representation of a single search result.
@@ -20,7 +20,7 @@ public class Establishment
     /// <summary>
     /// Establishment type.
     /// </summary>
-    public string EstablishmentType {  get; init; } = string.Empty;
+    public string EstablishmentType { get; init; } = string.Empty;
     /// <summary>
     /// Establishment education phase
     /// </summary>

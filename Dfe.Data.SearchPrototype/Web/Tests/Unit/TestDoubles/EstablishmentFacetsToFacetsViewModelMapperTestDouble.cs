@@ -1,6 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models;
 using Moq;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles

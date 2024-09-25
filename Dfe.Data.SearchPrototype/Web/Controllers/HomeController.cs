@@ -3,7 +3,7 @@ using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Data.SearchPrototype.Web.Controllers;
@@ -15,7 +15,7 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
-    private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
+    private readonly IMapper<EstablishmentResults?, List<Models.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
     private readonly IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
 
@@ -47,7 +47,7 @@ public class HomeController : Controller
     public HomeController(
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
-        IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
+        IMapper<EstablishmentResults?, List<Models.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
         IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> establishmentFacetsToFacetsViewModelMapper,
         IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> requestMapper)
     {
@@ -78,7 +78,7 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
 
-        ViewModels.SearchResults viewModel = new()
+        Models.SearchResults viewModel = new()
         {
 
             SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
@@ -113,7 +113,7 @@ public class HomeController : Controller
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
                         filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
-            ViewModels.SearchResults viewModel = new()
+            Models.SearchResults viewModel = new()
             {
 
                 SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
