@@ -19,7 +19,6 @@ public class HomeController : Controller
     private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
 
-
     /// <summary>
     /// The following dependencies include the use-case which orchestrates the search functionality,
     /// and the mapper which transforms from the use-case response to the view model.

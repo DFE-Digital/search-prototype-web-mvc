@@ -1,7 +1,7 @@
 ﻿namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
-/// A view model representation of search requests defining view logic predicated on the status of user input.
+/// The search requests defining model bound view response logic predicated on the status of user input.
 /// </summary>
 public class SearchRequest
 {
