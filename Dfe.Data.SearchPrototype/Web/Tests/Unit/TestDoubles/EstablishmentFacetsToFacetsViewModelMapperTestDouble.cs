@@ -7,17 +7,17 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
 {
     public static class EstablishmentFacetsToFacetsViewModelMapperTestDouble
     {
-        public static Mock<IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>> MockFor(List<Facet>? viewModel)
+        public static Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> MockFor(List<Facet>? viewModel)
         {
-            Mock<IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>> mockMapper = DefaultMock();
+            Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockMapper = DefaultMock();
 
             mockMapper.Setup(mapper =>
-                mapper.MapFrom(It.IsAny<EstablishmentFacetsMapperRequest>())).Returns(viewModel);
+                mapper.MapFrom(It.IsAny<FacetsAndSelectedFacets>())).Returns(viewModel);
 
             return mockMapper;
         }
 
-        public static Mock<IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>> DefaultMock() =>
-            new Mock<IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>>();
+        public static Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> DefaultMock() =>
+            new Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>>();
     }
 }

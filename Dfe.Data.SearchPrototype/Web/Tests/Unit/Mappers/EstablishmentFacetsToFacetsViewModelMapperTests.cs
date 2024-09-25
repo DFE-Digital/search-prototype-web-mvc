@@ -11,8 +11,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 {
     public sealed class EstablishmentFacetsToFacetsViewModelMapperTests
     {
-        private readonly IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper
-            = new EstablishmentFacetsToFacetsViewModelMapper();
+        private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper
+            = new FacetsAndSelectedFacetsToFacetsViewModelMapper();
 
         [Fact]
         public void Mapper_WithFacetResults_ReturnsFacetsInViewModel()
@@ -25,7 +25,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             {
                 Facets =
                     _establishmentFacetsToFacetsViewModelMapper.MapFrom(
-                        new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults))
+                        new FacetsAndSelectedFacets(response.EstablishmentFacetResults))
             };
 
             // assert
@@ -54,7 +54,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             {
                 Facets =
                     _establishmentFacetsToFacetsViewModelMapper.MapFrom(
-                        new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults))
+                        new FacetsAndSelectedFacets(response.EstablishmentFacetResults))
             };
 
             // assert.
@@ -72,7 +72,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             {
                 Facets =
                     _establishmentFacetsToFacetsViewModelMapper.MapFrom(
-                        new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults))
+                        new FacetsAndSelectedFacets(response.EstablishmentFacetResults))
             };
 
             // assert.
@@ -103,7 +103,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             {
                 Facets =
                     _establishmentFacetsToFacetsViewModelMapper.MapFrom(
-                        new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults, selectedFacets))
+                        new FacetsAndSelectedFacets(response.EstablishmentFacetResults, selectedFacets))
             };
  
             // assert

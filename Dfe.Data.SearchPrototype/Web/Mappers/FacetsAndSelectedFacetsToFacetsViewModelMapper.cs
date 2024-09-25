@@ -7,8 +7,9 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class EstablishmentFacetsToFacetsViewModelMapper : IMapper<EstablishmentFacetsMapperRequest, List<Facet>?>
+    public sealed class FacetsAndSelectedFacetsToFacetsViewModelMapper : IMapper<FacetsAndSelectedFacets, List<Facet>?>
     {
+        
         /// <summary>
         /// 
         /// </summary>
@@ -18,15 +19,15 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <returns>
         /// 
         /// </returns>
-        public List<Facet>? MapFrom(EstablishmentFacetsMapperRequest input)
+        public List<Facet>? MapFrom(FacetsAndSelectedFacets input)
         {
             List<Facet>? facetItems = null;
 
-            if (input.EstablishmentFacets != null)
+            if (input.Facets != null)
             {
                 facetItems = [];
 
-                foreach (EstablishmentFacet establishmentFacet in input.EstablishmentFacets.Facets)
+                foreach (EstablishmentFacet establishmentFacet in input.Facets.Facets)
                 {
                     List<FacetValue> facetValues =
                         establishmentFacet.Results.Select(
@@ -53,12 +54,12 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
     /// Encapsulates the request objects necessary to attempt a valid mapping
     /// of the required collection of <see cref="Facet"/> view models.
     /// </summary>
-    public class EstablishmentFacetsMapperRequest
+    public class FacetsAndSelectedFacets
     {
         /// <summary>
         /// 
         /// </summary>
-        public EstablishmentFacets? EstablishmentFacets { get; }
+        public EstablishmentFacets? Facets { get; }
 
         /// <summary>
         /// 
@@ -74,11 +75,11 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <param name="selectedFacets">
         /// 
         /// </param>
-        public EstablishmentFacetsMapperRequest(
+        public FacetsAndSelectedFacets(
             EstablishmentFacets? establishmentFacets,
             Dictionary<string, List<string>>? selectedFacets = null)
         {
-            EstablishmentFacets = establishmentFacets;
+            Facets = establishmentFacets;
             SelectedFacets = selectedFacets;
         }
     }

@@ -37,7 +37,7 @@ public class HomeControllerTests
         HomeController controller =
             new(_logger.Object, useCase,
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                new EstablishmentFacetsToFacetsViewModelMapper(),
+                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
                 new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
@@ -69,7 +69,7 @@ public class HomeControllerTests
         HomeController controller =
             new(_logger.Object, useCase,
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                new EstablishmentFacetsToFacetsViewModelMapper(),
+                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
                 new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
@@ -104,7 +104,7 @@ public class HomeControllerTests
         var controller =
             new HomeController(_logger.Object, useCase,
             new EstablishmentResultsToEstablishmentsViewModelMapper(),
-            new EstablishmentFacetsToFacetsViewModelMapper(),
+            new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
             new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
@@ -147,7 +147,7 @@ public class HomeControllerTests
         HomeController controller =
             new (_logger.Object, useCase,
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                new EstablishmentFacetsToFacetsViewModelMapper(),
+                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
                 new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act
@@ -194,7 +194,7 @@ public class HomeControllerTests
         var controller =
             new HomeController(_logger.Object, useCase,
             new EstablishmentResultsToEstablishmentsViewModelMapper(),
-            new EstablishmentFacetsToFacetsViewModelMapper(),
+            new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
             new ViewModelSelectedFacetsToFilterRequestMapper());
 
         // act

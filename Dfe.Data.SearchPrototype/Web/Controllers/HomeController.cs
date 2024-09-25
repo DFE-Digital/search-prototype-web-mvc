@@ -16,7 +16,7 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
     private readonly IMapper<EstablishmentResults?, List<Models.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
-    private readonly IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
+    private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _establishmentFacetsToFacetsViewModelMapper;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _requestMapper;
 
 
@@ -48,7 +48,7 @@ public class HomeController : Controller
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
         IMapper<EstablishmentResults?, List<Models.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-        IMapper<EstablishmentFacetsMapperRequest, List<Facet>?> establishmentFacetsToFacetsViewModelMapper,
+        IMapper<FacetsAndSelectedFacets, List<Facet>?> establishmentFacetsToFacetsViewModelMapper,
         IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> requestMapper)
     {
         _logger = logger;
@@ -82,7 +82,7 @@ public class HomeController : Controller
         {
 
             SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
-            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new EstablishmentFacetsMapperRequest(
+            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new FacetsAndSelectedFacets(
                     response.EstablishmentFacetResults))
         };
 
@@ -117,7 +117,7 @@ public class HomeController : Controller
             {
 
                 SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
-                Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new EstablishmentFacetsMapperRequest(
+                Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new FacetsAndSelectedFacets(
                         response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets))
             };
 
