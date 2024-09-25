@@ -159,7 +159,7 @@ public class HomeControllerTests
     }
 
     [Fact]
-    public async Task SearchWithFilters_NoSearckKeywordOnSearchRequest_NullViewModel()
+    public async Task SearchWithFilters_NoSearchKeywordOnSearchRequest_NullViewModel()
     {
         // arrange
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
