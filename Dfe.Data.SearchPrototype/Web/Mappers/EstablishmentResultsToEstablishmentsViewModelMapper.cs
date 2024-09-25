@@ -4,18 +4,21 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 namespace Dfe.Data.SearchPrototype.Web.Mappers
 {
     /// <summary>
-    /// 
+    /// Facilitates mapping from the received <see cref="EstablishmentResults"/>,
+    /// into the required list of <see cref="Models.Establishment"/> instances.
     /// </summary>
     public sealed class EstablishmentResultsToEstablishmentsViewModelMapper : IMapper<EstablishmentResults?, List<Models.Establishment>?>
     {
         /// <summary>
-        /// 
+        /// Provides the functionality to map from the <see cref="EstablishmentResults"/>
+        /// input, to a configured list of <see cref="Models.Establishment"/> instances.
         /// </summary>
         /// <param name="input">
-        /// 
+        /// The provisioned <see cref="EstablishmentResults"> received
+        /// from the use-case search request.
         /// </param>
         /// <returns>
-        /// 
+        /// The configured list of <see cref="Models.Establishment"/> instances expected.
         /// </returns>
         public List<Models.Establishment>? MapFrom(EstablishmentResults? input)
         {
