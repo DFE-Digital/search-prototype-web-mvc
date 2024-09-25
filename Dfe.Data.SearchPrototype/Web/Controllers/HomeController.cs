@@ -78,13 +78,11 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
 
-        Models.SearchResults viewModel = new()
-        {
-
-            SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
-            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new FacetsAndSelectedFacets(
-                    response.EstablishmentFacetResults))
-        };
+        Models.SearchResults viewModel =
+            CreateViewModel(
+                response.EstablishmentResults,
+                new FacetsAndSelectedFacets(
+                    response.EstablishmentFacetResults));
 
         return View("Index", viewModel);
     }
@@ -113,17 +111,40 @@ public class HomeController : Controller
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
                         filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
-            Models.SearchResults viewModel = new()
-            {
-
-                SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
-                Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new FacetsAndSelectedFacets(
-                        response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets))
-            };
+            Models.SearchResults viewModel =
+                CreateViewModel(
+                    response.EstablishmentResults,
+                    new FacetsAndSelectedFacets(
+                        response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
 
             return View("Index", viewModel);
         }
 
         return await Index(searchRequestViewModel.SearchKeyword!);
     }
+
+    /// <summary>
+    /// Factory method for creating the required <see cref="ViewModels.SearchResults"/> view model
+    /// based on the service response and the previously selected (if any) facets which are
+    /// reinstated via the mappings provisioned.
+    /// </summary>
+    /// <param name="establishmentResults">
+    /// Encapsulates the aggregation of <see cref="SearchForEstablishments.Models.Establishment" />
+    /// types returned from the underlying search system.
+    /// </param>
+    /// <param name="facetsAndSelectedFacets">
+    /// Encapsulates the request objects necessary to attempt a valid mapping
+    /// of the required collection of <see cref="Facet"/> view models.
+    /// </param>
+    /// <returns>
+    /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
+    /// establishment result and facet result mappers.
+    /// </returns>
+    private Models.SearchResults CreateViewModel(
+        EstablishmentResults? establishmentResults,
+        FacetsAndSelectedFacets facetsAndSelectedFacets) => new()
+        {
+            SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(establishmentResults),
+            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(facetsAndSelectedFacets)
+        };
 }
