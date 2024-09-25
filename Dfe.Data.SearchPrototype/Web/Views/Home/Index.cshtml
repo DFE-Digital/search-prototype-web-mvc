@@ -1,4 +1,4 @@
-﻿@model Dfe.Data.SearchPrototype.Web.Models.SearchResultsViewModel
+﻿@model SearchResults
 
 @{
     ViewData["Title"] = "Search Results";
@@ -6,7 +6,8 @@
 }
 
 @* search component *@
-<form method="get" action="@Url.Action("Index", "home")" id="search-establishments">
+@using (Html.BeginForm("SearchWithFilters", "Home", FormMethod.Post, new { id = "search-establishments" }))
+{
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
         <govuk-input-hint>Search establishments</govuk-input-hint>
@@ -20,7 +21,6 @@
         </govuk-input-suffix>
     </govuk-input>
     @* end of search component *@
-
     @* filters *@
     @if (Model != null)
     {
@@ -28,25 +28,28 @@
         {
             <div id="filters-container" class="govuk-grid-column-one-third">
                 <h3 id="filters-heading">Filters</h3>
+                <button type="submit" class="govuk-button" data-module="govuk-button">
+                    Apply filters
+                </button>
                 @if (Model.Facets is not null && Model.Facets.Any())
                 {
-                    @foreach (var facet in Model.Facets)
+                    foreach (var facet in Model.Facets)
                     {
-                        <govuk-checkboxes name="@facet.Name">
+                        <govuk-checkboxes name="selectedFacets[@facet.Name]">
                             <govuk-checkboxes-fieldset>
-                                <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
+                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
                                     @facet.Name
                                 </govuk-checkboxes-fieldset-legend>
-                                @foreach (var facetItem in facet.Values)
+
+                                @foreach (var facetValue in facet.Values)
                                 {
-                                    <govuk-checkboxes-item value="@facetItem.Value">
-                                        @facetItem.Value (@facetItem.Count)
+                                    <govuk-checkboxes-item checked="@facetValue.IsSelected" value="@facetValue.Value">
+                                        @facetValue.Value (@facetValue.Count)
                                     </govuk-checkboxes-item>
                                 }
                             </govuk-checkboxes-fieldset>
                         </govuk-checkboxes>
                     }
-
                 }
                 else
                 {
@@ -92,14 +95,12 @@
             </div>
         }
         else
-
         {
             <div class="govuk-grid-column-two-thirds" id="no-results">
-                <p> Sorry no results found please amend your search criteria</p>
+                <p>Sorry no results found please amend your search criteria</p>
             </div>
         }
         @*  end of list component *@
     }
     @* end of display results *@
-
-</form>
+}

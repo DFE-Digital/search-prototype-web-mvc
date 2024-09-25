@@ -1,16 +1,15 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers;
 
-public class SearchByKeywordResponseToViewModelMapperTests
+public class EstablishmentResultsToEstablishmentsViewModelMapperTests
 {
-    private readonly IMapper<SearchByKeywordResponse, SearchResultsViewModel> _serviceModelToViewModelMapper
-        = new SearchByKeywordResponseToViewModelMapper();
+    private readonly IMapper<EstablishmentResults?, List<Web.Models.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper
+        = new EstablishmentResultsToEstablishmentsViewModelMapper();
 
     [Fact]
     public void Mapper_WithEstablishmentResults_ReturnsEstablishmentResultsInViewModel()
@@ -19,7 +18,11 @@ public class SearchByKeywordResponseToViewModelMapperTests
         var response = SearchByKeywordResponseTestDouble.Create();
 
         // act.
-        SearchResultsViewModel viewModelResults = _serviceModelToViewModelMapper.MapFrom(response);
+        Web.Models.SearchResults viewModelResults = new()
+        {
+            SearchItems =
+                _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults)
+        };
 
         // assert.
         for (int i = 0; i < response.EstablishmentResults!.Establishments?.Count; i++)
@@ -38,40 +41,19 @@ public class SearchByKeywordResponseToViewModelMapperTests
     }
 
     [Fact]
-    public void Mapper_WithFacetResults_ReturnsFacetsInViewModel()
+    public void Mapper_NoEstablishmentsResults_ReturnNullViewModel_NullEstablishments()
     {
         // arrange.
-        var response = SearchByKeywordResponseTestDouble.Create();
+        var response = SearchByKeywordResponseTestDouble.CreateWithNoResults();
 
         // act.
-        SearchResultsViewModel viewModelResults = _serviceModelToViewModelMapper.MapFrom(response);
-
-        // assert
-        foreach (var facetedField in response.EstablishmentFacetResults!.Facets!) // for each FacetedField (e.g. Phase of education)
+        var viewModelResults = new Web.Models.SearchResults()
         {
-            var equivalentFacetedField = viewModelResults.Facets!.Where(x => x.Name == facetedField.Name).First();
-            Assert.NotNull(equivalentFacetedField); // the name has been mapped correctly
-
-            foreach (var expectedFacet in facetedField.Results) // for each facet (value) within this faceted field (e.g. 'primary')
-            {
-                var equivalentFacet = equivalentFacetedField.Values.Where(x => x.Value == expectedFacet.Value).First(); // find the equivalent facet in the mapped response
-                Assert.NotNull(equivalentFacet);
-                Assert.Equal(expectedFacet.Count, equivalentFacet.Count);
-            }
-        }
-    }
-
-    [Fact]
-    public void Mapper_NoResultsAndNoFacets_ReturnViewModel_NullEstablishmentResultsAndNullFacets()
-    {
-        // arrange.
-        var establishmentResults = SearchByKeywordResponseTestDouble.CreateWithNoResults();
-
-        // act.
-        var viewModelResults = _serviceModelToViewModelMapper.MapFrom(establishmentResults);
+            SearchItems =
+                _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults)
+        };
 
         // assert.
         Assert.Null(viewModelResults.SearchItems);
-        Assert.Null(viewModelResults.Facets);
     }
 }
