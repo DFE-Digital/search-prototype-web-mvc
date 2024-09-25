@@ -1,4 +1,5 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+﻿using Azure.Search.Documents.Models;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
@@ -33,7 +34,8 @@ public static class SearchByKeywordResponseTestDouble
         List<EstablishmentFacet> facetResults = new() {
             EstablishmentFacetTestDouble.Create()
         };
-        return new SearchByKeywordResponse(status: SearchResponseStatus.Success) {
+        return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
+        {
             EstablishmentResults = new EstablishmentResults(establishmentResults),
             EstablishmentFacetResults = new EstablishmentFacets(facetResults)
         };
@@ -42,5 +44,14 @@ public static class SearchByKeywordResponseTestDouble
     public static SearchByKeywordResponse CreateWithNoResults()
     {
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success) { };
+    }
+
+    public static SearchByKeywordResponse CreateWithEmptyList()
+    {
+        return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
+        {
+            EstablishmentResults = new EstablishmentResults(),
+            EstablishmentFacetResults = new EstablishmentFacets()
+        };
     }
 }

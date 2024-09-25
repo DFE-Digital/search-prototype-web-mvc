@@ -3,16 +3,16 @@
 /// <summary>
 /// A view model representation of search results defining view logic predicated on the status of the results.
 /// </summary>
-public class SearchResultsViewModel
+public class SearchResults
 {
     /// <summary>
     /// View model representation of the available facets.
-    /// </summary> 
+    /// </summary>
     public List<Facet>? Facets { get; set; }
     /// <summary>
     /// View model representation of aggregated search results.
     /// </summary>
-    public List<EstablishmentViewModel>? SearchItems { get; set; }
+    public List<Establishment>? SearchItems { get; set; }
     /// <summary>
     /// Property determining whether we have at least one search result.
     /// </summary>
