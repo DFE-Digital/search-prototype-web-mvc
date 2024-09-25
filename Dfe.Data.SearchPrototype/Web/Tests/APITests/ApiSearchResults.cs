@@ -3,10 +3,9 @@ using Dfe.Data.SearchPrototype.Web.Tests;
 using Xunit.Abstractions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-using System.Text.Json.Serialization;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
 
 namespace Dfe.Data.SearchPrototype.WebApi.Tests.APITests;
 
@@ -44,7 +43,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}*");
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        var jsonString = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
+        var jsonString = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
         jsonString.EstablishmentResults!.Establishments.Should().HaveCount(resultsInt);
     }
@@ -55,7 +54,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Academy*");
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        var results = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
+        var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
         results.EstablishmentResults!.Establishments!.First().Urn.Should().Be("123456");
         results.EstablishmentResults!.Establishments!.First().Name.Should().Be("Goose Academy");
@@ -75,7 +74,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Antony*");
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        var results = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
+        var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
         results.EstablishmentResults!.Establishments.Should().HaveCount(0);
     }
@@ -86,7 +85,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}!*");
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        var results = JsonConvert.DeserializeObject<SearchResultsJson>(responseBody)!;
+        var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
         results.EstablishmentResults!.Establishments.Should().HaveCount(0);
     }
@@ -98,16 +97,4 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
 
         response.StatusCode.Should().Be((System.Net.HttpStatusCode)StatusCodes.Status400BadRequest);
     }
-}
-
-public class SearchResultsJson
-{
-    [JsonPropertyName("establishmentResults")]
-    public EstablishmentSearchResults? EstablishmentResults { get; set; }
-}
-
-public class EstablishmentSearchResults
-{
-    [JsonPropertyName("establishments")]
-    public IEnumerable<Establishment>? Establishments { get; set; }
 }

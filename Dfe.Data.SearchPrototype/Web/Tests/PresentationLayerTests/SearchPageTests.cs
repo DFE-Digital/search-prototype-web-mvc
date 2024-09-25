@@ -41,8 +41,8 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var response = await client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
+        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
+        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
         var formResponse = await client.SendAsync(
             formElement!,
@@ -54,9 +54,9 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        resultsPage.QuerySelector(SearchResultsPage.SearchNoResultText.Criteria)!
+        resultsPage.QuerySelector(HomePage.SearchNoResultText.Criteria)!
             .TextContent.Should().Contain("Sorry no results found please amend your search criteria");
-        resultsPage.QuerySelector(SearchResultsPage.SearchResultsNumber.Criteria)!
+        resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
             .Should().BeNull();
         resultsPage.GetElementById("filters-container").Should().BeNull();
     }
@@ -72,8 +72,8 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var response = await client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
+        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
+        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
         var formResponse = await client.SendAsync(
             formElement!,
@@ -85,10 +85,10 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        resultsPage.QuerySelector(SearchResultsPage.SearchResultsNumber.Criteria)!
+        resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Be("1 Result");
-        resultsPage.QuerySelector(SearchResultsPage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria)
+        resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
+            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
             .Count().Should().Be(1);
     }
 
@@ -103,8 +103,8 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var response = await client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
+        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
+        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
         var formResponse = await client.SendAsync(
             formElement!,
@@ -116,10 +116,10 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        resultsPage.QuerySelector(SearchResultsPage.SearchResultsNumber.Criteria)!
+        resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Contain("Results");
-        resultsPage.QuerySelector(SearchResultsPage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria)
+        resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
+            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
             .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 
@@ -134,8 +134,8 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var response = await client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria);
+        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
+        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
         var formResponse = await client.SendAsync(
             formElement!,
@@ -147,7 +147,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-        var filtersHeading = resultsPage.QuerySelector(SearchResultsPage.FiltersHeading.Criteria);
+        var filtersHeading = resultsPage.QuerySelector(HomePage.FiltersHeading.Criteria);
         filtersHeading.Should().NotBeNull();
         filtersHeading!.TextContent.Should().Be("Filters");
 

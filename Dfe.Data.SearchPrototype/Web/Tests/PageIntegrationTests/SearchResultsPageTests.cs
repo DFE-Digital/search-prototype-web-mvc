@@ -11,14 +11,14 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 {
-    public class SearchResultsPageTests : IClassFixture<PageWebApplicationFactory<Program>>
+    public class HomePageTests : IClassFixture<PageWebApplicationFactory<Program>>
     {
         private const string uri = "http://localhost:5000";
         private readonly HttpClient _client;
         private readonly ITestOutputHelper _logger;
         private readonly WebApplicationFactory<Program> _factory;
 
-        public SearchResultsPageTests(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
+        public HomePageTests(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -35,7 +35,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            document.GetElementText(SearchPage.Heading.Criteria).Should().Be("Search prototype");
+            document.GetElementText(HomePage.Heading.Criteria).Should().Be("Search prototype");
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            document.GetElementText(SearchPage.HomeLink.Criteria).Should().Be("Home");
+            document.GetElementText(HomePage.HomeLink.Criteria).Should().Be("Home");
         }
 
         [Fact]
@@ -55,13 +55,13 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            document.GetElementText(SearchPage.SearchHeading.Criteria).Should().Be("Search");
+            document.GetElementText(HomePage.SearchHeading.Criteria).Should().Be("Search");
 
-            document.GetElementText(SearchPage.SearchSubHeading.Criteria).Should().Be("Search establishments");
+            document.GetElementText(HomePage.SearchSubHeading.Criteria).Should().Be("Search establishments");
 
-            document.GetMultipleElements(SearchPage.SearchInput.Criteria).Count().Should().Be(1);
+            document.GetMultipleElements(HomePage.SearchInput.Criteria).Count().Should().Be(1);
 
-            document.GetMultipleElements(SearchPage.SearchButton.Criteria).Count().Should().Be(1);
+            document.GetMultipleElements(HomePage.SearchButton.Criteria).Count().Should().Be(1);
         }
 
         [Fact]
@@ -70,8 +70,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
-            var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
+            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
             var formResponse = await _client.SendAsync(
                 formElement,
@@ -83,15 +83,15 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-            resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Contain("Result");
-            resultsPage.GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria).Count().Should().Be(1);
+            resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Result");
+            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(1);
 
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentName(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Be("Duck School");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentUrn(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("345678");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentAddress(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Duck Street, Duck Locality, Duck Address 3, Duck Town, DUU CKK");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentType(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Community School");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentStatus(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentPhase(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Primary");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Be("Duck School");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("345678");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Duck Street, Duck Locality, Duck Address 3, Duck Town, DUU CKK");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Community School");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Open");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Primary");
         }
 
         [Fact]
@@ -100,8 +100,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-            var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
+            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
             var formResponse = await _client.SendAsync(
                 formElement,
@@ -113,22 +113,22 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-            resultsPage.GetElementText(SearchResultsPage.SearchResultsNumber.Criteria).Should().Contain("Results");
-            resultsPage.GetMultipleElements(SearchResultsPage.SearchResultLinks.Criteria).Count().Should().Be(2);
+            resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Results");
+            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(2);
 
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentName(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Be("Goose Academy");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentUrn(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("123456");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentAddress(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Goose Street, Goose Locality, Goose Address 3, Goose Town, GOO OSE");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentType(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Academy");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentStatus(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentPhase(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Secondary");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Be("Goose Academy");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("123456");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Goose Street, Goose Locality, Goose Address 3, Goose Town, GOO OSE");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Academy");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Open");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Secondary");
                                                          
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentName(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Be("Horse Academy");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentUrn(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("234567");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentAddress(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Horse Street, Horse Locality, Horse Address 3, Horse Town, HOR SEE");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentType(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Academy");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentStatus(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(SearchResultsPage.SearchResultEstablishmentPhase(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Post 16");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Be("Horse Academy");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("234567");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Horse Street, Horse Locality, Horse Address 3, Horse Town, HOR SEE");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Academy");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Open");
+            resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Post 16");
         }
 
         [Theory]
@@ -139,8 +139,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
             // using Anglesharp to get document elements
-            var formElement = document.QuerySelector<IHtmlFormElement>(SearchPage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-            var formButton = document.QuerySelector<IHtmlButtonElement>(SearchPage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
+            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
             var formResponse = await _client.SendAsync(
                 formElement,
@@ -157,7 +157,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-            resultsPage.GetElementText(SearchResultsPage.SearchNoResultText.Criteria).Should().Contain("Sorry no results found please amend your search criteria");
+            // using the selenium selector under the hood
+            var thingToTest = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
+            thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
         }
     }
 }
