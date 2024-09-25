@@ -56,35 +56,17 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
-        var firstUrn = results.EstablishmentResults!.Establishments!.First().Urn;
-        firstUrn.Should().Be("123456");
-
-        var firstName = results.EstablishmentResults!.Establishments!.First().Name;
-        firstName.Should().Be("Goose Academy");
-
-        var firstStreet = results.EstablishmentResults.Establishments!.First().Address.Street;
-        firstStreet.Should().Be("Goose Street");
-
-        var firstLocality = results.EstablishmentResults.Establishments!.First().Address.Locality;
-        firstLocality.Should().Be("Goose Locality");
-
-        var firstAddress3 = results.EstablishmentResults.Establishments!.First().Address.Address3;
-        firstAddress3.Should().Be("Goose Address 3");
-
-        var firstTown = results.EstablishmentResults.Establishments!.First().Address.Town;
-        firstTown.Should().Be("Goose Town");
-
-        var firstPostCode = results.EstablishmentResults.Establishments!.First().Address.Postcode;
-        firstPostCode.Should().Be("GOO OSE");
-
-        var firstType = results.EstablishmentResults!.Establishments!.First().EstablishmentType;
-        firstType.Should().Be("Academy");
-
-        var firstStatus = results.EstablishmentResults!.Establishments!.First().EstablishmentStatusName;
-        firstStatus.Should().Be("Open");
-
-        var firstPhase = results.EstablishmentResults!.Establishments!.First().PhaseOfEducation;
-        firstPhase.Should().Be("Secondary");
+        var firstEstablishmentResult = results.EstablishmentResults!.Establishments!.First();
+        firstEstablishmentResult.Urn.Should().Be("123456");
+        firstEstablishmentResult.Name.Should().Be("Goose Academy");
+        firstEstablishmentResult.Address.Street.Should().Be("Goose Street");
+        firstEstablishmentResult.Address.Locality.Should().Be("Goose Locality");
+        firstEstablishmentResult.Address.Address3.Should().Be("Goose Address 3");
+        firstEstablishmentResult.Address.Town.Should().Be("Goose Town");
+        firstEstablishmentResult.Address.Postcode.Should().Be("GOO OSE");
+        firstEstablishmentResult.EstablishmentType.Should().Be("Academy");
+        firstEstablishmentResult.EstablishmentStatusName.Should().Be("Open");
+        firstEstablishmentResult.PhaseOfEducation.Should().Be("Secondary");
     }
 
     [Fact]
