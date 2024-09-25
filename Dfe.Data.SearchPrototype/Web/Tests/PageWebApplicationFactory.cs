@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests;
 
-public sealed class PageWebApplicationFactory : WebApplicationFactory<Program>
+public sealed class PageWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
 
     public static readonly IConfiguration TestConfiguration =
