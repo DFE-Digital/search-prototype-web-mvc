@@ -11,7 +11,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
     {
         private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _mapper;
 
-        public ViewModelSelectedFacetsToFilterRequestMapperTests() => _mapper = new ViewModelSelectedFacetsToFilterRequestMapper();
+        public ViewModelSelectedFacetsToFilterRequestMapperTests() => _mapper = new SelectedFacetsToFilterRequestsMapper();
 
         [Fact]
         public void Mapper_WithFacetedResultsViewModel_ReturnsFilterRequest()

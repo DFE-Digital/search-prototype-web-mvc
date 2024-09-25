@@ -24,7 +24,7 @@ builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices();
 builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<Models.Establishment>?>, EstablishmentResultsToEstablishmentsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, FacetsAndSelectedFacetsToFacetsViewModelMapper>();
-builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>, ViewModelSelectedFacetsToFilterRequestMapper>();
+builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>, SelectedFacetsToFilterRequestsMapper>();
 //
 //
 // End of IOC container registrations

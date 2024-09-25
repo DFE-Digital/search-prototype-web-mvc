@@ -6,7 +6,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ViewModelSelectedFacetsToFilterRequestMapper : IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>
+    public sealed class SelectedFacetsToFilterRequestsMapper : IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>
     {
         /// <summary>
         /// 

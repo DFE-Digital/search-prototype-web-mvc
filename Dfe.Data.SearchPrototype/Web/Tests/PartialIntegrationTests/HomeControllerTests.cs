@@ -38,7 +38,7 @@ public class HomeControllerTests
             new(_logger.Object, useCase,
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                new ViewModelSelectedFacetsToFilterRequestMapper());
+                new SelectedFacetsToFilterRequestsMapper());
 
         // act
         IActionResult result = await controller.Index("searchTerm");
@@ -70,7 +70,7 @@ public class HomeControllerTests
             new(_logger.Object, useCase,
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                new ViewModelSelectedFacetsToFilterRequestMapper());
+                new SelectedFacetsToFilterRequestsMapper());
 
         // act
         IActionResult result = await controller.Index("searchTerm");
@@ -105,7 +105,7 @@ public class HomeControllerTests
             new HomeController(_logger.Object, useCase,
             new EstablishmentResultsToEstablishmentsViewModelMapper(),
             new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-            new ViewModelSelectedFacetsToFilterRequestMapper());
+            new SelectedFacetsToFilterRequestsMapper());
 
         // act
         IActionResult result =
@@ -148,7 +148,7 @@ public class HomeControllerTests
             new (_logger.Object, useCase,
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                new ViewModelSelectedFacetsToFilterRequestMapper());
+                new SelectedFacetsToFilterRequestsMapper());
 
         // act
         IActionResult result =
@@ -195,7 +195,7 @@ public class HomeControllerTests
             new HomeController(_logger.Object, useCase,
             new EstablishmentResultsToEstablishmentsViewModelMapper(),
             new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-            new ViewModelSelectedFacetsToFilterRequestMapper());
+            new SelectedFacetsToFilterRequestsMapper());
 
         // act
         IActionResult result =
