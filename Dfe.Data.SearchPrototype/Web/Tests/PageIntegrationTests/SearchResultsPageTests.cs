@@ -6,7 +6,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 using Xunit.Abstractions;
-using Dfe.Data.SearchPrototype.Web.Tests.Pages.Search;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Integration

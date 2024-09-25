@@ -13,8 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Xunit;
-using Dfe.Data.SearchPrototype.Web;
-using Dfe.Data.SearchPrototype.Web.Tests.Pages.Search;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 
