@@ -110,39 +110,17 @@ public class HomeController : Controller
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
                         filterRequests: _requestMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
-            ViewModels.SearchResults viewModel =
-                CreateViewModel(
-                    response.EstablishmentResults,
-                    new EstablishmentFacetsMapperRequest(
-                        response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
+            ViewModels.SearchResults viewModel = new()
+            {
+
+                SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
+                Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new EstablishmentFacetsMapperRequest(
+                        response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets))
+            };
 
             return View("Index", viewModel);
         }
 
         return await Index(searchRequestViewModel.SearchKeyword!);
     }
-
-    /// <summary>
-    /// Factory method for creating the required <see cref="ViewModels.SearchResults"/> view model
-    /// based on the service response and the previously selected (if any) facets which are
-    /// reinstated via the mappings provisioned.
-    /// </summary>
-    /// <param name="establishmentResults">
-    /// Encapsulates the aggregation of <see cref="SearchForEstablishments.Models.Establishment" />
-    /// types returned from the underlying search system.
-    /// </param>
-    /// <param name="facetMapperRequest">
-    /// Encapsulates the request objects necessary to attempt a valid mapping
-    /// of the required collection of <see cref="Facet"/> view models.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
-    /// establishment result and facet result mappers.
-    /// </returns>
-    private ViewModels.SearchResults CreateViewModel(
-        EstablishmentResults? establishmentResults,
-        EstablishmentFacetsMapperRequest facetMapperRequest) => new(){
-            SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(establishmentResults),
-            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(facetMapperRequest)
-        };
 }
