@@ -78,10 +78,13 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
 
-        ViewModels.SearchResults viewModel =
-               CreateViewModel(
-                   response.EstablishmentResults,
-                   new EstablishmentFacetsMapperRequest(response.EstablishmentFacetResults));
+        ViewModels.SearchResults viewModel = new()
+        {
+
+            SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults),
+            Facets = _establishmentFacetsToFacetsViewModelMapper.MapFrom(new EstablishmentFacetsMapperRequest(
+                    response.EstablishmentFacetResults))
+        };
 
         return View("Index", viewModel);
     }
