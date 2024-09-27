@@ -1,4 +1,5 @@
-﻿@model SearchResults
+﻿@using Dfe.Data.SearchPrototype.Web.Models.ViewModels
+@model SearchResults
 
 @{
     ViewData["Title"] = "Search Results";
@@ -12,7 +13,7 @@
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
         <govuk-input-hint>Search establishments</govuk-input-hint>
         <govuk-input-suffix style="padding: 0px">
-            <button style="border: none">
+            <button style="border: none; cursor:pointer">
                 <svg class="gem-c-search__icon" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                     <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="currentColor" stroke-width="3"></circle>
                     <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="currentColor" stroke-width="3"></line>
@@ -78,7 +79,7 @@
                             <strong>URN: </strong>@searchItem.Urn
                         </li>
                         <li id="address-@searchItem.Urn">
-                            <strong>Address: </strong> @searchItem.AddressAsString()
+                            <strong>Address: </strong> @searchItem.ReadableAddress
                         </li>
                         <li id="establishment-type-@searchItem.Urn">
                             <strong>Type of establishment: </strong> @searchItem.EstablishmentType

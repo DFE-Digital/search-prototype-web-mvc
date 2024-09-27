@@ -1,7 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
-using Dfe.Data.SearchPrototype.Web.Models;
 using FluentAssertions;
 using Xunit;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models;
 
@@ -24,7 +24,7 @@ public class EstablishmentViewModelTests
             }
         };
         var expected = "street, locality, address3, town, postcode";
-        var result = establishmentViewModel.AddressAsString();
+        var result = establishmentViewModel.ReadableAddress;
 
         Assert.Equal(expected, result);
         result.Should().Be(expected);
@@ -55,7 +55,7 @@ public class EstablishmentViewModelTests
         };
         var expected = expectedString;
         // act
-        var result = establishmentViewModel.AddressAsString();
+        var result = establishmentViewModel.ReadableAddress;
         // assert
         Assert.Equal(expected, result);
         result.Should().Be(expected);

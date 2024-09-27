@@ -3,9 +3,9 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
-using Dfe.Data.SearchPrototype.Web.Models;
 using Xunit;
-using SearchResults = Dfe.Data.SearchPrototype.Web.Models.SearchResults;
+using SearchResults = Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 {

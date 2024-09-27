@@ -4,6 +4,7 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Data.SearchPrototype.Web.Controllers;
@@ -15,7 +16,7 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
-    private readonly IMapper<EstablishmentResults?, List<Models.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
+    private readonly IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
     private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _selectedFacetsToFilterRequestsMapper;
 
@@ -46,7 +47,7 @@ public class HomeController : Controller
     public HomeController(
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
-        IMapper<EstablishmentResults?, List<Models.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
+        IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
         IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper,
         IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> selectedFacetsToFilterRequestsMapper)
     {
@@ -77,7 +78,7 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
 
-        Models.SearchResults viewModel =
+        Models.ViewModels.SearchResults viewModel =
             CreateViewModel(
                 response.EstablishmentResults,
                 new FacetsAndSelectedFacets(
@@ -110,7 +111,7 @@ public class HomeController : Controller
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
                         filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
-            Models.SearchResults viewModel =
+            Models.ViewModels.SearchResults viewModel =
                 CreateViewModel(
                     response.EstablishmentResults,
                     new FacetsAndSelectedFacets(
@@ -139,7 +140,7 @@ public class HomeController : Controller
     /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
     /// establishment result and facet result mappers.
     /// </returns>
-    private Models.SearchResults CreateViewModel(
+    private Models.ViewModels.SearchResults CreateViewModel(
         EstablishmentResults? establishmentResults,
         FacetsAndSelectedFacets facetsAndSelectedFacets) => new()
         {
