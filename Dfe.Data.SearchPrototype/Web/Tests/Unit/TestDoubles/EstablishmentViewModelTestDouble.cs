@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 
