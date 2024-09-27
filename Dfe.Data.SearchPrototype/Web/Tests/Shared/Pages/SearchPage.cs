@@ -20,7 +20,7 @@ public sealed class SearchPage : BasePage
     public static By SearchButton => By.CssSelector("#search-establishments button");
     public static By SearchResultsContainer => By.CssSelector("#results");
     public static By SearchResultsNumber => By.CssSelector("#search-results-count");
-    public static By SearchResultLinks => By.CssSelector("ul li h4 a");
+    public static By SearchResultLinks => By.CssSelector("ul li h4");
     public static By SearchNoResultText => By.CssSelector("#no-results");
     public static By FiltersHeading => By.CssSelector("#filters-heading");
 }
