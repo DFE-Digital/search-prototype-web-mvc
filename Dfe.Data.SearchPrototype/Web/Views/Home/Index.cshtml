@@ -69,10 +69,8 @@
                     @foreach (var searchItem in Model.SearchItems!)
                     {
                         <li id="name-@searchItem.Urn">
-                            <h4>
-                                <a href="/">
-                                    @searchItem.Name
-                                </a>
+                            <h4 style="background-color:aliceblue">
+                                @searchItem.Name
                             </h4>
                         </li>
                         <li id="urn-@searchItem.Urn">

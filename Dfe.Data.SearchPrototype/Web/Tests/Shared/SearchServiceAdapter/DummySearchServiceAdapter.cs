@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Resources;
 using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
 {
@@ -20,9 +21,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
 
             JObject establishmentsObject = JObject.Parse(json);
 
-            IEnumerable<Establishment> establishments =
+            IEnumerable<Establishment> allEstablishments =
                 from establishmentToken in establishmentsObject["establishments"]
-                where (establishmentToken["name"]!+"*").Contains(searchServiceAdapterRequest.SearchKeyword)
                 select new Establishment(
                     (string)establishmentToken["urn"]!,
                     (string)establishmentToken["name"]!,
@@ -35,6 +35,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
                     (string)establishmentToken["establishmentType"]!,
                     (string)establishmentToken["phaseOfEducation"]!,
                     (string)establishmentToken["establishmentStatusName"]!);
+
+            var establishments = allEstablishments
+                .Where( establishment => (establishment.Name+"*").Contains(searchServiceAdapterRequest.SearchKeyword))
+                .ToList();
 
             return new SearchResults()
             {
