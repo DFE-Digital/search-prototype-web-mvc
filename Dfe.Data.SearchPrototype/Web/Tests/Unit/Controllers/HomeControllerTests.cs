@@ -3,15 +3,16 @@ using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Controllers;
+using Dfe.Data.SearchPrototype.Web.Mappers;
+using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
-using Dfe.Data.SearchPrototype.Web.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
-using Dfe.Data.SearchPrototype.Web.Mappers;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Controllers;
 
@@ -22,11 +23,7 @@ public class HomeControllerTests
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
 
-        Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
-            EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.SearchResults());
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -42,8 +39,7 @@ public class HomeControllerTests
 
         HomeController controller =
             new(mockLogger.Object, mockUseCase,
-                mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
-                mockEstablishmentFacetsToFacetsViewModelMapper.Object,
+                mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
         await controller.Index("KDM");
@@ -52,15 +48,11 @@ public class HomeControllerTests
     }
 
     [Fact]
-    public async Task Index_SearchKeyword_CallMapper()
+    public async Task Index_SearchKeyword_CallsViewModelFactory()
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
 
-        Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
-           EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.SearchResults());
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -73,13 +65,12 @@ public class HomeControllerTests
 
         HomeController controller =
             new(mockLogger.Object, mockUseCase,
-                mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
-                mockEstablishmentFacetsToFacetsViewModelMapper.Object,
+               mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
         await controller.Index("KDM");
 
-        mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Once());
+        mockSearchResultsFactory.Verify(factory => factory.CreateViewModel(It.IsAny<EstablishmentResults?>(), It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
     }
 
     [Fact]
@@ -91,11 +82,7 @@ public class HomeControllerTests
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().Create();
 
-        Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
-            EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.SearchResults());
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -103,8 +90,7 @@ public class HomeControllerTests
         //act
         HomeController controller =
             new(mockLogger.Object, mockUseCase,
-                mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
-                mockEstablishmentFacetsToFacetsViewModelMapper.Object,
+                mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
         IActionResult result = await controller.Index(null!);
@@ -113,49 +99,6 @@ public class HomeControllerTests
         result.Should().NotBeNull();
         ViewResult viewResult = Assert.IsType<ViewResult>(result);
         viewResult.Model.Should().BeNull();
-    }
-
-    [Fact]
-    public async Task SearchWithFilters_ValidSearchRequest_CallsMappers()
-    {
-        // arrange
-        Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
-
-        SearchByKeywordResponse response =
-           new(status: SearchResponseStatus.Success) { EstablishmentResults = new([]) };
-
-        IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
-            new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
-
-        Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
-            EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
-            ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
-
-        SearchRequest searchRequest =
-            new(){
-                SearchKeyword = "KDM",
-                SelectedFacets = new Dictionary<string, List<string>>() {
-                    { "Facet_1", ["Facet_1_Value"] }
-                }
-            };
-
-        //act
-        HomeController controller =
-            new(mockLogger.Object, mockUseCase,
-                mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
-                mockEstablishmentFacetsToFacetsViewModelMapper.Object,
-                mockRequestMapper.Object);
-
-        // assert/verify
-        await controller.SearchWithFilters(searchRequest);
-
-        mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Once());
-        mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
     }
 
     [Fact]
@@ -170,11 +113,7 @@ public class HomeControllerTests
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
-        Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
-            EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.SearchResults());
 
         Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -191,8 +130,7 @@ public class HomeControllerTests
         //act
         HomeController controller =
             new(mockLogger.Object, mockUseCase,
-                mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
-                mockEstablishmentFacetsToFacetsViewModelMapper.Object,
+                mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
         // assert/verify
@@ -201,46 +139,5 @@ public class HomeControllerTests
         // assert
         ViewResult viewResult = Assert.IsType<ViewResult>(result);
         viewResult.Model.Should().BeNull();
-    }
-
-    [Fact]
-    public async Task SearchWithFilters_SearchRequestWithNoFacets_CallsMappers()
-    {
-        // arrange
-        Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
-
-        SearchByKeywordResponse response =
-           new(status: SearchResponseStatus.Success) { EstablishmentResults = new([]) };
-
-        IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
-            new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
-
-        Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
-            EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
-            FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
-
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
-            ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
-
-        SearchRequest searchRequest =
-            new(){
-                SearchKeyword = "KDM",
-                SelectedFacets = []
-            };
-
-        //act
-        HomeController controller =
-            new(mockLogger.Object, mockUseCase,
-                mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
-                mockEstablishmentFacetsToFacetsViewModelMapper.Object,
-                mockRequestMapper.Object);
-
-        // assert/verify
-        await controller.SearchWithFilters(searchRequest);
-
-        mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Once());
-        mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
     }
 }

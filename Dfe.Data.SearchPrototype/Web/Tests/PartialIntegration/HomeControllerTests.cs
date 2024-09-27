@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using Dfe.Data.SearchPrototype.Web.Models.Factories;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests;
 
@@ -36,8 +37,10 @@ public class HomeControllerTests
 
         HomeController controller =
             new(_logger.Object, useCase,
-                new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                new SearchResultsFactory(
+                    new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                ),
                 new SelectedFacetsToFilterRequestsMapper());
 
         // act
@@ -68,8 +71,10 @@ public class HomeControllerTests
 
         HomeController controller =
             new(_logger.Object, useCase,
-                new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                new SearchResultsFactory(
+                    new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                ),
                 new SelectedFacetsToFilterRequestsMapper());
 
         // act
@@ -79,7 +84,7 @@ public class HomeControllerTests
         var viewResult = Assert.IsType<ViewResult>(result);
         var viewModel = Assert.IsType<Models.SearchResults>(viewResult.Model);
 
-        viewModel.SearchItems.Should().BeEmpty();
+        viewModel.SearchItems.Should().BeNull();
         viewModel.HasResults.Should().BeFalse();
         viewModel.SearchResultsCount.Should().Be(0);
     }
@@ -103,8 +108,10 @@ public class HomeControllerTests
         
         var controller =
             new HomeController(_logger.Object, useCase,
-            new EstablishmentResultsToEstablishmentsViewModelMapper(),
-            new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+            new SearchResultsFactory(
+                    new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+            ),
             new SelectedFacetsToFilterRequestsMapper());
 
         // act
@@ -146,8 +153,10 @@ public class HomeControllerTests
 
         HomeController controller =
             new (_logger.Object, useCase,
-                new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                new SearchResultsFactory(
+                    new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                ),
                 new SelectedFacetsToFilterRequestsMapper());
 
         // act
@@ -193,8 +202,10 @@ public class HomeControllerTests
 
         var controller =
             new HomeController(_logger.Object, useCase,
-            new EstablishmentResultsToEstablishmentsViewModelMapper(),
-            new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+            new SearchResultsFactory(
+                    new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                ),
             new SelectedFacetsToFilterRequestsMapper());
 
         // act
