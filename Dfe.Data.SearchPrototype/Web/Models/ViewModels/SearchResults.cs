@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 /// <summary>
 /// A view model representation of search results defining view logic predicated on the status of the results.
