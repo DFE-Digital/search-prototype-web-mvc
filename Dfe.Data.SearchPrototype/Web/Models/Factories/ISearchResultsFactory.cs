@@ -26,7 +26,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
         /// establishment result and facet result mappers.
         /// </returns>
-        public SearchResults CreateViewModel(
+        public ViewModels.SearchResults CreateViewModel(
             EstablishmentResults? establishmentResults,
             FacetsAndSelectedFacets facetsAndSelectedFacets);
     }

@@ -7,7 +7,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
 {
     public static class SearchResultsFactoryTestDouble
     {
-        public static Mock<ISearchResultsFactory> MockFor(Web.Models.SearchResults viewModel)
+        public static Mock<ISearchResultsFactory> MockFor(Web.Models.ViewModels.SearchResults viewModel)
         {
             Mock<ISearchResultsFactory> mockSearchResultsFactory = DefaultMock();
 

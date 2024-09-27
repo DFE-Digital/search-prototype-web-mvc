@@ -1,6 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Models.Factories
 {
@@ -11,7 +12,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
     /// </summary>
     public sealed class SearchResultsFactory : ISearchResultsFactory
     {
-        private readonly IMapper<EstablishmentResults?, List<Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
+        private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
         private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// defined within, and injected by the IOC container (defined within program.cs) used to map all facets and pre-selections from the response to the view model.
         /// </param>
         public SearchResultsFactory(
-            IMapper<EstablishmentResults?, List<Models.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
+            IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
             IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper)
         {
             _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
@@ -53,7 +54,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
         /// establishment result and facet result mappers.
         /// </returns>
-        public SearchResults CreateViewModel(
+        public ViewModels.SearchResults CreateViewModel(
             EstablishmentResults? establishmentResults,
             FacetsAndSelectedFacets facetsAndSelectedFacets) =>
                 (establishmentResults?.Establishments.Count > 0) ?

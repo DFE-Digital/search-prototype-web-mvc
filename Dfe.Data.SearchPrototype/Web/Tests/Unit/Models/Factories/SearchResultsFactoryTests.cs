@@ -1,7 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
@@ -16,10 +15,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
         public async Task CreateViewModel_ValidInput_CallsMappers()
         {
             // arrange
-            Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
-            EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
+            Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
+                EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
-            Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
+            Mock<IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             //act
@@ -38,10 +37,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
         public async Task CreateViewModel_NullEstablishmentResultParam_CallsMappers()
         {
             // arrange
-            Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
+            Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
-            Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
+            Mock<IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             //act
@@ -60,10 +59,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
         public async Task CreateViewModel_NullfacetsAndSelectedFacetsParam_CallsMappers()
         {
             // arrange
-            Mock<IMapper<EstablishmentResults?, List<Web.Models.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
+            Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
-            Mock<IMapper<FacetsAndSelectedFacets, List<Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
+            Mock<IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             //act
@@ -77,7 +76,5 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Once());
             mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
         }
-
-
     }
 }
