@@ -19,7 +19,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
         private readonly AccessibilityOptions _options;
         private readonly ITestOutputHelper _logger;
         private readonly IWebDriverContext _driverContext;
-        private readonly SearchPage _searchPage;
+        private readonly HomePage _searchPage;
         private readonly WebDriverSessionOptions _sessionOptions;
         private readonly HttpClient _httpClient;
         private readonly WebApplicationFactoryFixture<Program> _factory;
@@ -35,7 +35,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
             IOptions<AccessibilityOptions> options,
             ITestOutputHelper logger,
             IWebDriverContext driverContext,
-            SearchPage searchPage,
+            HomePage searchPage,
             WebDriverSessionOptions sessionOptions
         )
         {
