@@ -12,7 +12,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
     public sealed class SearchResultsFactoryTests
     {
         [Fact]
-        public void CreateViewModel_ValidInput_CallsMappers()
+        public async Task CreateViewModel_ValidInput_CallsMappers()
         {
             // arrange
             Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
@@ -26,15 +26,18 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
                     mockEstablishmentFacetsToFacetsViewModelMapper.Object);
 
-            // assert/verify
-            searchResultsFactory.CreateViewModel(EstablishmentResultsTestDouble.Create(), FacetsAndSelectedFacetsTestDouble.Create());
+            EstablishmentResults establishmentResults = EstablishmentResultsTestDouble.Create();
+            FacetsAndSelectedFacets facetsAndSelectedFacets = FacetsAndSelectedFacetsTestDouble.Create();
 
-            mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Once());
-            mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
+            // assert/verify
+            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets);
+
+            mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(establishmentResults), Times.Once());
+            mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(facetsAndSelectedFacets), Times.Once());
         }
 
         [Fact]
-        public void CreateViewModel_NullEstablishmentResultParam_CallsMappers()
+        public async Task CreateViewModel_NullEstablishmentResultParam_CallsMappers()
         {
             // arrange
             Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
@@ -48,15 +51,18 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
                     mockEstablishmentFacetsToFacetsViewModelMapper.Object);
 
+            EstablishmentResults establishmentResults = null!;
+            FacetsAndSelectedFacets facetsAndSelectedFacets = FacetsAndSelectedFacetsTestDouble.Create();
+
             // assert/verify
-            searchResultsFactory.CreateViewModel(establishmentResults: null!, FacetsAndSelectedFacetsTestDouble.Create());
+            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets);
 
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Never());
-            mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<FacetsAndSelectedFacets>()), Times.Never());
+            mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(facetsAndSelectedFacets), Times.Never());
         }
 
         [Fact]
-        public void CreateViewModel_NullfacetsAndSelectedFacetsParam_CallsMappers()
+        public async Task CreateViewModel_NullfacetsAndSelectedFacetsParam_CallsMappers()
         {
             // arrange
             Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
@@ -65,16 +71,19 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             Mock<IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
+            EstablishmentResults establishmentResults = EstablishmentResultsTestDouble.Create();
+            FacetsAndSelectedFacets facetsAndSelectedFacets = null!;
+
             //act
             SearchResultsFactory searchResultsFactory =
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
                     mockEstablishmentFacetsToFacetsViewModelMapper.Object);
 
             // assert/verify
-            searchResultsFactory.CreateViewModel(establishmentResults: EstablishmentResultsTestDouble.Create(), facetsAndSelectedFacets: null!);
+            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets);
 
-            mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Once());
-            mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
+            mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(establishmentResults), Times.Once());
+            mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(facetsAndSelectedFacets), Times.Once());
         }
     }
 }
