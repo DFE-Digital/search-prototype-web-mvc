@@ -76,7 +76,7 @@ public class HomeController : Controller
 
         SearchByKeywordResponse response =
             await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
+                new SearchByKeywordRequest(searchKeyword: searchKeyWord));
 
         Models.ViewModels.SearchResults viewModel =
             CreateViewModel(
@@ -108,7 +108,7 @@ public class HomeController : Controller
             SearchByKeywordResponse response =
                 await _searchByKeywordUseCase.HandleRequest(
                     new SearchByKeywordRequest(
-                        searchKeyword: searchRequestViewModel.SearchKeyword + "*",
+                        searchKeyword: searchRequestViewModel.SearchKeyword,
                         filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
             Models.ViewModels.SearchResults viewModel =
@@ -120,7 +120,7 @@ public class HomeController : Controller
             return View("Index", viewModel);
         }
 
-        return await Index(searchRequestViewModel.SearchKeyword!);
+        return await Index(searchRequestViewModel.SearchKeyword);
     }
 
     /// <summary>
