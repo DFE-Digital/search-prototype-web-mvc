@@ -14,7 +14,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
     public sealed class SearchResultsFactoryTests
     {
         [Fact]
-        public async Task CreateViewModel_WithValidInput_ReturnsConfiguredSearchResults()
+        public void CreateViewModel_WithValidInput_ReturnsConfiguredSearchResults()
         {
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
@@ -42,7 +42,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
         }
 
         [Fact]
-        public async Task CreateViewModel_WithNullEstablishmentResultsParam_ReturnsEmptySearchResults()
+        public void CreateViewModel_WithNullEstablishmentResultsParam_ReturnsEmptySearchResults()
         {
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
@@ -70,7 +70,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
         }
 
         [Fact]
-        public async Task CreateViewModel_WithNullFacetsAndSelectedFacetsParam_ReturnsSearchResultsWithNullFacets()
+        public void CreateViewModel_WithNullFacetsAndSelectedFacetsParam_ReturnsSearchResultsWithNullFacets()
         {
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
@@ -98,7 +98,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
         }
 
         [Fact]
-        public async Task CreateViewModel_WithFacetsAndSelectedFacetsParamNullFacets_ReturnsSearchResultsWithNullFacets()
+        public void CreateViewModel_WithFacetsAndSelectedFacetsParamNullFacets_ReturnsSearchResultsWithNullFacets()
         {
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
