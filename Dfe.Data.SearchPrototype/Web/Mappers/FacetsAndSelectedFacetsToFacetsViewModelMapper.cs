@@ -29,7 +29,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         {
             List<Facet>? facetItems = null;
 
-            if (input.Facets != null)
+            if (input?.Facets != null)
             {
                 facetItems = [];
 

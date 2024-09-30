@@ -1,9 +1,9 @@
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,8 +16,7 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
-    private readonly IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
-    private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
+    private readonly ISearchResultsFactory _searchResultsFactory;
     private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _selectedFacetsToFilterRequestsMapper;
 
     /// <summary>
@@ -32,29 +31,22 @@ public class HomeController : Controller
     /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.UseCase.IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>
     /// defined within, and injected by the IOC container (defined within program.cs)
     /// </param>
-    /// <param name="establishmentResultsToEstablishmentsViewModelMapper">
-    /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<EstablishmentResults, SearchByKeywordResponse>
-    /// defined within, and injected by the IOC container (defined within program.cs)
+    /// <param name="searchResultsFactory">
+    ///  The concrete implementation of the <see cref="ISearchResultsFactory"/> type used to create a configured instance of an <see cref="SearchResults"/> instance.
     /// </param>
-    /// <param name="facetsAndSelectedFacetsToFacetsViewModelMapper">
-    /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<FacetsAndSelectedFacets, List<Facet>?>
-    /// defined within, and injected by the IOC container (defined within program.cs) used to map all facets and pre-selections from the response to the view model.
-    /// </param>
-    /// <param name="requestMapper">
+    /// <param name="selectedFacetsToFilterRequestsMapper">
     /// The concrete implementation of the T:DfE.Data.ComponentLibrary.CrossCuttingConcerns.Mapping.IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>
     /// defined within, and injected by the IOC container (defined within program.cs) used to map the user input to a list of <see cref="FilterRequest"/> request types.
     /// </param>
     public HomeController(
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
-        IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-        IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper,
+        ISearchResultsFactory searchResultsFactory,
         IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> selectedFacetsToFilterRequestsMapper)
     {
         _logger = logger;
         _searchByKeywordUseCase = searchByKeywordUseCase;
-        _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
-        _facetsAndSelectedFacetsToFacetsViewModelMapper = facetsAndSelectedFacetsToFacetsViewModelMapper;
+        _searchResultsFactory = searchResultsFactory;
         _selectedFacetsToFilterRequestsMapper = selectedFacetsToFilterRequestsMapper;
     }
 
@@ -78,8 +70,8 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
 
-        Models.ViewModels.SearchResults viewModel =
-            CreateViewModel(
+        SearchResults viewModel =
+            _searchResultsFactory.CreateViewModel(
                 response.EstablishmentResults,
                 new FacetsAndSelectedFacets(
                     response.EstablishmentFacetResults));
@@ -111,8 +103,8 @@ public class HomeController : Controller
                         searchKeyword: searchRequestViewModel.SearchKeyword + "*",
                         filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
-            Models.ViewModels.SearchResults viewModel =
-                CreateViewModel(
+            SearchResults viewModel =
+                _searchResultsFactory.CreateViewModel(
                     response.EstablishmentResults,
                     new FacetsAndSelectedFacets(
                         response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
@@ -122,29 +114,4 @@ public class HomeController : Controller
 
         return await Index(searchRequestViewModel.SearchKeyword!);
     }
-
-    /// <summary>
-    /// Factory method for creating the required <see cref="ViewModels.SearchResults"/> view model
-    /// based on the service response and the previously selected (if any) facets which are
-    /// reinstated via the mappings provisioned.
-    /// </summary>
-    /// <param name="establishmentResults">
-    /// Encapsulates the aggregation of <see cref="SearchForEstablishments.Models.Establishment" />
-    /// types returned from the underlying search system.
-    /// </param>
-    /// <param name="facetsAndSelectedFacets">
-    /// Encapsulates the request objects necessary to attempt a valid mapping
-    /// of the required collection of <see cref="Facet"/> view models.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
-    /// establishment result and facet result mappers.
-    /// </returns>
-    private Models.ViewModels.SearchResults CreateViewModel(
-        EstablishmentResults? establishmentResults,
-        FacetsAndSelectedFacets facetsAndSelectedFacets) => new()
-        {
-            SearchItems = _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(establishmentResults),
-            Facets = _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(facetsAndSelectedFacets)
-        };
 }
