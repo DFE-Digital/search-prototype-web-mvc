@@ -37,7 +37,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
                     (string)establishmentToken["establishmentStatusName"]!);
 
             var establishments = allEstablishments
-                .Where( establishment => (establishment.Name+"*").Contains(searchServiceAdapterRequest.SearchKeyword))
+                .Where( establishment => establishment.Name.Contains(searchServiceAdapterRequest.SearchKeyword))
                 .ToList();
 
             return new SearchResults()
