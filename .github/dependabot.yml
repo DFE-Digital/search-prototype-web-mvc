@@ -29,6 +29,6 @@ updates:
       - github-nuget
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     commit-message:
       prefix: "[nuget] "
