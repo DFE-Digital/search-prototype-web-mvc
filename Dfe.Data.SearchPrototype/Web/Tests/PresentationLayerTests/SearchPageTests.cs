@@ -1,9 +1,7 @@
-﻿using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
+﻿using AngleSharp;
+using AngleSharp.Dom;
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
@@ -18,13 +16,17 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 
 public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.SearchPrototype.Web.Program>>
 {
-    private const string uri = "http://localhost:5000";
     private Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> _useCase = new();
+    private HttpClient _httpClient;
+    private readonly IBrowsingContext _browsingContext;
 
     private readonly WebApplicationFactory<Program> _factory;
-        public SearchPageTests(WebApplicationFactory<Program> factory)
+    
+    public SearchPageTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
+        _httpClient = ConfigureHost().CreateClient();
+        _browsingContext = CreateBrowsingContext(_httpClient);
     }
 
     [Fact]
@@ -33,29 +35,25 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWithNoResults();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
-        var document = await HtmlHelpers.GetDocumentAsync(response);
+        // act 
+        var document = await NavigateToPage("Home");
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
+        var searchPage = new SearchPageModel(document);
 
-        var formResponse = await client.SendAsync(
-            formElement!,
-            formButton!,
-            new Dictionary<string, string>
-            {
-                ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
-            });
+        var formResponse = await new SearchPageModel(document)
+                .Form
+                .SubmitSearch(_httpClient, new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
+                });
 
-        var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+        var searchResponse = await _browsingContext.OpenAsync(req => req.Content(formResponse));
+        var resultsPage = new SearchPageModel(searchResponse);
 
-        resultsPage.QuerySelector(HomePage.SearchNoResultText.Criteria)!
-            .TextContent.Should().Contain("Sorry no results found please amend your search criteria");
-        resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
-            .Should().BeNull();
-        resultsPage.GetElementById("filters-container").Should().BeNull();
+        resultsPage.Results.NoResultsText!.Should().Contain("Sorry no results found please amend your search criteria");
+        resultsPage.Results.ResultsText!.Should().BeNull();
+        searchResponse.GetElementById("filters-container").Should().BeNull();
     }
 
     [Fact]
@@ -64,29 +62,22 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWithOneResult();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
-        var document = await HtmlHelpers.GetDocumentAsync(response);
+        // act 
+        var document = await NavigateToPage("Home");
+        var formResponse = await new SearchPageModel(document)
+                .Form
+                .SubmitSearch(_httpClient, new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
+                });
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
+        var searchResponse = await _browsingContext.OpenAsync(req => req.Content(formResponse));
 
-        var formResponse = await client.SendAsync(
-            formElement!,
-            formButton!,
-            new Dictionary<string, string>
-            {
-                ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
-            });
+        var resultsPage = new SearchPageModel(searchResponse);
 
-        var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
-
-        resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
-            .TextContent.Should().Be("1 Result");
-        resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
-            .Count().Should().Be(1);
+        resultsPage.Results.ResultsText.Should().Be("1 Result");
+        resultsPage.Results.SearchResultLinks!.Count().Should().Be(1);
     }
 
     [Fact]
@@ -95,29 +86,22 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
-        var document = await HtmlHelpers.GetDocumentAsync(response);
+        // act 
+        var document = await NavigateToPage("Home");
+        var formResponse = await new SearchPageModel(document)
+                .Form
+                .SubmitSearch(_httpClient, new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
+                });
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
+        var searchResponse = await _browsingContext.OpenAsync(req => req.Content(formResponse));
 
-        var formResponse = await client.SendAsync(
-            formElement!,
-            formButton!,
-            new Dictionary<string, string>
-            {
-                ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
-            });
+        var resultsPage = new SearchPageModel(searchResponse);
 
-        var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
-
-        resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
-            .TextContent.Should().Contain("Results");
-        resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
-            .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
+        resultsPage.Results.ResultsText.Should().Contain("Results");
+        resultsPage.Results.SearchResultLinks!.Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 
     [Fact]
@@ -126,46 +110,38 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
-        var document = await HtmlHelpers.GetDocumentAsync(response);
+        // act 
+        var document = await NavigateToPage("Home");
+        var formResponse = await new SearchPageModel(document)
+                .Form
+                .SubmitSearch(_httpClient, new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
+                });
 
-        var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
-        var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
+        var searchResponse = await _browsingContext.OpenAsync(req => req.Content(formResponse));
 
-        var formResponse = await client.SendAsync(
-            formElement!,
-            formButton!,
-            new Dictionary<string, string>
-            {
-                ["searchKeyWord"] = "anything - I've mocked the response from the use-case regardless of the request"
-            });
+        var resultsPage = new SearchPageModel(searchResponse);
 
-        var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
-
-        var filtersHeading = resultsPage.QuerySelector(HomePage.FiltersHeading.Criteria);
-        filtersHeading.Should().NotBeNull();
-        filtersHeading!.TextContent.Should().Be("Filters");
+        // assert
+        var filtersHeading = resultsPage.Filters.FiltersHeading.Should().Be("Filters");
 
         var expectedFacets = useCaseResponse.EstablishmentFacetResults!.Facets;
-        var resultFacetNames = resultsPage.GetElementsByTagName("legend").Select(x => x.InnerHtml.Trim());
+        var resultFacetNames = resultsPage.Filters.FacetNames;
 
         foreach (var expectedFacet in expectedFacets)
         {
-            var facetInputElements = resultsPage.All
-                .Where(element => element.Id != null && element.Id.Contains($"selectedFacets_{expectedFacet.Name}"))
-                .Select(e => e as IHtmlInputElement);
-
+            var filterBoxesForFacet = resultsPage.Filters.FilterBoxesForFacet(expectedFacet.Name);
             foreach(var expectedFacetValue in expectedFacet.Results)
             {
-                var matchedFacet = facetInputElements.Single(inputElement => inputElement!.Value == expectedFacetValue.Value);
-                matchedFacet.Should().NotBeNull();
+                var matchedFacetValue = filterBoxesForFacet.Single(inputElement => inputElement!.Value == expectedFacetValue.Value);
+                matchedFacetValue.Should().NotBeNull();
             }
         }
     }
 
-    private WebApplicationFactory<Program> CreateHost()
+    private WebApplicationFactory<Program> ConfigureHost()
     {
         return _factory.WithWebHostBuilder(
             (IWebHostBuilder builder) =>
@@ -177,5 +153,20 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
                 });
             }
         );
+    }
+
+    protected async Task<IDocument> NavigateToPage(string webPage)
+    {
+        var response = await _httpClient.GetAsync(webPage);
+
+        var DOM = await response.Content.ReadAsStringAsync();
+
+        return await _browsingContext.OpenAsync(req => req.Content(DOM));
+    }
+
+    private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
+    {
+        var config = AngleSharp.Configuration.Default;
+        return BrowsingContext.New(config);
     }
 }
