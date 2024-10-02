@@ -22,22 +22,22 @@
 	
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.1.2" />
-	<PackageReference Include="Bogus" Version="35.6.0" />
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
-	<PackageReference Include="Deque.AxeCore.Selenium" Version="4.9.1" />
+	<PackageReference Include="Bogus" Version="35.6.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2" />
+	<PackageReference Include="Deque.AxeCore.Selenium" Version="4.10.0" />
 	<PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
 	<PackageReference Include="FluentAssertions" Version="6.12.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="Selenium.Support" Version="4.25.0" />
 	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="128.0.6613.8600" />
 	<PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.35.0" />
 	<PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
 	<PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
-	<PackageReference Include="WireMock.Net" Version="1.6.2" />
+	<PackageReference Include="WireMock.Net" Version="1.6.4" />
     <PackageReference Include="xunit" Version="2.5.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
 	
   <ItemGroup>
