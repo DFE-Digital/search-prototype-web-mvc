@@ -39,8 +39,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     [InlineData("School", 1)]
     public async Task GET_Search_Returns_ExpectedNumber_Of_Results(string query, int resultsInt)
     {
-        // all searches have to have the '*' added for now - this needs to go to the top of the list for refactor
-        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}*");
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var jsonString = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
@@ -51,7 +50,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     [Fact]
     public async Task GET_Search_Returns_EstablishmentData()
     {
-        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Academy*");
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Academy");
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
@@ -72,7 +71,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     [Fact]
     public async Task GET_Search_NoMatch_Returns_NoEstablishmentData()
     {
-        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Antony*");
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Antony");
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
@@ -83,7 +82,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     [Fact]
     public async Task GET_Search_SpecialCharacter_Returns_NoEstablishmentData()
     {
-        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}!*");
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}!");
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;

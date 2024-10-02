@@ -1,6 +1,5 @@
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Infrastructure;
-using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 
 
@@ -18,8 +17,8 @@ builder.Services.AddSwaggerGen();
 //
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
-builder.Services.AddSearchForEstablishmentServices();
-
+builder.Services.AddSearchForEstablishmentServices(builder.Configuration);
+builder.Services.AddDefaultSearchFilterServices(builder.Configuration);
 //
 //
 // End of IOC container registrations

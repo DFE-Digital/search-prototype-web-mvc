@@ -57,7 +57,7 @@ public class HomeController : Controller
     /// <returns>
     /// An IActionResult contract that represents the result of this action method.
     /// </returns>
-    public async Task<IActionResult> Index(string searchKeyWord)
+    public async Task<IActionResult> Index(string? searchKeyWord)
     {
         if (string.IsNullOrEmpty(searchKeyWord))
         {
@@ -68,7 +68,7 @@ public class HomeController : Controller
 
         SearchByKeywordResponse response =
             await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyword: searchKeyWord + "*"));
+                new SearchByKeywordRequest(searchKeyword: searchKeyWord));
 
         SearchResults viewModel =
             _searchResultsFactory.CreateViewModel(
@@ -100,7 +100,7 @@ public class HomeController : Controller
             SearchByKeywordResponse response =
                 await _searchByKeywordUseCase.HandleRequest(
                     new SearchByKeywordRequest(
-                        searchKeyword: searchRequestViewModel.SearchKeyword + "*",
+                        searchKeyword: searchRequestViewModel.SearchKeyword!,
                         filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
             SearchResults viewModel =
@@ -112,6 +112,6 @@ public class HomeController : Controller
             return View("Index", viewModel);
         }
 
-        return await Index(searchRequestViewModel.SearchKeyword!);
+        return await Index(searchRequestViewModel.SearchKeyword);
     }
 }
