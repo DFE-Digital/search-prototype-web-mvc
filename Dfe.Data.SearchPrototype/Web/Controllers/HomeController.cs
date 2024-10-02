@@ -65,7 +65,7 @@ public class HomeController : Controller
     /// <returns>
     /// An IActionResult contract that represents the result of this action method.
     /// </returns>
-    public async Task<IActionResult> Index(string searchKeyWord)
+    public async Task<IActionResult> Index(string? searchKeyWord)
     {
         if (string.IsNullOrEmpty(searchKeyWord))
         {
@@ -108,7 +108,7 @@ public class HomeController : Controller
             SearchByKeywordResponse response =
                 await _searchByKeywordUseCase.HandleRequest(
                     new SearchByKeywordRequest(
-                        searchKeyword: searchRequestViewModel.SearchKeyword,
+                        searchKeyword: searchRequestViewModel.SearchKeyword!,
                         filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
 
             Models.ViewModels.SearchResults viewModel =
