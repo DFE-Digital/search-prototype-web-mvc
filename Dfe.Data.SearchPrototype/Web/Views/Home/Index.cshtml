@@ -7,7 +7,7 @@
 }
 
 @* search component *@
-@using (Html.BeginForm("SearchWithFilters", "Home", FormMethod.Post, new { id = "search-establishments" }))
+@using (Html.BeginForm("Index", "Home", FormMethod.Get, new { id = "search-establishments" }))
 {
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>

@@ -26,7 +26,7 @@ builder.Services.AddSearchForEstablishmentServices(builder.Configuration);
 builder.Services.AddScoped<ISearchResultsFactory, SearchResultsFactory>();
 builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?>, EstablishmentResultsToEstablishmentsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, FacetsAndSelectedFacetsToFacetsViewModelMapper>();
-builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>, SelectedFacetsToFilterRequestsMapper>();
+builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>?>, SelectedFacetsToFilterRequestsMapper>();
 //
 //
 // End of IOC container registrations

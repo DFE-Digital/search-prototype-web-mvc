@@ -25,7 +25,7 @@ public class HomeControllerTests
 
         Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
 
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+        Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success)
@@ -42,7 +42,7 @@ public class HomeControllerTests
                 mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
-        await controller.Index("KDM");
+        await controller.Index(new SearchRequest() { SearchKeyword = "KDM" });
 
         Mock.Get(mockUseCase).Verify(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()), Times.Once());
     }
@@ -54,7 +54,7 @@ public class HomeControllerTests
 
         Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
 
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+        Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         SearchByKeywordResponse response =
@@ -68,7 +68,7 @@ public class HomeControllerTests
                mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
-        await controller.Index("KDM");
+        await controller.Index(new SearchRequest() { SearchKeyword = "KDM" });
 
         mockSearchResultsFactory.Verify(factory => factory.CreateViewModel(It.IsAny<EstablishmentResults?>(), It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
     }
@@ -84,7 +84,7 @@ public class HomeControllerTests
 
         Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
 
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+        Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         //act
@@ -93,12 +93,12 @@ public class HomeControllerTests
                 mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
-        IActionResult result = await controller.Index(null!);
+        IActionResult result = await controller.Index(new SearchRequest());
 
         // assert
         result.Should().NotBeNull();
         ViewResult viewResult = Assert.IsType<ViewResult>(result);
-        viewResult.Model.Should().BeNull();
+
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class HomeControllerTests
 
         Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
 
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+        Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         SearchRequest searchRequest =
@@ -134,7 +134,7 @@ public class HomeControllerTests
                 mockRequestMapper.Object);
 
         // assert/verify
-        IActionResult result = await controller.SearchWithFilters(searchRequest);
+        IActionResult result = await controller.Index(searchRequest);
 
         // assert
         ViewResult viewResult = Assert.IsType<ViewResult>(result);
