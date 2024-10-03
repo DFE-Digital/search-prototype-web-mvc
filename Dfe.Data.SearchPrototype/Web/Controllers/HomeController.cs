@@ -72,7 +72,7 @@ public class HomeController : Controller
         SearchByKeywordResponse response =
             await _searchByKeywordUseCase.HandleRequest(new SearchByKeywordRequest(
                     searchKeyword: searchRequestViewModel.SearchKeyword!,
-                    filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
+                    filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
 
         SearchResults viewModel =
             _searchResultsFactory.CreateViewModel(
