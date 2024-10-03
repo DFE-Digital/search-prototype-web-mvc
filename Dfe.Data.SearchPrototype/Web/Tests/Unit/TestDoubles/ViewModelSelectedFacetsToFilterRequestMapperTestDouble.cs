@@ -6,9 +6,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
 {
     public static class ViewModelSelectedFacetsToFilterRequestMapperTestDouble
     {
-        public static Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> MockFor(IList<FilterRequest> filterRequests)
+        public static Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> MockFor(IList<FilterRequest> filterRequests)
         {
-            Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockMapper = DefaultMock();
+            Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockMapper = DefaultMock();
 
             mockMapper.Setup(mapper =>
                 mapper.MapFrom(It.IsAny<Dictionary<string, List<string>>>())).Returns(filterRequests);
@@ -16,6 +16,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
             return mockMapper;
         }
 
-        public static Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> DefaultMock() => new();
+        public static Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> DefaultMock() => new();
     }
 }

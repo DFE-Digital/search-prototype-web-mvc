@@ -7,7 +7,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
     /// Facilitates mapping from the received dictionary of selected facets,
     /// into the required list of <see cref="FilterRequest"/> instances.
     /// </summary>
-    public sealed class SelectedFacetsToFilterRequestsMapper : IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>
+    public sealed class SelectedFacetsToFilterRequestsMapper : IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>
     {
         /// <summary>
         /// Provides the functionality to map from user selected facets in the form of a
@@ -19,10 +19,10 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
         /// <returns>
         /// The configured list of <see cref="FilterRequest"/> instances expected.
         /// </returns>
-        public IList<FilterRequest> MapFrom(Dictionary<string, List<string>> input)
+        public IList<FilterRequest> MapFrom(Dictionary<string, List<string>>? input)
         {
             List<FilterRequest> filterRequests = [];
-
+            if (input == null) { return filterRequests; }
             foreach (KeyValuePair<string, List<string>> filterResult in input)
             {
                 filterRequests.Add(MapFromFilterRequestViewModel(filterResult));

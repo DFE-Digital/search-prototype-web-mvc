@@ -1,29 +1,44 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
-using Xunit;
 using FluentAssertions;
+using Xunit;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
+namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers;
+
+public class SelectedFacetsToFilterRequestsMapperTests
 {
-    public class SelectedFacetsToFilterRequestsMapperTests
+    private readonly SelectedFacetsToFilterRequestsMapper _mapper = new SelectedFacetsToFilterRequestsMapper();
+
+    [Fact]
+    public void Mapper_WithFacetsInput_ReturnsFilterRequests()
     {
-        private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _mapper;
-
-        public SelectedFacetsToFilterRequestsMapperTests() => _mapper = new SelectedFacetsToFilterRequestsMapper();
-
-        [Fact]
-        public void Mapper_WithFacetedResultsViewModel_ReturnsFilterRequest()
+        // arrange
+        Dictionary<string, List<string>>? facetSelections = new Dictionary<string, List<string>>
         {
-            // arrange.
-            Dictionary<string, List<string>> viewModel = FacetsSelectedModelTestDouble.Create();
+            { "FacetName1", new List<string> {"FacetValue1a", "FacetValue1b" } },
+            { "FacetName2", new List<string> {"FacetValue2a", "FacetValue2b" } }
+        };
 
-            // act.
-            IList<FilterRequest> response = _mapper.MapFrom(input: viewModel);
+        // act
+        IList<FilterRequest>? response = _mapper.MapFrom(input: facetSelections);
 
-            // assert.
-            response.Should().NotBeEmpty().And.AllBeOfType<FilterRequest>().And.HaveCountGreaterThan(0);
-        }
+        // assert
+        response!.Single(filterRequest => filterRequest.FilterName == "FacetName1")
+            .FilterValues
+            .Should().BeEquivalentTo(facetSelections["FacetName1"]);
+        response!.Single(filterRequest => filterRequest.FilterName == "FacetName2")
+            .FilterValues
+            .Should().BeEquivalentTo(facetSelections["FacetName2"]);
+    }
+
+    [Fact]
+    public void Mapper_NoInput_ReturnsEmptyList()
+    {
+        // act
+        IList<FilterRequest> response = _mapper.MapFrom(null);
+
+        // assert
+        response.Should().BeEmpty();
     }
 }

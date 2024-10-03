@@ -17,7 +17,7 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
     private readonly ISearchResultsFactory _searchResultsFactory;
-    private readonly IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> _selectedFacetsToFilterRequestsMapper;
+    private readonly IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>> _selectedFacetsToFilterRequestsMapper;
 
     /// <summary>
     /// The following dependencies include the use-case which orchestrates the search functionality,
@@ -42,41 +42,12 @@ public class HomeController : Controller
         ILogger<HomeController> logger,
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
         ISearchResultsFactory searchResultsFactory,
-        IMapper<Dictionary<string, List<string>>, IList<FilterRequest>> selectedFacetsToFilterRequestsMapper)
+        IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>> selectedFacetsToFilterRequestsMapper)
     {
         _logger = logger;
         _searchByKeywordUseCase = searchByKeywordUseCase;
         _searchResultsFactory = searchResultsFactory;
         _selectedFacetsToFilterRequestsMapper = selectedFacetsToFilterRequestsMapper;
-    }
-
-    /// <summary>
-    /// The action method that composes the view model based on the search keyword.
-    /// </summary>
-    /// <param name="searchKeyWord">search keyword</param>
-    /// <returns>
-    /// An IActionResult contract that represents the result of this action method.
-    /// </returns>
-    public async Task<IActionResult> Index(string? searchKeyWord)
-    {
-        if (string.IsNullOrEmpty(searchKeyWord))
-        {
-            return View();
-        }
-
-        ViewBag.SearchQuery = searchKeyWord;
-
-        SearchByKeywordResponse response =
-            await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyword: searchKeyWord));
-
-        SearchResults viewModel =
-            _searchResultsFactory.CreateViewModel(
-                response.EstablishmentResults,
-                new FacetsAndSelectedFacets(
-                    response.EstablishmentFacetResults));
-
-        return View("Index", viewModel);
     }
 
     /// <summary>
@@ -89,29 +60,26 @@ public class HomeController : Controller
     /// <returns>
     /// An IActionResult contract that represents the result of this action method.
     /// </returns>
-    [HttpPost]
-    public async Task<IActionResult> SearchWithFilters(SearchRequest searchRequestViewModel)
+    [HttpGet]
+    public async Task<IActionResult> Index(SearchRequest searchRequestViewModel)
     {
+        if (string.IsNullOrEmpty(searchRequestViewModel.SearchKeyword))
+        {
+            return View();
+        }
         ViewBag.SearchQuery = searchRequestViewModel.SearchKeyword;
 
-        if (searchRequestViewModel.HasSearchKeyWord &&
-            searchRequestViewModel.HasSelectedFacets)
-        {
-            SearchByKeywordResponse response =
-                await _searchByKeywordUseCase.HandleRequest(
-                    new SearchByKeywordRequest(
-                        searchKeyword: searchRequestViewModel.SearchKeyword!,
-                        filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets!)));
+        SearchByKeywordResponse response =
+            await _searchByKeywordUseCase.HandleRequest(new SearchByKeywordRequest(
+                    searchKeyword: searchRequestViewModel.SearchKeyword!,
+                    filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
 
-            SearchResults viewModel =
-                _searchResultsFactory.CreateViewModel(
-                    response.EstablishmentResults,
-                    new FacetsAndSelectedFacets(
-                        response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
+        SearchResults viewModel =
+            _searchResultsFactory.CreateViewModel(
+                response.EstablishmentResults,
+                new FacetsAndSelectedFacets(
+                    response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
 
-            return View("Index", viewModel);
-        }
-
-        return await Index(searchRequestViewModel.SearchKeyword);
+        return View(viewModel);
     }
 }

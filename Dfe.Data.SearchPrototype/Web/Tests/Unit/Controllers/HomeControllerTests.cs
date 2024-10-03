@@ -25,7 +25,7 @@ public class HomeControllerTests
 
         Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
 
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+        Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success)
@@ -42,7 +42,7 @@ public class HomeControllerTests
                 mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
-        await controller.Index("KDM");
+        await controller.Index(new SearchRequest() { SearchKeyword = "KDM" });
 
         Mock.Get(mockUseCase).Verify(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()), Times.Once());
     }
@@ -54,7 +54,7 @@ public class HomeControllerTests
 
         Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
 
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+        Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         SearchByKeywordResponse response =
@@ -68,37 +68,9 @@ public class HomeControllerTests
                mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
-        await controller.Index("KDM");
+        await controller.Index(new SearchRequest() { SearchKeyword = "KDM" });
 
         mockSearchResultsFactory.Verify(factory => factory.CreateViewModel(It.IsAny<EstablishmentResults?>(), It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
-    }
-
-    [Fact]
-    public async Task Index_NoSearchKeyword_NullViewModel()
-    {
-        // arrange
-        Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
-
-        IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
-            new SearchByKeywordUseCaseMockBuilder().Create();
-
-        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
-
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
-            ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
-
-        //act
-        HomeController controller =
-            new(mockLogger.Object, mockUseCase,
-                mockSearchResultsFactory.Object,
-                mockRequestMapper.Object);
-
-        IActionResult result = await controller.Index(null!);
-
-        // assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = Assert.IsType<ViewResult>(result);
-        viewResult.Model.Should().BeNull();
     }
 
     [Fact]
@@ -115,26 +87,24 @@ public class HomeControllerTests
 
         Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
 
-        Mock<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>>> mockRequestMapper =
+        Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         SearchRequest searchRequest =
             new()
             {
-                SearchKeyword = null!,
                 SelectedFacets = new Dictionary<string, List<string>>() {
                     { "Facet_1", ["Facet_1_Value"] }
                 }
             };
 
-        //act
         HomeController controller =
             new(mockLogger.Object, mockUseCase,
                 mockSearchResultsFactory.Object,
                 mockRequestMapper.Object);
 
-        // assert/verify
-        IActionResult result = await controller.SearchWithFilters(searchRequest);
+        // act
+        IActionResult result = await controller.Index(searchRequest);
 
         // assert
         ViewResult viewResult = Assert.IsType<ViewResult>(result);

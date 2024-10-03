@@ -44,7 +44,7 @@ public class HomeControllerTests
                 new SelectedFacetsToFilterRequestsMapper());
 
         // act
-        IActionResult result = await controller.Index("searchTerm");
+        IActionResult result = await controller.Index(new SearchRequest() { SearchKeyword = "searchTerm" });
 
         // assert
         ViewResult viewResult = Assert.IsType<ViewResult>(result);
@@ -78,7 +78,7 @@ public class HomeControllerTests
                 new SelectedFacetsToFilterRequestsMapper());
 
         // act
-        IActionResult result = await controller.Index("searchTerm");
+        IActionResult result = await controller.Index(new SearchRequest() { SearchKeyword = "searchTerm" });
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -116,7 +116,7 @@ public class HomeControllerTests
 
         // act
         IActionResult result =
-            await controller.SearchWithFilters(
+            await controller.Index(
                 new SearchRequest()
                 {
                     SearchKeyword = "searchTerm",
@@ -161,7 +161,7 @@ public class HomeControllerTests
 
         // act
         IActionResult result =
-            await controller.SearchWithFilters(
+            await controller.Index(
                 new SearchRequest()
                 {
                     SearchKeyword = "searchTerm",
@@ -210,7 +210,7 @@ public class HomeControllerTests
 
         // act
         IActionResult result =
-            await controller.SearchWithFilters(
+            await controller.Index(
                 new SearchRequest()
                 {
                     SearchKeyword = "searchTerm",
