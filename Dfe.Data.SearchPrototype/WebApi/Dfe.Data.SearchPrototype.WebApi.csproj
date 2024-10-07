@@ -17,7 +17,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
 		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.2-44" />
 		<PackageReference Include="Dfe.Data.SearchPrototype" Version="1.0.4-10" />
-		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.4-10" />
+		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.4-PullRequest55.16" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.4-10" />
 	</ItemGroup>
 
