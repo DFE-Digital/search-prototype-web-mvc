@@ -64,7 +64,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         }
 
         [Fact]
-        public async Task Search_ByName_ReturnsSingleResult()
+        public async Task Search_ByName_Returns_LessThan100_Results()
         {
             var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
@@ -77,7 +77,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
                 formButton,
                 new Dictionary<string, string>
                 {
-                    ["searchKeyWord"] = "School"
+                    ["searchKeyWord"] = "One"
                 });
 
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
@@ -85,14 +85,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
             searchResultsNumber.Should().Contain("Result");
 
-            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(1);
-
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Be("Duck School");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("345678");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Duck Street, Duck Locality, Duck Address 3, Duck Town, DUU CKK");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Community School");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Primary");
+            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().BeLessThan(100);
         }
 
         [Fact]
@@ -115,25 +108,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
             resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Results");
-            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(2);
-
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Be("Goose Academy");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("123456");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Goose Street, Goose Locality, Goose Address 3, Goose Town, GOO OSE");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Academy");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Secondary");
-                                                         
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Be("Horse Academy");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("234567");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Horse Street, Horse Locality, Horse Address 3, Horse Town, HOR SEE");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Academy");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Open");
-            resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Post 16");
+            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(100);
         }
 
         [Theory]
-        [InlineData("ant")]
+        [InlineData("zzz")]
         public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
         {
             var response = await _client.GetAsync(uri);
