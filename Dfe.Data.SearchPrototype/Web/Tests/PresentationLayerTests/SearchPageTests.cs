@@ -20,11 +20,13 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 {
     private const string uri = "http://localhost:5000";
     private Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> _useCase = new();
+    private readonly HttpClient _client;
 
     private readonly WebApplicationFactory<Program> _factory;
         public SearchPageTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
+        _client = CreateHost().CreateClient();
     }
 
     [Fact]
@@ -33,15 +35,14 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWithNoResults();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
+        var response = await _client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
         var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
         var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
-        var formResponse = await client.SendAsync(
+        var formResponse = await _client.SendAsync(
             formElement!,
             formButton!,
             new Dictionary<string, string>
@@ -64,15 +65,14 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWithOneResult();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
+        var response = await _client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
         var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
         var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
-        var formResponse = await client.SendAsync(
+        var formResponse = await _client.SendAsync(
             formElement!,
             formButton!,
             new Dictionary<string, string>
@@ -95,15 +95,14 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
+        var response = await _client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
         var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
         var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
-        var formResponse = await client.SendAsync(
+        var formResponse = await _client.SendAsync(
             formElement!,
             formButton!,
             new Dictionary<string, string>
@@ -126,15 +125,14 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
-        var client = CreateHost().CreateClient();
 
-        var response = await client.GetAsync(uri);
+        var response = await _client.GetAsync(uri);
         var document = await HtmlHelpers.GetDocumentAsync(response);
 
         var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria);
         var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria);
 
-        var formResponse = await client.SendAsync(
+        var formResponse = await _client.SendAsync(
             formElement!,
             formButton!,
             new Dictionary<string, string>
