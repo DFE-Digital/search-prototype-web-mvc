@@ -165,9 +165,12 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var applyFiltersButton = document.GetElementText(HomePage.ApplyFiltersButton.Criteria);
             applyFiltersButton.Should().Be("Apply filters");
 
+            var establishmentStatusName = document.GetElementText(HomePage.EstablishmentStatusNameHeading.Criteria);
+            establishmentStatusName.Should().Be("ESTABLISHMENT STATUS NAME");
+
             var phaseOfEducation = document.GetElementText(HomePage.PhaseOfEducationHeading.Criteria);
             phaseOfEducation.Should().Be("PHASE OF EDUCATION");
-
+            
             var primaryInput = document.GetMultipleElements(HomePage.PrimaryFilterInput.Criteria);
             primaryInput.Should().HaveCount(1);
         }

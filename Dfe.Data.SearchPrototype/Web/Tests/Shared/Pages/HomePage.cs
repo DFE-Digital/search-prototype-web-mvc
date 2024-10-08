@@ -23,11 +23,11 @@ public sealed class HomePage : BasePage
     public static By SearchNoResultText => By.CssSelector("#no-results");
     public static By SearchResultsContainer => By.CssSelector("#results");
     public static By FiltersHeading => By.CssSelector("#filters-heading");
-    public static By ApplyFiltersButton => By.CssSelector("#filters-button");
-    public static By PhaseOfEducationHeading => By.CssSelector("#filters-container div:nth-child(3) fieldset legend");
+    public static By ApplyFiltersButton => By.CssSelector("#filters-button"); 
+    public static By EstablishmentStatusNameHeading => By.CssSelector("#filters-container div:nth-child(3) fieldset legend");
+    public static By PhaseOfEducationHeading => By.CssSelector("#filters-container div:nth-child(4) fieldset legend");
     public static By PrimaryFilterInput => By.CssSelector("#selectedFacets_PHASEOFEDUCATION_");
     public static By PrimaryFilterLabel => By.CssSelector("#selectedFacets_PHASEOFEDUCATION_ label");
-    public static By EstablishmentStatusNameHeading => By.CssSelector("#filters-container div:nth-child(4) fieldset legend");
     public static By SearchResultEstablishmentName(int urn) => By.CssSelector($"#name-{urn}");
     public static By SearchResultEstablishmentUrn(int urn) => By.CssSelector($"#urn-{urn}");
     public static By SearchResultEstablishmentAddress(int urn) => By.CssSelector($"#address-{urn}");
