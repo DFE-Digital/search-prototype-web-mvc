@@ -36,8 +36,8 @@
                     foreach (var facet in Model.Facets)
                     {
                         <govuk-checkboxes name="selectedFacets[@facet.Name]">
-                            <govuk-checkboxes-fieldset>
-                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s" id="FacetName-@facet.Name">
+                            <govuk-checkboxes-fieldset id="FacetName-@facet.Name">
+                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
                                     @facet.Name
                                 </govuk-checkboxes-fieldset-legend>
 

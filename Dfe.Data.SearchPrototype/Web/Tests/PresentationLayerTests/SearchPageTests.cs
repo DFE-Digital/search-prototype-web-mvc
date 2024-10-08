@@ -43,7 +43,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var document = await _context.OpenAsync(uri);
 
-        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>("#search-establishments-form")!;
+        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria)!;
         IDocument resultsPage = await form.SubmitAsync(new
         {
             searchKeyWord = "anything - I've mocked the response from the use-case regardless of the request"
@@ -65,7 +65,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var document = await _context.OpenAsync(uri);
 
-        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>("#search-establishments-form")!;
+        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria)!;
         IDocument resultsPage = await form.SubmitAsync(new
         {
             searchKeyWord = "anything - I've mocked the response from the use-case regardless of the request"
@@ -87,7 +87,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var document = await _context.OpenAsync(uri);
 
-        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>("#search-establishments-form")!;
+        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria)!;
         IDocument resultsPage = await form.SubmitAsync(new
         {
             searchKeyWord = "anything - I've mocked the response from the use-case regardless of the request"
@@ -109,7 +109,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var document = await _context.OpenAsync(uri);
 
-        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>("#search-establishments-form")!;
+        IHtmlFormElement form = document!.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria)!;
         IDocument resultsPage = await form.SubmitAsync(new
         {
             searchKeyWord = "anything - I've mocked the response from the use-case regardless of the request"
@@ -119,17 +119,23 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         filtersHeading.Should().NotBeNull();
         filtersHeading!.TextContent.Should().Be("Filters");
 
-        var expectedFacets = useCaseResponse.EstablishmentFacetResults!.Facets;
-        var resultFacetNames = resultsPage.GetElementsByTagName("legend").Select(x => x.InnerHtml.Trim());
+        var facetContainer = resultsPage.QuerySelector(HomePage.FiltersContainer.Criteria);
 
+        var expectedFacets = useCaseResponse.EstablishmentFacetResults!.Facets;
         foreach (var expectedFacet in expectedFacets)
         {
-            var facetInputElements = resultsPage.All
-                .Where(element => element.Id != null && element.Id.Contains($"selectedFacets_{expectedFacet.Name}"))
-                .Select(e => e as IHtmlInputElement);
+            // get the page element and its child nodes for each expected facet - this bit could be done with a page model
+            var matchingFacetPageElement = facetContainer!
+                .GetNodes<IHtmlFieldSetElement>()
+                .Single(element => element.Id != null && element.Id == $"FacetName-{expectedFacet.Name}");
+            var facetLegend = matchingFacetPageElement.GetNodes<IHtmlLegendElement>().Single();
+            var facetInputElements = matchingFacetPageElement.GetNodes<IHtmlInputElement>();
 
-            foreach(var expectedFacetValue in expectedFacet.Results)
+           // assert the facet name is on the page
+           facetLegend.TextContent.Trim().Should().Be(expectedFacet.Name);
+           foreach (var expectedFacetValue in expectedFacet.Results)
             {
+                // assert that each expected facet value appears on the page under the correct facet name
                 var matchedFacet = facetInputElements.Single(inputElement => inputElement!.Value == expectedFacetValue.Value);
                 matchedFacet.Should().NotBeNull();
             }

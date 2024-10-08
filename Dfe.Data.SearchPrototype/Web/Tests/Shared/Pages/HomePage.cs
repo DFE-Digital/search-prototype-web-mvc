@@ -23,6 +23,7 @@ public sealed class HomePage : BasePage
     public static By SearchNoResultText => By.CssSelector("#no-results");
     public static By SearchResultsContainer => By.CssSelector("#results");
     public static By FiltersHeading => By.CssSelector("#filters-heading");
+    public static By FiltersContainer => By.CssSelector("#filters-container");
     public static By SearchResultEstablishmentName(int urn) => By.CssSelector($"#name-{urn}");
     public static By SearchResultEstablishmentUrn(int urn) => By.CssSelector($"#urn-{urn}");
     public static By SearchResultEstablishmentAddress(int urn) => By.CssSelector($"#address-{urn}");
