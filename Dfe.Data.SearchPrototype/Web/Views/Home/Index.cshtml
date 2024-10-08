@@ -7,8 +7,7 @@
 }
 
 @* search component *@
-@using (Html.BeginForm("Index", "Home", FormMethod.Get, new { id = "search-establishments" }))
-{
+<form asp-action="Index" asp-controller="Home" method="get" id="search-establishments">
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
         <govuk-input-hint>Search establishments</govuk-input-hint>
@@ -102,4 +101,4 @@
         @*  end of list component *@
     }
     @* end of display results *@
-}
+</form>
