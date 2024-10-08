@@ -82,7 +82,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-            resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Result");
+            var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
+            searchResultsNumber.Should().Contain("Result");
+
             resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(1);
 
             resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Be("Duck School");
@@ -137,7 +139,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var response = await _client.GetAsync(uri);
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            // using Anglesharp to get document elements
             var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
             var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
@@ -149,16 +150,26 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
                     ["searchKeyWord"] = searchTerm
                 });
 
-            _logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
-            _logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
-
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-            _logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
+            var noResultText = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
+            noResultText.Should().Contain("Sorry no results found please amend your search criteria");
+        }
 
-            // using the selenium selector under the hood
-            var thingToTest = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
-            thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
+        [Fact]
+        public async Task Filters_AreDisplayed()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=Academy");
+            var document = await HtmlHelpers.GetDocumentAsync(response);
+
+            var applyFiltersButton = document.GetElementText(HomePage.ApplyFiltersButton.Criteria);
+            applyFiltersButton.Should().Be("Apply filters");
+
+            var phaseOfEducation = document.GetElementText(HomePage.PhaseOfEducationHeading.Criteria);
+            phaseOfEducation.Should().Be("PHASE OF EDUCATION");
+
+            var primaryInput = document.GetMultipleElements(HomePage.PrimaryFilterInput.Criteria);
+            primaryInput.Should().HaveCount(1);
         }
     }
 }

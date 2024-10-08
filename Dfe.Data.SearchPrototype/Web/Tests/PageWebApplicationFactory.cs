@@ -35,21 +35,21 @@ public sealed class PageWebApplicationFactory<TEntryPoint> : WebApplicationFacto
         builder.ConfigureServices(services =>
         {
             // remove any services that need overriding with test configuration
-            services.RemoveAll<IOptions<AzureSearchConnectionOptions>>();
+            //services.RemoveAll<IOptions<AzureSearchConnectionOptions>>();
 
-            services.RemoveAll<ISearchServiceAdapter>();
+            //services.RemoveAll<ISearchServiceAdapter>();
 
             // register dependencies with test configuration
 
-            services.AddSingleton<IJsonFileLoader, JsonFileLoader>();
+            //services.AddSingleton<IJsonFileLoader, JsonFileLoader>();
             
-            services.AddScoped(typeof(ISearchServiceAdapter), typeof(DummySearchServiceAdapter<Infrastructure.DataTransferObjects.Establishment>));
+            //services.AddScoped(typeof(ISearchServiceAdapter), typeof(DummySearchServiceAdapter<Infrastructure.DataTransferObjects.Establishment>));
 
-            services.AddOptions<DummySearchServiceAdapterOptions>().Configure(
-                (options) => options.FileName = TestConfiguration["dummySearchServiceAdapter:fileName"]);
+            //services.AddOptions<DummySearchServiceAdapterOptions>().Configure(
+            //    (options) => options.FileName = TestConfiguration["dummySearchServiceAdapter:fileName"]);
 
-            services.AddOptions<AzureSearchConnectionOptions>().Configure(
-                (options) => options.Credentials = TestConfiguration["azureSearchClientOptions:credentials"]);
+            //services.AddOptions<AzureSearchConnectionOptions>().Configure(
+            //    (options) => options.Credentials = TestConfiguration["azureSearchClientOptions:credentials"]);
 
         });
     }
