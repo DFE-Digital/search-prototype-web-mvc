@@ -7,13 +7,12 @@
 }
 
 @* search component *@
-@using (Html.BeginForm("Index", "Home", FormMethod.Get, new { id = "search-establishments" }))
-{
+<form asp-action="Index" asp-controller="Home" method="get" id="search-establishments-form">
     <govuk-input input-class="govuk-input govuk-!-width-two-thirds" input-placeholder="Search by keyword" input-value="@searchKeyWord" name="searchKeyWord">
         <govuk-input-label is-page-heading="true" class="govuk-label--l" id="page-heading">Search</govuk-input-label>
         <govuk-input-hint>Search establishments</govuk-input-hint>
         <govuk-input-suffix style="padding: 0px">
-            <button style="border: none; cursor:pointer">
+            <button id="search" style="border: none; cursor:pointer">
                 <svg class="gem-c-search__icon" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                     <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="currentColor" stroke-width="3"></circle>
                     <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="currentColor" stroke-width="3"></line>
@@ -37,7 +36,7 @@
                     foreach (var facet in Model.Facets)
                     {
                         <govuk-checkboxes name="selectedFacets[@facet.Name]">
-                            <govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-fieldset id="FacetName-@facet.Name">
                                 <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
                                     @facet.Name
                                 </govuk-checkboxes-fieldset-legend>
@@ -102,4 +101,4 @@
         @*  end of list component *@
     }
     @* end of display results *@
-}
+</form>
