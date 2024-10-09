@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
@@ -11,6 +12,13 @@ using GovUk.Frontend.AspNetCore;
 using Models = Dfe.Data.SearchPrototype.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (!builder.Environment.IsLocal())
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri("https://search-prototype-vault.vault.azure.net/"),
+        new DefaultAzureCredential());
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -57,4 +65,10 @@ app.Run();
 namespace Dfe.Data.SearchPrototype.Web
 {
     public partial class Program { }
+}
+
+public static class HostEnvironmentExtensions
+{
+    public static bool IsLocal(this IHostEnvironment _)
+        => Environment.GetEnvironmentVariable("IS_LOCAL")?.Equals("true") ?? false;
 }
