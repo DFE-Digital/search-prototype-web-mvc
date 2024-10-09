@@ -22,6 +22,7 @@ public sealed class HomePage : BasePage
     public static By SearchResultLinks => By.CssSelector("ul li h4");
     public static By SearchNoResultText => By.CssSelector("#no-results");
     public static By SearchResultsContainer => By.CssSelector("#results");
+    public static By FiltersContainer => By.CssSelector("#filters-container");
     public static By FiltersHeading => By.CssSelector("#filters-heading");
     public static By ApplyFiltersButton => By.CssSelector("#filters-button"); 
     public static By PhaseOfEducationHeading => By.CssSelector("#filters-container div:nth-child(3) fieldset legend");
