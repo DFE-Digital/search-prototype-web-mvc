@@ -13,13 +13,6 @@ using Models = Dfe.Data.SearchPrototype.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (!builder.Environment.IsLocal())
-{
-    builder.Configuration.AddAzureKeyVault(
-        new Uri("https://search-prototype-vault.vault.azure.net/"),
-        new DefaultAzureCredential());
-}
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddGovUkFrontend();
@@ -47,6 +40,9 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    builder.Configuration.AddAzureKeyVault(
+    new Uri("https://search-prototype-vault.vault.azure.net/"),
+    new DefaultAzureCredential());
 }
 
 app.UseHttpsRedirection();
@@ -65,10 +61,4 @@ app.Run();
 namespace Dfe.Data.SearchPrototype.Web
 {
     public partial class Program { }
-}
-
-public static class HostEnvironmentExtensions
-{
-    public static bool IsLocal(this IHostEnvironment _)
-        => Environment.GetEnvironmentVariable("IS_LOCAL")?.Equals("true") ?? false;
 }
