@@ -15,22 +15,22 @@ namespace Dfe.Data.SearchPrototype.Web.Tests;
 public sealed class PageWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
 
-    public static readonly IConfiguration TestConfiguration =
-        new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.test.json", false)
-                    .Build();
+    //public static readonly IConfiguration TestConfiguration =
+    //    new ConfigurationBuilder()
+    //        .SetBasePath(Directory.GetCurrentDirectory())
+    //            .AddJsonFile("appsettings.test.json", false)
+    //                .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // TODO temp fix to read and set application settings from test appsettings.json, until devs generate appsettings with secrets in
-        if (
-            string.IsNullOrEmpty(TestConfiguration["web:domain"]) ||
-            string.IsNullOrEmpty(TestConfiguration["web:port"]) ||
-            string.IsNullOrEmpty(TestConfiguration["web:scheme"]))
-        {
-            throw new ArgumentNullException("Missing test configuration: configure your user secrets file");
-        }
+        //if (
+        //    string.IsNullOrEmpty(TestConfiguration["web:domain"]) ||
+        //    string.IsNullOrEmpty(TestConfiguration["web:port"]) ||
+        //    string.IsNullOrEmpty(TestConfiguration["web:scheme"]))
+        //{
+        //    throw new ArgumentNullException("Missing test configuration: configure your user secrets file");
+        //}
 
         builder.ConfigureServices(services =>
         {
