@@ -38,13 +38,14 @@ jobs:
       with: 
         keyvault: search-prototype-vault
         secrets: 'AzureSearchConnectionOptions--Credentials'
+        echo "The secret value is: ${{ aisearch-key }}"
 
     - name: Swap appsettings values
       uses: microsoft/variable-substitution@v1
       with: 
         files: '**/appsettings.*.json'
       env:
-        AzureSearchConnectionOptions.Credentials: 'Some_cred'
+        AzureSearchConnectionOptions.Credentials: '${{ aisearch-key }}'
 
     - name: Test
       run: dotnet test --verbosity normal
