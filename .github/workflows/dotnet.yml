@@ -37,15 +37,6 @@ jobs:
       with: 
         keyvault: search-prototype-vault
         secrets: 'AzureSearchConnectionOptions--Credentials'
-    - name: Echo the secret
-      run: |
-        echo "My Secret: ${{ steps.getSecretFromKeyVault.outputs.demosecret }}" | base64
-    - name: Azure CLI Script
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az keyvault secret show --vault-name ${{vars.AZURE_KEYVAULT_NAME}} --name ${{vars.AZURE_KEYVAULT_SECRET_NAME}} | jq -r '.value'
-
         
     - name: Test
       run: dotnet test --no-build --verbosity normal
