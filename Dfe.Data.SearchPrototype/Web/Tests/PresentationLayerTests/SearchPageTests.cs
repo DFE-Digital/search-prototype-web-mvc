@@ -42,7 +42,9 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
+        var landingPage = await _context.OpenAsync($"{homeUri}");
+        landingPage.TypeIntoSearchBox("search terms");
+        var resultsPage = await landingPage.SubmitSearchAsync();
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchNoResultText.Criteria)!
@@ -61,7 +63,9 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
+        var landingPage = await _context.OpenAsync($"{homeUri}");
+        landingPage.TypeIntoSearchBox("search terms");
+        var resultsPage = await landingPage.SubmitSearchAsync();
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
@@ -80,7 +84,9 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
+        var landingPage = await _context.OpenAsync($"{homeUri}");
+        landingPage.TypeIntoSearchBox("search terms");
+        var resultsPage = await landingPage.SubmitSearchAsync();
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
@@ -99,7 +105,9 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
+        var landingPage = await _context.OpenAsync($"{homeUri}");
+        landingPage.TypeIntoSearchBox("search terms");
+        var resultsPage = await landingPage.SubmitSearchAsync();
 
         // assert
         var filtersHeading = resultsPage.QuerySelector(HomePage.FiltersHeading.Criteria);
@@ -134,13 +142,13 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var document = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
-        // select some filters
-        var checkedBoxes = document.SelectFilters();
-        // submit filtered search
-        IDocument resultsPage = await document.SubmitSearchAsync();
+        var landingPage = await _context.OpenAsync($"{homeUri}");
+        landingPage.TypeIntoSearchBox("search terms");
+        var resultsPage = await landingPage.SubmitSearchAsync();
+        var checkedBoxes = resultsPage.SelectFilters();
+        IDocument filteredResultsPage = await resultsPage.SubmitSearchAsync();
 
-        var resultsPageSelectedFacets = resultsPage.GetFacets().SelectMany(facet => facet.GetCheckBoxes().Where(checkBox => checkBox.IsChecked));
+        var resultsPageSelectedFacets = filteredResultsPage.GetFacets().SelectMany(facet => facet.GetCheckBoxes().Where(checkBox => checkBox.IsChecked));
         resultsPageSelectedFacets.Select(facet => facet.Value).Should().BeEquivalentTo(checkedBoxes.Select(facet => facet.Value));
     }
 
