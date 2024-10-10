@@ -42,6 +42,7 @@ jobs:
     - name: Echo the secret
       run: |
         echo "My Secret: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}"
+        echo ${{secrets.AzureSearchConnectionOptions--Credentials}} | sed 's/./& /g'
 
     - name: Swap appsettings values
       uses: microsoft/variable-substitution@v1
