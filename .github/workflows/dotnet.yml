@@ -31,5 +31,21 @@ jobs:
         tenant-id: 9c7d9dd3-840c-4b3f-818e-552865082e16
         subscription-id:  1ca1a2df-f842-48ce-9403-6d9bc4021692 
         enable-AzPSSession: true
+
+    - id: getSecretFromKeyVault
+      uses: Azure/get-keyvault-secrets@v1
+      with: 
+        keyvault: search-prototype-vault
+        secrets: 'AzureSearchConnectionOptions--Credentials'
+    - name: Echo the secret
+      run: |
+        echo "My Secret: ${{ steps.getSecretFromKeyVault.outputs.demosecret }}" | base64
+    - name: Azure CLI Script
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az keyvault secret show --vault-name ${{vars.AZURE_KEYVAULT_NAME}} --name ${{vars.AZURE_KEYVAULT_SECRET_NAME}} | jq -r '.value'
+
+        
     - name: Test
       run: dotnet test --no-build --verbosity normal
