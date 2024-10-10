@@ -42,7 +42,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync($"{homeUri}");
+        var landingPage = await _context.OpenAsync(homeUri);
         landingPage.TypeIntoSearchBox("search terms");
         var resultsPage = await landingPage.SubmitSearchAsync();
 
@@ -63,7 +63,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync($"{homeUri}");
+        var landingPage = await _context.OpenAsync(homeUri);
         landingPage.TypeIntoSearchBox("search terms");
         var resultsPage = await landingPage.SubmitSearchAsync();
 
@@ -84,7 +84,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync($"{homeUri}");
+        var landingPage = await _context.OpenAsync(homeUri);
         landingPage.TypeIntoSearchBox("search terms");
         var resultsPage = await landingPage.SubmitSearchAsync();
 
@@ -105,7 +105,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync($"{homeUri}");
+        var landingPage = await _context.OpenAsync(homeUri);
         landingPage.TypeIntoSearchBox("search terms");
         var resultsPage = await landingPage.SubmitSearchAsync();
 
@@ -142,7 +142,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync($"{homeUri}");
+        var landingPage = await _context.OpenAsync(homeUri);
         landingPage.TypeIntoSearchBox("search terms");
         var resultsPage = await landingPage.SubmitSearchAsync();
         var checkedBoxes = resultsPage.SelectFilters();
