@@ -33,7 +33,7 @@ jobs:
         enable-AzPSSession: true
 
     - name: Get Appsettings Key Vault Secrets
-    - id: aisearch-key
+      id: aisearch-key
       uses: Azure/get-keyvault-secrets@v1
       with: 
         keyvault: search-prototype-vault
