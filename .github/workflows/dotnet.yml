@@ -14,16 +14,21 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    
     - name: Add nuget package source
       run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DFE-Digital/index.json"
+    
     - name: Restore dependencies
       run: dotnet restore
+    
     - name: Build
       run: dotnet build --no-restore
+    
     - name: Login to Azure
       uses: azure/login@v1
       with:
@@ -38,13 +43,8 @@ jobs:
       with: 
         keyvault: search-prototype-vault
         secrets: 'AzureSearchConnectionOptions--Credentials'
-        
-    - name: Echo the secret
-      run: |
-        echo "My Secret: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}" | sed 's/./&/g'
-        
 
-    - name: Swap appsettings values
+    - name: Swap appsettings Ai Search Creds
       uses: microsoft/variable-substitution@v1
       with: 
         files: '**/appsettings.json'
