@@ -44,7 +44,7 @@ jobs:
       with: 
         files: 'appsettings.json'
       env:
-        AzureSearchConnectionOptions.Credentials: ${{ secrets.AzureSearchConnectionOptions--Credentials }}
+        AzureSearchConnectionOptions.Credentials: 'Some_cred'
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
