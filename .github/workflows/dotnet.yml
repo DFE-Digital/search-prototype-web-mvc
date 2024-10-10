@@ -32,9 +32,9 @@ jobs:
     - name: Login to Azure
       uses: azure/login@v1
       with:
-        client-id: fbc6d4c5-887a-4f53-9193-eecf51f2b111
-        tenant-id: 9c7d9dd3-840c-4b3f-818e-552865082e16
-        subscription-id:  1ca1a2df-f842-48ce-9403-6d9bc4021692 
+        client-id: ${{ secrets.AZURE_LOGIN_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_LOGIN_TENANT_ID }}
+        subscription-id:  ${{ secrets.AZURE_LOGIN_SUBSCRIPTION_ID }} 
         enable-AzPSSession: true
 
     - name: Get Appsettings Key Vault Secrets
