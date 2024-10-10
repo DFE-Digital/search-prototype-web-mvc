@@ -49,7 +49,7 @@ jobs:
       with: 
         files: '**/appsettings.*.json'
       env:
-        AzureSearchConnectionOptions.Credentials: '${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}'
+        AzureSearchConnectionOptions.Credentials: 'PvzypruaY4kICDJda1WqmG8CJ021eUdelOWGiJX6e1AzSeBD7EKA'
 
     - name: Test
       run: dotnet test --verbosity normal
