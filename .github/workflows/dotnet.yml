@@ -38,7 +38,10 @@ jobs:
       with: 
         keyvault: search-prototype-vault
         secrets: 'AzureSearchConnectionOptions--Credentials'
-        echo "The secret value is: ${{ aisearch-key }}"
+        
+    - name: Echo the secret
+      run: |
+        echo "My Secret: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}" | base64
 
     - name: Swap appsettings values
       uses: microsoft/variable-substitution@v1
