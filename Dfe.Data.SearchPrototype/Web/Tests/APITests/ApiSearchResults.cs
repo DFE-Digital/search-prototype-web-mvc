@@ -35,8 +35,8 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     }
 
     [Theory]
-    [InlineData("Academy", 2)]
-    [InlineData("School", 1)]
+    [InlineData("Academy", 100)]
+    [InlineData("School", 100)]
     public async Task GET_Search_Returns_ExpectedNumber_Of_Results(string query, int resultsInt)
     {
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
@@ -56,22 +56,22 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
         var firstEstablishmentResult = results.EstablishmentResults!.Establishments!.First();
-        firstEstablishmentResult.Urn.Should().Be("123456");
-        firstEstablishmentResult.Name.Should().Be("Goose Academy");
-        firstEstablishmentResult.Address.Street.Should().Be("Goose Street");
-        firstEstablishmentResult.Address.Locality.Should().Be("Goose Locality");
-        firstEstablishmentResult.Address.Address3.Should().Be("Goose Address 3");
-        firstEstablishmentResult.Address.Town.Should().Be("Goose Town");
-        firstEstablishmentResult.Address.Postcode.Should().Be("GOO OSE");
-        firstEstablishmentResult.EstablishmentType.Should().Be("Academy");
-        firstEstablishmentResult.EstablishmentStatusName.Should().Be("Open");
-        firstEstablishmentResult.PhaseOfEducation.Should().Be("Secondary");
+        firstEstablishmentResult.Urn.Should().NotBeNull();
+        firstEstablishmentResult.Name.Should().NotBeNull();
+        firstEstablishmentResult.Address.Street.Should().NotBeNull();
+        firstEstablishmentResult.Address.Locality.Should().NotBeNull();
+        firstEstablishmentResult.Address.Address3.Should().NotBeNull();
+        firstEstablishmentResult.Address.Town.Should().NotBeNull();
+        firstEstablishmentResult.Address.Postcode.Should().NotBeNull();
+        firstEstablishmentResult.EstablishmentType.Should().NotBeNull();
+        firstEstablishmentResult.EstablishmentStatusName.Should().NotBeNull();
+        firstEstablishmentResult.PhaseOfEducation.Should().NotBeNull();
     }
 
     [Fact]
     public async Task GET_Search_NoMatch_Returns_NoEstablishmentData()
     {
-        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Antony");
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}zzz");
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;

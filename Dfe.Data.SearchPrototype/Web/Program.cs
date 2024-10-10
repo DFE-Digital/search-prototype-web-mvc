@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
@@ -40,6 +41,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+builder.Configuration.AddAzureKeyVault(
+    new Uri("https://search-prototype-vault.vault.azure.net/"),
+    new DefaultAzureCredential());
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
