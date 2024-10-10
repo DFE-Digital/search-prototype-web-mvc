@@ -47,4 +47,4 @@ jobs:
         AzureSearchConnectionOptions.Credentials: 'Some_cred'
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
