@@ -42,7 +42,7 @@ jobs:
     - name: Swap appsettings values
       uses: microsoft/variable-substitution@v1
       with: 
-        files: '**/appsettings.json'
+        files: '**/appsettings.test.json'
       env:
         AzureSearchConnectionOptions.Credentials: 'Some_cred'
 
