@@ -44,7 +44,7 @@ jobs:
       with: 
         files: 'appsettings.json'
       env:
-        ApiKey: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials}}
-        
+        AzureSearchConnectionOptions.Credentials: ${{ secrets.AzureSearchConnectionOptions--Credentials }}
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
