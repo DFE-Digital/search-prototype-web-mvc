@@ -1,6 +1,5 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
 using AngleSharp.Io;
 using AngleSharp.Io.Network;
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
@@ -139,8 +138,6 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         filtersHeading.Should().NotBeNull();
         filtersHeading!.TextContent.Should().Be("Filters");
 
-        var facetContainer = resultsPage.QuerySelector(HomePage.FiltersContainer.Criteria);
-
         var expectedFacets = useCaseResponse.EstablishmentFacetResults!.Facets;
         foreach (var expectedFacet in expectedFacets)
         {
@@ -158,6 +155,25 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
                 matchedFacet.Should().NotBeNull();
             }
         }
+    }
+
+    [Fact]
+    public async Task Search_ByKeyword_WithSelectedFacets_ShowsFacetsAsSelected()
+    {
+        // arrange
+        var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
+        _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
+            .ReturnsAsync(useCaseResponse);
+
+        // act
+        var document = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
+        // select some filters
+        var checkedBoxes = document.SelectFilters();
+        // submit filtered search
+        IDocument resultsPage = await document.SubmitSearchAsync();
+
+        var resultsPageSelectedFacets = resultsPage.GetFacets().SelectMany(facet => facet.GetCheckBoxes().Where(checkBox => checkBox.IsChecked));
+        resultsPageSelectedFacets.Select(facet => facet.Value).Should().BeEquivalentTo(checkedBoxes.Select(facet => facet.Value));
     }
 
     private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
