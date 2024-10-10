@@ -34,38 +34,6 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
     }
 
     [Fact]
-    public async Task Search_SendsKeywordAndSelectedFiltersToUsecase()
-    {
-        // arrange
-        var searchTerm = "e.g. School name";
-        SearchByKeywordRequest? capturedUsecaseRequest = default;
-
-        var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
-        _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
-            .Callback<SearchByKeywordRequest>((x) => capturedUsecaseRequest = x)
-            .ReturnsAsync(useCaseResponse);
-
-        // act
-        // navigate to results page with search keyword)
-        var document = await _context.OpenAsync($"{homeUri}?searchKeyword={searchTerm}");
-        // select some filters
-        var checkedBoxes = document.SelectFilters();
-        // submit filtered search
-        IDocument resultsPage = await document.SubmitSearchAsync();
-
-        // assert
-        var usecaseSelectedFacets = capturedUsecaseRequest!
-            .FilterRequests!
-            .SelectMany(request => request
-                .FilterValues
-                .Where(filterValue => checkedBoxes.Select(checkbox => checkbox.Value).Contains(filterValue.ToString()))
-                );
-
-        checkedBoxes.Select(element => element.Value).Should().BeEquivalentTo(usecaseSelectedFacets.Select(facet => facet.ToString()));
-        capturedUsecaseRequest!.SearchKeyword.Should().Be(searchTerm);
-    }
-
-    [Fact]
     public async Task Search_WithNoEstablishmentResultsAndNoFacets_ShowsNoResultsText()
     {
         // arrange
@@ -174,6 +142,38 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
 
         var resultsPageSelectedFacets = resultsPage.GetFacets().SelectMany(facet => facet.GetCheckBoxes().Where(checkBox => checkBox.IsChecked));
         resultsPageSelectedFacets.Select(facet => facet.Value).Should().BeEquivalentTo(checkedBoxes.Select(facet => facet.Value));
+    }
+
+    [Fact]
+    public async Task Search_SendsKeywordAndSelectedFiltersToUsecase()
+    {
+        // arrange
+        var searchTerm = "e.g. School name";
+        SearchByKeywordRequest? capturedUsecaseRequest = default;
+
+        var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
+        _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
+            .Callback<SearchByKeywordRequest>((x) => capturedUsecaseRequest = x)
+            .ReturnsAsync(useCaseResponse);
+
+        // act
+        // navigate to results page with search keyword)
+        var document = await _context.OpenAsync($"{homeUri}?searchKeyword={searchTerm}");
+        // select some filters
+        var checkedBoxes = document.SelectFilters();
+        // submit filtered search
+        IDocument resultsPage = await document.SubmitSearchAsync();
+
+        // assert
+        var usecaseSelectedFacets = capturedUsecaseRequest!
+            .FilterRequests!
+            .SelectMany(request => request
+                .FilterValues
+                .Where(filterValue => checkedBoxes.Select(checkbox => checkbox.Value).Contains(filterValue.ToString()))
+                );
+
+        checkedBoxes.Select(element => element.Value).Should().BeEquivalentTo(usecaseSelectedFacets.Select(facet => facet.ToString()));
+        capturedUsecaseRequest!.SearchKeyword.Should().Be(searchTerm);
     }
 
     private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
