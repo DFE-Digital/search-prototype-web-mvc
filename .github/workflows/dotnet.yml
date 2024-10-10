@@ -45,7 +45,7 @@ jobs:
       with: 
         files: '**/appsettings.*.json'
       env:
-        AzureSearchConnectionOptions.Credentials: '${{ aisearch-key }}'
+        AzureSearchConnectionOptions.Credentials: ''
 
     - name: Test
       run: dotnet test --verbosity normal
