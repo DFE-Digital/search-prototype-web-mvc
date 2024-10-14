@@ -11,7 +11,7 @@ public static class HtmlHelpers
     public static async Task<IHtmlDocument> GetDocumentAsync(this HttpResponseMessage response)
     {
         var content = await response.Content.ReadAsStringAsync();
-        var config = Configuration.Default;
+        var config = Configuration.Default.WithDefaultLoader();
         var document = await
             BrowsingContext.New(config)
                     .OpenAsync(ResponseFactory, CancellationToken.None);
