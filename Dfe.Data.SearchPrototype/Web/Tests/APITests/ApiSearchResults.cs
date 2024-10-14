@@ -78,7 +78,7 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentFacetsProperty>(responseBody)!;
 
-        var facets = results.EstablishmentFacets!.Facets!.Count();
+        var facets = results.EstablishmentFacetResults!.Facets!.Count();
         facets.Should().Be(resultsInt);
         //jsonString.EstablishmentFacets!.Name.Should().HaveCount(resultsInt);
     }

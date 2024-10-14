@@ -21,17 +21,18 @@ public sealed class ApiHelpers
     public class EstablishmentFacetsProperty
     {
         [JsonPropertyName("establishmentFacetResults")]
-        public EstablishmentFacets? EstablishmentFacets { get; set; }
+        public EstablishmentFacets EstablishmentFacetResults { get; set; }
     }
 
     public class EstablishmentFacets
     {
         [JsonPropertyName("facets")]
-        public IEnumerable<EstablishmentFacet>? Facets { get; set; }
+        public List<EstablishmentFacet> Facets { get; set; }
     }
 
     public class EstablishmentFacet
     {
-        public string Name { get; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
     }
 }
