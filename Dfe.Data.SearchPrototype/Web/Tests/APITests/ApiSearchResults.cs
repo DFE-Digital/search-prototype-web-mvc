@@ -69,9 +69,9 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     }
 
     [Theory]
-    [InlineData("Academy", 2)]
-    [InlineData("School", 2)]
-    public async Task GET_Search_Returns_Facets(string query, int resultsInt)
+    [InlineData("Catholic")]
+    [InlineData("Junior")]
+    public async Task GET_Search_Returns_Facets(string query)
     {
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
 
@@ -79,14 +79,21 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var results = JsonConvert.DeserializeObject<EstablishmentFacetsProperty>(responseBody)!;
 
         var facets = results.EstablishmentFacetResults!.Facets!.Count();
-        facets.Should().Be(resultsInt);
-        //jsonString.EstablishmentFacets!.Name.Should().HaveCount(resultsInt);
+        facets.Should().Be(2);
+
+        var establishmentStatusName = results.EstablishmentFacetResults!.Facets.First();
+        establishmentStatusName.Name.Should().Be("ESTABLISHMENTSTATUSNAME");
+        
+        var phaseOfEducaion = results.EstablishmentFacetResults!.Facets.Last();
+        phaseOfEducaion.Name.Should().Be("PHASEOFEDUCATION");
     }
 
-    [Fact]
-    public async Task GET_Search_NoMatch_Returns_NoEstablishmentData()
+    [Theory]
+    [InlineData("zzz")]
+    [InlineData("123")]
+    public async Task GET_Search_NoMatch_Returns_NoEstablishmentData(string query)
     {
-        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}zzz");
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
