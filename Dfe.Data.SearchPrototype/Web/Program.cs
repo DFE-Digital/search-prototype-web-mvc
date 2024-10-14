@@ -35,17 +35,26 @@ builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<Fi
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment() && app.Environment.IsEnvironment("Local"))
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-builder.Configuration.AddAzureKeyVault(
-    new Uri("https://search-prototype-vault.vault.azure.net/"),
-    new DefaultAzureCredential());
+if (app.Environment.IsDevelopment())
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri("https://search-prototype-vault.vault.azure.net/"),
+        new DefaultAzureCredential());
+}
 
+if (app.Environment.IsEnvironment("Local"))
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
+
+app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
