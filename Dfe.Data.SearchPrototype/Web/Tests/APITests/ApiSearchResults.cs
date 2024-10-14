@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Dfe.Data.SearchPrototype.WebApi.Tests.APITests;
 
@@ -42,9 +43,9 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        var jsonString = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
+        var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
-        jsonString.EstablishmentResults!.Establishments.Should().HaveCount(resultsInt);
+        results.EstablishmentResults!.Establishments.Should().HaveCount(resultsInt);
     }
 
     [Fact]
@@ -69,6 +70,26 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     }
 
     [Theory]
+    [InlineData("St")]
+    [InlineData("Jos")]
+    [InlineData("Cath")]
+    public async Task GET_Search_ByPartialName_ReturnsResults(string query)
+    {
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
+
+        results.EstablishmentResults!.Establishments.Should().HaveCountGreaterThan(1);
+
+        var establishmentResults = results.EstablishmentResults!.Establishments!;
+        foreach (var headings in establishmentResults!)
+        {
+            establishmentResults!.First().Name.Should().Contain(query);
+        }
+    }
+
+    [Theory]
     [InlineData("Catholic")]
     [InlineData("Junior")]
     public async Task GET_Search_Returns_Facets(string query)
@@ -81,10 +102,10 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var facets = results.EstablishmentFacetResults!.Facets!.Count();
         facets.Should().Be(2);
 
-        var establishmentStatusName = results.EstablishmentFacetResults!.Facets.First();
+        var establishmentStatusName = results.EstablishmentFacetResults!.Facets!.First();
         establishmentStatusName.Name.Should().Be("ESTABLISHMENTSTATUSNAME");
         
-        var phaseOfEducaion = results.EstablishmentFacetResults!.Facets.Last();
+        var phaseOfEducaion = results.EstablishmentFacetResults!.Facets!.Last();
         phaseOfEducaion.Name.Should().Be("PHASEOFEDUCATION");
     }
 
