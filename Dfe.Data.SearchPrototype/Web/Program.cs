@@ -45,7 +45,7 @@ if (!app.Environment.IsDevelopment() && app.Environment.IsEnvironment("Local"))
 if (app.Environment.IsDevelopment())
 {
     builder.Configuration.AddAzureKeyVault(
-        new Uri("https://search-prototype-vault.vault.azure.net/"),
+        new Uri(app.Configuration.GetValue<string>("KeyVaultUri")!),
         new DefaultAzureCredential());
 }
 
