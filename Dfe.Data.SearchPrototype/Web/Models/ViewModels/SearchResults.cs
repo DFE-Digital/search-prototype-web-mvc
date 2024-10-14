@@ -5,6 +5,12 @@
 /// </summary>
 public class SearchResults
 {
+    //private IFacetNameToDisplayNameProvider _niceNamesProvider;
+    //public SearchResults(IFacetNameToDisplayNameProvider niceNamesProvider)
+    //{
+    //    _niceNamesProvider = niceNamesProvider;
+    //}
+
     /// <summary>
     /// View model representation of the available facets.
     /// </summary>
@@ -25,4 +31,9 @@ public class SearchResults
     /// Property determining the number of search results.
     /// </summary>
     public int SearchResultsCount => SearchItems?.Count ?? 0;
+
+    //public string FacetNiceName(Facet.Name)
+    //{
+    //    return _niceNamesProvider.NiceName(Facet.Name);
+    //}
 }
