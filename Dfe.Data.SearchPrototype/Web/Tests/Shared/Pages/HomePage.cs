@@ -19,7 +19,7 @@ public sealed class HomePage : BasePage
     public static By SearchForm => By.CssSelector("#search-establishments-form");
     public static By SearchButton => By.CssSelector("#search-establishments-form button");
     public static By SearchResultsNumber => By.CssSelector("#search-results-count");
-    public static By SearchResultLinks => By.CssSelector("ul li h4");
+    public static By SearchResultsHeadings => By.CssSelector("ul li h4");
     public static By SearchNoResultText => By.CssSelector("#no-results");
     public static By SearchResultsContainer => By.CssSelector("#results");
     public static By FiltersContainer => By.CssSelector("#filters-container");

@@ -85,7 +85,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
             searchResultsNumber.Should().Contain("Result");
 
-            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().BeLessThan(100);
+            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().BeLessThan(100);
         }
 
         [Fact]
@@ -108,10 +108,48 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
             resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Results");
-            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(100);
+            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().Be(100);
+        }
+        
+        [Theory]
+        [InlineData("St")]
+        [InlineData("Jos")]
+        [InlineData("Cath")]
+        public async Task Search_ByPartialName_ReturnsResults(string term)
+        {
+            var response = await _client.GetAsync(uri);
+            var document = await HtmlHelpers.GetDocumentAsync(response);
+
+            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
+            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+
+            var formResponse = await _client.SendAsync(
+                formElement,
+                formButton,
+                new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = term
+                });
+
+            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+
+            var resultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
+            resultsNumber.Should().Contain("Results");
+
+            var resultsHeadingsText = resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria);
+            resultsHeadingsText.Should().HaveCountGreaterThan(1);
+
+            //var resultsHeadings = resultsPage.QuerySelector(HomePage.SearchResultsHeadings.Criteria);
+            var resultsHeadings = resultsPage.QuerySelector(HomePage.SearchResultsHeadings.Criteria);
+            foreach( var headings in resultsHeadings!.Text())
+            {
+                resultsHeadings!.TextContent.Should().ContainAny(term);
+            }
+            
         }
 
         [Theory]
+        [InlineData("abcd")]
         [InlineData("zzz")]
         public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
         {

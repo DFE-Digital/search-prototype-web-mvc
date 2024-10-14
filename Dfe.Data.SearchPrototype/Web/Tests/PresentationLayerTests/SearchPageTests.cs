@@ -74,7 +74,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Be("1 Result");
         resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
+            .GetMultipleElements(HomePage.SearchResultsHeadings.Criteria)
             .Count().Should().Be(1);
     }
 
@@ -96,7 +96,7 @@ public class SearchPageTests : IClassFixture<WebApplicationFactory<Dfe.Data.Sear
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Contain("Results");
         resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
+            .GetMultipleElements(HomePage.SearchResultsHeadings.Criteria)
             .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 

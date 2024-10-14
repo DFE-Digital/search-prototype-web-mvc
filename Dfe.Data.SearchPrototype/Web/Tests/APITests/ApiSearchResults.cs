@@ -68,6 +68,21 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         firstEstablishmentResult.PhaseOfEducation.Should().NotBeNull();
     }
 
+    [Theory]
+    [InlineData("Academy", 2)]
+    [InlineData("School", 2)]
+    public async Task GET_Search_Returns_Facets(string query, int resultsInt)
+    {
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var results = JsonConvert.DeserializeObject<EstablishmentFacetsProperty>(responseBody)!;
+
+        var facets = results.EstablishmentFacets!.Facets!.Count();
+        facets.Should().Be(resultsInt);
+        //jsonString.EstablishmentFacets!.Name.Should().HaveCount(resultsInt);
+    }
+
     [Fact]
     public async Task GET_Search_NoMatch_Returns_NoEstablishmentData()
     {
