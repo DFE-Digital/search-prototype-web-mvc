@@ -1,7 +1,9 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
+using Dfe.Data.SearchPrototype.Web.Services;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+using Moq;
 using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers;
@@ -10,6 +12,7 @@ public class EstablishmentResultsToEstablishmentsViewModelMapperTests
 {
     private readonly IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper
         = new EstablishmentResultsToEstablishmentsViewModelMapper();
+    private Mock<INameKeyToDisplayNameProvider> _displayNameProviderMock = new Mock<INameKeyToDisplayNameProvider>();
 
     [Fact]
     public void Mapper_WithEstablishmentResults_ReturnsEstablishmentResultsInViewModel()
@@ -18,7 +21,7 @@ public class EstablishmentResultsToEstablishmentsViewModelMapperTests
         var response = SearchByKeywordResponseTestDouble.Create();
 
         // act.
-        Web.Models.ViewModels.SearchResults viewModelResults = new()
+        Web.Models.ViewModels.SearchResults viewModelResults = new(_displayNameProviderMock.Object)
         {
             SearchItems =
                 _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults)
@@ -47,7 +50,7 @@ public class EstablishmentResultsToEstablishmentsViewModelMapperTests
         var response = SearchByKeywordResponseTestDouble.CreateWithNoResults();
 
         // act.
-        var viewModelResults = new Web.Models.ViewModels.SearchResults()
+        var viewModelResults = new Web.Models.ViewModels.SearchResults(_displayNameProviderMock.Object)
         {
             SearchItems =
                 _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults)

@@ -6,11 +6,14 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Xunit;
 using SearchResults = Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Services;
+using Moq;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 {
     public sealed class FacetsAndSelectedFacetsToFacetsViewModelMapperTests
     {
+        private Mock<INameKeyToDisplayNameProvider> _displayNameProviderMock = new Mock<INameKeyToDisplayNameProvider>();
         private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper
             = new FacetsAndSelectedFacetsToFacetsViewModelMapper();
 
@@ -21,7 +24,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             var response = SearchByKeywordResponseTestDouble.Create();
 
             // act.
-            SearchResults viewModelResults = new()
+            SearchResults viewModelResults = new(_displayNameProviderMock.Object)
             {
                 Facets =
                     _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(
@@ -50,7 +53,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             SearchByKeywordResponse response = SearchByKeywordResponseTestDouble.CreateWithNoResults();
 
             // act.
-            SearchResults viewModelResults = new()
+            SearchResults viewModelResults = new(_displayNameProviderMock.Object)
             {
                 Facets =
                     _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(
@@ -68,7 +71,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             SearchByKeywordResponse response = SearchByKeywordResponseTestDouble.CreateWithEmptyList();
 
             // act.
-            SearchResults viewModelResults = new()
+            SearchResults viewModelResults = new(_displayNameProviderMock.Object)
             {
                 Facets =
                     _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(
@@ -98,7 +101,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             };
 
             // act.
-            SearchResults viewModelResults = new()
+            SearchResults viewModelResults = new(_displayNameProviderMock.Object)
             {
                 Facets =
                     _facetsAndSelectedFacetsToFacetsViewModelMapper.MapFrom(

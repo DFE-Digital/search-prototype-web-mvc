@@ -14,12 +14,14 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
+using Dfe.Data.SearchPrototype.Web.Services;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests;
 
 public class HomeControllerTests
 {
     private readonly Mock<ILogger<HomeController>> _logger = new();
+    private INameKeyToDisplayNameProvider _facetNameToDisplayNameProvider = new Mock<INameKeyToDisplayNameProvider>().Object;
 
     [Fact]
     public async Task Index_WithSearchTerm_ReturnsModel()
@@ -39,7 +41,8 @@ public class HomeControllerTests
             new(_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    _facetNameToDisplayNameProvider
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -73,7 +76,8 @@ public class HomeControllerTests
             new(_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    _facetNameToDisplayNameProvider
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -110,7 +114,8 @@ public class HomeControllerTests
             new HomeController(_logger.Object, useCase,
             new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    _facetNameToDisplayNameProvider
             ),
             new SelectedFacetsToFilterRequestsMapper());
 
@@ -155,7 +160,8 @@ public class HomeControllerTests
             new (_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    _facetNameToDisplayNameProvider
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -204,7 +210,8 @@ public class HomeControllerTests
             new HomeController(_logger.Object, useCase,
             new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    _facetNameToDisplayNameProvider
                 ),
             new SelectedFacetsToFilterRequestsMapper());
 

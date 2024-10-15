@@ -27,7 +27,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             _searchResultsFactory =
                 new SearchResultsFactory(
                     _establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    displayNamesProviderMock
                     );
         }
 

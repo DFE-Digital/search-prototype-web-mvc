@@ -30,12 +30,12 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// </param>
         public SearchResultsFactory(
             IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper
-            /*INameKeyToDisplayNameProvider displayNamesProvider*/)
+            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper,
+            INameKeyToDisplayNameProvider displayNamesProvider)
         {
             _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
             _facetsAndSelectedFacetsToFacetsViewModelMapper = facetsAndSelectedFacetsToFacetsViewModelMapper;
-            //_displayNamesProvider = displayNamesProvider;
+            _displayNamesProvider = displayNamesProvider;
         }
 
         /// <summary>
@@ -62,7 +62,8 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
             EstablishmentResults? establishmentResults,
             FacetsAndSelectedFacets facetsAndSelectedFacets) =>
                 (establishmentResults?.Establishments.Count > 0) ?
-                   new(){
+                   new(_displayNamesProvider)
+                   {
                         SearchItems =
                             _establishmentResultsToEstablishmentsViewModelMapper
                                 .MapFrom(establishmentResults),
@@ -70,6 +71,6 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
                             _facetsAndSelectedFacetsToFacetsViewModelMapper
                                 .MapFrom(facetsAndSelectedFacets)
                    }
-                   : new(); // default.
+                   : new(_displayNamesProvider); // default.
     }
 }

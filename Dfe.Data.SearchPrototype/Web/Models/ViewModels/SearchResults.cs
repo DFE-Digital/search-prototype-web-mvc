@@ -9,10 +9,10 @@ public class SearchResults
 {
     private INameKeyToDisplayNameProvider _displayNamesProvider;
 
-    //public SearchResults(INameKeyToDisplayNameProvider displayNamesProvider)
-    //{
-    //    _displayNamesProvider = displayNamesProvider;
-    //}
+    public SearchResults(INameKeyToDisplayNameProvider displayNamesProvider)
+    {
+        _displayNamesProvider = displayNamesProvider;
+    }
 
     /// <summary>
     /// View model representation of the available facets.

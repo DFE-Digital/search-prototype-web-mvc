@@ -7,6 +7,7 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Services;
 using GovUk.Frontend.AspNetCore;
 using Models = Dfe.Data.SearchPrototype.Web.Models;
 
@@ -27,6 +28,7 @@ builder.Services.AddScoped<ISearchResultsFactory, SearchResultsFactory>();
 builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?>, EstablishmentResultsToEstablishmentsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, FacetsAndSelectedFacetsToFacetsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>?>, SelectedFacetsToFilterRequestsMapper>();
+builder.Services.AddSingleton<INameKeyToDisplayNameProvider,FacetNameToDisplayNameProvider>();
 //
 //
 // End of IOC container registrations

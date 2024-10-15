@@ -6,6 +6,7 @@ using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
+using Dfe.Data.SearchPrototype.Web.Services;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using FluentAssertions;
@@ -18,12 +19,16 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Controllers;
 
 public class HomeControllerTests
 {
+    private Mock<INameKeyToDisplayNameProvider> _displayNameProviderMock = new Mock<INameKeyToDisplayNameProvider>();
+
     [Fact]
     public async Task Index_SearchKeyword_CallUseCase()
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
 
-        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(
+            new Web.Models.ViewModels.SearchResults(
+                _displayNameProviderMock.Object));
 
         Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -52,7 +57,9 @@ public class HomeControllerTests
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
 
-        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(
+            new Web.Models.ViewModels.SearchResults(
+                _displayNameProviderMock.Object));
 
         Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -85,7 +92,9 @@ public class HomeControllerTests
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
-        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(
+            new Web.Models.ViewModels.SearchResults(
+                _displayNameProviderMock.Object));
 
         Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
