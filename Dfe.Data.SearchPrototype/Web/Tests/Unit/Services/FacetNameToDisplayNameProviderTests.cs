@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using Dfe.Data.SearchPrototype.Web.Services;
+using FluentAssertions;
+using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Services;
 
@@ -8,7 +10,7 @@ public class FacetNameToDisplayNameProviderTests
     [InlineData("FACET1", "nice name 1")]
     [InlineData("FACET2", "nice name 2")]
     [InlineData("somethingelse", "somethingelse")]
-    public void NiceName_ReturnsNiceName(string facetName, string expected)
+    public void GetDisplayName_ReturnsDisplayName(string facetName, string expected)
     {
         // arrange
         Dictionary<string, string> stubNiceNameDictionary = new Dictionary<string, string>()
@@ -20,9 +22,9 @@ public class FacetNameToDisplayNameProviderTests
         var provider = new FacetNameToDisplayNameProvider(stubNiceNameDictionary);
 
         // act
-        var result = provider.NiceName(facetName);
+        var result = provider.GetDisplayName(facetName);
 
         // assert
-        result.Should.Be(expected);
+        result.Should().Be(expected);
     }
 }

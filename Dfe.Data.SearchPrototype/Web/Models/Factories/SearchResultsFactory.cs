@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Services;
 
 namespace Dfe.Data.SearchPrototype.Web.Models.Factories
 {
@@ -14,6 +15,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
     {
         private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
         private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
+        private INameKeyToDisplayNameProvider _displayNamesProvider;
 
         /// <summary>
         /// The following dependencies are mappers which facilitate the transformation from the use-case response to the required view model.
@@ -28,10 +30,12 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// </param>
         public SearchResultsFactory(
             IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper)
+            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper
+            /*INameKeyToDisplayNameProvider displayNamesProvider*/)
         {
             _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
             _facetsAndSelectedFacetsToFacetsViewModelMapper = facetsAndSelectedFacetsToFacetsViewModelMapper;
+            //_displayNamesProvider = displayNamesProvider;
         }
 
         /// <summary>

@@ -1,14 +1,17 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+﻿using Dfe.Data.SearchPrototype.Web.Services;
+
+namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 /// <summary>
 /// A view model representation of search results defining view logic predicated on the status of the results.
 /// </summary>
 public class SearchResults
 {
-    //private IFacetNameToDisplayNameProvider _niceNamesProvider;
-    //public SearchResults(IFacetNameToDisplayNameProvider niceNamesProvider)
+    private INameKeyToDisplayNameProvider _displayNamesProvider;
+
+    //public SearchResults(INameKeyToDisplayNameProvider displayNamesProvider)
     //{
-    //    _niceNamesProvider = niceNamesProvider;
+    //    _displayNamesProvider = displayNamesProvider;
     //}
 
     /// <summary>
@@ -32,8 +35,8 @@ public class SearchResults
     /// </summary>
     public int SearchResultsCount => SearchItems?.Count ?? 0;
 
-    //public string FacetNiceName(Facet.Name)
-    //{
-    //    return _niceNamesProvider.NiceName(Facet.Name);
-    //}
+    public string DisplayNameForFacet(Facet facet)
+    {
+        return _displayNamesProvider.GetDisplayName(facet.Name);
+    }
 }
