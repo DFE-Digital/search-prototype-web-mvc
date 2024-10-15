@@ -1,4 +1,6 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models;
+﻿using System.Diagnostics.Eventing.Reader;
+
+namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
 /// The search requests defining model bound view response logic predicated on the status of user input.
@@ -14,15 +16,16 @@ public class SearchRequest
     /// The dictionary of selected facets (grouped by facet name key) provisioned
     /// by binding to user input.
     /// </summary>
-    public Dictionary<string, List<string>>? SelectedFacets { get; set; }
+    public Dictionary<string, List<string>>? SelectedFacets
+    {
+        get
+        {
+            if (ClearFilters) _selectedFacets = null;
+            return _selectedFacets;
+        }
+        set { _selectedFacets = value; }
+    }
 
-    /// <summary>
-    /// Conditionally checks if any facet values have been selected.
-    /// </summary>
-    public bool HasSelectedFacets => SelectedFacets?.Count > 0;
-
-    /// <summary>
-    /// Conditionally checks if a search keyword has been submitted.
-    /// </summary>
-    public bool HasSearchKeyWord => !string.IsNullOrWhiteSpace(SearchKeyword);
+    private Dictionary<string, List<string>>? _selectedFacets;
+    public bool ClearFilters { get; set; }
 }
