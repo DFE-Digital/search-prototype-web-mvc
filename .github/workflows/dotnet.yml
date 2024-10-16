@@ -43,16 +43,15 @@ jobs:
       with: 
         keyvault: search-prototype-vault
         secrets: 'AzureSearchConnectionOptions--Credentials'
-    
-    - name: check creds
-      run: echo "${{ secrets.AZURE_SEARCH_CREDS }}"
-      
+
     - name: Swap appsettings Ai Search Creds
       uses: microsoft/variable-substitution@v1
       with: 
-        files: '**/appsettings.json'
+        files: '**/appsettings.json'#
+        tfvars: |
+          test=${{secrets.AZURE_SEARCH_CREDS}}
       env:
-        AzureSearchConnectionOptions.Credentials: ${{ secrets.AZURE_SEARCH_CREDS }}
+        AzureSearchConnectionOptions.Credentials: test
 
     - name: Test
       run: dotnet test --verbosity normal
