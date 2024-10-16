@@ -1,4 +1,3 @@
-using Azure.Identity;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
@@ -35,23 +34,11 @@ builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<Fi
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment() && app.Environment.IsEnvironment("Local"))
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}
-
-if (app.Environment.IsDevelopment())
-{
-    builder.Configuration.AddAzureKeyVault(
-        new Uri(app.Configuration.GetValue<string>("KeyVaultUri")!),
-        new DefaultAzureCredential());
-}
-
-if (app.Environment.IsEnvironment("Local"))
-{
-    builder.Configuration.AddUserSecrets<Program>();
 }
 
 app.UseDeveloperExceptionPage();
