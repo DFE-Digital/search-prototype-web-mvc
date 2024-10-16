@@ -37,7 +37,7 @@ public class EstablishmentViewModelTests
     [InlineData("", null, null, null, null, "")]
     [InlineData(null, null, null, null, null, "")]
     public void AddressAsString_NullAddressValues_ReturnsFormattedString(
-         string street, string locality, string address3, string town, string postcode, string expectedString)
+         string? street, string? locality, string? address3, string? town, string? postcode, string? expectedString)
     {
         // arrange
         Establishment establishmentViewModel = new()

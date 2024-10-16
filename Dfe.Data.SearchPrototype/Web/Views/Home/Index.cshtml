@@ -1,6 +1,7 @@
 ﻿@using Dfe.Data.SearchPrototype.Web.Models.ViewModels
+@using Microsoft.AspNetCore.Mvc.Localization
 @model SearchResults
-
+@inject IViewLocalizer Localizer;
 @{
     ViewData["Title"] = "Search Results";
     var searchKeyWord = ViewBag.SearchQuery as string;
@@ -38,7 +39,7 @@
                         <govuk-checkboxes name="selectedFacets[@facet.Name]">
                             <govuk-checkboxes-fieldset id="FacetName-@facet.Name">
                                 <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
-                                    @facet.Name
+                                    @Localizer[facet.Name]
                                 </govuk-checkboxes-fieldset-legend>
 
                                 @foreach (var facetValue in facet.Values)
