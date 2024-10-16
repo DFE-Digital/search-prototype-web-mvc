@@ -34,6 +34,10 @@ Use the following command, replacing `[USERNAME] with your GitHub username, and 
 
 `dotnet nuget add source --username "[USERNAME]" --password "[PAT-TOKEN]" --store-password-in-clear-text --name DfE "https://nuget.pkg.github.com/DFE-Digital/index.json"`
 
+Later, to update your stored PAT (if you've had to change it in GitHub)
+
+`dotnet nuget update source DfE --username "[USERNAME]" --password "[PAT-TOKEN]" --store-password-in-clear-text`
+
 > Alternatively you may add a package source directly in Visual Studio.Once you have generated a PAT token you can add a new NuGet Package Source to visual studio. You may be prompted to sign in, if you are then enter your GitHub username and instead of the password enter the PAT token you generated.
 
 ---
