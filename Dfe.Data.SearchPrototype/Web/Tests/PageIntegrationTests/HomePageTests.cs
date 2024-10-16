@@ -139,7 +139,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var resultsHeadingsText = resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria);
             resultsHeadingsText.Should().HaveCountGreaterThan(1);
 
-            //var resultsHeadings = resultsPage.QuerySelector(HomePage.SearchResultsHeadings.Criteria);
             var resultsHeadings = resultsPage.QuerySelector(HomePage.SearchResultsHeadings.Criteria);
             foreach( var headings in resultsHeadings!.Text())
             {
@@ -228,7 +227,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             middleDeemedPrimaryLabel.Should().StartWith("Middle deemed primary");
 
             var establishmentStatusName = document.GetElementText(HomePage.EstablishmentStatusNameHeading.Criteria);
-            establishmentStatusName.Should().Be("Establishment status name");
+            establishmentStatusName.Should().Be("Establishment status");
 
             var openInput = document.GetMultipleElements(HomePage.OpenFilterInput.Criteria);
             openInput.Should().HaveCount(1);
