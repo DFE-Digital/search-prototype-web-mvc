@@ -12,6 +12,7 @@ permissions: write-all
 jobs:
   build:
     runs-on: windows-latest
+    environment: staging
     steps:
     - uses: actions/checkout@v4
     
@@ -47,9 +48,9 @@ jobs:
     - name: Swap appsettings Ai Search Creds
       uses: microsoft/variable-substitution@v1
       with: 
-        files: '**/appsettings.json'#
+        files: '**/appsettings.json'
       env:
-        AzureSearchConnectionOptions.Credentials: ${( secrets.AZURE_SEARCH_CRED )}
+        AzureSearchConnectionOptions.Credentials: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}
 
     - name: Test
       run: dotnet test --verbosity normal
