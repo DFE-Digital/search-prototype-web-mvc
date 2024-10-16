@@ -6,9 +6,8 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 using Xunit.Abstractions;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
 {
     public class HomePageTests : IClassFixture<PageWebApplicationFactory<Program>>
     {
@@ -32,7 +31,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         {
             var response = await _client.GetAsync(uri);
 
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             document.GetElementText(HomePage.Heading.Criteria).Should().Be("Search prototype");
         }
@@ -42,7 +41,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         {
             var response = await _client.GetAsync(uri);
 
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             document.GetElementText(HomePage.HomeLink.Criteria).Should().Be("Home");
         }
@@ -52,7 +51,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         {
             var response = await _client.GetAsync(uri);
 
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             document.GetElementText(HomePage.SearchHeading.Criteria).Should().Be("Search");
 
@@ -67,7 +66,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         public async Task Search_ByName_Returns_LessThan100_Results()
         {
             var response = await _client.GetAsync(uri);
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
             var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
@@ -80,7 +79,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
                     ["searchKeyWord"] = "One"
                 });
 
-            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+            var resultsPage = await formResponse.GetDocumentAsync();
 
             var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
             searchResultsNumber.Should().Contain("Result");
@@ -92,7 +91,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         public async Task Search_ByName_ReturnsMultipleResults()
         {
             var response = await _client.GetAsync(uri);
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
             var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
@@ -105,12 +104,12 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
                     ["searchKeyWord"] = "Academy"
                 });
 
-            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+            var resultsPage = await formResponse.GetDocumentAsync();
 
             resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Results");
             resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().Be(100);
         }
-        
+
         [Theory]
         [InlineData("St")]
         [InlineData("Jos")]
@@ -118,7 +117,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         public async Task Search_ByPartialName_ReturnsResults(string term)
         {
             var response = await _client.GetAsync(uri);
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
             var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
@@ -131,7 +130,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
                     ["searchKeyWord"] = term
                 });
 
-            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+            var resultsPage = await formResponse.GetDocumentAsync();
 
             var resultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
             resultsNumber.Should().Contain("Results");
@@ -140,11 +139,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             resultsHeadingsText.Should().HaveCountGreaterThan(1);
 
             var resultsHeadings = resultsPage.QuerySelector(HomePage.SearchResultsHeadings.Criteria);
-            foreach( var headings in resultsHeadings!.Text())
+            foreach (var headings in resultsHeadings!.Text())
             {
                 resultsHeadings!.TextContent.Should().ContainAny(term);
             }
-            
+
         }
 
         [Theory]
@@ -153,7 +152,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
         {
             var response = await _client.GetAsync(uri);
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
             var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
@@ -166,7 +165,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
                     ["searchKeyWord"] = searchTerm
                 });
 
-            var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+            var resultsPage = await formResponse.GetDocumentAsync();
 
             var noResultText = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
             noResultText.Should().Contain("Sorry no results found please amend your search criteria");
@@ -176,7 +175,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         public async Task Filters_AreDisplayed()
         {
             var response = await _client.GetAsync(uri + "/?searchKeyWord=Academy");
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            var document = await response.GetDocumentAsync();
 
             var applyFiltersButton = document.GetElementText(HomePage.ApplyFiltersButton.Criteria);
             applyFiltersButton.Should().Be("Apply filters");
@@ -185,11 +184,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             phaseOfEducation.Should().Be("Phase of education");
 
             var primaryInput = document.GetMultipleElements(HomePage.PrimaryFilterInput.Criteria);
-            primaryInput.Should().HaveCount(1); 
-            
+            primaryInput.Should().HaveCount(1);
+
             var primaryLabel = document.GetElementText(HomePage.PrimaryFilterLabel.Criteria);
-            primaryLabel.Should().StartWith("Primary"); 
-            
+            primaryLabel.Should().StartWith("Primary");
+
             var secondaryInput = document.GetMultipleElements(HomePage.SecondaryFilterInput.Criteria);
             secondaryInput.Should().HaveCount(1);
 
