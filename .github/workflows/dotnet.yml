@@ -43,7 +43,10 @@ jobs:
       with: 
         keyvault: search-prototype-vault
         secrets: 'AzureSearchConnectionOptions--Credentials'
-
+    
+    - name: check creds
+      run: echo "${{ secrets.AZURE_SEARCH_CREDS }}"
+      
     - name: Swap appsettings Ai Search Creds
       uses: microsoft/variable-substitution@v1
       with: 
