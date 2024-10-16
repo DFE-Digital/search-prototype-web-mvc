@@ -13,7 +13,8 @@ using Models = Dfe.Data.SearchPrototype.Web.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(options => { options.ResourcesPath = "Resources"; });
 builder.Services.AddGovUkFrontend();
 
 // Start of IOC container registrations
