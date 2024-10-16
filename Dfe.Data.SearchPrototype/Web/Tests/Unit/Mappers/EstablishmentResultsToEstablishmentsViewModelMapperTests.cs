@@ -3,12 +3,13 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Xunit;
+using ViewModels = Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers;
 
 public class EstablishmentResultsToEstablishmentsViewModelMapperTests
 {
-    private readonly IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper
+    private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper
         = new EstablishmentResultsToEstablishmentsViewModelMapper();
 
     [Fact]
@@ -18,7 +19,7 @@ public class EstablishmentResultsToEstablishmentsViewModelMapperTests
         var response = SearchByKeywordResponseTestDouble.Create();
 
         // act.
-        Web.Models.ViewModels.SearchResults viewModelResults = new()
+        ViewModels.SearchResults viewModelResults = new()
         {
             SearchItems =
                 _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults)
@@ -47,7 +48,7 @@ public class EstablishmentResultsToEstablishmentsViewModelMapperTests
         var response = SearchByKeywordResponseTestDouble.CreateWithNoResults();
 
         // act.
-        var viewModelResults = new Web.Models.ViewModels.SearchResults()
+        var viewModelResults = new ViewModels.SearchResults()
         {
             SearchItems =
                 _establishmentResultsToEstablishmentsViewModelMapper.MapFrom(response.EstablishmentResults)

@@ -1,14 +1,15 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Moq;
+using ViewModels = Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
 {
     public static class EstablishmentResultsToEstablishmentsViewModelMapperTestDouble
     {
-        public static Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> MockFor(List<Web.Models.ViewModels.Establishment>? viewModel)
+        public static Mock<IMapper<EstablishmentResults?, List<ViewModels.Establishment>?>> MockFor(List<ViewModels.Establishment>? viewModel)
         {
-            Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockMapper = DefaultMock();
+            Mock<IMapper<EstablishmentResults?, List<ViewModels.Establishment>?>> mockMapper = DefaultMock();
 
             mockMapper.Setup(mapper =>
                 mapper.MapFrom(It.IsAny<EstablishmentResults?>())).Returns(viewModel);
@@ -16,6 +17,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
             return mockMapper;
         }
 
-        public static Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> DefaultMock() => new();
+        public static Mock<IMapper<EstablishmentResults?, List<ViewModels.Establishment>?>> DefaultMock() => new();
     }
 }
