@@ -49,9 +49,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync(homeUri);
-        landingPage.TypeIntoSearchBox("search terms");
-        var resultsPage = await landingPage.SubmitSearchAsync();
+        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
@@ -70,9 +68,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync(homeUri);
-        landingPage.TypeIntoSearchBox("search terms");
-        var resultsPage = await landingPage.SubmitSearchAsync();
+        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
@@ -91,9 +87,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync(homeUri);
-        landingPage.TypeIntoSearchBox("search terms");
-        var resultsPage = await landingPage.SubmitSearchAsync();
+        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
 
         // assert
         var filtersHeading = resultsPage.QuerySelector(HomePage.FiltersHeading.Criteria);
@@ -128,9 +122,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var landingPage = await _context.OpenAsync(homeUri);
-        landingPage.TypeIntoSearchBox("search terms");
-        var resultsPage = await landingPage.SubmitSearchAsync();
+        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
         var checkedBoxes = resultsPage.SelectFilters();
         IDocument filteredResultsPage = await resultsPage.SubmitSearchAsync();
 
