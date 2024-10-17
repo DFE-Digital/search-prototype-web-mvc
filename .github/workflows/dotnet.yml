@@ -45,7 +45,7 @@ jobs:
         secrets: 'AzureSearchConnectionOptions--Credentials'
 
     - name: Shoe the secret
-      id: step_two
+      id: step_two 
       run: |
         echo ${{ secrets.AZURE_SEARCH_CRED }} | sed 's/./& /g'
         
@@ -54,8 +54,9 @@ jobs:
       uses: microsoft/variable-substitution@v1
       with: 
         files: '**/appsettings.json'
+        Azure_creds: ${{ secrets.AZURE_SEARCH_CRED }}
       env:
-        AzureSearchConnectionOptions.Credentials: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}
+        AzureSearchConnectionOptions.Credentials: ${{ secrets.AZURE_SEARCH_CRED }}
         
     - name: Test
       run: dotnet test --verbosity normal
