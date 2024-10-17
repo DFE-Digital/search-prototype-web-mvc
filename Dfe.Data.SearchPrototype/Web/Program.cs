@@ -43,6 +43,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+builder.Configuration.AddUserSecrets<Program>();
+
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
