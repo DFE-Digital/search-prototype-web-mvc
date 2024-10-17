@@ -42,7 +42,6 @@ jobs:
       uses: microsoft/variable-substitution@v1
       with: 
         files: '**/appsettings.json'
-        Azure_creds: ${{ secrets.AZURE_SEARCH_CRED }}
       env:
         AzureSearchConnectionOptions.Credentials: ${{ secrets.AZURE_SEARCH_CRED }}
         
