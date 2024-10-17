@@ -32,6 +32,9 @@
                 <button type="submit" class="govuk-button" data-module="govuk-button">
                     Apply filters
                 </button>
+                <button id="clearFilters" type="submit" name="ClearFilters" value="true" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                    Clear filters
+                </button>
                 @if (Model.Facets is not null && Model.Facets.Any())
                 {
                     foreach (var facet in Model.Facets)

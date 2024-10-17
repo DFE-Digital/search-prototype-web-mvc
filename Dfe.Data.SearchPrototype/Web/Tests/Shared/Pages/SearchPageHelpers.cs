@@ -1,5 +1,7 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
@@ -41,5 +43,39 @@ public static class SearchPageHelpers
     {
         IHtmlFormElement form = searchPage.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria)!;
         return form.SubmitAsync();
+    }
+
+    public static IEnumerable<IHtmlInputElement> GetSelectedFilters(this IDocument searchPage)
+    {
+        var firstFacetPageElement = searchPage.GetFacets().First();
+        var facetInputElements = firstFacetPageElement.GetCheckBoxes();
+        return facetInputElements;
+    }
+
+    public static Task<IDocument> SubmitClearAsync(this IDocument searchPage)
+    {
+        IHtmlFormElement form = searchPage.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria)!;
+
+        IHtmlButtonElement? clearButton = searchPage.GetClearButton();
+
+        string? buttonName = clearButton?.Name;
+        string? buttonValue = clearButton?.Value;
+
+        if (!string.IsNullOrWhiteSpace(buttonName) &&
+            !string.IsNullOrWhiteSpace(buttonValue) &&
+            clearButton != null)
+        {
+            clearButton.Name = $"{buttonName}_old";
+            IHtmlInputElement input = searchPage.CreateElement<IHtmlInputElement>();
+            input.Name = buttonName;
+            input.Value = buttonValue;
+            form.AppendChild(input);
+        }
+        return form.SubmitAsync();
+    }
+
+    public static IHtmlButtonElement? GetClearButton(this IDocument searchPage)
+    {
+        return searchPage?.QuerySelector<IHtmlButtonElement>(@"button[id=""clearFilters""]");
     }
 }
