@@ -12,8 +12,6 @@ permissions: write-all
 jobs:
   build:
     runs-on: windows-latest
-    env:
-      test
     steps:
     - uses: actions/checkout@v4
     
