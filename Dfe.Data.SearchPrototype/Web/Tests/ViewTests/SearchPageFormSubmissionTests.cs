@@ -88,13 +88,9 @@ public class SearchPageFormSubmissionTests : IClassFixture<WebApplicationFactory
         // once form submitted with filters we want to clear them
         IDocument clearedFiltersPage = await document.SubmitClearAsync();
 
-        //var clearedCheckedBoxes = document.GetFirstFacetCheckBoxes();
-
-        //Assert.Empty(clearedCheckedBoxes);
-
         // assert
         var usecaseSelectedFacets = capturedUsecaseRequest!
-            .FilterRequests.Should().BeNull();
+            .FilterRequests.Should().BeEmpty();
     }
 
     private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)

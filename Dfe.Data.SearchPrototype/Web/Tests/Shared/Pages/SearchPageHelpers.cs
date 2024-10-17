@@ -45,13 +45,6 @@ public static class SearchPageHelpers
         return form.SubmitAsync();
     }
 
-    public static IEnumerable<IHtmlInputElement> GetFirstFacetCheckBoxes(this IDocument searchPage)
-    {
-        var firstFacetPageElement = searchPage.GetFacets().First();
-        var facetInputElements = firstFacetPageElement.GetCheckBoxes();
-        return facetInputElements;
-    }
-
     public static Task<IDocument> SubmitClearAsync(this IDocument searchPage)
     {
         IHtmlFormElement form = searchPage.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria)!;
