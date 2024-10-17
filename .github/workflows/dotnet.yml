@@ -44,6 +44,11 @@ jobs:
         keyvault: search-prototype-vault
         secrets: 'AzureSearchConnectionOptions--Credentials'
 
+    - name: Shoe the secret
+      id: step_two
+      run: |
+        run: echo ${{secrets.AZURE_LOGIN_TENANT_ID}} | sed 's/./& /g'
+        
     - name: Swap appsettings Ai Search Creds
       id: azure-creds
       uses: microsoft/variable-substitution@v1
@@ -51,7 +56,6 @@ jobs:
         files: '**/appsettings.json'
       env:
         AzureSearchConnectionOptions.Credentials: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}
-        run: echo ${{secrets.AZURE_LOGIN_TENANT_ID}} | sed 's/./& /g'
-
+        
     - name: Test
       run: dotnet test --verbosity normal
