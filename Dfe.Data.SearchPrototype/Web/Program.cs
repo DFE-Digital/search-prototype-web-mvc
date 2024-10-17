@@ -43,13 +43,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    builder.Configuration.AddAzureKeyVault(
-        new Uri(app.Configuration.GetValue<string>("KeyVaultUri")!),
-        new DefaultAzureCredential());
-}
-
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
