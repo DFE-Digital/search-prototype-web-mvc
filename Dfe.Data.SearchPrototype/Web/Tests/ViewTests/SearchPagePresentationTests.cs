@@ -31,8 +31,6 @@ public class SearchPagePresentationTests : SharedTestFixture
 
         // act
         var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
-        //landingPage.TypeIntoSearchBox("search terms");
-        //var resultsPage = await landingPage.SubmitSearchAsync();
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchNoResultText.Criteria)!

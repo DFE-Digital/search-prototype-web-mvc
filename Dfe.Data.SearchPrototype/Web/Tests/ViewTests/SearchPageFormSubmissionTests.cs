@@ -31,7 +31,7 @@ public class SearchPageFormSubmissionTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        // navigate to results page with search keyword)
+        // navigate to results page with search keyword
         var document = await _context.OpenAsync($"{homeUri}?searchKeyword={searchTerm}");
         // select some filters
         var checkedBoxes = document.SelectFilters();
@@ -63,18 +63,20 @@ public class SearchPageFormSubmissionTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        // navigate to results page with search keyword)
+        // navigate to results page with search keyword
         var document = await _context.OpenAsync($"{homeUri}?searchKeyword={searchTerm}");
 
         // select some filters
         var checkedBoxes = document.SelectFilters();
         IDocument resultsPage = await document.SubmitSearchAsync();
+
+        // assert checkboxes have been selected
         Assert.NotEmpty(checkedBoxes);
 
         // once form submitted with filters we want to clear them
         IDocument clearedFiltersPage = await document.SubmitClearAsync();
 
-        // assert
+        // assert checkboxes are no longer selected
         var usecaseSelectedFacets = capturedUsecaseRequest!
             .FilterRequests.Should().BeEmpty();
     }
