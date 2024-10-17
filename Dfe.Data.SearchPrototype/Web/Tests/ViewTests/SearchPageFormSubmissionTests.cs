@@ -17,7 +17,7 @@ using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 
-public class SearchPageFormSubmissionTests
+public class SearchPageFormSubmissionTests : IClassFixture<WebApplicationFactory<Dfe.Data.SearchPrototype.Web.Program>>
 {
     private const string homeUri = "http://localhost";
     private Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> _useCase = new();
