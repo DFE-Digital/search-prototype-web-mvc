@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
@@ -42,6 +43,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

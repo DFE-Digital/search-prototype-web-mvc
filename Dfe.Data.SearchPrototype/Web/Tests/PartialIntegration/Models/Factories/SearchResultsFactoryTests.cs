@@ -1,7 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Models;
+using ViewModels =  Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
@@ -19,7 +19,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
 
             ISearchResultsFactory searchResultsFactory =
@@ -38,7 +38,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             result.SearchItems.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<Establishment>>();
             result.SearchResultsCount.Should().BeGreaterThanOrEqualTo(1);
             result.HasResults.Should().BeTrue();
-            result.Facets.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<Web.Models.ViewModels.Facet>>();
+            result.Facets.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<ViewModels.Facet>>();
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
 
             ISearchResultsFactory searchResultsFactory =
@@ -75,7 +75,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
 
             ISearchResultsFactory searchResultsFactory =
@@ -103,7 +103,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
 
             ISearchResultsFactory searchResultsFactory =

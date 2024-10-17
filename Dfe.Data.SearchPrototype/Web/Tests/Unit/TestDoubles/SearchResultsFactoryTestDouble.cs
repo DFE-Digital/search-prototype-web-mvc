@@ -2,12 +2,13 @@
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Moq;
+using ViewModels = Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
 {
     public static class SearchResultsFactoryTestDouble
     {
-        public static Mock<ISearchResultsFactory> MockFor(Web.Models.ViewModels.SearchResults viewModel)
+        public static Mock<ISearchResultsFactory> MockFor(ViewModels.SearchResults viewModel)
         {
             Mock<ISearchResultsFactory> mockSearchResultsFactory = DefaultMock();
 
