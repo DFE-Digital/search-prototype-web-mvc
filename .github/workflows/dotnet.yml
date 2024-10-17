@@ -12,6 +12,8 @@ permissions: write-all
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      test
     steps:
     - uses: actions/checkout@v4
     
@@ -45,11 +47,13 @@ jobs:
         secrets: 'AzureSearchConnectionOptions--Credentials'
 
     - name: Swap appsettings Ai Search Creds
+      id: azure-creds
       uses: microsoft/variable-substitution@v1
       with: 
         files: '**/appsettings.json'
       env:
         AzureSearchConnectionOptions.Credentials: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}
+        run: echo ${{secrets.AZURE_LOGIN_TENANT_ID}} | sed 's/./& /g'
 
     - name: Test
       run: dotnet test --verbosity normal
