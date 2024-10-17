@@ -1,7 +1,5 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
-using System.Reflection.Metadata;
-using System.Xml.Linq;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
