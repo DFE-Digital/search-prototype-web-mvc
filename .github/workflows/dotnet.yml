@@ -25,10 +25,10 @@ jobs:
     
     - name: Restore dependencies
       run: dotnet restore
-    
+
     - name: Build
       run: dotnet build --no-restore
-    
+  
     - name: Login to Azure
       uses: azure/login@v1
       with:
@@ -37,19 +37,14 @@ jobs:
         subscription-id:  ${{ secrets.AZURE_LOGIN_SUBSCRIPTION_ID }} 
         enable-AzPSSession: true
 
-    - name: Get Appsettings Key Vault Secrets
-      id: aisearch-key
-      uses: Azure/get-keyvault-secrets@v1
-      with: 
-        keyvault: search-prototype-vault
-        secrets: 'AzureSearchConnectionOptions--Credentials'
-
     - name: Swap appsettings Ai Search Creds
+      id: azure-creds
       uses: microsoft/variable-substitution@v1
       with: 
         files: '**/appsettings.json'
+        Azure_creds: ${{ secrets.AZURE_SEARCH_CRED }}
       env:
-        AzureSearchConnectionOptions.Credentials: ${{ steps.aisearch-key.outputs.AzureSearchConnectionOptions--Credentials }}
-
+        AzureSearchConnectionOptions.Credentials: ${{ secrets.AZURE_SEARCH_CRED }}
+        
     - name: Test
       run: dotnet test --verbosity normal
