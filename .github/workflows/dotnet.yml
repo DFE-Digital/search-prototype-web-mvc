@@ -47,7 +47,7 @@ jobs:
     - name: Shoe the secret
       id: step_two
       run: |
-        echo ${{secrets.AZURE_LOGIN_TENANT_ID}} | sed 's/./& /g'
+        echo ${{ secrets.AZURE_SEARCH_CRED }} | sed 's/./& /g'
         
     - name: Swap appsettings Ai Search Creds
       id: azure-creds
