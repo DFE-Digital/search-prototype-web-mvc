@@ -1,12 +1,15 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 using Xunit.Abstractions;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using DfE.Data.SearchPrototype.Pages;
+using HomePage = DfE.Data.SearchPrototype.Pages.HomePage;
+
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 {
@@ -28,13 +31,21 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         }
 
         [Fact]
-        public async Task Search_Title_IsDisplayed()
+        public async Task Search_Title_Displayed()
         {
-            var response = await _client.GetAsync(uri);
+            // Act
+            Response response = await GetResponseAsync("/");
 
-            var document = await HtmlHelpers.GetDocumentAsync(response);
+            // Assert
+            new HomePage(response.DomQueryClient).GetHeading().Should().Be("Search prototype");
+        }
 
-            document.GetElementText(HomePage.Heading.Criteria).Should().Be("Search prototype");
+        // TODO helper Might go in a BaseHttpTestClass?
+        public async Task<Response> GetResponseAsync(string path)
+        {
+            HttpResponseMessage response = await _client.GetAsync(path);
+            AngleSharpQueryClient domQueryClient = await AngleSharpQueryClient.CreateAsync(response);
+            return new(httpResponseMessage: response, domQueryClient: domQueryClient);
         }
 
         [Fact]
@@ -54,7 +65,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            document.GetElementText(HomePage.SearchHeading.Criteria).Should().Be("Search");
+            document.GetElementText(Shared.Pages.HomePage.SearchHeading.Criteria).Should().Be("Search");
 
             document.GetElementText(HomePage.SearchSubHeading.Criteria).Should().Be("Search establishments");
 
@@ -161,4 +172,17 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
         }
     }
+}
+
+public sealed class Response
+{
+    public Response(HttpResponseMessage? httpResponseMessage, IDomQueryClient domQueryClient)
+    {
+        ArgumentNullException.ThrowIfNull(domQueryClient);
+        HttpResponseMessage = httpResponseMessage;
+        DomQueryClient = domQueryClient;
+    }
+
+    public IDomQueryClient DomQueryClient { get; }
+    public HttpResponseMessage? HttpResponseMessage { get; }
 }
