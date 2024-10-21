@@ -16,6 +16,7 @@ public interface IDomQueryClient
     string? GetLink(string cssSelector);
     string? GetAttribute(string cssSelector, string attribute);
     IEnumerable<string> GetTexts(string cssSelector);
+    bool ElementExists(string v);
 }
 
 public class WebDriverDomQueryClient : IDomQueryClient
@@ -54,6 +55,11 @@ public class WebDriverDomQueryClient : IDomQueryClient
         ArgumentException.ThrowIfNullOrEmpty(nameof(cssSelector));
         return _webDriverContext.Driver.FindElements(By.CssSelector(cssSelector))
             ?? Enumerable.Empty<IWebElement>();
+    }
+
+    public bool ElementExists(string v)
+    {
+        throw new NotImplementedException();
     }
 }
 
@@ -97,6 +103,10 @@ internal class AngleSharpQueryClient : IDomQueryClient
             .ThrowIfNullOrEmpty();
     }
 
+    public bool ElementExists(string v)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 internal static class HtmlHelpers

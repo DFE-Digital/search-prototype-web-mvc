@@ -34,18 +34,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         public async Task Search_Title_Displayed()
         {
             // Act
-            Response response = await GetResponseAsync("/");
+            Response response = await _client.GetHttpResponseAsync("/");
 
             // Assert
             new HomePage(response.DomQueryClient).GetHeading().Should().Be("Search prototype");
-        }
-
-        // TODO helper Might go in a BaseHttpTestClass?
-        public async Task<Response> GetResponseAsync(string path)
-        {
-            HttpResponseMessage response = await _client.GetAsync(path);
-            AngleSharpQueryClient domQueryClient = await AngleSharpQueryClient.CreateAsync(response);
-            return new(httpResponseMessage: response, domQueryClient: domQueryClient);
         }
 
         [Fact]
@@ -172,17 +164,4 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
         }
     }
-}
-
-public sealed class Response
-{
-    public Response(HttpResponseMessage? httpResponseMessage, IDomQueryClient domQueryClient)
-    {
-        ArgumentNullException.ThrowIfNull(domQueryClient);
-        HttpResponseMessage = httpResponseMessage;
-        DomQueryClient = domQueryClient;
-    }
-
-    public IDomQueryClient DomQueryClient { get; }
-    public HttpResponseMessage? HttpResponseMessage { get; }
 }
