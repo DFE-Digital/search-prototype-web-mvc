@@ -63,14 +63,18 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(SearchRequest searchRequestViewModel)
     {
+        // TODO: add OFFSET, and LIMIT
+
         if (string.IsNullOrEmpty(searchRequestViewModel.SearchKeyword))
         {
             return View();
         }
+
         ViewBag.SearchQuery = searchRequestViewModel.SearchKeyword;
 
         SearchByKeywordResponse response =
-            await _searchByKeywordUseCase.HandleRequest(new SearchByKeywordRequest(
+            await _searchByKeywordUseCase.HandleRequest(
+                new SearchByKeywordRequest(
                     searchKeyword: searchRequestViewModel.SearchKeyword!,
                     filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
 
@@ -79,6 +83,55 @@ public class HomeController : Controller
                 response.EstablishmentResults,
                 new FacetsAndSelectedFacets(
                     response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
+
+
+        viewModel.PaginationResults = new Models.ViewModels.Shared.Pagination()
+        {
+            CurrentPageNumber = 1,
+            TotalPageCount = 5,
+            TotalRecordCount = 92,
+            PageSequences= new Dictionary<int, int[]>()
+            {
+                { 1, [1,2,3,4,5] },
+                { 2, [6,7,8,9,10] },
+            },
+            PageSize = 20,
+            PageSequenceWidth = 5,
+        };
+
+
+    //    public int CurrentPageNumber { get; set; }
+
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public int TotalPageCount { get; set; }
+
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public Dictionary<int, int[]> PageSequences { get; set; } = [];
+
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public int TotalRecordCount { get; set; }
+
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public int PageSize { get; set; }
+
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public int PageSequenceWidth { get; set; }
+
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    //public int[] CurrentPageSequence => PageSequences[CurrentPageNumber];
+
 
         return View(viewModel);
     }

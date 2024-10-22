@@ -9,6 +9,7 @@ public class SearchRequest
     /// The search keyword provisioned by binding to user input.
     /// </summary>
     public string? SearchKeyword { get; set; }
+    public int? PageNumber { get; set; }
 
     /// <summary>
     /// The dictionary of selected facets (grouped by facet name key) provisioned

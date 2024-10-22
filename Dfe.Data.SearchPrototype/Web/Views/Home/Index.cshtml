@@ -1,6 +1,7 @@
 ﻿@using Dfe.Data.SearchPrototype.Web.Models.ViewModels
 @using Microsoft.AspNetCore.Mvc.Localization
 @model SearchResults
+
 @inject IViewLocalizer Localizer;
 @{
     ViewData["Title"] = "Search Results";
@@ -67,6 +68,75 @@
         {
             <div class="govuk-grid-column-two-thirds" id="results">
                 <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
+
+                <nav class="govuk-pagination" role="navigation" aria-label="results">
+                    @* @if (!(bool.Parse(Model.ViewModel.PaginationResponse.IsFirstPage)))
+                    {
+                        <div class="govuk-pagination__prev">
+                            <a class="govuk-link govuk-pagination__link"
+                               rel="prev"
+                               href="@Url.Action(
+                    (string)Model.ViewModel.PaginationRequest.ActionName,
+                    (string)Model.ViewModel.PaginationRequest.ControllerName,
+                new {
+                    pagename = $"{Model.ViewModel.PaginationRequest.PageName}",
+                    viewId =$"{Model.ViewModel.PaginationRequest.ViewId}",
+                    pageNumber = (int.Parse(Model.ViewModel.PaginationResponse.CurrentPage) - 1)
+                })">
+                                <svg class="govuk-pagination__icon govuk-pagination__icon--prev"
+                                     xmlns="http://www.w3.org/2000/svg" height="13" width="15"
+                                     aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                                    <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                                </svg>
+                                <span class="govuk-pagination__link-title">
+                                    @(Model.ViewContent.PreviousPageLabelText ?? "Previous")
+                                </span>
+                            </a>
+                        </div>
+                    } *@
+                    @if (Model.PaginationResults?.PageSequences.Count > 0)
+                    {
+                        <ul class="govuk-pagination__list">
+                            @if (!Model.PaginationResults.IsFirstPageSequence)
+                            {
+                                <li class="govuk-pagination__item govuk-pagination__item--ellipses">&ctdot;</li>
+                            }
+                            @foreach (var pageNumber in Model.PaginationResults.CurrentPageSequence)
+                            {
+                                if (pageNumber > 0)
+                                {
+                                    <li class="govuk-pagination__item
+                                        @(pageNumber == Model.PaginationResults.CurrentPageNumber ? "govuk-pagination__item--current" : "")">
+
+
+                                        <button type="submit" class="govuk-link govuk-pagination__link" data-module="govuk-button" name="PageNumber" value=@pageNumber>
+                                            @pageNumber
+                                        </button>
+
+                                    @* <a class="govuk-link govuk-pagination__link"
+                                            @if (pageNumber == Model.PaginationResults.CurrentPageNumber)
+                                            {
+                                                <text>aria-current="page"</text>
+                                            }
+                                            aria-label="@(("Page " + pageNumber))"
+                                            type="submit"
+
+                                                                    href="?ClearFilters=true"
+
+                                            >
+                                            @pageNumber
+                                        </a> *@
+                                    </li>
+                                }
+                            }
+                            @if (!Model.PaginationResults.IsLastPageSequence)
+                            {
+                                <li class="govuk-pagination__item govuk-pagination__item--ellipses">&ctdot;</li>
+                            }
+                        </ul>
+                    }
+                    
+                </nav>
                 <hr />
                 <ul style="list-style: none">
                     @foreach (var searchItem in Model.SearchItems!)
