@@ -23,21 +23,6 @@ namespace Dfe.Data.SearchPrototype.WebApi.Controllers
             _searchRequestToFilterRequestsMapper = selectedFacetsToFilterRequestsMapper;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetEstablishments([FromQuery] string searchKeyword)
-        //{
-        //    if (string.IsNullOrEmpty(searchKeyword))
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    SearchByKeywordResponse response =
-        //        await _searchByKeywordUseCase.HandleRequest(new SearchByKeywordRequest(
-        //                searchKeyword: searchKeyword));
-
-        //    return Ok(response);
-        //}
-
         [HttpGet]
         public async Task<IActionResult> GetEstablishments([FromQuery] SearchRequest searchRequest)
         {
