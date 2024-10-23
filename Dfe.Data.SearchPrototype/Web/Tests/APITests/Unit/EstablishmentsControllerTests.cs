@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.WebApi.Controllers;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
@@ -27,18 +28,42 @@ public class EstablishmentsControllerTests
             EstablishmentStatus = new List<string> { "status1" }
         };
         var controller = new EstablishmentsController(_logger, _searchByKeywordUseCase, _searchRequestToFilterRequestsMapper);
-        SearchByKeywordRequest? capturedUseCaseRequest;
-        // act
-        var response = controller.GetEstablishments(searchRequest);
+        SearchByKeywordRequest? capturedUseCaseRequest = default;
 
         Mock.Get(_searchByKeywordUseCase)
             .Setup(usecase => usecase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
-            .Callback(x => capturedUseCaseRequest = x);
+            .Callback<SearchByKeywordRequest>((request) => capturedUseCaseRequest = request);
+        
+        // act
+        var response = await controller.GetEstablishments(searchRequest);
+
+        // assert
+        capturedUseCaseRequest!.SearchKeyword.Should().Be(searchRequest.SearchKeyword);
     }
 
     [Fact]
-    public void GetEstablishments_CallsFiltersMapper()
+    public async Task GetEstablishments_CallsFiltersMapper()
     {
+        // arrange
+        SearchRequest searchRequest = new()
+        {
+            SearchKeyword = "keyword",
+            EstablishmentStatus = new List<string> { "status1" }
+        };
 
+        var controller = new EstablishmentsController(_logger, _searchByKeywordUseCase, _searchRequestToFilterRequestsMapper);
+        SearchRequest? capturedMapperRequest = default;
+
+        Mock.Get(_searchRequestToFilterRequestsMapper)
+            .Setup(usecase => usecase.MapFrom(It.IsAny<SearchRequest>()))
+            .Callback<SearchRequest>((request) => capturedMapperRequest = request);
+
+        // act
+        var response = await controller.GetEstablishments(searchRequest);
+
+        // assert
+        capturedMapperRequest!.SearchKeyword.Should().Be(searchRequest.SearchKeyword);
+        capturedMapperRequest!.EstablishmentStatus!.Should().BeEquivalentTo(searchRequest.EstablishmentStatus);
+        capturedMapperRequest!.PhaseOfEducation.Should().BeNull();
     }
 }

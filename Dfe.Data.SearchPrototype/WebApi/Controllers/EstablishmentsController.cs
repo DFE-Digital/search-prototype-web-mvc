@@ -39,7 +39,7 @@ namespace Dfe.Data.SearchPrototype.WebApi.Controllers
         //}
 
         [HttpGet]
-        public async Task<IActionResult> GetEstablishments(SearchRequest searchRequest)
+        public async Task<IActionResult> GetEstablishments([FromQuery] SearchRequest searchRequest)
         {
             if (string.IsNullOrEmpty(searchRequest.SearchKeyword))
             {

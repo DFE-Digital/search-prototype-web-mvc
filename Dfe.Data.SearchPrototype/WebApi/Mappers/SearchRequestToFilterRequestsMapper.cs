@@ -8,6 +8,17 @@ public class SearchRequestToFilterRequestsMapper : IMapper<SearchRequest, IList<
 {
     IList<FilterRequest> IMapper<SearchRequest, IList<FilterRequest>>.MapFrom(SearchRequest input)
     {
-        throw new NotImplementedException();
+        var response = new List<FilterRequest>();
+        if (input.EstablishmentStatus != null)
+        {
+            var filterRequest = new FilterRequest("ESTABLISHMENTSTATUSNAME", input.EstablishmentStatus.Select(value => (object)value).ToList());
+            response.Add(filterRequest);
+        };
+        if (input.PhaseOfEducation != null)
+        {
+            var filterRequest = new FilterRequest("PHASEOFEDUCATION", input.PhaseOfEducation.Select(value => (object)value).ToList());
+            response.Add(filterRequest);
+        }
+        return response;
     }
 }

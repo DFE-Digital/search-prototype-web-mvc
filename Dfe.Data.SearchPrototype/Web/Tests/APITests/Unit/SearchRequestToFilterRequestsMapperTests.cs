@@ -12,7 +12,7 @@ public class SearchRequestToFilterRequestsMapperTests
     private IMapper<SearchRequest, IList<FilterRequest>> _mapper = new SearchRequestToFilterRequestsMapper();
 
     [Fact]
-    public void Maps()
+    public void MapFrom_MapsFilters()
     {
         // arrange
         var searchrequest = new SearchRequest()
@@ -27,10 +27,10 @@ public class SearchRequestToFilterRequestsMapperTests
         // assert
         response!.Single(filterRequest => filterRequest.FilterName == "PHASEOFEDUCATION")
             .FilterValues
-            .Should().BeEquivalentTo(searchrequest.EstablishmentStatus);
+            .Should().BeEquivalentTo(searchrequest.PhaseOfEducation);
         response!.Single(filterRequest => filterRequest.FilterName == "ESTABLISHMENTSTATUSNAME")
             .FilterValues
-            .Should().BeEquivalentTo(searchrequest.PhaseOfEducation);
+            .Should().BeEquivalentTo(searchrequest.EstablishmentStatus);
     }
 
 }
