@@ -33,4 +33,17 @@ public class SearchRequestToFilterRequestsMapperTests
             .Should().BeEquivalentTo(searchrequest.EstablishmentStatus);
     }
 
+    [Fact]
+    public void MapFrom_NoFilters_NullResponse()
+    {
+        // arrange
+        var searchrequest = new SearchRequest();
+
+        // act
+        var response = _mapper.MapFrom(searchrequest);
+
+        // assert
+        response.Should().BeNull();
+    }
+
 }

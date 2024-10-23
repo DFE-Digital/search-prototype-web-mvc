@@ -66,4 +66,29 @@ public class EstablishmentsControllerTests
         capturedMapperRequest!.EstablishmentStatus!.Should().BeEquivalentTo(searchRequest.EstablishmentStatus);
         capturedMapperRequest!.PhaseOfEducation.Should().BeNull();
     }
+
+    [Fact]
+    public async Task GetEstablishments_NoFilters_CallsFiltersMapper()
+    {
+        // arrange
+        SearchRequest searchRequest = new()
+        {
+            SearchKeyword = "keyword"
+        };
+
+        var controller = new EstablishmentsController(_logger, _searchByKeywordUseCase, _searchRequestToFilterRequestsMapper);
+        SearchRequest? capturedMapperRequest = default;
+
+        Mock.Get(_searchRequestToFilterRequestsMapper)
+            .Setup(usecase => usecase.MapFrom(It.IsAny<SearchRequest>()))
+            .Callback<SearchRequest>((request) => capturedMapperRequest = request);
+
+        // act
+        var response = await controller.GetEstablishments(searchRequest);
+
+        // assert
+        capturedMapperRequest!.SearchKeyword.Should().Be(searchRequest.SearchKeyword);
+        capturedMapperRequest!.EstablishmentStatus.Should().BeNull();
+        capturedMapperRequest!.PhaseOfEducation.Should().BeNull();
+    }
 }
