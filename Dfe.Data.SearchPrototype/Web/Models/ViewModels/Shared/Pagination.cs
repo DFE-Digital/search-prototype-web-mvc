@@ -68,21 +68,27 @@
             int totalPageCount = GetTotalNumberOfPages();
             List<int> allPages = Enumerable.Range(1, totalPageCount).ToList();
             int pagePaddingSize = 2;
-            int availablePaddingSize = 0;
-            int differenceBetweenPaddingSizeAndAvailablePadding = 0;
+            int additionalPadding = totalPageCount - CurrentPageNumber;
+            int startPageNumberOfPageSequence = 0;
             ///IF AVAILABLE PADDING SIZE = PAGE PADDING SIZE - ADD {PADDING SIZE} BUTTONS
             ///IF AVAILABLE PADDING SIZE < PAGE PADDING SIZE - CHECK IF WE CAN ADD IT ON THE OTHER SIDE BUT NO MORE THAN PADDING SIZE *2 LEFT OR RIGHT
-            ///IF AVAIALABLE PADDING SIZE > PAGE PADDING SIZE + 1 THEN ADD ELIPSIS AND FIRST OR LAST OAGE
+            ///IF AVAIALABLE PADDING SIZE > PAGE PADDING SIZE + 1 THEN ADD ELIPSIS AND FIRST OR LAST PAGE
+
+            //if (CurrentPageNumber == 1)
+            //{
+
+            //    startPageNumberOfPageSequence = CurrentPageNumber;
+            //}
+            //else if (CurrentPageNumber == 2)
+            //{
+            //    startPageNumberOfPageSequence = CurrentPageNumber - 1;
+            //}
+
 
             // if page number is 1 or 2 then check if we can add it to the right
-            if (CurrentPageNumber == 1)
+            if (CurrentPageNumber <= pagePaddingSize)
             {
-
-                differenceBetweenPaddingSizeAndAvailablePadding = CurrentPageNumber;
-            }
-            else if (CurrentPageNumber == 2)
-            {
-                differenceBetweenPaddingSizeAndAvailablePadding = CurrentPageNumber - 1;
+                startPageNumberOfPageSequence = 1;
             }
             //deals with the ideal situation full padding(2) on both sides
             else if (CurrentPageNumber > pagePaddingSize || CurrentPageNumber < (totalPageCount - pagePaddingSize))
@@ -90,30 +96,30 @@
                 //if page number is a last number
                 if (CurrentPageNumber == totalPageCount)
                 {
-                    differenceBetweenPaddingSizeAndAvailablePadding = CurrentPageNumber - (pagePaddingSize + pagePaddingSize);
+                    startPageNumberOfPageSequence = CurrentPageNumber - (pagePaddingSize + pagePaddingSize);
                 }
                 //if padding on the right side is not a full padding(less than 2 in this example)
                 else if (CurrentPageNumber > (totalPageCount - pagePaddingSize))
                 {
-                    int additionalPadding = totalPageCount- CurrentPageNumber;
-                   
-                    differenceBetweenPaddingSizeAndAvailablePadding = CurrentPageNumber - (pagePaddingSize + additionalPadding);
+
+                    startPageNumberOfPageSequence = CurrentPageNumber - (pagePaddingSize + additionalPadding);
                 }
                 else
                 {
                     //pagePaddingSize number 3 >  padding size 2 then we can add full padding 2 buttons
-                    differenceBetweenPaddingSizeAndAvailablePadding = CurrentPageNumber - pagePaddingSize;
+                    startPageNumberOfPageSequence = CurrentPageNumber - pagePaddingSize;
                 }
                
             }
-           
-            
-
-            List<int> pageSequence = Enumerable.Range(differenceBetweenPaddingSizeAndAvailablePadding, (pagePaddingSize + pagePaddingSize + 1)).ToList();
-
+            List<int> pageSequence = Enumerable.Range(startPageNumberOfPageSequence, (pagePaddingSize + pagePaddingSize + 1)).ToList();
             return pageSequence;
-
         }
+
+
+
+
+
+
         public int GetTotalNumberOfPages()
         {
             if (TotalRecordCount == 0)
