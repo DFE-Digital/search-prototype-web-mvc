@@ -84,20 +84,20 @@ public class HomeController : Controller
                 new FacetsAndSelectedFacets(
                     response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
 
-        viewModel.PaginationResults = new Models.ViewModels.Shared.Pagination()
-        {
-            CurrentPageNumber = searchRequestViewModel.PageNumber.Value,  // set from view model on binding
-            TotalPageCount = 5,     // calculated
-            TotalRecordCount = 92,
-            PageSequences = new Dictionary<int, int[]>()
-            {
-                { 1, [1,2,3,4,5] },
-                { 2, [6,7,8,9,10] },
-                { 3, [11,12,13,14,15] },
-            },
-            PageSize = 20,
-            PageSequenceWidth = 5,
-        };
+        //viewModel.PaginationResults = new Models.ViewModels.Shared.Pagination()
+        //{
+        //    CurrentPageNumber = searchRequestViewModel.PageNumber.Value,  // set from view model on binding
+        //    TotalPageCount = 5,     // calculated
+        //    TotalRecordCount = 92,
+        //    PageSequences = new Dictionary<int, int[]>()
+        //    {
+        //        { 1, [1,2,3,4,5] },
+        //        { 2, [6,7,8,9,10] },
+        //        { 3, [11,12,13,14,15] },
+        //    },
+        //    PageSize = 20,
+        //    PageSequenceWidth = 5,
+        //};
 
         return View(viewModel);
     }
