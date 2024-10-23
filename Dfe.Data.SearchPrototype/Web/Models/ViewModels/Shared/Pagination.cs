@@ -28,7 +28,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int PageSequenceWidth { get; set; }
+        public int PageSequenceWidth => GetPageSequence().Count;
 
         /// <summary>
         /// 
@@ -63,27 +63,19 @@
         /// </summary>
         public bool IsLastPage => CurrentPageNumber == GetTotalNumberOfPages();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<int> GetPageSequence()
         {
             int totalPageCount = GetTotalNumberOfPages();
-            List<int> allPages = Enumerable.Range(1, totalPageCount).ToList();
             int pagePaddingSize = 2;
             int additionalPadding = totalPageCount - CurrentPageNumber;
             int startPageNumberOfPageSequence = 0;
             ///IF AVAILABLE PADDING SIZE = PAGE PADDING SIZE - ADD {PADDING SIZE} BUTTONS
             ///IF AVAILABLE PADDING SIZE < PAGE PADDING SIZE - CHECK IF WE CAN ADD IT ON THE OTHER SIDE BUT NO MORE THAN PADDING SIZE *2 LEFT OR RIGHT
             ///IF AVAIALABLE PADDING SIZE > PAGE PADDING SIZE + 1 THEN ADD ELIPSIS AND FIRST OR LAST PAGE
-
-            //if (CurrentPageNumber == 1)
-            //{
-
-            //    startPageNumberOfPageSequence = CurrentPageNumber;
-            //}
-            //else if (CurrentPageNumber == 2)
-            //{
-            //    startPageNumberOfPageSequence = CurrentPageNumber - 1;
-            //}
-
 
             // if page number is 1 or 2 then check if we can add it to the right
             if (CurrentPageNumber <= pagePaddingSize)
@@ -110,15 +102,16 @@
                     startPageNumberOfPageSequence = CurrentPageNumber - pagePaddingSize;
                 }
             }
+
             List<int> pageSequence = Enumerable.Range(startPageNumberOfPageSequence, (pagePaddingSize + pagePaddingSize + 1)).ToList();
             return pageSequence;
         }
 
-
-
-
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public int GetTotalNumberOfPages()
         {
             if (TotalRecordCount == 0)

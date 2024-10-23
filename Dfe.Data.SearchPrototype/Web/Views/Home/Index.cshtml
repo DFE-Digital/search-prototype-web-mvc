@@ -69,15 +69,20 @@
             <div class="govuk-grid-column-two-thirds" id="results">
                 <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
 
+                @{
+                    var pageSequence = Model.PaginationResults.GetPageSequence();
+                }
+
                 <nav class="govuk-pagination" role="navigation" aria-label="results">
-                    @if (Model.PaginationResults?.PageSequences.Count > 0)
+                    @if (pageSequence.Count > 0)
                     {
                         <ul class="govuk-pagination__list">
-                            @if (!Model.PaginationResults.IsFirstPageSequence)
+                            @* @if (!Model.PaginationResults.IsFirstPageSequence)
                             {
                                 <li class="govuk-pagination__item govuk-pagination__item--ellipses">&ctdot;</li>
-                            }
-                            @foreach (var pageNumber in Model.PaginationResults.CurrentPageSequence)
+                            } *@
+
+                            @foreach (var pageNumber in pageSequence)
                             {
                                 if (pageNumber > 0)
                                 {
@@ -94,10 +99,11 @@
                                     </li>
                                 }
                             }
-                            @if (!Model.PaginationResults.IsLastPageSequence)
+
+                            @* @if (!Model.PaginationResults.IsLastPageSequence)
                             {
                                 <li class="govuk-pagination__item govuk-pagination__item--ellipses">&ctdot;</li>
-                            }
+                            } *@
                         </ul>
                     }
                     
