@@ -5,10 +5,15 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
+using DfE.Data.SearchPrototype.Pages;
 using FluentAssertions;
+using FluentAssertions.Execution;
+using FluentAssertions.Primitives;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
+using System.Net;
 using Xunit;
+using HomePage = DfE.Data.SearchPrototype.Pages.HomePage;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 
@@ -16,9 +21,9 @@ public class SearchPagePresentationTests : SharedTestFixture
 {
     private const string homeUri = "http://localhost";
 
-    public SearchPagePresentationTests(WebApplicationFactory<Program> factory) :base(factory)
+    public SearchPagePresentationTests(WebApplicationFactory<Program> factory) : base(factory)
     {
-        
+
     }
 
     [Fact]
@@ -30,15 +35,15 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
+        const string searchKeywordQueryWithNoResults = $"?searchKeyword=anything";
+        Response response = await _client.GetHttpResponseAsync(searchKeywordQueryWithNoResults);
 
         // assert
-        resultsPage.QuerySelector(HomePage.SearchNoResultText.Criteria)!
-            .TextContent.Should().Contain("Sorry no results found please amend your search criteria");
-        resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
-            .Should().BeNull();
-        resultsPage.GetElementById("filters-container").Should().BeNull();
+        response.HttpResponseMessage.Should().HaveStatusCode(HttpStatusCode.OK);
+        new HomePage(response.DomQueryClient).Should().HaveNoSearchResults();
     }
+
+
 
     [Fact]
     public async Task Search_ByKeyword_WithSingleEstablishmentResult_Shows1ResultText()

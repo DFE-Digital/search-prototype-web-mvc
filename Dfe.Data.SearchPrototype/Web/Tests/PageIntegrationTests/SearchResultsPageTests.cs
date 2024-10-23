@@ -1,12 +1,15 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 using Xunit.Abstractions;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using DfE.Data.SearchPrototype.Pages;
+using HomePage = DfE.Data.SearchPrototype.Pages.HomePage;
+
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 {
@@ -28,13 +31,13 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         }
 
         [Fact]
-        public async Task Search_Title_IsDisplayed()
+        public async Task Search_Title_Displayed()
         {
-            var response = await _client.GetAsync(uri);
+            // Act
+            Response response = await _client.GetHttpResponseAsync("/");
 
-            var document = await HtmlHelpers.GetDocumentAsync(response);
-
-            document.GetElementText(HomePage.Heading.Criteria).Should().Be("Search prototype");
+            // Assert
+            new HomePage(response.DomQueryClient).GetHeading().Should().Be("Search prototype");
         }
 
         [Fact]
@@ -54,7 +57,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            document.GetElementText(HomePage.SearchHeading.Criteria).Should().Be("Search");
+            document.GetElementText(Shared.Pages.HomePage.SearchHeading.Criteria).Should().Be("Search");
 
             document.GetElementText(HomePage.SearchSubHeading.Criteria).Should().Be("Search establishments");
 

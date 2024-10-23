@@ -1,14 +1,15 @@
 ﻿using Deque.AxeCore.Selenium;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Extensions;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using DfE.Data.SearchPrototype.Pages;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow;
 using Xunit;
 using Xunit.Abstractions;
+using IWebDriverContext = DfE.Data.SearchPrototype.Pages.IWebDriverContext;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
 {
@@ -19,7 +20,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
         private readonly AccessibilityOptions _options;
         private readonly ITestOutputHelper _logger;
         private readonly IWebDriverContext _driverContext;
-        private readonly HomePage _searchPage;
+        private readonly DfE.Data.SearchPrototype.Pages.HomePage _searchPage;
         private readonly WebDriverSessionOptions _sessionOptions;
         private readonly HttpClient _httpClient;
         private readonly WebApplicationFactoryFixture<Program> _factory;
@@ -35,7 +36,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
             IOptions<AccessibilityOptions> options,
             ITestOutputHelper logger,
             IWebDriverContext driverContext,
-            HomePage searchPage,
+            DfE.Data.SearchPrototype.Pages.HomePage searchPage,
             WebDriverSessionOptions sessionOptions
         )
         {
@@ -54,7 +55,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
         {
             _driverContext.GoToUri($"{_pageNameToUrlConverter[pageName]}");
 
-            _searchPage.HeadingElement.Text.Should().Be("Search prototype");
+            _searchPage.GetHeading().Should().Be("Search prototype");
         }
 
         [StepDefinition(@"the (.*) is accessible")]
