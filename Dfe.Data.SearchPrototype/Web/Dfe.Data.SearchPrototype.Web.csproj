@@ -21,8 +21,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.2-44" />
-		<PackageReference Include="Dfe.Data.SearchPrototype" Version="1.0.4-11" />
-		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.4-11" />
+		<PackageReference Include="Dfe.Data.SearchPrototype" Version="1.0.4-PullRequest57.13" />
+		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.4-PullRequest57.13" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.4-11" />
 	</ItemGroup>
 </Project>
