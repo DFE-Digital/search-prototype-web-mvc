@@ -76,7 +76,8 @@ public class HomeController : Controller
             await _searchByKeywordUseCase.HandleRequest(
                 new SearchByKeywordRequest(
                     searchKeyword: searchRequestViewModel.SearchKeyword!,
-                    filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
+                    filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets),
+                    offset: 1));
 
         SearchResults viewModel =
             _searchResultsFactory.CreateViewModel(

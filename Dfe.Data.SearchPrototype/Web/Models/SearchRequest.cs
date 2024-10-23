@@ -29,10 +29,18 @@ public class SearchRequest
     /// <summary>
     /// 
     /// </summary>
-    public int? PageNumber { get; set; } = 1;
+    public int PageNumber { get; set; } = 1;
 
     /// <summary>
     /// 
     /// </summary>
     public bool ClearFilters { get; set; }
+
+    /// <summary>
+    /// The offset is used to skip the defined number of records retrieved
+    /// on a search request. We set page number -1 to ensure the first page
+    /// is not skipped, etc (so we'll have (1-1) * 20 = 0, which ensures no
+    /// values are ignored in the first instance.
+    /// </summary>
+    public int Offset => (PageNumber - 1) * 20; // TODO: we need to derive this from settings maybe?
 }
