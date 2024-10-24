@@ -99,7 +99,7 @@
                                         @firstPageNumber
                                 </button>
                             </li>
-                            <li class="govuk-pagination__item govuk-pagination__item--ellipses @(pageSequence.First() < Model.PaginationResults?.PageSequencePaddingSize ? "govuk-visually-hidden" : "")">
+                            <li class="govuk-pagination__item govuk-pagination__item--ellipses @(pageSequence.First() < Model.PaginationResults?.PageSequencePaddingSize + 1 ? "govuk-visually-hidden" : "")">
                                 &ctdot;
                             </li>
                             @foreach (var pageNumber in pageSequence)

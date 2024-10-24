@@ -42,5 +42,5 @@ public class SearchRequest
     /// is not skipped, etc (so we'll have (1-1) * 20 = 0, which ensures no
     /// values are ignored in the first instance.
     /// </summary>
-    public int Offset => (PageNumber - 1) * 20; // TODO: we need to derive this from settings maybe?
+    public int Offset => (PageNumber - 1) * 10; // TODO: we need to derive this from settings maybe?
 }

@@ -87,7 +87,7 @@ public class HomeController : Controller
         {
             CurrentPageNumber = searchRequestViewModel.PageNumber,  // set from view model on binding
             TotalRecordCount = (int)response.EstablishmentResults?.TotalNumberOfEstablishments,
-            RecordsPerPage = 20,
+            RecordsPerPage = 10,
             PageSequencePaddingSize = 2
         };
 
