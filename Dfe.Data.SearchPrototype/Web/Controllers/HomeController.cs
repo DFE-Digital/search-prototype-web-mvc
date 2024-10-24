@@ -63,8 +63,6 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(SearchRequest searchRequestViewModel)
     {
-        // TODO: add OFFSET, and LIMIT
-
         if (string.IsNullOrEmpty(searchRequestViewModel.SearchKeyword))
         {
             return View();
@@ -88,8 +86,9 @@ public class HomeController : Controller
         viewModel.PaginationResults = new Models.ViewModels.Shared.Pagination()
         {
             CurrentPageNumber = searchRequestViewModel.PageNumber,  // set from view model on binding
-            TotalRecordCount = (int)response.EstablishmentResults.TotalNumberOfEstablishments,
+            TotalRecordCount = (int)response.EstablishmentResults?.TotalNumberOfEstablishments,
             RecordsPerPage = 20,
+            PageSequencePaddingSize = 2
         };
 
         return View(viewModel);

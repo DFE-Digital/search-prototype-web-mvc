@@ -23,21 +23,28 @@
         /// <summary>
         /// 
         /// </summary>
+        public int PageSequencePaddingSize { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="pagePaddingSize">
         /// 
         /// </param>
         /// <returns>
         /// 
         /// </returns>
-        public List<int> GetPageSequenceWithBounds(int pagePaddingSize)
+        public List<int> GetPageSequenceWithBounds()
         {
             int totalPageCount = GetTotalNumberOfPages();
 
-            int[] lowerPagePadding = Enumerable.Range(1, pagePaddingSize).ToArray();
-            int[] upperPagePadding = Enumerable.Range(totalPageCount - pagePaddingSize + 1, pagePaddingSize).ToArray();
+            int[] lowerPagePadding =
+                Enumerable.Range(1, PageSequencePaddingSize).ToArray();
+            int[] upperPagePadding =
+                Enumerable.Range(totalPageCount - PageSequencePaddingSize + 1, PageSequencePaddingSize).ToArray();
 
-            int firstSequencePageNumber = CurrentPageNumber - pagePaddingSize;
-            int pageSequenceSize = (pagePaddingSize * 2);
+            int firstSequencePageNumber = CurrentPageNumber - PageSequencePaddingSize;
+            int pageSequenceSize = (PageSequencePaddingSize * 2);
             int sequencePageCount = pageSequenceSize + 1;
 
             if (lowerPagePadding.Contains(CurrentPageNumber)){
