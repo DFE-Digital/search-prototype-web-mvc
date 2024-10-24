@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
+﻿namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
 {
     /// <summary>
     /// 
@@ -31,6 +29,11 @@ namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
         /// 
         /// </summary>
         public int PreviousPageNumber => CurrentPageNumber -1;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int NextPageNumber => CurrentPageNumber + 1;
 
         /// <summary>
         /// 

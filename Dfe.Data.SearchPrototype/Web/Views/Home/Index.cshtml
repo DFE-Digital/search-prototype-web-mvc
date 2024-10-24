@@ -69,6 +69,7 @@
             <div class="govuk-grid-column-two-thirds" id="results">
                 <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
 
+                @* pagination *@
                 @{
                     var pageSequence = Model.PaginationResults?.GetPageSequenceWithBounds();
                     int firstPageNumber = 1;
@@ -118,14 +119,22 @@
                                 }
                             }
 
-                            @* @if (!Model.PaginationResults.IsLastPageSequence)
-                            {
-                                <li class="govuk-pagination__item govuk-pagination__item--ellipses">&ctdot;</li>
-                            } *@
+
+                            <li class="govuk-pagination__item @(Model.PaginationResults?.CurrentPageNumber == Model.PaginationResults?.GetTotalNumberOfPages() ? "govuk-visually-hidden" : "")">
+                                <button type="submit"
+                                        style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;"
+                                        class="govuk-link govuk-pagination__link"
+                                        name="PageNumber"
+                                        value=@Model.PaginationResults?.NextPageNumber>
+                                    next »
+                                </button>
+                            </li>
+
                         </ul>
                     }
                     
                 </nav>
+                @* end of pagination *@
                 <hr />
                 <ul style="list-style: none">
                     @foreach (var searchItem in Model.SearchItems!)
