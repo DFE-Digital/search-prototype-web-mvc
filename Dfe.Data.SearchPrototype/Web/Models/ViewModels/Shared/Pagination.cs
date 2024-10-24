@@ -1,7 +1,8 @@
 ﻿namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
 {
     /// <summary>
-    /// 
+    /// TODO: Break this class up around structural and behavioural pagination concerns.
+    /// Review naming and terminology to clean things up a bit.
     /// </summary>
     public sealed class Pagination
     {
@@ -28,7 +29,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int PreviousPageNumber => CurrentPageNumber -1;
+        public int PreviousPageNumber => CurrentPageNumber - 1;
 
         /// <summary>
         /// 
@@ -38,16 +39,60 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="pagePaddingSize">
+        public List<int> CurrentPageSequence => GetPageSequence();
+
+        /// <summary>
         /// 
-        /// </param>
-        /// <returns>
+        /// </summary>
+        public int TotalNumberOfPages => GetTotalNumberOfPages();
+
+        /// <summary>
         /// 
-        /// </returns>
-        public List<int> GetPageSequenceWithBounds()
+        /// </summary>
+        public bool HasPageableResults => CurrentPageSequence.Count > 1;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int FirstPageNumber => 1;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsLastPage => CurrentPageNumber == TotalNumberOfPages;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsFirstPage => CurrentPageNumber == FirstPageNumber;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CurrentPageInsideLowerPaddingBoundary => CurrentPageSequence[0] < PageSequencePaddingSize;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CurrentPageOnLowerPaddingBoundaryThreshold => CurrentPageSequence[0] < PageSequencePaddingSize + 1;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CurrentPageOnUpperPaddingBoundaryThreshold => CurrentPageNumber > (TotalNumberOfPages - (PageSequencePaddingSize * 2));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CurrentPageInsideUpperPaddingBoundaryThreshold => CurrentPageNumber > (TotalNumberOfPages - (PageSequencePaddingSize + 1));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private List<int> GetPageSequence()
         {
             int totalPageCount = GetTotalNumberOfPages();
-
             int[] lowerPagePadding =
                 Enumerable.Range(1, PageSequencePaddingSize).ToArray();
             int[] upperPagePadding =
@@ -78,7 +123,7 @@
         /// <exception cref="ArgumentException">
         /// 
         /// </exception>
-        public int GetTotalNumberOfPages()
+        private int GetTotalNumberOfPages()
         {
             if (TotalRecordCount == 0) {
                 throw new ArgumentException("The record count must be greater than zero.");

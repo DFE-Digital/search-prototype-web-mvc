@@ -5,6 +5,7 @@ using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Data.SearchPrototype.Web.Controllers;
@@ -83,7 +84,7 @@ public class HomeController : Controller
                 new FacetsAndSelectedFacets(
                     response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
 
-        viewModel.PaginationResults = new Models.ViewModels.Shared.Pagination()
+        viewModel.Pagination = new Pagination()
         {
             CurrentPageNumber = searchRequestViewModel.PageNumber,  // set from view model on binding
             TotalRecordCount = (int)response.EstablishmentResults?.TotalNumberOfEstablishments,
