@@ -70,11 +70,11 @@
                 <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
 
                 @{
-                    var pageSequence = Model.PaginationResults.GetPageSequence();
+                    var pageSequence = Model.PaginationResults?.GetPageSequenceWithBounds(pagePaddingSize: 2);
                 }
 
                 <nav class="govuk-pagination" role="navigation" aria-label="results">
-                    @if (pageSequence.Count > 0)
+                    @if (pageSequence?.Count > 0)
                     {
                         <ul class="govuk-pagination__list">
                             @* @if (!Model.PaginationResults.IsFirstPageSequence)

@@ -13,11 +13,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public Dictionary<int, int[]> PageSequences { get; set; } = [];
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int TotalRecordCount { get; set; }
 
         /// <summary>
@@ -28,99 +23,55 @@
         /// <summary>
         /// 
         /// </summary>
-        public int PageSequenceWidth => GetPageSequence().Count;
-
-        /// <summary>
+        /// <param name="pagePaddingSize">
         /// 
-        /// </summary>
-        public int[] CurrentPageSequence => PageSequences[CurrentPageNumber]; // throws KeyNotFoundException by default.
-
-        /// <summary>
+        /// </param>
+        /// <returns>
         /// 
-        /// </summary>
-        public bool IsFirstPageSequence =>
-            PageSequences == null || !PageSequences.Any() ?
-                throw new InvalidOperationException(
-                    "Cannot determine first page result when page sequence is null or empty.") :
-                PageSequences.First().Value.Contains(CurrentPageNumber);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsLastPageSequence =>
-            PageSequences == null || !PageSequences.Any() ?
-                throw new InvalidOperationException(
-                    "Cannot determine last page result when page sequence is null or empty.") :
-                PageSequences.Last().Value.Contains(CurrentPageNumber);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsFirstPage => CurrentPageNumber == 1;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsLastPage => CurrentPageNumber == GetTotalNumberOfPages();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public List<int> GetPageSequence()
+        /// </returns>
+        public List<int> GetPageSequenceWithBounds(int pagePaddingSize)
         {
             int totalPageCount = GetTotalNumberOfPages();
-            int pagePaddingSize = 2;
-            int additionalPadding = totalPageCount - CurrentPageNumber;
-            int startPageNumberOfPageSequence = 0;
-            ///IF AVAILABLE PADDING SIZE = PAGE PADDING SIZE - ADD {PADDING SIZE} BUTTONS
-            ///IF AVAILABLE PADDING SIZE < PAGE PADDING SIZE - CHECK IF WE CAN ADD IT ON THE OTHER SIDE BUT NO MORE THAN PADDING SIZE *2 LEFT OR RIGHT
-            ///IF AVAIALABLE PADDING SIZE > PAGE PADDING SIZE + 1 THEN ADD ELIPSIS AND FIRST OR LAST PAGE
 
-            // if page number is 1 or 2 then check if we can add it to the right
-            if (CurrentPageNumber <= pagePaddingSize)
-            {
-                startPageNumberOfPageSequence = 1;
+            int[] lowerPagePadding = Enumerable.Range(1, pagePaddingSize).ToArray();
+            int[] upperPagePadding = Enumerable.Range(totalPageCount - pagePaddingSize + 1, pagePaddingSize).ToArray();
+
+            int firstSequencePageNumber = CurrentPageNumber - pagePaddingSize;
+            int pageSequenceSize = (pagePaddingSize * 2);
+            int sequencePageCount = pageSequenceSize + 1;
+
+            if (lowerPagePadding.Contains(CurrentPageNumber)){
+                firstSequencePageNumber = 1;
+                sequencePageCount =
+                    (totalPageCount <= pageSequenceSize) ? totalPageCount : sequencePageCount;
             }
-            //deals with the ideal situation full padding(2) on both sides
-            else if (CurrentPageNumber > pagePaddingSize || CurrentPageNumber < (totalPageCount - pagePaddingSize))
-            {
-                //if page number is a last number
-                if (CurrentPageNumber == totalPageCount)
-                {
-                    startPageNumberOfPageSequence = CurrentPageNumber - (pagePaddingSize + pagePaddingSize);
-                }
-                //if padding on the right side is not a full padding(less than 2 in this example)
-                else if (CurrentPageNumber > (totalPageCount - pagePaddingSize))
-                {
-
-                    startPageNumberOfPageSequence = CurrentPageNumber - (pagePaddingSize + additionalPadding);
-                }
-                else
-                {
-                    //pagePaddingSize number 3 >  padding size 2 then we can add full padding 2 buttons
-                    startPageNumberOfPageSequence = CurrentPageNumber - pagePaddingSize;
-                }
+            else if (upperPagePadding.Contains(CurrentPageNumber)){
+                firstSequencePageNumber = totalPageCount - pageSequenceSize;
             }
 
-            List<int> pageSequence = Enumerable.Range(startPageNumberOfPageSequence, (pagePaddingSize + pagePaddingSize + 1)).ToList();
-            return pageSequence;
+            return Enumerable.Range(firstSequencePageNumber, sequencePageCount).ToList();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <returns>
+        /// 
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// 
+        /// </exception>
         public int GetTotalNumberOfPages()
         {
-            if (TotalRecordCount == 0)
+            if (TotalRecordCount == 0) {
                 throw new ArgumentException("The record count must be greater than zero.");
+            }
 
-            if (RecordsPerPage == 0)
+            if (RecordsPerPage == 0){
                 throw new ArgumentException("The page size must be greater than zero.");
+            }
 
-            return TotalRecordCount / RecordsPerPage + (TotalRecordCount % RecordsPerPage > 0 ? 1 : 0);
+            return (TotalRecordCount / RecordsPerPage) + (TotalRecordCount % RecordsPerPage > 0 ? 1 : 0);
         }
     }
 }

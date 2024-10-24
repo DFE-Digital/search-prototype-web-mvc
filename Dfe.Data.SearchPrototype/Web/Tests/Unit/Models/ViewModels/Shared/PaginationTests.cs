@@ -2,9 +2,9 @@
 using FluentAssertions;
 using Xunit;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Services
+namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
 {
-    public sealed class PaginationServiceTests
+    public sealed class PaginationTests
     {
         [Fact]
         public void GetTotalNumberOfPages()
@@ -14,7 +14,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Services
             pagination.RecordsPerPage = 20;
             int totalNumberOfPages = pagination.GetTotalNumberOfPages();
             totalNumberOfPages.Should().Be(5);
-
         }
 
         [Fact]
@@ -24,7 +23,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Services
             pagination.TotalRecordCount = 1023;
             pagination.RecordsPerPage = 20;
             pagination.CurrentPageNumber = 21;
-            List<int> pageSequence = pagination.GetPageSequence();
+            List<int> pageSequence = pagination.GetPageSequenceWithBounds(pagePaddingSize: 2);
             pageSequence.Should().Equal([19, 20, 21, 22, 23]);
         }
 
@@ -35,7 +34,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Services
             pagination.TotalRecordCount = 1023;
             pagination.RecordsPerPage = 20;
             pagination.CurrentPageNumber = 50;
-            List<int> pageSequence = pagination.GetPageSequence();
+            List<int> pageSequence = pagination.GetPageSequenceWithBounds(pagePaddingSize: 2);
             pageSequence.Should().Equal([48, 49, 50, 51, 52]);
         }
 
@@ -46,7 +45,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Services
             pagination.TotalRecordCount = 1023;
             pagination.RecordsPerPage = 20;
             pagination.CurrentPageNumber = 1;
-            List<int> pageSequence = pagination.GetPageSequence();
+            List<int> pageSequence = pagination.GetPageSequenceWithBounds(pagePaddingSize: 2);
             pageSequence.Should().Equal([1, 2, 3, 4, 5]);
         }
         [Fact]
@@ -56,7 +55,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Services
             pagination.TotalRecordCount = 1023;
             pagination.RecordsPerPage = 20;
             pagination.CurrentPageNumber = 2;
-            List<int> pageSequence = pagination.GetPageSequence();
+            List<int> pageSequence = pagination.GetPageSequenceWithBounds(pagePaddingSize: 2);
             pageSequence.Should().Equal([1, 2, 3, 4, 5]);
         }
 
@@ -67,8 +66,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Services
             pagination.TotalRecordCount = 1023;
             pagination.RecordsPerPage = 20;
             pagination.CurrentPageNumber = 52;
-            List<int> pageSequence = pagination.GetPageSequence();
-            pageSequence.Should().Equal([ 48, 49, 50, 51, 52]);
+            List<int> pageSequence = pagination.GetPageSequenceWithBounds(pagePaddingSize: 2);
+            pageSequence.Should().Equal([48, 49, 50, 51, 52]);
         }
 
         [Fact]
@@ -78,7 +77,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Services
             pagination.TotalRecordCount = 1023;
             pagination.RecordsPerPage = 20;
             pagination.CurrentPageNumber = 51;
-            List<int> pageSequence = pagination.GetPageSequence();
+            List<int> pageSequence = pagination.GetPageSequenceWithBounds(pagePaddingSize: 2);
             pageSequence.Should().Equal([48, 49, 50, 51, 52]);
         }
     }
