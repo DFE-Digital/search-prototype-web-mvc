@@ -71,22 +71,33 @@
 
                 @{
                     var pageSequence = Model.PaginationResults?.GetPageSequenceWithBounds();
+                    int firstPageNumber = 1;
                 }
 
                 <nav class="govuk-pagination" role="navigation" aria-label="results">
                     @if (pageSequence?.Count > 0)
                     {
                         <ul class="govuk-pagination__list">
-                            @* @if (!Model.PaginationResults.IsFirstPageSequence)
-                            {
-                                <li class="govuk-pagination__item govuk-pagination__item--ellipses">&ctdot;</li>
-                            } *@
-                            <li class="govuk-pagination__item @(pageSequence.First() < 3 ? "govuk-visually-hidden" : "")">
-                                <a class="govuk-link govuk-pagination__link" href="#" aria-label="Page 1">
-                                    1
-                                </a>
+                            <li class="govuk-pagination__item @(Model.PaginationResults?.CurrentPageNumber == firstPageNumber ? "govuk-visually-hidden" : "")">
+                                <button type="submit"
+                                        style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;"
+                                        class="govuk-link govuk-pagination__link"
+                                        name="PageNumber"
+                                        value=@Model.PaginationResults?.PreviousPageNumber>
+                                    « previous
+                                </button>
                             </li>
-                            <li class="govuk-pagination__item govuk-pagination__item--ellipses @(pageSequence.First() < 3 ? "govuk-visually-hidden" : "")">
+                            <li class="govuk-pagination__item @(pageSequence.First() < Model.PaginationResults?.PageSequencePaddingSize ? "govuk-visually-hidden" : "")">
+                                <button
+                                    type="submit"
+                                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;"
+                                    class="govuk-link govuk-pagination__link"
+                                    name="PageNumber"
+                                    value=@firstPageNumber>
+                                        @firstPageNumber
+                                </button>
+                            </li>
+                            <li class="govuk-pagination__item govuk-pagination__item--ellipses @(pageSequence.First() < Model.PaginationResults?.PageSequencePaddingSize ? "govuk-visually-hidden" : "")">
                                 &ctdot;
                             </li>
                             @foreach (var pageNumber in pageSequence)
@@ -94,7 +105,7 @@
                                 if (pageNumber > 0)
                                 {
                                     <li class="govuk-pagination__item
-                                        @(pageNumber == Model.PaginationResults.CurrentPageNumber ? "govuk-pagination__item--current" : "")">
+                                        @(pageNumber == Model.PaginationResults?.CurrentPageNumber ? "govuk-pagination__item--current" : "")">
                                         <button
                                             type="submit"
                                             style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;"

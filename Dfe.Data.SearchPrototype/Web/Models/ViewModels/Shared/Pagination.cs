@@ -1,4 +1,6 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
+﻿using System.Reflection;
+
+namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
 {
     /// <summary>
     /// 
@@ -24,6 +26,11 @@
         /// 
         /// </summary>
         public int PageSequencePaddingSize { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int PreviousPageNumber => CurrentPageNumber -1;
 
         /// <summary>
         /// 
