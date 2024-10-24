@@ -71,6 +71,7 @@
 
                 @* pagination *@
                 @{
+                    int lastPageNumber = Model.PaginationResults.GetTotalNumberOfPages();
                     var pageSequence = Model.PaginationResults?.GetPageSequenceWithBounds();
                     int firstPageNumber = 1;
                 }
@@ -119,8 +120,23 @@
                                 }
                             }
 
+                            <li class="govuk-pagination__item govuk-pagination__item--ellipses 
+@(Model.PaginationResults?.CurrentPageNumber > (Model.PaginationResults.GetTotalNumberOfPages() - Model.PaginationResults?.PageSequencePaddingSize * 2) ? "govuk-visually-hidden" : "")">
+                                &ctdot;
+                            </li>
 
-                            <li class="govuk-pagination__item @(Model.PaginationResults?.CurrentPageNumber == Model.PaginationResults?.GetTotalNumberOfPages() ? "govuk-visually-hidden" : "")">
+                            <li class="govuk-pagination__item govuk-pagination__item--ellipses
+@(Model.PaginationResults?.CurrentPageNumber > (Model.PaginationResults.GetTotalNumberOfPages() - ((Model.PaginationResults?.PageSequencePaddingSize + 1))) ? "govuk-visually-hidden" : "")">
+                                <button type="submit"
+                                        style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;"
+                                        class="govuk-link govuk-pagination__link"
+                                        name="PageNumber"
+                                        value=@lastPageNumber>
+                                    @lastPageNumber
+                                </button>
+                            </li>
+
+                            <li class="govuk-pagination__item @(Model.PaginationResults?.CurrentPageNumber == lastPageNumber ? "govuk-visually-hidden" : "")">
                                 <button type="submit"
                                         style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;"
                                         class="govuk-link govuk-pagination__link"
@@ -129,7 +145,6 @@
                                     next »
                                 </button>
                             </li>
-
                         </ul>
                     }
                     
