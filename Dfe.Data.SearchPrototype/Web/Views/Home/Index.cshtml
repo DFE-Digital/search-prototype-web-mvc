@@ -67,7 +67,7 @@
         @if (Model.HasResults)
         {
             <div class="govuk-grid-column-two-thirds" id="results">
-                <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount @(Model.HasMoreThanOneResult ? "Results" : "Result")</h3>
+                <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount out of @Model.PaginationResults.TotalRecordCount @(Model.PaginationResults.TotalRecordCount > 1 ? "results" : "result")</h3>
 
                 @* pagination *@
                 @{
