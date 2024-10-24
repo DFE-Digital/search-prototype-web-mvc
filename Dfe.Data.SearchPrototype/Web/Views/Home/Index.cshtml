@@ -77,7 +77,7 @@
                 }
 
                 <nav class="govuk-pagination" role="navigation" aria-label="results">
-                    @if (pageSequence?.Count > 0)
+                    @if (pageSequence?.Count > 1)
                     {
                         <ul class="govuk-pagination__list">
                             <li class="govuk-pagination__item @(Model.PaginationResults?.CurrentPageNumber == firstPageNumber ? "govuk-visually-hidden" : "")">
