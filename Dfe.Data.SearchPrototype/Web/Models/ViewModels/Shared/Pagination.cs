@@ -24,7 +24,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int PageSequencePaddingSize { get; set; }
+        public int PageSequencePaddingSize => 2;
 
         /// <summary>
         /// 
