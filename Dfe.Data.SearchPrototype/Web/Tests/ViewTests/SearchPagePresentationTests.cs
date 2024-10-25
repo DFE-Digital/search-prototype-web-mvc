@@ -13,11 +13,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 public class SearchPagePresentationTests : SharedTestFixture
 {
     private const string homeUri = "http://localhost";
-    private SearchPageModel _searchPageModel;
+    private SearchPageModel _searchPage;
 
     public SearchPagePresentationTests(WebApplicationFactory<Program> factory) : base(factory)
     {
-        _searchPageModel = new SearchPageModel(_context);
+        _searchPage = new SearchPageModel(_context);
     }
 
     [Fact]
@@ -29,12 +29,12 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPageModel.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
 
         // assert
-        _searchPageModel.Results!.NoResultsText.Should().Contain("Sorry no results found please amend your search criteria");
-        _searchPageModel.Results!.ResultsText.Should().BeNull();
-        _searchPageModel.FilterSection.Should().BeNull();
+        _searchPage.Results!.NoResultsText.Should().Contain("Sorry no results found please amend your search criteria");
+        _searchPage.Results!.ResultsText.Should().BeNull();
+        _searchPage.FilterSection.Should().BeNull();
     }
 
     [Fact]
@@ -46,12 +46,12 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPageModel.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
 
         // assert
-        _searchPageModel.Results.Should().NotBeNull();
-        _searchPageModel.Results!.ResultsText.Should().Be("1 Result");
-        _searchPageModel.Results!.SearchResultLinks!.Count().Should().Be(1);
+        _searchPage.Results.Should().NotBeNull();
+        _searchPage.Results!.ResultsText.Should().Be("1 Result");
+        _searchPage.Results!.SearchResultLinks!.Count().Should().Be(1);
     }
 
     [Fact]
@@ -63,12 +63,12 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPageModel.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
 
         // assert
-        _searchPageModel.Results.Should().NotBeNull();
-        _searchPageModel.Results!.ResultsText.Should().Contain("Results");
-        _searchPageModel.Results!.SearchResultLinks!.Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
+        _searchPage.Results.Should().NotBeNull();
+        _searchPage.Results!.ResultsText.Should().Contain("Results");
+        _searchPage.Results!.SearchResultLinks!.Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 
     [Fact]
@@ -80,18 +80,18 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPageModel.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
 
         // assert
-        _searchPageModel.FilterSection.Should().NotBeNull();
-        _searchPageModel.FilterSection!.FiltersHeading.Should().Be("Filters");
+        _searchPage.FilterSection.Should().NotBeNull();
+        _searchPage.FilterSection!.FiltersHeading.Should().Be("Filters");
 
         var expectedFacets = useCaseResponse
             .EstablishmentFacetResults!
             .Facets
             .SelectMany(facet => facet.Results.Select(facetResult => new KeyValuePair<string, string>(facet.Name, facetResult.Value)));
 
-        var pageFacets = _searchPageModel
+        var pageFacets = _searchPage
             .FilterSection
             .Filters
             .SelectMany(filter => filter.CheckBoxValues.Select(checkBoxValue => new KeyValuePair<string, string>(filter.Name, checkBoxValue)));
@@ -108,7 +108,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPageModel.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
         var selectionFilters = new Dictionary<string, string>() {
             {
                 useCaseResponse
@@ -121,10 +121,10 @@ public class SearchPagePresentationTests : SharedTestFixture
                     .First().Results.First().Value
             }
         };
-         _searchPageModel.FilterSection!.SelectFilters(selectionFilters);
-        await _searchPageModel.Form!.SubmitAsync();
+         _searchPage.FilterSection!.SelectFilters(selectionFilters);
+        await _searchPage.Form!.SubmitAsync();
 
-        var resultsPageSelectedFacets = _searchPageModel.FilterSection!.Filters.SelectMany(filter => filter.SelectedCheckBoxValues);
+        var resultsPageSelectedFacets = _searchPage.FilterSection!.Filters.SelectMany(filter => filter.SelectedCheckBoxValues);
         resultsPageSelectedFacets.Should().BeEquivalentTo(selectionFilters.Select(filter => filter.Value));
     }
 }
