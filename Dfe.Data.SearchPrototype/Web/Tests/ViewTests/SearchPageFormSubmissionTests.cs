@@ -1,7 +1,6 @@
-﻿using AngleSharp;
-using AngleSharp.Dom;
+﻿using AngleSharp.Dom;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -10,12 +9,18 @@ using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 
+/// <summary>
+///  Tests that submit the page form and check that the subsequest
+///  request to the use-case is correct
+/// </summary>
 public class SearchPageFormSubmissionTests : SharedTestFixture
 {
     private const string homeUri = "http://localhost";
+    private SearchPageModel _searchPage;
 
     public SearchPageFormSubmissionTests(WebApplicationFactory<Program> factory) : base(factory)
     {
+        _searchPage = new SearchPageModel(_context);
     }
 
     [Fact]
@@ -30,23 +35,37 @@ public class SearchPageFormSubmissionTests : SharedTestFixture
             .Callback<SearchByKeywordRequest>((x) => capturedUsecaseRequest = x)
             .ReturnsAsync(useCaseResponse);
 
+        // choose a filter to apply from those mocked in the use-case response 
+        var selectionFilters = new Dictionary<string, string>() {
+            {
+                useCaseResponse
+                    .EstablishmentFacetResults!
+                    .Facets
+                    .First().Name,
+                useCaseResponse
+                    .EstablishmentFacetResults
+                    .Facets
+                    .First().Results.First().Value
+            }
+        };
+
         // act
         // navigate to results page with search keyword
-        var document = await _context.OpenAsync($"{homeUri}?searchKeyword={searchTerm}");
+        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword={searchTerm}");
         // select some filters
-        var checkedBoxes = document.SelectFilters();
+        _searchPage.FilterSection!.SelectFilters(selectionFilters);
         // submit filtered search
-        IDocument resultsPage = await document.SubmitSearchAsync();
+        await _searchPage.Form!.SubmitAsync();
 
         // assert
         var usecaseSelectedFacets = capturedUsecaseRequest!
             .FilterRequests!
             .SelectMany(request => request
                 .FilterValues
-                .Where(filterValue => checkedBoxes.Select(checkbox => checkbox.Value).Contains(filterValue.ToString()))
+                .Where(filterValue => selectionFilters.Select(selectedFilter => selectedFilter.Value).Contains(filterValue.ToString()))
                 );
 
-        checkedBoxes.Select(element => element.Value).Should().BeEquivalentTo(usecaseSelectedFacets.Select(facet => facet.ToString()));
+        selectionFilters.Select(element => element.Value).Should().BeEquivalentTo(usecaseSelectedFacets.Select(facet => facet.ToString()));
         capturedUsecaseRequest!.SearchKeyword.Should().Be(searchTerm);
     }
 
@@ -62,19 +81,33 @@ public class SearchPageFormSubmissionTests : SharedTestFixture
             .Callback<SearchByKeywordRequest>((x) => capturedUsecaseRequest = x)
             .ReturnsAsync(useCaseResponse);
 
+        // choose a filter to apply from those mocked in the use-case response 
+        var selectionFilters = new Dictionary<string, string>() {
+            {
+                useCaseResponse
+                    .EstablishmentFacetResults!
+                    .Facets
+                    .First().Name,
+                useCaseResponse
+                    .EstablishmentFacetResults
+                    .Facets
+                    .First().Results.First().Value
+            }
+        };
+
         // act
         // navigate to results page with search keyword
-        var document = await _context.OpenAsync($"{homeUri}?searchKeyword={searchTerm}");
+        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword={searchTerm}");
 
         // select some filters
-        var checkedBoxes = document.SelectFilters();
-        IDocument resultsPage = await document.SubmitSearchAsync();
+        _searchPage.FilterSection!.SelectFilters(selectionFilters);
+        await _searchPage.Form!.SubmitAsync();
 
         // assert checkboxes have been selected
-        Assert.NotEmpty(checkedBoxes);
+        _searchPage.FilterSection!.Filters.SelectMany(filter => filter.SelectedCheckBoxValues).Should().NotBeEmpty();
 
-        // once form submitted with filters we want to clear them
-        IDocument clearedFiltersPage = await document.SubmitClearAsync();
+        // clear the filters
+        await _searchPage.Form!.SubmitClearAsync();
 
         // assert checkboxes are no longer selected
         var usecaseSelectedFacets = capturedUsecaseRequest!

@@ -25,7 +25,7 @@
     @* filters *@
     @if (Model != null)
     {
-        @if (Model.HasResults)
+        @if (Model.Facets != null)
         {
             <div id="filters-container" class="govuk-grid-column-one-third">
                 <h3 id="filters-heading">Filters</h3>
