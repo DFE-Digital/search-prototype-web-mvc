@@ -6,6 +6,16 @@
     /// </summary>
     public sealed class Pagination
     {
+        private readonly IPaginationSequencer _paginationSequencer;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Pagination(IPaginationSequencer paginationSequencer)
+        {
+            _paginationSequencer = paginationSequencer;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -39,7 +49,8 @@
         /// <summary>
         /// 
         /// </summary>
-        public List<int> CurrentPageSequence => GetPageSequence();
+        public List<int> CurrentPageSequence =>
+            _paginationSequencer.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
@@ -69,50 +80,30 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageInsideLowerPaddingBoundary => CurrentPageSequence[0] < PageSequencePaddingSize;
+        public bool CurrentPageInsideLowerPaddingBoundary =>
+            _paginationSequencer
+                .IsCurrentPageInsideLowerPaddingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageOnLowerPaddingBoundaryThreshold => CurrentPageSequence[0] < PageSequencePaddingSize + 1;
+        public bool CurrentPageOnLowerPaddingBoundaryThreshold =>
+            _paginationSequencer
+                .IsCurrentPageOnLowerPaddingBoundaryThreshold(CurrentPageNumber, TotalNumberOfPages);
         
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageOnUpperPaddingBoundaryThreshold => CurrentPageNumber > (TotalNumberOfPages - (PageSequencePaddingSize * 2));
+        public bool CurrentPageOnUpperPaddingBoundaryThreshold =>
+            _paginationSequencer
+                .IsCurrentPageOnUpperPaddingBoundaryThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageInsideUpperPaddingBoundaryThreshold => CurrentPageNumber > (TotalNumberOfPages - (PageSequencePaddingSize + 1));
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private List<int> GetPageSequence()
-        {
-            int totalPageCount = GetTotalNumberOfPages();
-            int[] lowerPagePadding =
-                Enumerable.Range(1, PageSequencePaddingSize).ToArray();
-            int[] upperPagePadding =
-                Enumerable.Range(totalPageCount - PageSequencePaddingSize + 1, PageSequencePaddingSize).ToArray();
-
-            int firstSequencePageNumber = CurrentPageNumber - PageSequencePaddingSize;
-            int pageSequenceSize = (PageSequencePaddingSize * 2);
-            int sequencePageCount = pageSequenceSize + 1;
-
-            if (lowerPagePadding.Contains(CurrentPageNumber)){
-                firstSequencePageNumber = 1;
-                sequencePageCount =
-                    (totalPageCount <= pageSequenceSize) ? totalPageCount : sequencePageCount;
-            }
-            else if (upperPagePadding.Contains(CurrentPageNumber)){
-                firstSequencePageNumber = totalPageCount - pageSequenceSize;
-            }
-
-            return Enumerable.Range(firstSequencePageNumber, sequencePageCount).ToList();
-        }
+        public bool CurrentPageInsideUpperPaddingBoundary =>
+            _paginationSequencer
+                .IsCurrentPageInsideUpperPaddingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 

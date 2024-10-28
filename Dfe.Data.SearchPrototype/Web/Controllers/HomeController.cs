@@ -84,11 +84,13 @@ public class HomeController : Controller
                 new FacetsAndSelectedFacets(
                     response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
 
-        viewModel.Pagination = new Pagination()
+        IPaginationSequencer paginationSequencer = new PaginationSequencer();
+
+        viewModel.Pagination = new Pagination(paginationSequencer)
         {
             CurrentPageNumber = searchRequestViewModel.PageNumber,  // set from view model on binding
-            TotalRecordCount = (int)response.EstablishmentResults?.TotalNumberOfEstablishments,
-            RecordsPerPage = 10
+            TotalRecordCount = (int)response.EstablishmentResults?.TotalNumberOfEstablishments, // from AI search result
+            RecordsPerPage = 10 // from config?
         };
 
         return View(viewModel);
