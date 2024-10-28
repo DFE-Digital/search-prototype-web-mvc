@@ -70,7 +70,11 @@ public class HomeControllerTests
 
         await controller.Index(new SearchRequest() { SearchKeyword = "KDM" });
 
-        mockSearchResultsFactory.Verify(factory => factory.CreateViewModel(It.IsAny<EstablishmentResults?>(), It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
+        mockSearchResultsFactory.Verify(factory =>
+            factory.CreateViewModel(
+                It.IsAny<EstablishmentResults?>(),
+                It.IsAny<FacetsAndSelectedFacets>(),
+                It.IsAny<int>()), Times.Once());
     }
 
     [Fact]

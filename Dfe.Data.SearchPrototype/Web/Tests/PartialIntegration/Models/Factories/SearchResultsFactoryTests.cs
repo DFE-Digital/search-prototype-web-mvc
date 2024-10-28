@@ -31,7 +31,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
-                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create());
+                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create(),
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();
@@ -59,7 +60,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: null!,
-                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create());
+                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create(),
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();
@@ -87,7 +89,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
-                    facetsAndSelectedFacets: null!);
+                    facetsAndSelectedFacets: null!,
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();
@@ -115,7 +118,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
-                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.CreateWith(establishmentFacets: null!, selectedFacets: null!));
+                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.CreateWith(establishmentFacets: null!, selectedFacets: null!),
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();
