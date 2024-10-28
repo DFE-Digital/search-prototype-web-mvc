@@ -34,11 +34,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public int PageSequencePaddingSize => 2;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int PreviousPageNumber => CurrentPageNumber - 1;
 
         /// <summary>
