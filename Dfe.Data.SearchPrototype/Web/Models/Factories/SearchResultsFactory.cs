@@ -69,7 +69,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
                         Facets =
                             _facetsAndSelectedFacetsToFacetsViewModelMapper
                                 .MapFrom(facetsAndSelectedFacets),
-                        Pagination = 
+                        Pagination =
                             _paginationResultsToPaginationViewModelMapper
                                 .MapFrom((currentPageNumber, (int)establishmentResults.TotalNumberOfEstablishments))
                    }

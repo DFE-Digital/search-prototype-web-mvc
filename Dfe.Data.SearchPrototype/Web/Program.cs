@@ -30,7 +30,7 @@ builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<Models.ViewMod
 builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, FacetsAndSelectedFacetsToFacetsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>?>, SelectedFacetsToFilterRequestsMapper>();
 builder.Services.AddSingleton<IMapper<(int, int), Pagination>, PaginationResultsToPaginationViewModelMapper>();
-builder.Services.AddSingleton<IPaginationSequencer, PaginationSequencer>();
+builder.Services.AddSingleton<IPager, ScrollablePager>();
 //
 //
 // End of IOC container registrations

@@ -1,20 +1,16 @@
 ﻿namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
 {
     /// <summary>
-    /// TODO: Break this class up around structural and behavioural pagination concerns.
-    /// Review naming and terminology to clean things up a bit.
+    ///
     /// </summary>
     public sealed class Pagination
     {
-        private readonly IPaginationSequencer _paginationSequencer;
+        private readonly IPager _pager;
 
         /// <summary>
         /// 
         /// </summary>
-        public Pagination(IPaginationSequencer paginationSequencer)
-        {
-            _paginationSequencer = paginationSequencer;
-        }
+        public Pagination(IPager pager) => _pager = pager;
 
         /// <summary>
         /// 
@@ -45,7 +41,7 @@
         /// 
         /// </summary>
         public List<int> CurrentPageSequence =>
-            _paginationSequencer.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
+            _pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
@@ -55,7 +51,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool HasPageableResults => CurrentPageSequence.Count > 1;
+        public bool IsPageable => CurrentPageSequence.Count > 1;
 
         /// <summary>
         /// 
@@ -75,40 +71,32 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageInsideLowerPaddingBoundary =>
-            _paginationSequencer
-                .IsCurrentPageInsideLowerPaddingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInLowerPagingBoundary =>
+            _pager.IsCurrentPageInLowerPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageOnLowerPaddingBoundaryThreshold =>
-            _paginationSequencer
-                .IsCurrentPageOnLowerPaddingBoundaryThreshold(CurrentPageNumber, TotalNumberOfPages);
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool CurrentPageOnUpperPaddingBoundaryThreshold =>
-            _paginationSequencer
-                .IsCurrentPageOnUpperPaddingBoundaryThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageOnLowerPagingThreshold =>
+            _pager.IsCurrentPageOnLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageInsideUpperPaddingBoundary =>
-            _paginationSequencer
-                .IsCurrentPageInsideUpperPaddingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInUpperPagingBoundary =>
+            _pager.IsCurrentPageInUpperPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <returns>
+        public bool CurrentPageOnUpperPagingThreshold =>
+            _pager.IsCurrentPageOnUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+
+        /// <summary>
         /// 
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// 
-        /// </exception>
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         private int GetTotalNumberOfPages()
         {
             if (TotalRecordCount == 0) {

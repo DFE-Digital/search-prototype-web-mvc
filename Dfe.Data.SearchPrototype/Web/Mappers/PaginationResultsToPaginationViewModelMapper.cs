@@ -5,9 +5,9 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers;
 
 public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), Pagination>
 {
-    private readonly IPaginationSequencer _paginationSequencer;
+    private readonly IPager _paginationSequencer;
 
-    public PaginationResultsToPaginationViewModelMapper(IPaginationSequencer paginationSequencer)
+    public PaginationResultsToPaginationViewModelMapper(IPager paginationSequencer)
     {
         _paginationSequencer = paginationSequencer;
     }

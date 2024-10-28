@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PaginationSequencer : IPaginationSequencer
+    public sealed class ScrollablePager : IPager
     {
         /// <summary>
         /// 
@@ -13,33 +13,41 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool IsCurrentPageInsideLowerPaddingBoundary(
-            int currentPageNumber,
-            int totalNumberOfPages) =>
+        /// <param name="currentPageNumber"></param>
+        /// <param name="totalNumberOfPages"></param>
+        /// <returns></returns>
+        public bool IsCurrentPageInLowerPagingBoundary(
+            int currentPageNumber, int totalNumberOfPages) =>
                 GetPageSequence(currentPageNumber, totalNumberOfPages)?[0] < PageSequencePaddingSize;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsCurrentPageOnLowerPaddingBoundaryThreshold(
-            int currentPageNumber,
-            int totalNumberOfPages) =>
+        /// <param name="currentPageNumber"></param>
+        /// <param name="totalNumberOfPages"></param>
+        /// <returns></returns>
+        public bool IsCurrentPageOnLowerPagingThreshold(
+            int currentPageNumber, int totalNumberOfPages) =>
                 GetPageSequence(currentPageNumber, totalNumberOfPages)?[0] < PageSequencePaddingSize + 1;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsCurrentPageInsideUpperPaddingBoundary(
-            int currentPageNumber,
-            int totalNumberOfPages) =>
+        /// <param name="currentPageNumber"></param>
+        /// <param name="totalNumberOfPages"></param>
+        /// <returns></returns>
+        public bool IsCurrentPageInUpperPagingBoundary(
+            int currentPageNumber, int totalNumberOfPages) =>
                 currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize + 1));
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsCurrentPageOnUpperPaddingBoundaryThreshold(
-            int currentPageNumber,
-            int totalNumberOfPages) =>
+        /// <param name="currentPageNumber"></param>
+        /// <param name="totalNumberOfPages"></param>
+        /// <returns></returns>
+        public bool IsCurrentPageOnUpperPagingThreshold(
+            int currentPageNumber, int totalNumberOfPages) =>
                 currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize * 2));
 
         /// <summary>

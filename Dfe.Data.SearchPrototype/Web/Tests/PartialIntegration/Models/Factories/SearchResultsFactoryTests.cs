@@ -1,8 +1,8 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
 using Xunit;
@@ -21,11 +21,14 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =
@@ -50,11 +53,14 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =
@@ -79,11 +85,14 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =
@@ -108,11 +117,14 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =

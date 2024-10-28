@@ -70,7 +70,7 @@
             <div class="govuk-grid-column-two-thirds" id="results">
                 <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount out of @Model.Pagination.TotalRecordCount @(Model.Pagination.TotalRecordCount > 1 ? "results" : "result")</h3>
                 @* pagination *@
-                @await Html.PartialAsync("_pagination", Model)
+                @await Html.PartialAsync("_pagination", Model.Pagination)
                 @* end of pagination *@
                 <hr />
                 <ul style="list-style: none">
@@ -100,7 +100,7 @@
                     }
                 </ul>
                 @* pagination *@
-                @await Html.PartialAsync("_pagination", Model)
+                @await Html.PartialAsync("_pagination", Model.Pagination)
                 @* end of pagination *@
             </div>
         }

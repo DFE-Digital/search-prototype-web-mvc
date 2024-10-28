@@ -1,65 +1,74 @@
 ﻿@* partial view for pagination*@
 <nav class="govuk-pagination" role="navigation" aria-label="results">
-    @if (Model.Pagination.HasPageableResults)
+    @if (Model.IsPageable)
     {
         <ul class="govuk-pagination__list">
-            <li class="govuk-pagination__item @(Model.Pagination.IsFirstPage ? "govuk-visually-hidden" : "")">
-                <button type="submit"
-                        style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                        class="govuk-link govuk-pagination__link"
-                        name="PageNumber"
-                        value=@Model.Pagination.PreviousPageNumber>
+            <li class="govuk-pagination__item
+                @(Model.IsFirstPage ? "govuk-visually-hidden" : "")">
+                <button
+                    type="submit"
+                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
+                    class="govuk-link govuk-pagination__link"
+                    name="PageNumber"
+                    value=@Model.PreviousPageNumber>
                     « previous
                 </button>
             </li>
-            <li class="govuk-pagination__item @(Model.Pagination.CurrentPageInsideLowerPaddingBoundary ? "govuk-visually-hidden" : "")">
-                <button type="submit"
-                        style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                        class="govuk-link govuk-pagination__link"
-                        name="PageNumber"
-                        value=@Model.Pagination.FirstPageNumber>
-                    @Model.Pagination.FirstPageNumber
+            <li class="govuk-pagination__item
+                @(Model.CurrentPageInLowerPagingBoundary ? "govuk-visually-hidden" : "")">
+                <button
+                    type="submit"
+                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
+                    class="govuk-link govuk-pagination__link"
+                    name="PageNumber"
+                    value=@Model.FirstPageNumber>
+                    @Model.FirstPageNumber
                 </button>
             </li>
-            <li class="govuk-pagination__item govuk-pagination__item--ellipses @(Model.Pagination.CurrentPageOnLowerPaddingBoundaryThreshold ? "govuk-visually-hidden" : "")">
+            <li class="govuk-pagination__item govuk-pagination__item--ellipses
+                @(Model.CurrentPageOnLowerPagingThreshold ? "govuk-visually-hidden" : "")">
                 &ctdot;
             </li>
-            @foreach (var pageNumber in Model.Pagination.CurrentPageSequence)
+            @foreach (var pageNumber in Model.CurrentPageSequence)
             {
                 if (pageNumber > 0)
                 {
                     <li class="govuk-pagination__item
-                                        @(pageNumber == Model.Pagination.CurrentPageNumber ? "govuk-pagination__item--current" : "")">
-                        <button type="submit"
-                                style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                                class="govuk-link govuk-pagination__link"
-                                name="PageNumber"
-                                value=@pageNumber>
+                        @(pageNumber == Model.CurrentPageNumber ? "govuk-pagination__item--current" : "")">
+                        <button
+                            type="submit"
+                            style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
+                            class="govuk-link govuk-pagination__link"
+                            name="PageNumber"
+                            value=@pageNumber>
                             @pageNumber
                         </button>
                     </li>
                 }
             }
             <li class="govuk-pagination__item govuk-pagination__item--ellipses
-                                @(Model.Pagination.CurrentPageOnUpperPaddingBoundaryThreshold ? "govuk-visually-hidden" : "")">
+                @(Model.CurrentPageOnUpperPagingThreshold ? "govuk-visually-hidden" : "")">
                 &ctdot;
             </li>
             <li class="govuk-pagination__item govuk-pagination__item--ellipses
-                                @(Model.Pagination.CurrentPageInsideUpperPaddingBoundary ? "govuk-visually-hidden" : "")">
-                <button type="submit"
-                        style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                        class="govuk-link govuk-pagination__link"
-                        name="PageNumber"
-                        value=@Model.Pagination.TotalNumberOfPages>
-                    @Model.Pagination.TotalNumberOfPages
+                @(Model.CurrentPageInUpperPagingBoundary ? "govuk-visually-hidden" : "")">
+                <button
+                    type="submit"
+                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
+                    class="govuk-link govuk-pagination__link"
+                    name="PageNumber"
+                    value=@Model.TotalNumberOfPages>
+                    @Model.TotalNumberOfPages
                 </button>
             </li>
-            <li class="govuk-pagination__item @(Model.Pagination.IsLastPage ? "govuk-visually-hidden" : "")">
-                <button type="submit"
-                        style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                        class="govuk-link govuk-pagination__link"
-                        name="PageNumber"
-                        value=@Model.Pagination.NextPageNumber>
+            <li class="govuk-pagination__item
+                @(Model.IsLastPage ? "govuk-visually-hidden" : "")">
+                <button
+                    type="submit"
+                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
+                    class="govuk-link govuk-pagination__link"
+                    name="PageNumber"
+                    value=@Model.NextPageNumber>
                     next »
                 </button>
             </li>
