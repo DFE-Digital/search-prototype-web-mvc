@@ -64,18 +64,15 @@
                 Enumerable.Range(totalNumberOfPages - PageSequencePaddingSize + 1, PageSequencePaddingSize).ToArray();
 
             const int pageSequenceSize = (PageSequencePaddingSize * 2);
-
             int firstSequencePageNumber = currentPageNumber - PageSequencePaddingSize;
             int sequencePageCount = pageSequenceSize + 1;
 
-            if (lowerPagePadding.Contains(currentPageNumber))
-            {
+            if (lowerPagePadding.Contains(currentPageNumber)){
                 firstSequencePageNumber = 1;
                 sequencePageCount =
                     (totalNumberOfPages <= pageSequenceSize) ? totalNumberOfPages : sequencePageCount;
             }
-            else if (upperPagePadding.Contains(currentPageNumber))
-            {
+            else if (upperPagePadding.Contains(currentPageNumber)){
                 firstSequencePageNumber = totalNumberOfPages - pageSequenceSize;
             }
 

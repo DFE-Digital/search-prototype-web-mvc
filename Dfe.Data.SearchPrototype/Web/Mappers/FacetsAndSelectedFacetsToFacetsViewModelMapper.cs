@@ -44,9 +44,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers
                                     IsSelected:
                                         input.SelectedFacets?.ContainsKey(establishmentFacet.Name) == true &&
                                             input.SelectedFacets[establishmentFacet.Name]
-                                                .Any(selectedValue => result.Value == selectedValue))
-                                )
-                                .ToList();
+                                                .Any(selectedValue => result.Value == selectedValue))).ToList();
 
                     facetItems.Add(new Facet(Name: establishmentFacet.Name, Values: facetValues));
                 }

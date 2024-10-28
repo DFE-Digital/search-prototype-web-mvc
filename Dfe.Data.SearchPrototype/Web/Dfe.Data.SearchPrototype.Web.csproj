@@ -25,4 +25,8 @@
 		<PackageReference Include="Dfe.Data.SearchPrototype.Common" Version="1.0.0" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\css\" />
+	</ItemGroup>
 </Project>
