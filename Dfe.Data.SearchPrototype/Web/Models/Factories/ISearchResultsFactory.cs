@@ -28,6 +28,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// </returns>
         public ViewModels.SearchResults CreateViewModel(
             EstablishmentResults? establishmentResults,
-            FacetsAndSelectedFacets facetsAndSelectedFacets);
+            FacetsAndSelectedFacets facetsAndSelectedFacets,
+            int currentPageNumber);
     }
 }

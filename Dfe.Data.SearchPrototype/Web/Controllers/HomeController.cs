@@ -82,16 +82,8 @@ public class HomeController : Controller
             _searchResultsFactory.CreateViewModel(
                 response.EstablishmentResults,
                 new FacetsAndSelectedFacets(
-                    response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
-
-        IPaginationSequencer paginationSequencer = new PaginationSequencer();
-
-        viewModel.Pagination = new Pagination(paginationSequencer)
-        {
-            CurrentPageNumber = searchRequestViewModel.PageNumber,  // set from view model on binding
-            TotalRecordCount = (int)response.EstablishmentResults?.TotalNumberOfEstablishments, // from AI search result
-            RecordsPerPage = 10 // from config?
-        };
+                    response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets),
+                    searchRequestViewModel.PageNumber);
 
         return View(viewModel);
     }

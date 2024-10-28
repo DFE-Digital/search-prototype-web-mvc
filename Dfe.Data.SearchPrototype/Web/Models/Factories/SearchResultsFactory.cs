@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Models.Factories
 {
@@ -14,7 +15,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
     {
         private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
         private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
-
+        private readonly IMapper<(int, int), Pagination> _paginationResultsToPaginationViewModelMapper;
         /// <summary>
         /// The following dependencies are mappers which facilitate the transformation from the use-case response to the required view model.
         /// </summary>
@@ -28,10 +29,12 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// </param>
         public SearchResultsFactory(
             IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper)
+            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper,
+            IMapper<(int, int), Pagination> paginationResultsToPaginationViewModelMapper)
         {
             _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
             _facetsAndSelectedFacetsToFacetsViewModelMapper = facetsAndSelectedFacetsToFacetsViewModelMapper;
+            _paginationResultsToPaginationViewModelMapper = paginationResultsToPaginationViewModelMapper;
         }
 
         /// <summary>
@@ -56,7 +59,8 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// </returns>
         public ViewModels.SearchResults CreateViewModel(
             EstablishmentResults? establishmentResults,
-            FacetsAndSelectedFacets facetsAndSelectedFacets) =>
+            FacetsAndSelectedFacets facetsAndSelectedFacets,
+            int currentPageNumber) =>
                 (establishmentResults?.Establishments.Count > 0) ?
                    new(){
                         SearchItems =
@@ -64,7 +68,10 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
                                 .MapFrom(establishmentResults),
                         Facets =
                             _facetsAndSelectedFacetsToFacetsViewModelMapper
-                                .MapFrom(facetsAndSelectedFacets)
+                                .MapFrom(facetsAndSelectedFacets),
+                        Pagination = 
+                            _paginationResultsToPaginationViewModelMapper
+                                .MapFrom((currentPageNumber, (int)establishmentResults.TotalNumberOfEstablishments))
                    }
                    : new(); // default.
     }
