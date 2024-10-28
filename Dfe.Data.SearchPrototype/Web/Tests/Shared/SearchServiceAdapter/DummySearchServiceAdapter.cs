@@ -42,7 +42,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
 
             return new SearchResults()
             {
-                Establishments = new EstablishmentResults(establishments)
+                Establishments =
+                    new EstablishmentResults(
+                        establishments, totalNumberOfEstablishments: establishments.Count)
             };
         }
     }

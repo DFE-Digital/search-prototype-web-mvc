@@ -15,13 +15,18 @@ public static class SearchByKeywordResponseTestDouble
         }
 
         List<EstablishmentFacet> facetResults = new();
+
+        long? totalNumberOfEstablishments = 0;
+
         for (int i = 0; i < new Bogus.Faker().Random.Int(2, 10); i++)
         {
             facetResults.Add(EstablishmentFacetTestDouble.Create(i.ToString()));
+
+            totalNumberOfEstablishments += i;
         }
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
-            EstablishmentResults = new EstablishmentResults(establishmentResults),
+            EstablishmentResults = new EstablishmentResults(establishmentResults, totalNumberOfEstablishments),
             EstablishmentFacetResults = new EstablishmentFacets(facetResults)
         };
     }
@@ -36,7 +41,7 @@ public static class SearchByKeywordResponseTestDouble
         };
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
-            EstablishmentResults = new EstablishmentResults(establishmentResults),
+            EstablishmentResults = new EstablishmentResults(establishmentResults, totalNumberOfEstablishments: 1),
             EstablishmentFacetResults = new EstablishmentFacets(facetResults)
         };
     }

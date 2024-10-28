@@ -8,12 +8,16 @@ public static class EstablishmentResultsTestDouble
     {
         var establishments = new List<Establishment>();
 
+        long? totalNumberOFEstablishments = 0;
+
         for (int i = 0; i < new Bogus.Faker().Random.Int(1, 10); i++)
         {
             establishments.Add(
                 EstablishmentTestDouble.Create());
+            
+            totalNumberOFEstablishments += i;
         }
-        return new EstablishmentResults(establishments);
+        return new EstablishmentResults(establishments, totalNumberOFEstablishments);
     }
 
     public static EstablishmentResults CreateWithNoResults()
