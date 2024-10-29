@@ -23,7 +23,7 @@
         public bool IsCurrentPageInLowerPagingBoundary(int currentPageNumber, int totalNumberOfPages);
 
         /// <summary>
-        /// Determines whether the current page falls on the lower paging threshold.
+        /// Determines whether the current page falls within the lower paging threshold.
         /// </summary>
         /// <param name="currentPageNumber">
         /// The current page selected through the pagination provisioned.

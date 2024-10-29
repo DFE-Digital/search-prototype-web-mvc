@@ -1,90 +1,107 @@
 ﻿namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared
 {
     /// <summary>
-    ///
+    /// View model to describe and assign pagination related presentation concerns.
     /// </summary>
     public sealed class Pagination(IPager pager)
     {
         /// <summary>
-        /// 
+        /// Establishes the current page number.
         /// </summary>
         public int CurrentPageNumber { get; set; }
 
         /// <summary>
-        /// 
+        /// Establishes the total record count from the derived collection source.
         /// </summary>
         public int TotalRecordCount { get; set; }
 
         /// <summary>
-        /// 
+        /// Establishes the number of records to allow on a per-page basis.
         /// </summary>
         public int RecordsPerPage { get; set; }
 
         /// <summary>
-        /// 
+        /// Determines the previous page number and defaults to one
+        /// if the current page is the first page.
         /// </summary>
-        public int PreviousPageNumber => (CurrentPageNumber > 0) ? CurrentPageNumber - 1 : 0;
+        public int PreviousPageNumber => (CurrentPageNumber > 1) ? CurrentPageNumber - 1 : 1;
 
         /// <summary>
-        /// 
+        /// Determines the previous page number and defaults
+        /// to the last page number if the current page is the last page.
         /// </summary>
         public int NextPageNumber => (CurrentPageNumber < TotalNumberOfPages) ? CurrentPageNumber + 1 : TotalNumberOfPages;
 
         /// <summary>
-        /// 
-        /// </summary>
-        public int[] CurrentPageSequence => pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
-
-        /// <summary>
-        /// 
+        /// Determines the total number of pages available for pagination.
         /// </summary>
         public int TotalNumberOfPages => GetTotalNumberOfPages();
 
         /// <summary>
-        /// 
+        /// Determines whether pagination can be applied i.e. page sequence length has values.
         /// </summary>
         public bool IsPageable => CurrentPageSequence.Length > 1;
 
         /// <summary>
-        /// 
+        /// Sets the default first page number to 1.
         /// </summary>
         public int FirstPageNumber => 1;
 
         /// <summary>
-        /// 
+        /// Determines whether the current page is the last page in the sequence.
         /// </summary>
         public bool IsLastPage => CurrentPageNumber == TotalNumberOfPages;
 
         /// <summary>
-        /// 
+        /// Determines whether the current page is the first page in the sequence.
         /// </summary>
         public bool IsFirstPage => CurrentPageNumber == FirstPageNumber;
 
         /// <summary>
-        /// 
+        /// Determines the current page sequence (i.e. array of page numbers)
+        /// based on the current page and the total number of pages available.
         /// </summary>
-        public bool CurrentPageInLowerPagingBoundary => pager.IsCurrentPageInLowerPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public int[] CurrentPageSequence =>
+            pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
-        /// 
+        /// Determines whether the current page falls within the lower paging
+        /// boundary, given the total number of pages provisioned.
         /// </summary>
-        public bool CurrentPageInLowerPagingThreshold => pager.IsCurrentPageInLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInLowerPagingBoundary =>
+            pager.IsCurrentPageInLowerPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
-        /// 
+        /// Determines whether the current page falls within the lower paging threshold.
         /// </summary>
-        public bool CurrentPageInUpperPagingBoundary => pager.IsCurrentPageInUpperPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInLowerPagingThreshold =>
+            pager.IsCurrentPageInLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
-        /// 
+        /// Determines whether the current page falls within the upper paging
+        /// boundary, given the total number of pages provisioned.
         /// </summary>
-        public bool CurrentPageInUpperPagingThreshold => pager.IsCurrentPageInUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInUpperPagingBoundary =>
+            pager.IsCurrentPageInUpperPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
-        /// 
+        /// Determines whether the current page falls within the upper paging threshold.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        public bool CurrentPageInUpperPagingThreshold =>
+            pager.IsCurrentPageInUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+
+        /// <summary>
+        /// Gets the total number of pages available based on the Total record count divided by the number
+        /// of records allowed per-page. Using the modulus operator, if we have a remainder greater than
+        /// zero then we can expect to provision an extra page which may be partially provisioned with records.
+        /// </summary>
+        /// <returns>
+        /// The calculated number of pages available.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if either we have a total record count of zero, or records per-page
+        /// configured to zero.
+        /// </exception>
         private int GetTotalNumberOfPages()
         {
             if (TotalRecordCount == 0) {
