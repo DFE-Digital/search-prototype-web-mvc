@@ -34,8 +34,8 @@
                 GetFirstPageInSequence(currentPageNumber, totalNumberOfPages) < PageSequencePaddingSize;
 
         /// <summary>
-        /// Determines whether the current page falls on the lower paging boundary,
-        /// i.e. is equal to 2 (given the constrained page sequence padding size).
+        /// Determines whether the current page falls on the lower paging threshold,
+        /// i.e. is equal to padding size + 1 (given the constrained page sequence padding size of 2).
         /// </summary>
         /// <param name="currentPageNumber">
         /// The current page selected through the pagination provisioned.
@@ -46,9 +46,9 @@
         /// </param>
         /// <returns>
         /// True or false based on whether the condition is met (i.e. the
-        /// current page falls on the lower paging bounds).
+        /// current page falls in the lower paging threshold).
         /// </returns>
-        public bool IsCurrentPageOnLowerPagingThreshold(
+        public bool IsCurrentPageInLowerPagingThreshold(
             int currentPageNumber, int totalNumberOfPages) =>
                 GetFirstPageInSequence(currentPageNumber, totalNumberOfPages) < PageSequencePaddingSize + 1;
 
@@ -72,8 +72,8 @@
                 currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize + 1));
 
         /// <summary>
-        /// Determines whether the current page falls on the upper paging boundary,
-        /// i.e. is equal to the total number of pages - 2 (given the constrained page sequence padding size).
+        /// Determines whether the current page falls within the upper paging threshold,
+        /// i.e. is equal to the total number of pages - 2 * padding size (given the constrained page sequence padding size of 2).
         /// </summary>
         /// <param name="currentPageNumber">
         /// The current page selected through the pagination provisioned.
@@ -84,9 +84,9 @@
         /// </param>
         /// <returns>
         /// True or false based on whether the condition is met (i.e. the
-        /// current page falls on the upper paging bounds).
+        /// current page falls on the upper paging threshold).
         /// </returns>
-        public bool IsCurrentPageOnUpperPagingThreshold(
+        public bool IsCurrentPageInUpperPagingThreshold(
             int currentPageNumber, int totalNumberOfPages) =>
                 currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize * 2));
 

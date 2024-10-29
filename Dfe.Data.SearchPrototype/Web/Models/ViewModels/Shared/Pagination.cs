@@ -68,7 +68,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageOnLowerPagingThreshold => pager.IsCurrentPageOnLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInLowerPagingThreshold => pager.IsCurrentPageInLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
@@ -78,7 +78,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageOnUpperPagingThreshold => pager.IsCurrentPageOnUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInUpperPagingThreshold => pager.IsCurrentPageInUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
