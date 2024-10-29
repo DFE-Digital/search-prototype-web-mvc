@@ -3,15 +3,8 @@
     /// <summary>
     ///
     /// </summary>
-    public sealed class Pagination
+    public sealed class Pagination(IPager pager)
     {
-        private readonly IPager _pager;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Pagination(IPager pager) => _pager = pager;
-
         /// <summary>
         /// 
         /// </summary>
@@ -30,18 +23,17 @@
         /// <summary>
         /// 
         /// </summary>
-        public int PreviousPageNumber => CurrentPageNumber - 1;
+        public int PreviousPageNumber => (CurrentPageNumber > 0) ? CurrentPageNumber - 1 : 0;
 
         /// <summary>
         /// 
         /// </summary>
-        public int NextPageNumber => CurrentPageNumber + 1;
+        public int NextPageNumber => (CurrentPageNumber < TotalNumberOfPages) ? CurrentPageNumber + 1 : TotalNumberOfPages;
 
         /// <summary>
         /// 
         /// </summary>
-        public List<int> CurrentPageSequence =>
-            _pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
+        public int[] CurrentPageSequence => pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
@@ -51,7 +43,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool IsPageable => CurrentPageSequence.Count > 1;
+        public bool IsPageable => CurrentPageSequence.Length > 1;
 
         /// <summary>
         /// 
@@ -71,26 +63,22 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageInLowerPagingBoundary =>
-            _pager.IsCurrentPageInLowerPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInLowerPagingBoundary => pager.IsCurrentPageInLowerPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageOnLowerPagingThreshold =>
-            _pager.IsCurrentPageOnLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageOnLowerPagingThreshold => pager.IsCurrentPageOnLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageInUpperPagingBoundary =>
-            _pager.IsCurrentPageInUpperPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageInUpperPagingBoundary => pager.IsCurrentPageInUpperPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool CurrentPageOnUpperPagingThreshold =>
-            _pager.IsCurrentPageOnUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool CurrentPageOnUpperPagingThreshold => pager.IsCurrentPageOnUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// 

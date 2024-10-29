@@ -40,6 +40,6 @@
         /// <param name="currentPageNumber"></param>
         /// <param name="totalNumberOfPages"></param>
         /// <returns></returns>
-        List<int> GetPageSequence(int currentPageNumber, int totalNumberOfPages);
+        int[] GetPageSequence(int currentPageNumber, int totalNumberOfPages);
     }
 }
