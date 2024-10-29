@@ -225,9 +225,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             result.Should().BeFalse();
         }
 
-
-
-
         [Fact]
         public void IsFirstPage_WithCurrentPageSetToFirst_ReturnsTrue()
         {
