@@ -26,7 +26,7 @@
                 </button>
             </li>
             <li class="govuk-pagination__item govuk-pagination__item--ellipses
-                @(Model.CurrentPageOnLowerPagingThreshold ? "govuk-visually-hidden" : "")">
+                @(Model.CurrentPageInLowerPagingThreshold ? "govuk-visually-hidden" : "")">
                 &ctdot;
             </li>
             @foreach (var pageNumber in Model.CurrentPageSequence)
@@ -47,7 +47,7 @@
                 }
             }
             <li class="govuk-pagination__item govuk-pagination__item--ellipses
-                @(Model.CurrentPageOnUpperPagingThreshold ? "govuk-visually-hidden" : "")">
+                @(Model.CurrentPageInUpperPagingThreshold ? "govuk-visually-hidden" : "")">
                 &ctdot;
             </li>
             <li class="govuk-pagination__item govuk-pagination__item--ellipses
