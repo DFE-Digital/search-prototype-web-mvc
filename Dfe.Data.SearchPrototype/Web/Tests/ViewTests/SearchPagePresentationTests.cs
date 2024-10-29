@@ -1,6 +1,4 @@
-﻿using AngleSharp.Dom;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 using FluentAssertions;
@@ -10,14 +8,13 @@ using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 
+/// <summary>
+/// Test that the response from the use-case is rendered as expected on the page
+/// </summary>
 public class SearchPagePresentationTests : SharedTestFixture
 {
-    private const string homeUri = "http://localhost";
-    private SearchPageModel _searchPage;
-
     public SearchPagePresentationTests(WebApplicationFactory<Program> factory) : base(factory)
     {
-        _searchPage = new SearchPageModel(_context);
     }
 
     [Fact]
@@ -29,7 +26,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{_homeUri}?searchKeyword=anything");
 
         // assert
         _searchPage.Results!.NoResultsText.Should().Contain("Sorry no results found please amend your search criteria");
@@ -46,7 +43,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{_homeUri}?searchKeyword=anything");
 
         // assert
         _searchPage.Results.Should().NotBeNull();
@@ -63,7 +60,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{_homeUri}?searchKeyword=anything");
 
         // assert
         _searchPage.Results.Should().NotBeNull();
@@ -80,7 +77,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{_homeUri}?searchKeyword=anything");
 
         // assert
         _searchPage.FilterSection.Should().NotBeNull();
@@ -108,7 +105,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword=anything");
+        await _searchPage.NavigateToPage($"{_homeUri}?searchKeyword=anything");
         var selectionFilters = new Dictionary<string, string>() {
             {
                 useCaseResponse

@@ -3,6 +3,7 @@ using AngleSharp.Io;
 using AngleSharp.Io.Network;
 using Dfe.Data.SearchPrototype.Common.CleanArchitecture.Application.UseCase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -15,16 +16,15 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 
 public class SharedTestFixture : IClassFixture<WebApplicationFactory<Dfe.Data.SearchPrototype.Web.Program>>
 {
-    protected readonly HttpClient _client;
-    protected readonly IBrowsingContext _context;
-    protected readonly WebApplicationFactory<Program> _factory;
+    protected const string _homeUri = "http://localhost";
+    protected SearchPageModel _searchPage;
     protected Mock<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>> _useCase = new();
 
     public SharedTestFixture(WebApplicationFactory<Program> factory)
     {
-        _factory = factory;
-        _client = CreateHost().CreateClient();
-        _context = CreateBrowsingContext(_client);
+        HttpClient client = CreateHost(factory).CreateClient();
+        IBrowsingContext context = CreateBrowsingContext(client);
+        _searchPage = new SearchPageModel(context);
     }
 
     private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
@@ -36,9 +36,9 @@ public class SharedTestFixture : IClassFixture<WebApplicationFactory<Dfe.Data.Se
         return BrowsingContext.New(config);
     }
 
-    private WebApplicationFactory<Program> CreateHost()
+    private WebApplicationFactory<Program> CreateHost(WebApplicationFactory<Program> factory)
     {
-        return _factory.WithWebHostBuilder(
+        return factory.WithWebHostBuilder(
             (IWebHostBuilder builder) =>
             {
                 builder.ConfigureTestServices(services =>

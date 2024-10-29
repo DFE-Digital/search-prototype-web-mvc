@@ -1,6 +1,4 @@
-﻿using AngleSharp.Dom;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
-using Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -15,12 +13,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 /// </summary>
 public class SearchPageFormSubmissionTests : SharedTestFixture
 {
-    private const string homeUri = "http://localhost";
-    private SearchPageModel _searchPage;
-
     public SearchPageFormSubmissionTests(WebApplicationFactory<Program> factory) : base(factory)
     {
-        _searchPage = new SearchPageModel(_context);
     }
 
     [Fact]
@@ -51,7 +45,7 @@ public class SearchPageFormSubmissionTests : SharedTestFixture
 
         // act
         // navigate to results page with search keyword
-        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword={searchTerm}");
+        await _searchPage.NavigateToPage($"{_homeUri}?searchKeyword={searchTerm}");
         // select some filters
         _searchPage.FilterSection!.SelectFilters(selectionFilters);
         // submit filtered search
@@ -97,7 +91,7 @@ public class SearchPageFormSubmissionTests : SharedTestFixture
 
         // act
         // navigate to results page with search keyword
-        await _searchPage.NavigateToPage($"{homeUri}?searchKeyword={searchTerm}");
+        await _searchPage.NavigateToPage($"{_homeUri}?searchKeyword={searchTerm}");
 
         // select some filters
         _searchPage.FilterSection!.SelectFilters(selectionFilters);
