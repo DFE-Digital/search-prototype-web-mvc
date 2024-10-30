@@ -1,5 +1,5 @@
 ﻿@* partial view for pagination*@
-<nav class="govuk-pagination" role="navigation" aria-label="results">
+<nav id="pagination" class="govuk-pagination" role="navigation" aria-label="results-pagination">
     @if (Model.IsPageable)
     {
         <ul class="govuk-pagination__list">
@@ -40,7 +40,8 @@
                             style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
                             class="govuk-link govuk-pagination__link"
                             name="PageNumber"
-                            value=@pageNumber>
+                            value=@pageNumber
+                            id="pageNumber-@pageNumber">
                             @pageNumber
                         </button>
                     </li>
