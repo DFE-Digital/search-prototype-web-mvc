@@ -129,6 +129,25 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
         }
 
         [Fact]
+        public void TotalNumberOfPages_WithRecordsPerPageZero_ThrowsArgumentException()
+        {
+            // arrange
+            Pagination pagination = new(new Mock<IPager>().Object)
+            {
+                TotalRecordCount = 10,
+                RecordsPerPage = 0
+            };
+
+            // act, assert
+            Action failedAction =
+                () => _ = pagination.TotalNumberOfPages;
+
+            ArgumentException exception = Assert.Throws<ArgumentException>(failedAction);
+
+            exception.Message.Should().Be("The page size must be greater than zero.");
+        }
+
+        [Fact]
         public void IsPageable_WithMoreThanOnePage_ReturnsTrue()
         {
             // arrange

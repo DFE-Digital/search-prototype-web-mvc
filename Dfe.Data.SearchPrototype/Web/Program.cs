@@ -1,6 +1,7 @@
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
+using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
@@ -8,7 +9,9 @@ using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+using Dfe.Data.SearchPrototype.Web.Options;
 using GovUk.Frontend.AspNetCore;
+using Microsoft.Extensions.Options;
 using Models = Dfe.Data.SearchPrototype.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +34,12 @@ builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, Fa
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>?>, SelectedFacetsToFilterRequestsMapper>();
 builder.Services.AddSingleton<IMapper<(int, int), Pagination>, PaginationResultsToPaginationViewModelMapper>();
 builder.Services.AddSingleton<IPager, ScrollablePager>();
+builder.Services.AddOptions<PaginationOptions>()
+    .Configure<IOptions<AzureSearchOptions>>(
+        (paginationOptions, azureSearchOptions) => {
+            ArgumentNullException.ThrowIfNull(azureSearchOptions.Value);
+            paginationOptions.RecordsPerPage = azureSearchOptions.Value.Size;
+        });
 //
 //
 // End of IOC container registrations

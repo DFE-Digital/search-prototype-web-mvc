@@ -16,6 +16,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
         private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
         private readonly IMapper<(int, int), Pagination> _paginationResultsToPaginationViewModelMapper;
+
         /// <summary>
         /// The following dependencies are mappers which facilitate the transformation from the use-case response to the required view model.
         /// </summary>

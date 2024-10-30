@@ -1,10 +1,13 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
+using Dfe.Data.SearchPrototype.Infrastructure.Tests.TestDoubles.Shared;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+using Dfe.Data.SearchPrototype.Web.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Xunit;
 using Establishment = Dfe.Data.SearchPrototype.Web.Models.ViewModels.Establishment;
 using SearchResults = Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults;
@@ -21,8 +24,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
@@ -53,8 +58,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
@@ -85,8 +92,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
@@ -117,8 +126,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
             IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager());
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(

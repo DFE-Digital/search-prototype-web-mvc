@@ -1,13 +1,28 @@
-﻿using Dfe.Data.SearchPrototype.Web.Mappers;
+﻿using Dfe.Data.SearchPrototype.Infrastructure.Tests.TestDoubles.Shared;
+using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+using Dfe.Data.SearchPrototype.Web.Options;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 {
     public sealed class PaginationResultsToPaginationViewModelMapperTests
     {
-        private readonly PaginationResultsToPaginationViewModelMapper _mapper = new(new ScrollablePager());
+        private readonly PaginationResultsToPaginationViewModelMapper _mapper;
+
+        public PaginationResultsToPaginationViewModelMapperTests()
+        {
+            PaginationOptions options = new(){
+                RecordsPerPage = 10,
+            };
+
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(options);
+
+            _mapper = new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
+        }
 
         [Fact]
         public void MapFrom_WithCurrentPageAsFirstPage()

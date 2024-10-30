@@ -8,11 +8,13 @@ using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+using Dfe.Data.SearchPrototype.Web.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -36,12 +38,15 @@ public class HomeControllerTests
             mockSearchServiceAdapter,
             IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+
         HomeController controller =
             new(_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
                     new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager())
+                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -71,12 +76,15 @@ public class HomeControllerTests
             new (mockSearchServiceAdapter,
                 IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+
         HomeController controller =
             new(_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
                     new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager())
+                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -108,13 +116,16 @@ public class HomeControllerTests
         SearchByKeywordUseCase useCase =
             new (mockSearchServiceAdapter,
                 IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
-        
+
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+
         var controller =
             new HomeController(_logger.Object, useCase,
             new SearchResultsFactory(
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager())
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
             ),
             new SelectedFacetsToFilterRequestsMapper());
 
@@ -155,12 +166,15 @@ public class HomeControllerTests
             new (mockSearchServiceAdapter,
                 IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+
         HomeController controller =
             new (_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
                     new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager())
+                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -184,7 +198,7 @@ public class HomeControllerTests
 
     [Fact]
     public async Task SearchWithFilters_WithSearchRequestAndMatchingSelectedFacets_ReturnsModelWithMatchingFacetSelected()
-{
+    {
         // arrange
         const string FacetValueKey = "Facet_1";
 
@@ -205,12 +219,15 @@ public class HomeControllerTests
             mockSearchServiceAdapter,
             IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+
         var controller =
             new HomeController(_logger.Object, useCase,
             new SearchResultsFactory(
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager())
+                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
             ),
             new SelectedFacetsToFilterRequestsMapper());
 
