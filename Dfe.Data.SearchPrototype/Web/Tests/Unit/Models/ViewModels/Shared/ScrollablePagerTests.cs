@@ -22,7 +22,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
         }
 
         [Fact]
-        public void IsCurrentPageOnUpperPagingThreshold_CurrentPageOnUpperBoundary_ReturnsTrue()
+        public void IsCurrentPageOnUpperPagingThreshold_CurrentPageOnUpperThreshold_ReturnsTrue()
         {
             // arrange
             ScrollablePager scrollablePager = new();
@@ -31,6 +31,36 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             bool result =
                 scrollablePager
                     .IsCurrentPageInUpperPagingThreshold(currentPageNumber: 10, totalNumberOfPages: 13);
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void IsCurrentPageInUpperPagingBoundary_TotalPageNumberEqualsPageSequenceWidth_ReturnsTrue()
+        {
+            // arrange
+            ScrollablePager scrollablePager = new();
+
+            // act
+            bool result =
+                scrollablePager
+                    .IsCurrentPageInUpperPagingBoundary(currentPageNumber: 1, totalNumberOfPages: 5);
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void IsCurrentPageOnUpperPagingThreshold_TotalPageNumberEqualsPageSequenceWidth_ReturnsTrue()
+        {
+            // arrange
+            ScrollablePager scrollablePager = new();
+
+            // act
+            bool result =
+                scrollablePager
+                    .IsCurrentPageInUpperPagingThreshold(currentPageNumber: 1, totalNumberOfPages: 5);
 
             // assert
             result.Should().BeTrue();

@@ -54,7 +54,8 @@
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging boundary,
-        /// i.e. less than total number of pages - 2 (given the constrained page sequence padding size).
+        /// i.e. less than total number of pages - 2 (given the constrained page sequence padding size),
+        /// or whether the total number of pages equals the page sequence width ((padding size * 2) + 1).
         /// </summary>
         /// <param name="currentPageNumber">
         /// The current page selected through the pagination provisioned.
@@ -69,11 +70,14 @@
         /// </returns>
         public bool IsCurrentPageInUpperPagingBoundary(
             int currentPageNumber, int totalNumberOfPages) =>
-                currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize + 1));
+                (currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize + 1))) ||
+                (totalNumberOfPages == ((PageSequencePaddingSize * 2) + 1));
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging threshold,
-        /// i.e. is equal to the total number of pages - 2 * padding size (given the constrained page sequence padding size of 2).
+        /// i.e. is equal to the total number of pages - 2 * padding size (given the constrained
+        /// page sequence padding size of 2), or whether the total number of pages equals the
+        /// page sequence width ((padding size * 2) + 1).
         /// </summary>
         /// <param name="currentPageNumber">
         /// The current page selected through the pagination provisioned.
@@ -88,7 +92,8 @@
         /// </returns>
         public bool IsCurrentPageInUpperPagingThreshold(
             int currentPageNumber, int totalNumberOfPages) =>
-                currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize * 2));
+                (currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize * 2))) ||
+                (totalNumberOfPages == ((PageSequencePaddingSize * 2) + 1));
 
         /// <summary>
         /// Determines the current page sequence to return given the current page number and total number of pages.
