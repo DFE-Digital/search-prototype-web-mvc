@@ -1,5 +1,6 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
@@ -20,10 +21,12 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithAtLeast2PagesWithResults_ShowsPaginationComponent()
+    public async Task Pagination_WithCurrentPageInLowerPaddingBoundry_ShowsCorrectPaginationElements()
     {
+        //The result of this test should create the following sequence: 1,2,3,4,5 ... 8 next>>
+        //
         // arrange
-        const int CurrentPageNumber = 3;
+        const int CurrentPageNumber = 1;
 
         var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 76, pageNumber: CurrentPageNumber);
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
@@ -35,11 +38,23 @@ public class PaginationPresentationTests : SharedTestFixture
         // assert
         resultsPage.QuerySelector(HomePage.PaginationContainer.Criteria)!
             .Should().NotBeNull();
-        List<IElement> paginationButtons = resultsPage.QuerySelector(HomePage.PaginationContainer.Criteria)!
-            .GetMultipleElements(HomePage.PageNumberLinks.Criteria).ToList();
+
+        // this gives us all list items we need
+        List<IElement> paginationListItems =
+             resultsPage.QuerySelector(HomePage.PaginationContainer.Criteria)!
+                .GetMultipleElements(HomePage.PageNumberLinks.Criteria).ToList();
+        //previous button
+        IHtmlListItemElement? previousPageListItem = paginationListItems[0] as IHtmlListItemElement;
+        previousPageListItem?.ClassName.Should().Contain("govuk-visually-hidden");
+        IElement? previousPageButton = previousPageListItem?.Children.First(element => element.Id == "previous");
+        previousPageButton?.TextContent.Should().Contain("previous");
+
+        // previous ellipsis
+        IHtmlListItemElement? previousEllipsisListItem = paginationListItems[1] as IHtmlListItemElement;
+        previousEllipsisListItem?.ClassName.Should().Contain("govuk-visually-hidden");
 
 
-       // GetElementById($"pageNumber-{pageNumber}")
+        // GetElementById($"pageNumber-{pageNumber}")
     }
 
     [Fact]

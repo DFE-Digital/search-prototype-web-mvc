@@ -31,6 +31,6 @@ public sealed class HomePage : BasePage
     public static By SearchResultEstablishmentStatus(int urn) => By.CssSelector($"#establishment-status-{urn}");
     public static By SearchResultEstablishmentPhase(int urn) => By.CssSelector($"#education-phase-{urn}");
     public static By PaginationContainer => By.CssSelector("#pagination");
-    public static By PageNumberLinks => By.CssSelector($"li button");
+    public static By PageNumberLinks => By.CssSelector($"li");
 
 }
