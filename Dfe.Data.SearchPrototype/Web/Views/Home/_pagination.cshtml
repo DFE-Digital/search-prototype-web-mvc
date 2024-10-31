@@ -1,7 +1,7 @@
-﻿@* partial view for pagination*@
+﻿@* @* partial view for pagination*@
+@if (Model.IsPageable)
+{
 <nav id="pagination" class="govuk-pagination" role="navigation" aria-label="results-pagination">
-    @if (Model.IsPageable)
-    {
         <ul class="govuk-pagination__list">
             <li class="govuk-pagination__item
                 @(Model.IsFirstPage ? "govuk-visually-hidden" : "")">
@@ -74,5 +74,5 @@
                 </button>
             </li>
         </ul>
-    }
 </nav>
+}
