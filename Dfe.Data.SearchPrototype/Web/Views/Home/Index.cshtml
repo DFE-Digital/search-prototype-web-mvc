@@ -33,7 +33,13 @@
                 <button type="submit" class="govuk-button" data-module="govuk-button">
                     Apply filters
                 </button>
-                <button id="clearFilters" type="submit" name="ClearFilters" value="true" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                <button
+                    id="clearFilters"
+                    type="submit"
+                    name="ClearFilters"
+                    value="true"
+                    class="govuk-button govuk-button--secondary"
+                    data-module="govuk-button">
                     Clear filters
                 </button>
                 @if (Model.Facets is not null && Model.Facets.Any())
@@ -69,11 +75,13 @@
         {
             <div class="govuk-grid-column-two-thirds" id="results">
                 <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount of @Model.Pagination.TotalRecordCount @(Model.Pagination.TotalRecordCount > 1 ? "results" : "result")</h3>
+                <hr />
+                <div style="padding-bottom: 10px"></div>
                 @* pagination *@
                 @await Html.PartialAsync("_pagination", Model.Pagination)
                 @* end of pagination *@
                 <hr />
-                <ul style="list-style: none">
+                <ul style="list-style:none; margin:0; padding:0;">
                     @foreach (var searchItem in Model.SearchItems!)
                     {
                         <li id="name-@searchItem.Urn">
@@ -95,13 +103,15 @@
                         </li>
                         <li id="education-phase-@searchItem.Urn">
                             <strong>Education phase: </strong> @searchItem.PhaseOfEducation
-                            <hr />
                         </li>
+                        <hr />
                     }
                 </ul>
+                <div style="padding-bottom: 10px"></div>
                 @* pagination *@
                 @await Html.PartialAsync("_pagination", Model.Pagination)
                 @* end of pagination *@
+                <hr />
             </div>
         }
         else
