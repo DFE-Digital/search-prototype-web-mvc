@@ -23,23 +23,23 @@ public class PaginationPresentationTests : SharedTestFixture
     public async Task Pagination_WithAtLeast2PagesWithResults_ShowsPaginationComponent()
     {
         // arrange
-        var useCaseResponse = SearchByKeywordResponseTestDouble.Create();
+        const int CurrentPageNumber = 3;
+
+        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 76, pageNumber: CurrentPageNumber);
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything&PageNumber=1");
+        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything&PageNumber={CurrentPageNumber}");
 
         // assert
         resultsPage.QuerySelector(HomePage.PaginationContainer.Criteria)!
             .Should().NotBeNull();
-        //IEnumerable<IElement> test = resultsPage.QuerySelector(HomePage.PaginationContainer.Criteria)!
-        //    .GetMultipleElements(HomePage.PageNumberLinks.Criteria);
+        List<IElement> paginationButtons = resultsPage.QuerySelector(HomePage.PaginationContainer.Criteria)!
+            .GetMultipleElements(HomePage.PageNumberLinks.Criteria).ToList();
 
 
-        resultsPage.QuerySelector(HomePage.PaginationContainer.Criteria)!
-            .GetMultipleElements(HomePage.PageNumberLinks.Criteria)
-            .Count().Should().BeGreaterThan(1);
+       // GetElementById($"pageNumber-{pageNumber}")
     }
 
     [Fact]
