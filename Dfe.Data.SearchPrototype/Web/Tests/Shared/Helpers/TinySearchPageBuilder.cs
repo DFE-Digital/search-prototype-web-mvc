@@ -1,21 +1,19 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
-using GraphQL;
-using GraphQLParser;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 
-public interface ITinySearchPageBuilder
+public interface ISearchPage
 {
-    public string? MainHeading();
-    public string? ResultsText();
-    public string? NoResultsText();
-    public string? FilterSectionHeading();
-    public IEnumerable<KeyValuePair<string, string>>? Filters();
-    public IEnumerable<KeyValuePair<string, string>>? SelectedFilters();
+    public string? PageHeading { get; }
+    public string? ResultsText { get; }
+    public string? NoResultsText { get; }
+    public string? FilterSectionHeading { get; }
+    public IEnumerable<KeyValuePair<string, string>>? Filters { get; }
+    public IEnumerable<KeyValuePair<string, string>>? SelectedFilters { get; }
 
-    public bool FilterSectionIsNullOrEmpty();
+    public bool FilterSectionIsNullOrEmpty { get; }
 
     public Task NavigateToPage(string url);
     public Task SubmitAsync();
@@ -23,10 +21,10 @@ public interface ITinySearchPageBuilder
     public Task SubmitClearAsync();
 }
 
-public class AngleSharpTinySearchPageBuilder : ITinySearchPageBuilder
+public class AngleSharpTinySearchPageBuilder
 {
     private IBrowsingContext _context;
-    private IDocument _dom;
+    private IDocument? _dom;
 
     public AngleSharpTinySearchPageBuilder(IBrowsingContext context)
     {
@@ -34,13 +32,13 @@ public class AngleSharpTinySearchPageBuilder : ITinySearchPageBuilder
     }
 
     // ------- get elements from the page
-    public string? MainHeading() => _dom.QuerySelector("#page-heading")?.TextContent;
-    public string? NoResultsText() => _dom.QuerySelector("#no-results")?.TextContent;
-    public string? ResultsText() => _dom.QuerySelector("#search-results-count")?.TextContent;
-    public string? FilterSectionHeading() => _dom.QuerySelector("#filters-heading")?.TextContent;
+    public string? MainHeading() => _dom!.QuerySelector("#page-heading")?.TextContent;
+    public string? NoResultsText() => _dom!.QuerySelector("#no-results")?.TextContent;
+    public string? ResultsText() => _dom!.QuerySelector("#search-results-count")?.TextContent;
+    public string? FilterSectionHeading() => _dom!.QuerySelector("#filters-heading")?.TextContent;
     public IEnumerable<KeyValuePair<string, string>>? Filters()
     {
-        return _dom.QuerySelector("#filters-container")?
+        return _dom!.QuerySelector("#filters-container")?
             .GetNodes<IHtmlFieldSetElement>()
             .SelectMany(
                 element => element
@@ -52,7 +50,7 @@ public class AngleSharpTinySearchPageBuilder : ITinySearchPageBuilder
 
     public IEnumerable<KeyValuePair<string, string>>? SelectedFilters()
     {
-        return _dom.QuerySelector("#filters-container")?
+        return _dom!.QuerySelector("#filters-container")?
             .GetNodes<IHtmlFieldSetElement>()
             .SelectMany(
                 element => element
@@ -64,7 +62,7 @@ public class AngleSharpTinySearchPageBuilder : ITinySearchPageBuilder
     }
 
     //------- equality cases for test asserts
-    public bool FilterSectionIsNullOrEmpty() => _dom.QuerySelector("#filters-container") == null;
+    public bool FilterSectionIsNullOrEmpty() => _dom!.QuerySelector("#filters-container") == null;
 
     //------- actions
     public async Task NavigateToPage(string uri)
@@ -74,14 +72,14 @@ public class AngleSharpTinySearchPageBuilder : ITinySearchPageBuilder
 
     public Task SubmitAsync()
     {
-        var form = _dom.QuerySelector<IHtmlFormElement>("#search-establishments-form");
+        var form = _dom!.QuerySelector<IHtmlFormElement>("#search-establishments-form");
         return form!.SubmitAsync();
     }
 
     public Task SubmitClearAsync()
     {
-        var clearButton = _dom.QuerySelector<IHtmlButtonElement>(@"button[id=""clearFilters""]");
-        var form = _dom.QuerySelector<IHtmlFormElement>("#search-establishments-form");
+        var clearButton = _dom!.QuerySelector<IHtmlButtonElement>(@"button[id=""clearFilters""]");
+        var form = _dom!.QuerySelector<IHtmlFormElement>("#search-establishments-form");
         string? buttonName = clearButton?.Name;
         string? buttonValue = clearButton?.Value;
 
@@ -92,7 +90,7 @@ public class AngleSharpTinySearchPageBuilder : ITinySearchPageBuilder
             // simulates the button press by manually adding the new element to the page
             // - TODO - reference an explanation of what's happening or does Aasim do it a better way?
             clearButton.Name = $"{buttonName}_old";
-            IHtmlInputElement input = _dom.CreateElement<IHtmlInputElement>();
+            IHtmlInputElement input = _dom!.CreateElement<IHtmlInputElement>();
             input.Name = buttonName;
             input.Value = buttonValue;
             form!.AppendChild(input);
@@ -114,7 +112,7 @@ public class AngleSharpTinySearchPageBuilder : ITinySearchPageBuilder
 
     private IHtmlFieldSetElement? GetFilterByName(string filterName)
     {
-        return _dom.QuerySelector("#filters-container")?
+        return _dom!.QuerySelector("#filters-container")?
             .GetNodes<IHtmlFieldSetElement>()
             .Where(element => element.GetNodes<IHtmlLegendElement>().Single().InnerHtml.Trim() == filterName).Single();
     }

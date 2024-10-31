@@ -101,7 +101,7 @@ public class SearchPageFormSubmissionTests : SharedTestFixture
         _searchPage.FilterSection!.Filters.SelectMany(filter => filter.SelectedCheckBoxValues).Should().NotBeEmpty();
 
         // clear the filters
-        await _searchPage.Form!.SubmitClearAsync();
+        await _searchPage.Form!.ClearButtonSubmitAsync();
 
         // assert checkboxes are no longer selected
         var usecaseSelectedFacets = capturedUsecaseRequest!

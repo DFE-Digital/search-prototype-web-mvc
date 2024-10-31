@@ -3,11 +3,9 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
-public class TinySearchPageModel
+public class TinySearchPageModel : ISearchPage
 {
-    public string PageParagraph { get; set; }
-
-    private ITinySearchPageBuilder _builder;
+    private AngleSharpTinySearchPageBuilder _builder;
 
     public TinySearchPageModel(IBrowsingContext _browsingContext)
     {
