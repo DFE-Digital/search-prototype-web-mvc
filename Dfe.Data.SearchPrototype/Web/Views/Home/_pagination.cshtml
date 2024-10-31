@@ -8,7 +8,6 @@
                 <button
                     type="submit"
                     style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                    class="govuk-link govuk-pagination__link"
                     name="PageNumber"
                     value=@Model.PreviousPageNumber>
                     « previous
@@ -19,7 +18,6 @@
                 <button
                     type="submit"
                     style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                    class="govuk-link govuk-pagination__link"
                     name="PageNumber"
                     value=@Model.FirstPageNumber>
                     @Model.FirstPageNumber
@@ -35,15 +33,29 @@
                 {
                     <li class="govuk-pagination__item
                         @(pageNumber == Model.CurrentPageNumber ? "govuk-pagination__item--current" : "")">
-                        <button
-                            type="submit"
-                            style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                            class="govuk-link govuk-pagination__link"
-                            name="PageNumber"
-                            value=@pageNumber
-                            id="pageNumber-@pageNumber">
-                            @pageNumber
-                        </button>
+                        @{
+                            if (pageNumber != Model.CurrentPageNumber){
+                                <button
+                                    type="submit"
+                                    style="background-color: transparent;
+                                        border: none;
+                                        color: blue;
+                                        text-decoration: underline;
+                                        cursor: pointer;
+                                        font-size:large;"
+                                    name="PageNumber"
+                                    value=@pageNumber
+                                    id="pageNumber-@pageNumber">
+                                    @pageNumber
+                                </button>
+                            }
+                            else{
+                                <label
+                                    class="govuk-link govuk-pagination__link"
+                                    style="color: white; cursor:text;">@pageNumber
+                                </label>
+                            }
+                        }
                     </li>
                 }
             }
@@ -56,7 +68,6 @@
                 <button
                     type="submit"
                     style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                    class="govuk-link govuk-pagination__link"
                     name="PageNumber"
                     value=@Model.TotalNumberOfPages>
                     @Model.TotalNumberOfPages
@@ -67,7 +78,6 @@
                 <button
                     type="submit"
                     style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
-                    class="govuk-link govuk-pagination__link"
                     name="PageNumber"
                     value=@Model.NextPageNumber>
                     next »
