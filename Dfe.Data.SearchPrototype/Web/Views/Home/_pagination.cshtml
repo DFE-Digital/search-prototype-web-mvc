@@ -1,4 +1,17 @@
 ﻿@* @* partial view for pagination*@
+<style>
+    button.paginationButton {
+        background: none;
+        border: none;
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 17px;
+        padding-block: 0px;
+        padding-inline: 0px;
+    }    
+</style>
+
 @if (Model.IsPageable)
 {
 <nav id="pagination" class="govuk-pagination" role="navigation" aria-label="results-pagination">
@@ -7,8 +20,9 @@
                 @(Model.IsFirstPage ? "govuk-visually-hidden" : "")">
                 <button
                     type="submit"
-                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
                     name="PageNumber"
+                    value=@Model.PreviousPageNumber
+                    class="paginationButton">
                     value=@Model.PreviousPageNumber
                     id="previous">
                     « previous
@@ -18,8 +32,9 @@
                 @(Model.CurrentPageInLowerPagingBoundary ? "govuk-visually-hidden" : "")">
                 <button
                     type="submit"
-                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
                     name="PageNumber"
+                    value=@Model.FirstPageNumber
+                    class="paginationButton">
                     value=@Model.FirstPageNumber
                     id="first">
                     @Model.FirstPageNumber
@@ -40,15 +55,10 @@
                             if (pageNumber != Model.CurrentPageNumber){
                                 <button
                                     type="submit"
-                                    style="background-color: transparent;
-                                        border: none;
-                                        color: blue;
-                                        text-decoration: underline;
-                                        cursor: pointer;
-                                        font-size:large;"
                                     name="PageNumber"
                                     value=@pageNumber
-                                    id="pageNumber-@pageNumber">
+                                    id="pageNumber-@pageNumber"
+                                    class="paginationButton">
                                     @pageNumber
                                 </button>
                             }
@@ -70,9 +80,9 @@
                 @(Model.CurrentPageInUpperPagingBoundary ? "govuk-visually-hidden" : "")">
                 <button
                     type="submit"
-                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
                     name="PageNumber"
-                    value=@Model.TotalNumberOfPages>
+                    value=@Model.TotalNumberOfPages
+                    class="paginationButton">
                     @Model.TotalNumberOfPages
                 </button>
             </li>
@@ -80,9 +90,9 @@
                 @(Model.IsLastPage ? "govuk-visually-hidden" : "")">
                 <button
                     type="submit"
-                    style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; font-size:large;"
                     name="PageNumber"
-                    value=@Model.NextPageNumber>
+                    value=@Model.NextPageNumber
+                    class="paginationButton">
                     next »
                 </button>
             </li>
