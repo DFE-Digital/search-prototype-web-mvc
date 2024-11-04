@@ -102,9 +102,9 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var facets = results.EstablishmentFacetResults!.Facets!.Count();
         facets.Should().Be(2);
 
-        var establishmentStatusName = results.EstablishmentFacetResults!.Facets!.SelectMany(t => t.Name!);
-        establishmentStatusName.Should().Contain("PHASEOFEDUCATION");
-        establishmentStatusName.Should().Contain("ESTABLISHMENTSTATUS");
+        var establishmentStatus = results.EstablishmentFacetResults!.Facets!.SelectMany(t => t.Name!);
+        establishmentStatus.Should().Contain("PHASEOFEDUCATION");
+        establishmentStatus.Should().Contain("ESTABLISHMENTSTATUS");
     }
 
     [Theory]
