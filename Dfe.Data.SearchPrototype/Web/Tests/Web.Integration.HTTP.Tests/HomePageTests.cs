@@ -4,6 +4,9 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V127.DOM;
+using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -251,6 +254,69 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
 
             var openProposedToCloseLabel = document.GetElementText(HomePage.OpenProposedToCloseFilterLabel.Criteria);
             openProposedToCloseLabel.Should().StartWith("Open, but proposed to close");
+        }
+
+        [Fact]
+        public async Task Apply_Filters_Button()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=Middle");
+            var document = await response.GetDocumentAsync();
+
+            var filtersButton = document.QuerySelector("#filters-button")!.GetAttribute("type");
+            filtersButton.Should().Be("submit");
+        }
+
+        [Theory]
+        [MemberData(nameof(EstablishmentStatusElements))]
+        public async Task Apply_EstablishmentStatus_Filter_Submissions(string keyword, string queryParam, string queryParamValue, string element, string establishmentStatus)
+        {
+            var response = await _client.GetAsync(uri + $"/?searchKeyWord={keyword}&selectedFacets%5B{queryParam}%5D={queryParamValue}");
+            var document = await response.GetDocumentAsync();
+
+            var openCheckBox = document.QuerySelector(element)!.GetAttribute("checked");
+            openCheckBox.Should().Be("checked");
+
+            var establishmentStatusText = document.QuerySelector(HomePage.SearchResultEstablishmentStatus.Criteria);
+            foreach (var text in establishmentStatusText!.Text())
+            {
+                establishmentStatusText!.TextContent.Should().ContainAny(establishmentStatus);
+            }
+        }
+
+        public static IEnumerable<object[]> EstablishmentStatusElements()
+        {
+            yield return new object[] { "middle", "ESTABLISHMENTSTATUSNAME", "Open", HomePage.OpenFilterInput.Criteria, "Open" };
+            yield return new object[] { "academy", "ESTABLISHMENTSTATUSNAME", "Closed", HomePage.ClosedFilterInput.Criteria, "Closed" };
+            yield return new object[] { "school", "ESTABLISHMENTSTATUSNAME", "Proposed+to+open", HomePage.ProposedToOpenFilterInput.Criteria, "Proposed to open" };
+            yield return new object[] { "isle", "ESTABLISHMENTSTATUSNAME", "Open%2C+but+proposed+to+close", HomePage.OpenProposedToCloseFilterInput.Criteria, "Open" };
+        }
+        
+        [Theory]
+        [MemberData(nameof(PhaseOfEducationElements))]
+        public async Task Apply_PhaseOfEducation_Filter_Submissions(string keyword, string queryParam, string queryParamValue, string element, string educationPhase)
+        {
+            var response = await _client.GetAsync(uri + $"/?searchKeyWord={keyword}&selectedFacets%5B{queryParam}%5D={queryParamValue}");
+            var document = await response.GetDocumentAsync();
+
+            var openCheckBox = document.QuerySelector(element)!.GetAttribute("checked");
+            openCheckBox.Should().Be("checked");
+
+            var educationPhaseText = document.QuerySelector(HomePage.SearchResultEstablishmentPhase.Criteria);
+            foreach (var text in educationPhaseText!.Text())
+            {
+                educationPhaseText!.TextContent.Should().ContainAny(educationPhase);
+            }
+        }
+
+        public static IEnumerable<object[]> PhaseOfEducationElements()
+        {
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Primary", HomePage.PrimaryFilterInput.Criteria, "Primary" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Secondary", HomePage.SecondaryFilterInput.Criteria, "Secondary" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Not+applicable", HomePage.NAFilterInput.Criteria, "Not applicable" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "All-through", HomePage.AllThroughFilterInput.Criteria, "All-through" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Middle+deemed+secondary", HomePage.MiddleDeemedSecondaryFilterInput.Criteria, "Middle deemed secondary" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "16+plus", HomePage.SixteenPlusFilterInput.Criteria, "16 plus" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Middle+deemed+primary", HomePage.MiddleDeemedPrimaryFilterInput.Criteria, "Middle deemed primary" };
         }
     }
 }
