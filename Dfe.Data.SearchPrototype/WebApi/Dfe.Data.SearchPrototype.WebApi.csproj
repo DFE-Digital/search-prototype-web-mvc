@@ -15,7 +15,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.1" />
-		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.2-44" />
+		<PackageReference Include="Dfe.Data.Common.Infrastructure.CognitiveSearch" Version="1.0.2-PullRequest22.51" />
 		<PackageReference Include="Dfe.Data.SearchPrototype.Infrastructure" Version="1.0.4-11" />
 	</ItemGroup>
 
