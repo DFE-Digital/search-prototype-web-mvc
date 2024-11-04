@@ -9,7 +9,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.APITests.Unit;
 
 public class SearchRequestToFilterRequestsMapperTests
 {
-    private IMapper<SearchRequest, IList<FilterRequest>> _mapper = new SearchRequestToFilterRequestsMapper();
+    private readonly IMapper<SearchRequest, IList<FilterRequest>?> _mapper = new SearchRequestToFilterRequestsMapper();
 
     [Fact]
     public void MapFrom_MapsFilters()
