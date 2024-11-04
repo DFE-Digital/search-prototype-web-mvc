@@ -1,23 +1,21 @@
-﻿using Xunit;
-using Dfe.Data.SearchPrototype.Web.Tests;
-using Xunit.Abstractions;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
+using Xunit;
+using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Dfe.Data.SearchPrototype.WebApi.Tests.APITests;
 
-public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>>
+public class ApiSearchResults : IClassFixture<WebApplicationFactory<Program>>
 {
     private const string SEARCHKEYWORD_ENDPOINT = "/establishments?SearchKeyword=";
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _logger;
-    private readonly PageWebApplicationFactory<Program> _factory;
+    private readonly WebApplicationFactory<Program> _factory;
 
-    public ApiSearchResults(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
+    public ApiSearchResults(WebApplicationFactory<Program> factory, ITestOutputHelper logger)
     {
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
