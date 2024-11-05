@@ -58,4 +58,9 @@ public sealed class HomePage : BasePage
     public static By SearchResultEstablishmentPhase(int urn) => By.CssSelector($"#education-phase-{urn}");
     public string? GetHeading() => DomQueryClient.GetText(Heading.Criteria);
     public string? GetNavigationBarHomeText() => DomQueryClient.GetText(NavigationBarHomeLink.Criteria);
+    public string? GetSearchHeading() => DomQueryClient.GetText(SearchHeading.Criteria);
+    public string? GetSearchSubheading() => DomQueryClient.GetText(SearchSubHeading.Criteria);
+    public bool IsSearchInputExists() => DomQueryClient.ElementExists(SearchInput.Criteria);
+    public bool IsSearchButtonExists() => DomQueryClient.ElementExists(SearchButton.Criteria);
+    public bool IsSearchFormExists() => DomQueryClient.ElementExists(SearchForm.Criteria);
 }

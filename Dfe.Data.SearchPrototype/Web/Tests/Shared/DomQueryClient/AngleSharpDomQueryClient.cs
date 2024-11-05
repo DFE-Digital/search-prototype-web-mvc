@@ -27,21 +27,18 @@ internal class AngleSharpQueryClient : IDomQueryClient
         return Find(cssSelector).GetAttribute(attribute);
     }
     public virtual string? GetLink(string cssSelector) => GetAttribute(cssSelector, "href");
+    public bool ElementExists(string cssSelector) => (TryFindOrDefault(cssSelector) != null);
 
     private IElement Find(string cssSelector)
         => FindAll(cssSelector)
             .ThrowIfMultiple()
             .Single();
 
-    private IEnumerable<IElement> FindAll(string cssSelector)
+    private IEnumerable<IElement> FindAll(string cssSelector) => TryFindOrDefault(cssSelector)! ?? [];
+    
+    private IEnumerable<IElement>? TryFindOrDefault(string cssSelector)
     {
         ArgumentException.ThrowIfNullOrEmpty(cssSelector);
-        return _htmlDocument.QuerySelectorAll(cssSelector)
-            .ThrowIfNullOrEmpty();
-    }
-
-    public bool ElementExists(string v)
-    {
-        throw new NotImplementedException();
+        return _htmlDocument.QuerySelectorAll(cssSelector);
     }
 }
