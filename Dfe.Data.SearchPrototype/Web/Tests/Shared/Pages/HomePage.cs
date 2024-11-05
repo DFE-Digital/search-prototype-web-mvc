@@ -1,17 +1,18 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
 public sealed class HomePage : BasePage
 {
-    public HomePage(IWebDriverContext driverContext) : base(driverContext)
+    public HomePage(IDomQueryClient domQueryClient) : base(domQueryClient)
     {
     }
 
     public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
-    public static By Heading => By.CssSelector("header div div:nth-of-type(2) a");
-    public static By HomeLink => By.CssSelector("nav a");
+    public static By Heading => By.CssSelector("#service-name");
+    public static By NavigationBarHomeLink => By.CssSelector("#home-link");
     public static By SearchHeading => By.CssSelector("h1 label");
     public static By SearchSubHeading => By.CssSelector("#searchKeyWord-hint");
     public By SearchHiddenDiv => By.CssSelector("#searchKeyWord + div");
@@ -55,5 +56,6 @@ public sealed class HomePage : BasePage
     public static By SearchResultEstablishmentType(int urn) => By.CssSelector($"#establishment-type-{urn}");
     public static By SearchResultEstablishmentStatus(int urn) => By.CssSelector($"#establishment-status-{urn}");
     public static By SearchResultEstablishmentPhase(int urn) => By.CssSelector($"#education-phase-{urn}");
-
+    public string? GetHeading() => DomQueryClient.GetText(Heading.Criteria);
+    public string? GetNavigationBarHomeText() => DomQueryClient.GetText(NavigationBarHomeLink.Criteria);
 }
