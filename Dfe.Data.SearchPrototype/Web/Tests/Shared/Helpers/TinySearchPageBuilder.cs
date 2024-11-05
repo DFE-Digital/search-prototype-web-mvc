@@ -4,23 +4,6 @@ using AngleSharp.Html.Dom;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 
-public interface ISearchPage
-{
-    public string? PageHeading { get; }
-    public string? ResultsText { get; }
-    public string? NoResultsText { get; }
-    public string? FilterSectionHeading { get; }
-    public IEnumerable<KeyValuePair<string, string>>? Filters { get; }
-    public IEnumerable<KeyValuePair<string, string>>? SelectedFilters { get; }
-
-    public bool FilterSectionIsNullOrEmpty { get; }
-
-    public Task NavigateToPage(string url);
-    public Task SubmitAsync();
-    public void SelectFilters(Dictionary<string, string> filters);
-    public Task SubmitClearAsync();
-}
-
 public class AngleSharpTinySearchPageBuilder
 {
     private IBrowsingContext _context;

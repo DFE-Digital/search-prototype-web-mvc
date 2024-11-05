@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 
-public class TinyTestSearchPageTests : TinyTestIntegrationTestsBase
+public class TinyTestSearchPageTests : AngleSharpIntegrationTestsBase
 {
     private const string _homeUri = "http://localhost";
 

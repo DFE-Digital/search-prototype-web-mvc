@@ -3,11 +3,28 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
-public class TinySearchPageModel : ISearchPage
+public interface ISearchPage
+{
+    public string? PageHeading { get; }
+    public string? ResultsText { get; }
+    public string? NoResultsText { get; }
+    public string? FilterSectionHeading { get; }
+    public IEnumerable<KeyValuePair<string, string>>? Filters { get; }
+    public IEnumerable<KeyValuePair<string, string>>? SelectedFilters { get; }
+
+    public bool FilterSectionIsNullOrEmpty { get; }
+
+    public Task NavigateToPage(string url);
+    public Task SubmitAsync();
+    public void SelectFilters(Dictionary<string, string> filters);
+    public Task SubmitClearAsync();
+}
+
+public class AngleSharpSearchPageModel : ISearchPage
 {
     private AngleSharpTinySearchPageBuilder _builder;
 
-    public TinySearchPageModel(IBrowsingContext _browsingContext)
+    public AngleSharpSearchPageModel(IBrowsingContext _browsingContext)
     {
         _builder = new AngleSharpTinySearchPageBuilder(_browsingContext);
     }

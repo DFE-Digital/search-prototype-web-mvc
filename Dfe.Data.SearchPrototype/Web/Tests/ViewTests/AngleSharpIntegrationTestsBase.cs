@@ -6,18 +6,18 @@ using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 
-public class TinyTestIntegrationTestsBase : IClassFixture<IntegrationTestingWebApplicationFactory>
+public class AngleSharpIntegrationTestsBase : IClassFixture<IntegrationTestingWebApplicationFactory>
 {
+    private readonly IBrowsingContext _browsingContext;
     protected readonly IntegrationTestingWebApplicationFactory _factory;
-    protected readonly IBrowsingContext _browsingContext;
-    protected readonly TinySearchPageModel _searchPage;
+    protected readonly ISearchPage _searchPage;
 
-    public TinyTestIntegrationTestsBase(IntegrationTestingWebApplicationFactory factory)
+    public AngleSharpIntegrationTestsBase(IntegrationTestingWebApplicationFactory factory)
     {
         _factory = factory;
         var httpClient = factory.CreateClient();
         _browsingContext = CreateBrowsingContext(httpClient);
-        _searchPage = new TinySearchPageModel(_browsingContext);
+        _searchPage = new AngleSharpSearchPageModel(_browsingContext);
     }
 
     private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
