@@ -1,4 +1,5 @@
 ﻿@using Dfe.Data.SearchPrototype.Web.Models.ViewModels
+@using Dfe.Data.SearchPrototype.Web.Views.Shared
 @using Microsoft.AspNetCore.Mvc.Localization
 @model SearchResults
 @inject IViewLocalizer Localizer;
@@ -41,13 +42,13 @@
                     {
                         <govuk-checkboxes name="selectedFacets[@facet.Name]">
                             <govuk-checkboxes-fieldset id="FacetName-@facet.Name">
-                                <govuk-checkboxes-fieldset-legend id="@facet.Name" class="govuk-fieldset__legend--s">
+                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
                                     @Localizer[facet.Name]
                                 </govuk-checkboxes-fieldset-legend>
 
                                 @foreach (var facetValue in facet.Values)
                                 {
-                                    <govuk-checkboxes-item checked="@facetValue.IsSelected" value="@facetValue.Value">
+                                    <govuk-checkboxes-item checked="@facetValue.IsSelected" value="@facetValue.Value" id="@facet.Name-@StringUtils.FormatToHTMLId(@facetValue.Value)">
                                         @facetValue.Value (@facetValue.Count)
                                     </govuk-checkboxes-item>
                                 }
