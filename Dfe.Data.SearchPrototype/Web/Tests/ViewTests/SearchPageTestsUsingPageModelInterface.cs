@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 
-public class TinyTestSearchPageTests : AngleSharpIntegrationTestsBase
+public class SearchPageTestsUsingPageModelInterface : AngleSharpIntegrationTestsBase
 {
     private const string _homeUri = "http://localhost";
 
-    public TinyTestSearchPageTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
+    public SearchPageTestsUsingPageModelInterface(IntegrationTestingWebApplicationFactory factory) : base(factory)
     {
     }
 
