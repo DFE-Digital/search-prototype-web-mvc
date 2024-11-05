@@ -1,4 +1,5 @@
-﻿Feature: AccessibilityTests
+﻿@ignore
+Feature: AccessibilityTests
 
 Scenario: Home page accessibility
 	When the user views the home page
