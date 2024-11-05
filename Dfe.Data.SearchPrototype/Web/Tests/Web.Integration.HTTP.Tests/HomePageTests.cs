@@ -167,6 +167,23 @@ public class HomePageTests : BaseHttpTest
         homePage.GetClearFiltersText().Should().Be("Clear filters");
     }
 
+    [Fact]
+    public async Task Filter_ByEstablishmentStatus_Checkboxes_And_Labels_Displayed()
+    {
+        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
+            .CreateAsync("/?searchKeyWord=Academy");
+        HomePage homePage = new(client);
+
+        homePage.GetEstablishmentStatusFiltersHeading().Should().Be("Establishment status");
+        
+        // homePage.GetEstablishmentStatusFiltersByValueToLabel() => List<KeyValuePairs<ValueOfCheckbox, LabelOfTheCheckbox>>
+
+/*        var something = new[]
+        {
+            new KeyValuePair<string, string>("Open", $"Open({})")
+        }
+        homePage.GetEstablishmentStatusFilters().Should().Be(something);*/
+    }
     /*
     [Fact]
     public async Task Filters_AreDisplayed()
