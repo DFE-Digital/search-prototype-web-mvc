@@ -41,21 +41,17 @@ public static class HtmlHelpers
 
     public static IElement GetElement(this IParentNode document, string cssSelector)
     {
-        if (string.IsNullOrEmpty(cssSelector))
-        {
-            throw new ArgumentException("selector cannot be null or empty", nameof(cssSelector));
-        }
-        return document.QuerySelector(cssSelector) ?? throw new ArgumentException($"Element not found with selector {cssSelector}");
+        return string.IsNullOrEmpty(cssSelector)
+            ? throw new ArgumentException("selector cannot be null or empty", nameof(cssSelector))
+            : document.QuerySelector(cssSelector) ?? throw new ArgumentException($"Element not found with selector {cssSelector}");
     }
 
     public static IEnumerable<IElement> GetMultipleElements(this IParentNode document, string cssSelector)
     {
-        if (string.IsNullOrEmpty(cssSelector))
-        {
-            throw new ArgumentException("selector cannot be null or empty", nameof(cssSelector));
-        }
-        return document.QuerySelectorAll(cssSelector) ??
-                throw new ArgumentNullException($"Multiple elements not found with selector {cssSelector}");
+        return string.IsNullOrEmpty(cssSelector)
+            ? throw new ArgumentException("selector cannot be null or empty", nameof(cssSelector))
+            : (IEnumerable<IElement>)(document.QuerySelectorAll(cssSelector) ??
+                throw new ArgumentNullException($"Multiple elements not found with selector {cssSelector}"));
     }
 
     public static string GetElementText(this IParentNode document, string cssSelector)

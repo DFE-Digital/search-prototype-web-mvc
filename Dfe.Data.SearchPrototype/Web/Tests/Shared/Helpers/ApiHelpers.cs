@@ -1,6 +1,4 @@
-﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 

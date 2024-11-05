@@ -10,9 +10,9 @@ public class AngleSharpDomQueryClientFactory : IDomQueryClientFactory
     {
         _httpClient = httpClient;
     }
-    public async Task<IDomQueryClient> CreateAsync(string path)
+    public async Task<IDomQueryClient> CreateClientFromHttpRequestAsync(HttpRequestMessage httpRequestMessage)
     {
-        HttpResponseMessage httpResponseMessage = await _httpClient.GetAsync(path);
+        HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage);
         var document = await HtmlHelpers.GetDocumentAsync(httpResponseMessage);
         return new AngleSharpQueryClient(document);
     }

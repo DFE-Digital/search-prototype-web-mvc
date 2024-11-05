@@ -2,8 +2,10 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using FluentAssertions;
+using System.Text;
 using Xunit;
 using Xunit.Abstractions;
+using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
@@ -16,8 +18,11 @@ public class HomePageTests : BaseHttpTest
     [Fact]
     public async Task Search_Title_IsDisplayed()
     {
-        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-            .CreateAsync("/");
+        HttpRequestMessage request = HttpRequestBuilder.Create()
+            .SetPath(Routes.HOME)
+            .Build();
+
+        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
         HomePage homePage = new(client);
         homePage.GetHeading().Should().Be("Search prototype");
     }
@@ -25,8 +30,11 @@ public class HomePageTests : BaseHttpTest
     [Fact]
     public async Task Header_Link_IsDisplayed()
     {
-        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-            .CreateAsync("/");
+        HttpRequestMessage request = HttpRequestBuilder.Create()
+            .SetPath(Routes.HOME)
+            .Build();
+
+        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
         HomePage homePage = new(client);
         homePage.GetNavigationBarHomeText().Should().Be("Home");
     }
@@ -35,40 +43,51 @@ public class HomePageTests : BaseHttpTest
     [Fact]
     public async Task Search_Establishment_IsDisplayed()
     {
-        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-            .CreateAsync("/");
+        HttpRequestMessage request = HttpRequestBuilder.Create()
+            .SetPath(Routes.HOME)
+            .Build();
+
+        // TODO expand to form parts need to be able to query within form container at the page level.
+        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
         HomePage homePage = new(client);
         homePage.GetSearchHeading().Should().Be("Search");
         homePage.GetSearchSubheading().Should().Be("Search establishments");
 
         homePage.IsSearchFormExists().Should().BeTrue();
         homePage.IsSearchInputExists().Should().BeTrue();
+        homePage.GetSearchFormInputName().Should().Be("searchKeyWord");
         homePage.IsSearchButtonExists().Should().BeTrue();
     }
 
-    /*    [Fact]
-        public async Task Search_ByName_Returns_LessThan100_Results()
-        {
-            IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-                .CreateAsync("/");
+    [Fact]
+    public async Task Search_ByName_Returns_LessThan100_Results()
+    {
+        HttpRequestMessage request = HttpRequestBuilder.Create()
+            .SetPath(Routes.HOME)
+            .Build();
 
-            HomePage homePage = new(client);
+        // TODO stub out search results?
+        // TODO do we NEED to make a request to home first, or, can we rely on a constant for the searchByKeyword query - and only focus on search submission here?
+        IDomQueryClientFactory clientFactory = ResolveTestService<IDomQueryClientFactory>();
+        IDomQueryClient client = await clientFactory.CreateClientFromHttpRequestAsync(request);
+        var searchInputFormName = new HomePage(client)
+            .GetSearchFormInputName()
+            .Should().NotBeNullOrEmpty().And.Subject;
 
-            var formResponse = await _client.SendAsync(
-                formElement,
-                formButton,
-                new Dictionary<string, string>
-                {
-                    ["searchKeyWord"] = "One"
-                });
+        // Build form request
+        HttpRequestMessage searchByKeywordRequest = HttpRequestBuilder.Create()
+            .AddQuery(
+                new(
+                    key: searchInputFormName,
+                    value: "One"))
+            .Build();
 
-            var resultsPage = await formResponse.GetDocumentAsync();
+        IDomQueryClient searchResponseClient = await clientFactory.CreateClientFromHttpRequestAsync(searchByKeywordRequest);
+        HomePage searchResultsPage = new(searchResponseClient);
+        searchResultsPage.GetSearchResultsText().Should().Contain("Result");
+        searchResultsPage.GetSearchResultsCount().Should().BeLessThan(100);
+    }
 
-            var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
-            searchResultsNumber.Should().Contain("Result");
-
-            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().BeLessThan(100);
-        }*/
     /*
        [Fact]
        public async Task Search_ByName_ReturnsMultipleResults()
@@ -158,10 +177,15 @@ public class HomePageTests : BaseHttpTest
     [Fact]
     public async Task Filter_Controls_Are_Displayed()
     {
-        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-            .CreateAsync("/?searchKeyWord=Academy");
-        HomePage homePage = new(client);
+        HttpRequestMessage request = HttpRequestBuilder.Create()
+            .AddQuery(new(
+                key: "searchKeyWord", value: "Academy"))
+            .Build();
 
+        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
+            .CreateClientFromHttpRequestAsync(request);
+        
+        HomePage homePage = new(client);
         homePage.GetFiltersHeading().Should().Be("Filters");
         homePage.GetApplyFiltersText().Should().Be("Apply filters");
         homePage.GetClearFiltersText().Should().Be("Clear filters");
@@ -170,19 +194,23 @@ public class HomePageTests : BaseHttpTest
     [Fact]
     public async Task Filter_ByEstablishmentStatus_Checkboxes_And_Labels_Displayed()
     {
+        HttpRequestMessage request = HttpRequestBuilder.Create()
+            .AddQuery(new(
+                key: "searchKeyWord", value: "Academy"))
+            .Build();
         IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-            .CreateAsync("/?searchKeyWord=Academy");
-        HomePage homePage = new(client);
+            .CreateClientFromHttpRequestAsync(request);
 
+        HomePage homePage = new(client);
         homePage.GetEstablishmentStatusFiltersHeading().Should().Be("Establishment status");
-        
+
         // homePage.GetEstablishmentStatusFiltersByValueToLabel() => List<KeyValuePairs<ValueOfCheckbox, LabelOfTheCheckbox>>
 
-/*        var something = new[]
-        {
-            new KeyValuePair<string, string>("Open", $"Open({})")
-        }
-        homePage.GetEstablishmentStatusFilters().Should().Be(something);*/
+        /*        var something = new[]
+                {
+                    new KeyValuePair<string, string>("Open", $"Open({})")
+                }
+                homePage.GetEstablishmentStatusFilters().Should().Be(something);*/
     }
     /*
     [Fact]
@@ -268,4 +296,45 @@ public class HomePageTests : BaseHttpTest
         var openProposedToCloseLabel = document.GetElementText(HomePage.OpenProposedToCloseFilterLabel.Criteria);
         openProposedToCloseLabel.Should().StartWith("Open, but proposed to close");
     }*/
+}
+
+public class HttpRequestBuilder
+{
+    private string? _path = Routes.HOME;
+    private List<KeyValuePair<string, string>> _query = new();
+
+    public HttpRequestBuilder()
+    {
+    }
+
+    public static HttpRequestBuilder Create() => new();
+
+    public HttpRequestBuilder SetPath(string path)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(path);
+        _path = path;
+        return this;
+    }
+
+    public HttpRequestBuilder AddQuery(KeyValuePair<string, string> query)
+    {
+        _query.Add(query);
+        return this;
+    }
+
+    public HttpRequestMessage Build()
+    {
+        UriBuilder uri = new()
+        {
+            Path = _path,
+            Query = _query.ToList()
+            .Aggregate(new StringBuilder(), (init, queryPairs) => init.Append($"{queryPairs.Key}={queryPairs.Value}"))
+                .ToString()
+        };
+
+        return new HttpRequestMessage()
+        {
+            RequestUri = uri.Uri
+        };
+    }
 }

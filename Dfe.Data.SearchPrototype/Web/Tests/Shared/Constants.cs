@@ -8,4 +8,9 @@ public static class Constants
         public const int HORSE_ACADEMY = 234567;
         public const int DUCK_SCHOOL = 345678;
     }
+
+    public static class Routes
+    {
+        public const string HOME = "/";
+    }
 }

@@ -25,7 +25,7 @@ public sealed class HomePage : BasePage
     public static By SearchResultsContainer => By.CssSelector("#results");
     public static By FiltersContainer => By.CssSelector("#filters-container");
     public static By FiltersHeading => By.CssSelector("#filters-heading");
-    public static By ApplyFiltersButton => By.CssSelector("#filters-button"); 
+    public static By ApplyFiltersButton => By.CssSelector("#filters-button");
     public static By PhaseOfEducationHeading => By.CssSelector("#PHASEOFEDUCATION");
     public static By PrimaryFilterInput => By.CssSelector("#selectedFacets_PHASEOFEDUCATION_");
     public static By PrimaryFilterLabel => By.CssSelector("#selectedFacets_PHASEOFEDUCATION_ + label");
@@ -66,4 +66,8 @@ public sealed class HomePage : BasePage
     public string? GetApplyFiltersText() => DomQueryClient.GetText(ApplyFiltersButton.Criteria);
     public string? GetClearFiltersText() => DomQueryClient.GetText("#clearFilters");
     public string? GetFiltersHeading() => DomQueryClient.GetText("#filters-heading");
+    public string? GetEstablishmentStatusFiltersHeading() => DomQueryClient.GetText("#FacetName-ESTABLISHMENTSTATUSNAME legend");
+    public string? GetSearchFormInputName() => DomQueryClient.GetAttribute(SearchInput.Criteria, "name");
+    public string? GetSearchResultsText() => DomQueryClient.GetText(SearchResultsNumber.Criteria);
+    public int GetSearchResultsCount() => DomQueryClient.GetCount(SearchResultsHeadings.Criteria);
 }

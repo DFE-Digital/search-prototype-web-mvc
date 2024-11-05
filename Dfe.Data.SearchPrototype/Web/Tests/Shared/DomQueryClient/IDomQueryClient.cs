@@ -7,4 +7,5 @@ public interface IDomQueryClient
     string? GetAttribute(string cssSelector, string attribute);
     IEnumerable<string?>? GetTexts(string cssSelector);
     bool ElementExists(string cssSelector);
+    int GetCount(string criteria);
 }
