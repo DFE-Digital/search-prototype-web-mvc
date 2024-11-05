@@ -1,22 +1,21 @@
-﻿using Xunit;
-using Dfe.Data.SearchPrototype.Web.Tests;
-using Xunit.Abstractions;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
+using Xunit;
+using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
 
 namespace Dfe.Data.SearchPrototype.WebApi.Tests.APITests;
 
-public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>>
+public class ApiSearchResults : IClassFixture<WebApplicationFactory<Program>>
 {
     private const string SEARCHKEYWORD_ENDPOINT = "/establishments?SearchKeyword=";
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _logger;
-    private readonly PageWebApplicationFactory<Program> _factory;
+    private readonly WebApplicationFactory<Program> _factory;
 
-    public ApiSearchResults(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
+    public ApiSearchResults(WebApplicationFactory<Program> factory, ITestOutputHelper logger)
     {
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
@@ -35,16 +34,16 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
     }
 
     [Theory]
-    [InlineData("Academy", 2)]
-    [InlineData("School", 1)]
+    [InlineData("Academy", 100)]
+    [InlineData("School", 100)]
     public async Task GET_Search_Returns_ExpectedNumber_Of_Results(string query, int resultsInt)
     {
         var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        var jsonString = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
+        var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
-        jsonString.EstablishmentResults!.Establishments.Should().HaveCount(resultsInt);
+        results.EstablishmentResults!.Establishments.Should().HaveCount(resultsInt);
     }
 
     [Fact]
@@ -56,22 +55,62 @@ public class ApiSearchResults : IClassFixture<PageWebApplicationFactory<Program>
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
 
         var firstEstablishmentResult = results.EstablishmentResults!.Establishments!.First();
-        firstEstablishmentResult.Urn.Should().Be("123456");
-        firstEstablishmentResult.Name.Should().Be("Goose Academy");
-        firstEstablishmentResult.Address.Street.Should().Be("Goose Street");
-        firstEstablishmentResult.Address.Locality.Should().Be("Goose Locality");
-        firstEstablishmentResult.Address.Address3.Should().Be("Goose Address 3");
-        firstEstablishmentResult.Address.Town.Should().Be("Goose Town");
-        firstEstablishmentResult.Address.Postcode.Should().Be("GOO OSE");
-        firstEstablishmentResult.EstablishmentType.Should().Be("Academy");
-        firstEstablishmentResult.EstablishmentStatusName.Should().Be("Open");
-        firstEstablishmentResult.PhaseOfEducation.Should().Be("Secondary");
+        firstEstablishmentResult.Urn.Should().NotBeNull();
+        firstEstablishmentResult.Name.Should().NotBeNull();
+        firstEstablishmentResult.Address.Street.Should().NotBeNull();
+        firstEstablishmentResult.Address.Locality.Should().NotBeNull();
+        firstEstablishmentResult.Address.Address3.Should().NotBeNull();
+        firstEstablishmentResult.Address.Town.Should().NotBeNull();
+        firstEstablishmentResult.Address.Postcode.Should().NotBeNull();
+        firstEstablishmentResult.EstablishmentType.Should().NotBeNull();
+        firstEstablishmentResult.EstablishmentStatusName.Should().NotBeNull();
+        firstEstablishmentResult.PhaseOfEducation.Should().NotBeNull();
     }
 
-    [Fact]
-    public async Task GET_Search_NoMatch_Returns_NoEstablishmentData()
+    [Theory]
+    [InlineData("St")]
+    [InlineData("Jos")]
+    [InlineData("Cath")]
+    public async Task GET_Search_ByPartialName_ReturnsResults(string query)
     {
-        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}Antony");
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;
+
+        results.EstablishmentResults!.Establishments.Should().HaveCountGreaterThan(1);
+
+        var establishmentResults = results.EstablishmentResults!.Establishments!;
+        foreach (var headings in establishmentResults!)
+        {
+            establishmentResults!.First().Name.Should().Contain(query);
+        }
+    }
+
+    [Theory]
+    [InlineData("Catholic")]
+    [InlineData("Junior")]
+    public async Task GET_Search_Returns_Facets(string query)
+    {
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var results = JsonConvert.DeserializeObject<EstablishmentFacetsProperty>(responseBody)!;
+
+        var facets = results.EstablishmentFacetResults!.Facets!.Count();
+        facets.Should().Be(2);
+
+        var establishmentStatus = results.EstablishmentFacetResults!.Facets!.SelectMany(t => t.Name!);
+        establishmentStatus.Should().Contain("PHASEOFEDUCATION");
+        establishmentStatus.Should().Contain("ESTABLISHMENTSTATUS");
+    }
+
+    [Theory]
+    [InlineData("zzz")]
+    [InlineData("123")]
+    public async Task GET_Search_NoMatch_Returns_NoEstablishmentData(string query)
+    {
+        var response = await _client.GetAsync($"{SEARCHKEYWORD_ENDPOINT}{query}");
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var results = JsonConvert.DeserializeObject<EstablishmentResultsProperty>(responseBody)!;

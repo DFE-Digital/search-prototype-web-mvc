@@ -8,23 +8,42 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+permissions: write-all
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v4
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    
     - name: Add nuget package source
       run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DFE-Digital/index.json"
+    
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
       run: dotnet build --no-restore
+  
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_LOGIN_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_LOGIN_TENANT_ID }}
+        subscription-id:  ${{ secrets.AZURE_LOGIN_SUBSCRIPTION_ID }} 
+        enable-AzPSSession: true
+
+    - name: Swap appsettings Ai Search Creds
+      id: azure-creds
+      uses: microsoft/variable-substitution@v1
+      with: 
+        files: '**/appsettings.json'
+      env:
+        AzureSearchConnectionOptions.Credentials: ${{ secrets.AZURE_SEARCH_CRED }}
+        
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
