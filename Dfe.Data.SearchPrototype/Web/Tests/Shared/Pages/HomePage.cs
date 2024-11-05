@@ -63,4 +63,7 @@ public sealed class HomePage : BasePage
     public bool IsSearchInputExists() => DomQueryClient.ElementExists(SearchInput.Criteria);
     public bool IsSearchButtonExists() => DomQueryClient.ElementExists(SearchButton.Criteria);
     public bool IsSearchFormExists() => DomQueryClient.ElementExists(SearchForm.Criteria);
+    public string? GetApplyFiltersText() => DomQueryClient.GetText(ApplyFiltersButton.Criteria);
+    public string? GetClearFiltersText() => DomQueryClient.GetText("#clearFilters");
+    public string? GetFiltersHeading() => DomQueryClient.GetText("#filters-heading");
 }

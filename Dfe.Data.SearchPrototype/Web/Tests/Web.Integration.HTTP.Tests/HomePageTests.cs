@@ -46,29 +46,29 @@ public class HomePageTests : BaseHttpTest
         homePage.IsSearchButtonExists().Should().BeTrue();
     }
 
-/*    [Fact]
-    public async Task Search_ByName_Returns_LessThan100_Results()
-    {
-        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-            .CreateAsync("/");
+    /*    [Fact]
+        public async Task Search_ByName_Returns_LessThan100_Results()
+        {
+            IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
+                .CreateAsync("/");
 
-        HomePage homePage = new(client);
+            HomePage homePage = new(client);
 
-        var formResponse = await _client.SendAsync(
-            formElement,
-            formButton,
-            new Dictionary<string, string>
-            {
-                ["searchKeyWord"] = "One"
-            });
+            var formResponse = await _client.SendAsync(
+                formElement,
+                formButton,
+                new Dictionary<string, string>
+                {
+                    ["searchKeyWord"] = "One"
+                });
 
-        var resultsPage = await formResponse.GetDocumentAsync();
+            var resultsPage = await formResponse.GetDocumentAsync();
 
-        var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
-        searchResultsNumber.Should().Contain("Result");
+            var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
+            searchResultsNumber.Should().Contain("Result");
 
-        resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().BeLessThan(100);
-    }*/
+            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().BeLessThan(100);
+        }*/
     /*
        [Fact]
        public async Task Search_ByName_ReturnsMultipleResults()
@@ -153,86 +153,102 @@ public class HomePageTests : BaseHttpTest
            var noResultText = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
            noResultText.Should().Contain("Sorry no results found please amend your search criteria");
        }
+    */
 
-       [Fact]
-       public async Task Filters_AreDisplayed()
-       {
-           var response = await _client.GetAsync("/?searchKeyWord=Academy");
-           var document = await response.GetDocumentAsync();
+    [Fact]
+    public async Task Filter_Controls_Are_Displayed()
+    {
+        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
+            .CreateAsync("/?searchKeyWord=Academy");
+        HomePage homePage = new(client);
 
-           var applyFiltersButton = document.GetElementText(HomePage.ApplyFiltersButton.Criteria);
-           applyFiltersButton.Should().Be("Apply filters");
+        homePage.GetFiltersHeading().Should().Be("Filters");
+        homePage.GetApplyFiltersText().Should().Be("Apply filters");
+        homePage.GetClearFiltersText().Should().Be("Clear filters");
+    }
 
-           var phaseOfEducation = document.GetElementText(HomePage.PhaseOfEducationHeading.Criteria);
-           phaseOfEducation.Should().Be("Phase of education");
+    /*
+    [Fact]
+    public async Task Filters_AreDisplayed()
+    {
+        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
+            .CreateAsync("/?searchKeyWord=Academy");
+        HomePage homePage = new(client);
 
-           var primaryInput = document.GetMultipleElements(HomePage.PrimaryFilterInput.Criteria);
-           primaryInput.Should().HaveCount(1);
 
-           var primaryLabel = document.GetElementText(HomePage.PrimaryFilterLabel.Criteria);
-           primaryLabel.Should().StartWith("Primary");
+        var applyFiltersButton = document.GetElementText(HomePage.ApplyFiltersButton.Criteria);
+        applyFiltersButton.Should().Be("Apply filters");
 
-           var secondaryInput = document.GetMultipleElements(HomePage.SecondaryFilterInput.Criteria);
-           secondaryInput.Should().HaveCount(1);
+        var phaseOfEducation = document.GetElementText(HomePage.PhaseOfEducationHeading.Criteria);
+        phaseOfEducation.Should().Be("Phase of education");
 
-           var secondaryLabel = document.GetElementText(HomePage.SecondaryFilterLabel.Criteria);
-           secondaryLabel.Should().StartWith("Secondary");
+        var primaryInput = document.GetMultipleElements(HomePage.PrimaryFilterInput.Criteria);
+        primaryInput.Should().HaveCount(1);
 
-           var naInput = document.GetMultipleElements(HomePage.NAFilterInput.Criteria);
-           naInput.Should().HaveCount(1);
+        var primaryLabel = document.GetElementText(HomePage.PrimaryFilterLabel.Criteria);
+        primaryLabel.Should().StartWith("Primary");
 
-           var naLabel = document.GetElementText(HomePage.NAFilterLabel.Criteria);
-           naLabel.Should().StartWith("Not applicable");
+        var secondaryInput = document.GetMultipleElements(HomePage.SecondaryFilterInput.Criteria);
+        secondaryInput.Should().HaveCount(1);
 
-           var allThroughInput = document.GetMultipleElements(HomePage.AllThroughFilterInput.Criteria);
-           allThroughInput.Should().HaveCount(1);
+        var secondaryLabel = document.GetElementText(HomePage.SecondaryFilterLabel.Criteria);
+        secondaryLabel.Should().StartWith("Secondary");
 
-           var allThroughLabel = document.GetElementText(HomePage.AllThroughFilterLabel.Criteria);
-           allThroughLabel.Should().StartWith("All-through");
+        var naInput = document.GetMultipleElements(HomePage.NAFilterInput.Criteria);
+        naInput.Should().HaveCount(1);
 
-           var middleDeemedSecondaryInput = document.GetMultipleElements(HomePage.MiddleDeemedSecondaryFilterInput.Criteria);
-           middleDeemedSecondaryInput.Should().HaveCount(1);
+        var naLabel = document.GetElementText(HomePage.NAFilterLabel.Criteria);
+        naLabel.Should().StartWith("Not applicable");
 
-           var middleDeemedSecondaryLabel = document.GetElementText(HomePage.MiddleDeemedSecondaryFilterLabel.Criteria);
-           middleDeemedSecondaryLabel.Should().StartWith("Middle deemed secondary");
+        var allThroughInput = document.GetMultipleElements(HomePage.AllThroughFilterInput.Criteria);
+        allThroughInput.Should().HaveCount(1);
 
-           var sixteenPlusInput = document.GetMultipleElements(HomePage.SixteenPlusFilterInput.Criteria);
-           sixteenPlusInput.Should().HaveCount(1);
+        var allThroughLabel = document.GetElementText(HomePage.AllThroughFilterLabel.Criteria);
+        allThroughLabel.Should().StartWith("All-through");
 
-           var sixteenPlusLabel = document.GetElementText(HomePage.SixteenPlusFilterLabel.Criteria);
-           sixteenPlusLabel.Should().StartWith("16 plus");
+        var middleDeemedSecondaryInput = document.GetMultipleElements(HomePage.MiddleDeemedSecondaryFilterInput.Criteria);
+        middleDeemedSecondaryInput.Should().HaveCount(1);
 
-           var middleDeemedPrimaryInput = document.GetMultipleElements(HomePage.MiddleDeemedPrimaryFilterInput.Criteria);
-           middleDeemedPrimaryInput.Should().HaveCount(1);
+        var middleDeemedSecondaryLabel = document.GetElementText(HomePage.MiddleDeemedSecondaryFilterLabel.Criteria);
+        middleDeemedSecondaryLabel.Should().StartWith("Middle deemed secondary");
 
-           var middleDeemedPrimaryLabel = document.GetElementText(HomePage.MiddleDeemedPrimaryFilterLabel.Criteria);
-           middleDeemedPrimaryLabel.Should().StartWith("Middle deemed primary");
+        var sixteenPlusInput = document.GetMultipleElements(HomePage.SixteenPlusFilterInput.Criteria);
+        sixteenPlusInput.Should().HaveCount(1);
 
-           var establishmentStatusName = document.GetElementText(HomePage.EstablishmentStatusNameHeading.Criteria);
-           establishmentStatusName.Should().Be("Establishment status");
+        var sixteenPlusLabel = document.GetElementText(HomePage.SixteenPlusFilterLabel.Criteria);
+        sixteenPlusLabel.Should().StartWith("16 plus");
 
-           var openInput = document.GetMultipleElements(HomePage.OpenFilterInput.Criteria);
-           openInput.Should().HaveCount(1);
+        var middleDeemedPrimaryInput = document.GetMultipleElements(HomePage.MiddleDeemedPrimaryFilterInput.Criteria);
+        middleDeemedPrimaryInput.Should().HaveCount(1);
 
-           var openLabel = document.GetElementText(HomePage.OpenFilterLabel.Criteria);
-           openLabel.Should().StartWith("Open");
+        var middleDeemedPrimaryLabel = document.GetElementText(HomePage.MiddleDeemedPrimaryFilterLabel.Criteria);
+        middleDeemedPrimaryLabel.Should().StartWith("Middle deemed primary");
 
-           var closedInput = document.GetMultipleElements(HomePage.ClosedFilterInput.Criteria);
-           closedInput.Should().HaveCount(1);
+        var establishmentStatusName = document.GetElementText(HomePage.EstablishmentStatusNameHeading.Criteria);
+        establishmentStatusName.Should().Be("Establishment status");
 
-           var closedLabel = document.GetElementText(HomePage.ClosedFilterLabel.Criteria);
-           closedLabel.Should().StartWith("Closed");
+        var openInput = document.GetMultipleElements(HomePage.OpenFilterInput.Criteria);
+        openInput.Should().HaveCount(1);
 
-           var proposedToOpenInput = document.GetMultipleElements(HomePage.ProposedToOpenFilterInput.Criteria);
-           proposedToOpenInput.Should().HaveCount(1);
+        var openLabel = document.GetElementText(HomePage.OpenFilterLabel.Criteria);
+        openLabel.Should().StartWith("Open");
 
-           var proposedToOpenLabel = document.GetElementText(HomePage.ProposedToOpenFilterLabel.Criteria);
-           proposedToOpenLabel.Should().StartWith("Proposed to open");
+        var closedInput = document.GetMultipleElements(HomePage.ClosedFilterInput.Criteria);
+        closedInput.Should().HaveCount(1);
 
-           var openProposedToCloseInput = document.GetMultipleElements(HomePage.OpenProposedToCloseFilterInput.Criteria);
-           openProposedToCloseInput.Should().HaveCount(1);
+        var closedLabel = document.GetElementText(HomePage.ClosedFilterLabel.Criteria);
+        closedLabel.Should().StartWith("Closed");
 
-           var openProposedToCloseLabel = document.GetElementText(HomePage.OpenProposedToCloseFilterLabel.Criteria);
-           openProposedToCloseLabel.Should().StartWith("Open, but proposed to close");
-       }*/
+        var proposedToOpenInput = document.GetMultipleElements(HomePage.ProposedToOpenFilterInput.Criteria);
+        proposedToOpenInput.Should().HaveCount(1);
+
+        var proposedToOpenLabel = document.GetElementText(HomePage.ProposedToOpenFilterLabel.Criteria);
+        proposedToOpenLabel.Should().StartWith("Proposed to open");
+
+        var openProposedToCloseInput = document.GetMultipleElements(HomePage.OpenProposedToCloseFilterInput.Criteria);
+        openProposedToCloseInput.Should().HaveCount(1);
+
+        var openProposedToCloseLabel = document.GetElementText(HomePage.OpenProposedToCloseFilterLabel.Criteria);
+        openProposedToCloseLabel.Should().StartWith("Open, but proposed to close");
+    }*/
 }
