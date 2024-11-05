@@ -8,12 +8,13 @@ class DocumentBatchHelpers
 {
     private static readonly HttpClient httpClient = new HttpClient();
 
-    public static IEnumerable<IEnumerable<dynamic>> SplitDataIntoBatches(IEnumerable<dynamic> source, int batchSize)
+    public static IEnumerable<IEnumerable<Establishment>> SplitDataIntoBatches(IEnumerable<Establishment> source, int batchSize)
     {
         ArgumentNullException.ThrowIfNull(source);
 
         var list = source.ToList();
-        for (int i = 0; i < list.Count; i += batchSize)
+        //for (int i = 0; i < list.Count; i += batchSize)
+        for (int i = 0; i < batchSize; i += batchSize)
         {
             yield return list.Skip(i).Take(batchSize);
         }
