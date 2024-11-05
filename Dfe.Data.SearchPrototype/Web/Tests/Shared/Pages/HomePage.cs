@@ -41,6 +41,8 @@ public sealed class HomePage : BasePage
     public static By SixteenPlusFilterLabel => By.CssSelector("#selectedFacets_PHASEOFEDUCATION_-6 + label");
     public static By MiddleDeemedPrimaryFilterInput => By.CssSelector("#selectedFacets_PHASEOFEDUCATION_-7");
     public static By MiddleDeemedPrimaryFilterLabel => By.CssSelector("#selectedFacets_PHASEOFEDUCATION_-7 + label");
+    public static By NurseryFilterInput => By.CssSelector("#PHASEOFEDUCATION-nursery");
+    public static By NurseryFilterLabel => By.CssSelector("#PHASEOFEDUCATION-nursery + label");
     public static By OpenFilterInput => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_");
     public static By OpenFilterLabel => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_ + label");
     public static By ClosedFilterInput => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-2");
@@ -50,12 +52,8 @@ public sealed class HomePage : BasePage
     public static By OpenProposedToCloseFilterInput => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-4");
     public static By OpenProposedToCloseFilterLabel => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-4 + label");
     public static By EstablishmentStatusNameHeading => By.CssSelector("#ESTABLISHMENTSTATUSNAME");
-    public static By SearchResultEstablishmentName(int urn) => By.CssSelector($"#name-{urn}");
-    public static By SearchResultEstablishmentUrn(int urn) => By.CssSelector($"#urn-{urn}");
-    public static By SearchResultEstablishmentAddress(int urn) => By.CssSelector($"#address-{urn}");
-    public static By SearchResultEstablishmentType(int urn) => By.CssSelector($"#establishment-type-{urn}");
-    public static By SearchResultEstablishmentStatus(int urn) => By.CssSelector($"#establishment-status-{urn}");
-    public static By SearchResultEstablishmentPhase(int urn) => By.CssSelector($"#education-phase-{urn}");
+    public static By SearchResultEstablishmentStatus => By.CssSelector("[id^=\"establishment-status-\"]");
+    public static By SearchResultEstablishmentPhase => By.CssSelector("[id^=\"education-phase-\"]");
     public string? GetHeading() => DomQueryClient.GetText(Heading.Criteria);
     public string? GetNavigationBarHomeText() => DomQueryClient.GetText(NavigationBarHomeLink.Criteria);
     public string? GetSearchHeading() => DomQueryClient.GetText(SearchHeading.Criteria);
@@ -66,4 +64,6 @@ public sealed class HomePage : BasePage
     public string? GetApplyFiltersText() => DomQueryClient.GetText(ApplyFiltersButton.Criteria);
     public string? GetClearFiltersText() => DomQueryClient.GetText("#clearFilters");
     public string? GetFiltersHeading() => DomQueryClient.GetText("#filters-heading");
+    public string? GetEstablishmentStatusFiltersHeading() => DomQueryClient.GetText(EstablishmentStatusNameHeading.Criteria);
+    
 }
