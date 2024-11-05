@@ -49,13 +49,14 @@ public sealed class HomePage : BasePage
     public static By ProposedToOpenFilterLabel => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-3 + label");
     public static By OpenProposedToCloseFilterInput => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-4");
     public static By OpenProposedToCloseFilterLabel => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-4 + label");
-    public static By EstablishmentStatusNameHeading => By.CssSelector("#ESTABLISHMENTSTATUSNAME");
     public static By SearchResultEstablishmentName(int urn) => By.CssSelector($"#name-{urn}");
     public static By SearchResultEstablishmentUrn(int urn) => By.CssSelector($"#urn-{urn}");
     public static By SearchResultEstablishmentAddress(int urn) => By.CssSelector($"#address-{urn}");
     public static By SearchResultEstablishmentType(int urn) => By.CssSelector($"#establishment-type-{urn}");
     public static By SearchResultEstablishmentStatus(int urn) => By.CssSelector($"#establishment-status-{urn}");
     public static By SearchResultEstablishmentPhase(int urn) => By.CssSelector($"#education-phase-{urn}");
+    public static By ClearFiltersButton => By.CssSelector("#clearFilters");
+    public static By EstablishmentStatusNameHeading => By.CssSelector("#FacetName-ESTABLISHMENTSTATUSNAME legend");
     public string? GetHeading() => DomQueryClient.GetText(Heading.Criteria);
     public string? GetNavigationBarHomeText() => DomQueryClient.GetText(NavigationBarHomeLink.Criteria);
     public string? GetSearchHeading() => DomQueryClient.GetText(SearchHeading.Criteria);
