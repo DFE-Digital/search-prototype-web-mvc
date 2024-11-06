@@ -25,7 +25,7 @@ public class HomePageTests : BaseHttpTest
 
         // Act
         IDomQueryClient client = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
-        
+
         // Assert
         HomePage homePage = new(client);
         homePage.GetHeading().Should().Be("Search prototype");
@@ -41,7 +41,7 @@ public class HomePageTests : BaseHttpTest
 
         // Act
         IDomQueryClient client = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
-        
+
         // Assert
         HomePage homePage = new(client);
         homePage.GetNavigationBarHomeText().Should().Be("Home");
@@ -84,7 +84,7 @@ public class HomePageTests : BaseHttpTest
 
         // Act
         IDomQueryClient searchResponseClient = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(searchByKeywordRequest);
-        
+
         // Assert
         HomePage searchResultsPage = new(searchResponseClient);
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
@@ -213,235 +213,236 @@ public class HomePageTests : BaseHttpTest
         homePage.GetPhaseOfEducationFiltersHeading().Should().Be("Phase of education");
         homePage.GetPhaseOfEducationFiltersByValueToLabel().Should().BeEquivalentTo(expectedFilterValuesToLabels);
     }
-/*
-    [Theory]
-    [MemberData(nameof(EstablishmentStatusElements))]
-    public async Task Apply_EstablishmentStatus_Filter_Submissions(string keyword, string queryParam, string queryParamValue, string element, string establishmentStatus)
-    {
-        var response = await _client.GetAsync(uri + $"/?searchKeyWord={keyword}&selectedFacets%5B{queryParam}%5D={queryParamValue}");
-        var document = await response.GetDocumentAsync();
-
-        var openCheckBox = document.QuerySelector(element)!.GetAttribute("checked");
-        openCheckBox.Should().Be("checked");
-
-        var establishmentStatusText = document.QuerySelector(HomePage.SearchResultEstablishmentStatus.Criteria);
-        foreach (var text in establishmentStatusText!.Text())
+    /*
+        [Theory]
+        [MemberData(nameof(EstablishmentStatusElements))]
+        public async Task Apply_EstablishmentStatus_Filter_Submissions(string keyword, string queryParam, string queryParamValue, string element, string establishmentStatus)
         {
-            establishmentStatusText!.TextContent.Should().ContainAny(establishmentStatus);
+            var response = await _client.GetAsync(uri + $"/?searchKeyWord={keyword}&selectedFacets%5B{queryParam}%5D={queryParamValue}");
+            var document = await response.GetDocumentAsync();
+
+            var openCheckBox = document.QuerySelector(element)!.GetAttribute("checked");
+            openCheckBox.Should().Be("checked");
+
+            var establishmentStatusText = document.QuerySelector(HomePage.SearchResultEstablishmentStatus.Criteria);
+            foreach (var text in establishmentStatusText!.Text())
+            {
+                establishmentStatusText!.TextContent.Should().ContainAny(establishmentStatus);
+            }
         }
-    }
 
-    [Theory]
-    [MemberData(nameof(PhaseOfEducationElements))]
-    public async Task Apply_PhaseOfEducation_Filter_Submissions(string keyword, string queryParam, string queryParamValue, string element, string educationPhase)
-    {
-        var response = await _client.GetAsync(uri + $"/?searchKeyWord={keyword}&selectedFacets%5B{queryParam}%5D={queryParamValue}");
-        var document = await response.GetDocumentAsync();
-
-        var openCheckBox = document.QuerySelector(element)!.GetAttribute("checked");
-        openCheckBox.Should().Be("checked");
-
-        var educationPhaseText = document.QuerySelector(HomePage.SearchResultEstablishmentPhase.Criteria);
-        foreach (var text in educationPhaseText!.Text())
+        [Theory]
+        [MemberData(nameof(PhaseOfEducationElements))]
+        public async Task Apply_PhaseOfEducation_Filter_Submissions(string keyword, string queryParam, string queryParamValue, string element, string educationPhase)
         {
-            educationPhaseText!.TextContent.Should().ContainAny(educationPhase);
+            var response = await _client.GetAsync(uri + $"/?searchKeyWord={keyword}&selectedFacets%5B{queryParam}%5D={queryParamValue}");
+            var document = await response.GetDocumentAsync();
+
+            var openCheckBox = document.QuerySelector(element)!.GetAttribute("checked");
+            openCheckBox.Should().Be("checked");
+
+            var educationPhaseText = document.QuerySelector(HomePage.SearchResultEstablishmentPhase.Criteria);
+            foreach (var text in educationPhaseText!.Text())
+            {
+                educationPhaseText!.TextContent.Should().ContainAny(educationPhase);
+            }
         }
-    }
 
-    [Fact]
-    public async Task Clear_Filters_Button_Text_And_Type()
-    {
-        var response = await _client.GetAsync(uri + "/?searchKeyWord=school&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open");
-        var document = await response.GetDocumentAsync();
+        [Fact]
+        public async Task Clear_Filters_Button_Text_And_Type()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=school&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open");
+            var document = await response.GetDocumentAsync();
 
-        var clearFiltersButtonText = document.GetElementText(HomePage.ClearFiltersButton.Criteria);
-        clearFiltersButtonText.Should().Be("Clear filters");
+            var clearFiltersButtonText = document.GetElementText(HomePage.ClearFiltersButton.Criteria);
+            clearFiltersButtonText.Should().Be("Clear filters");
 
-        var clearFiltersButtonType = document.QuerySelector(HomePage.ClearFiltersButton.Criteria)!.GetAttribute("type");
-        clearFiltersButtonType.Should().Be("submit");
-    }
+            var clearFiltersButtonType = document.QuerySelector(HomePage.ClearFiltersButton.Criteria)!.GetAttribute("type");
+            clearFiltersButtonType.Should().Be("submit");
+        }
 
-    [Fact]
-    public async Task Clear_Filters_Button_Clears_Single_EstablishmentStatus_Filter()
-    {
-        var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open");
-        var document = await response.GetDocumentAsync();
+        [Fact]
+        public async Task Clear_Filters_Button_Clears_Single_EstablishmentStatus_Filter()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open");
+            var document = await response.GetDocumentAsync();
 
-        var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
-        applyFiltersButton.Should().NotBeNull();
+            var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
+            applyFiltersButton.Should().NotBeNull();
 
-        var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
-        clearFiltersButtonText.Should().NotBeNull();
+            var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
+            clearFiltersButtonText.Should().NotBeNull();
 
-        var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
-        openFilterInput.Should().NotBeNull();
-        openFilterInput!.GetAttribute("checked").Should().Be(null);
-    }
+            var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
+            openFilterInput.Should().NotBeNull();
+            openFilterInput!.GetAttribute("checked").Should().Be(null);
+        }
 
-    [Fact]
-    public async Task Clear_Filters_Button_Clears_Single_PhaseOfEducation_Filter()
-    {
-        var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BPHASEOFEDUCATION%5D=Not+applicable");
-        var document = await response.GetDocumentAsync();
+        [Fact]
+        public async Task Clear_Filters_Button_Clears_Single_PhaseOfEducation_Filter()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BPHASEOFEDUCATION%5D=Not+applicable");
+            var document = await response.GetDocumentAsync();
 
-        var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
-        applyFiltersButton.Should().NotBeNull();
+            var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
+            applyFiltersButton.Should().NotBeNull();
 
-        var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
-        clearFiltersButtonText.Should().NotBeNull();
+            var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
+            clearFiltersButtonText.Should().NotBeNull();
 
-        var naFilterInput = document.QuerySelector(HomePage.NAFilterInput.Criteria);
-        naFilterInput.Should().NotBeNull();
-        naFilterInput!.GetAttribute("checked").Should().Be(null);
-    }
+            var naFilterInput = document.QuerySelector(HomePage.NAFilterInput.Criteria);
+            naFilterInput.Should().NotBeNull();
+            naFilterInput!.GetAttribute("checked").Should().Be(null);
+        }
 
-    [Fact]
-    public async Task Clear_Filters_Button_Clears_Multiple_EstablishmentStatus_Filters()
-    {
-        var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Closed");
-        var document = await response.GetDocumentAsync();
+        [Fact]
+        public async Task Clear_Filters_Button_Clears_Multiple_EstablishmentStatus_Filters()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Closed");
+            var document = await response.GetDocumentAsync();
 
-        var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
-        applyFiltersButton.Should().NotBeNull();
+            var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
+            applyFiltersButton.Should().NotBeNull();
 
-        var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
-        clearFiltersButtonText.Should().NotBeNull();
+            var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
+            clearFiltersButtonText.Should().NotBeNull();
 
-        var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
-        openFilterInput.Should().NotBeNull();
-        openFilterInput!.GetAttribute("checked").Should().Be(null);
+            var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
+            openFilterInput.Should().NotBeNull();
+            openFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var closedFilterInput = document.QuerySelector(HomePage.ClosedFilterInput.Criteria);
-        closedFilterInput.Should().NotBeNull();
-        closedFilterInput!.GetAttribute("checked").Should().Be(null);
-    }
+            var closedFilterInput = document.QuerySelector(HomePage.ClosedFilterInput.Criteria);
+            closedFilterInput.Should().NotBeNull();
+            closedFilterInput!.GetAttribute("checked").Should().Be(null);
+        }
 
-    [Fact]
-    public async Task Clear_Filters_Button_Clears_Multiple_PhaseOfEducation_Filters()
-    {
-        var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+secondary&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+primary");
-        var document = await response.GetDocumentAsync();
+        [Fact]
+        public async Task Clear_Filters_Button_Clears_Multiple_PhaseOfEducation_Filters()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+secondary&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+primary");
+            var document = await response.GetDocumentAsync();
 
-        var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
-        applyFiltersButton.Should().NotBeNull();
+            var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
+            applyFiltersButton.Should().NotBeNull();
 
-        var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
-        clearFiltersButtonText.Should().NotBeNull();
+            var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
+            clearFiltersButtonText.Should().NotBeNull();
 
-        var openFilterInput = document.QuerySelector(HomePage.MiddleDeemedSecondaryFilterInput.Criteria);
-        openFilterInput.Should().NotBeNull();
-        openFilterInput!.GetAttribute("checked").Should().Be(null);
+            var openFilterInput = document.QuerySelector(HomePage.MiddleDeemedSecondaryFilterInput.Criteria);
+            openFilterInput.Should().NotBeNull();
+            openFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var closedFilterInput = document.QuerySelector(HomePage.MiddleDeemedPrimaryFilterInput.Criteria);
-        closedFilterInput.Should().NotBeNull();
-        closedFilterInput!.GetAttribute("checked").Should().Be(null);
-    }
+            var closedFilterInput = document.QuerySelector(HomePage.MiddleDeemedPrimaryFilterInput.Criteria);
+            closedFilterInput.Should().NotBeNull();
+            closedFilterInput!.GetAttribute("checked").Should().Be(null);
+        }
 
-    [Fact]
-    public async Task Clear_Filters_Button_Clears_Multiple_Filters()
-    {
-        var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Closed&selectedFacets%5BPHASEOFEDUCATION%5D=Primary&selectedFacets%5BPHASEOFEDUCATION%5D=Secondary");
-        var document = await response.GetDocumentAsync();
+        [Fact]
+        public async Task Clear_Filters_Button_Clears_Multiple_Filters()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Closed&selectedFacets%5BPHASEOFEDUCATION%5D=Primary&selectedFacets%5BPHASEOFEDUCATION%5D=Secondary");
+            var document = await response.GetDocumentAsync();
 
-        var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
-        applyFiltersButton.Should().NotBeNull();
+            var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
+            applyFiltersButton.Should().NotBeNull();
 
-        var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
-        clearFiltersButtonText.Should().NotBeNull();
+            var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
+            clearFiltersButtonText.Should().NotBeNull();
 
-        var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
-        openFilterInput.Should().NotBeNull();
-        openFilterInput!.GetAttribute("checked").Should().Be(null);
-    }
+            var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
+            openFilterInput.Should().NotBeNull();
+            openFilterInput!.GetAttribute("checked").Should().Be(null);
+        }
 
-    [Fact]
-    public async Task Clear_Filters_Button_Clears_All_Filters()
-    {
-        var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Closed&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open%2C+but+proposed+to+close&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Proposed+to+open&selectedFacets%5BPHASEOFEDUCATION%5D=Primary&selectedFacets%5BPHASEOFEDUCATION%5D=Not+applicable&selectedFacets%5BPHASEOFEDUCATION%5D=Secondary&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+secondary&selectedFacets%5BPHASEOFEDUCATION%5D=Nursery&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+primary&selectedFacets%5BPHASEOFEDUCATION%5D=All-through&selectedFacets%5BPHASEOFEDUCATION%5D=16+plus");
-        var document = await response.GetDocumentAsync();
+        [Fact]
+        public async Task Clear_Filters_Button_Clears_All_Filters()
+        {
+            var response = await _client.GetAsync(uri + "/?searchKeyWord=school&ClearFilters=true&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Closed&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Open%2C+but+proposed+to+close&selectedFacets%5BESTABLISHMENTSTATUSNAME%5D=Proposed+to+open&selectedFacets%5BPHASEOFEDUCATION%5D=Primary&selectedFacets%5BPHASEOFEDUCATION%5D=Not+applicable&selectedFacets%5BPHASEOFEDUCATION%5D=Secondary&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+secondary&selectedFacets%5BPHASEOFEDUCATION%5D=Nursery&selectedFacets%5BPHASEOFEDUCATION%5D=Middle+deemed+primary&selectedFacets%5BPHASEOFEDUCATION%5D=All-through&selectedFacets%5BPHASEOFEDUCATION%5D=16+plus");
+            var document = await response.GetDocumentAsync();
 
-        var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
-        applyFiltersButton.Should().NotBeNull();
+            var applyFiltersButton = document.QuerySelector(HomePage.ApplyFiltersButton.Criteria);
+            applyFiltersButton.Should().NotBeNull();
 
-        var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
-        clearFiltersButtonText.Should().NotBeNull();
+            var clearFiltersButtonText = document.QuerySelector(HomePage.ClearFiltersButton.Criteria);
+            clearFiltersButtonText.Should().NotBeNull();
 
-        var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
-        openFilterInput.Should().NotBeNull();
-        openFilterInput!.GetAttribute("checked").Should().Be(null);
+            var openFilterInput = document.QuerySelector(HomePage.OpenFilterInput.Criteria);
+            openFilterInput.Should().NotBeNull();
+            openFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var closedFilterInput = document.QuerySelector(HomePage.ClosedFilterInput.Criteria);
-        closedFilterInput.Should().NotBeNull();
-        closedFilterInput!.GetAttribute("checked").Should().Be(null);
+            var closedFilterInput = document.QuerySelector(HomePage.ClosedFilterInput.Criteria);
+            closedFilterInput.Should().NotBeNull();
+            closedFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var openProposedToCloseFilterInput = document.QuerySelector(HomePage.OpenProposedToCloseFilterInput.Criteria);
-        openProposedToCloseFilterInput.Should().NotBeNull();
-        openProposedToCloseFilterInput!.GetAttribute("checked").Should().Be(null);
+            var openProposedToCloseFilterInput = document.QuerySelector(HomePage.OpenProposedToCloseFilterInput.Criteria);
+            openProposedToCloseFilterInput.Should().NotBeNull();
+            openProposedToCloseFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var proposedToOpenFilterInput = document.QuerySelector(HomePage.ProposedToOpenFilterInput.Criteria);
-        proposedToOpenFilterInput.Should().NotBeNull();
-        proposedToOpenFilterInput!.GetAttribute("checked").Should().Be(null);
+            var proposedToOpenFilterInput = document.QuerySelector(HomePage.ProposedToOpenFilterInput.Criteria);
+            proposedToOpenFilterInput.Should().NotBeNull();
+            proposedToOpenFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var primaryFilterInput = document.QuerySelector(HomePage.PrimaryFilterInput.Criteria);
-        primaryFilterInput.Should().NotBeNull();
-        primaryFilterInput!.GetAttribute("checked").Should().Be(null);
+            var primaryFilterInput = document.QuerySelector(HomePage.PrimaryFilterInput.Criteria);
+            primaryFilterInput.Should().NotBeNull();
+            primaryFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var naFilterInput = document.QuerySelector(HomePage.NAFilterInput.Criteria);
-        naFilterInput.Should().NotBeNull();
-        naFilterInput!.GetAttribute("checked").Should().Be(null);
+            var naFilterInput = document.QuerySelector(HomePage.NAFilterInput.Criteria);
+            naFilterInput.Should().NotBeNull();
+            naFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var secondaryFilterInput = document.QuerySelector(HomePage.SecondaryFilterInput.Criteria);
-        secondaryFilterInput.Should().NotBeNull();
-        secondaryFilterInput!.GetAttribute("checked").Should().Be(null);
+            var secondaryFilterInput = document.QuerySelector(HomePage.SecondaryFilterInput.Criteria);
+            secondaryFilterInput.Should().NotBeNull();
+            secondaryFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var middleDeemedSecondaryFilterInput = document.QuerySelector(HomePage.MiddleDeemedSecondaryFilterInput.Criteria);
-        middleDeemedSecondaryFilterInput.Should().NotBeNull();
-        middleDeemedSecondaryFilterInput!.GetAttribute("checked").Should().Be(null);
+            var middleDeemedSecondaryFilterInput = document.QuerySelector(HomePage.MiddleDeemedSecondaryFilterInput.Criteria);
+            middleDeemedSecondaryFilterInput.Should().NotBeNull();
+            middleDeemedSecondaryFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var nurseryFilterInput = document.QuerySelector(HomePage.NurseryFilterInput.Criteria);
-        nurseryFilterInput.Should().NotBeNull();
-        nurseryFilterInput!.GetAttribute("checked").Should().Be(null);
+            var nurseryFilterInput = document.QuerySelector(HomePage.NurseryFilterInput.Criteria);
+            nurseryFilterInput.Should().NotBeNull();
+            nurseryFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var middleDeemedPrimaryFilterInput = document.QuerySelector(HomePage.MiddleDeemedPrimaryFilterInput.Criteria);
-        middleDeemedPrimaryFilterInput.Should().NotBeNull();
-        middleDeemedPrimaryFilterInput!.GetAttribute("checked").Should().Be(null);
+            var middleDeemedPrimaryFilterInput = document.QuerySelector(HomePage.MiddleDeemedPrimaryFilterInput.Criteria);
+            middleDeemedPrimaryFilterInput.Should().NotBeNull();
+            middleDeemedPrimaryFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var allThroughFilterInput = document.QuerySelector(HomePage.AllThroughFilterInput.Criteria);
-        allThroughFilterInput.Should().NotBeNull();
-        allThroughFilterInput!.GetAttribute("checked").Should().Be(null);
+            var allThroughFilterInput = document.QuerySelector(HomePage.AllThroughFilterInput.Criteria);
+            allThroughFilterInput.Should().NotBeNull();
+            allThroughFilterInput!.GetAttribute("checked").Should().Be(null);
 
-        var sixteenPlusFilterInput = document.QuerySelector(HomePage.SixteenPlusFilterInput.Criteria);
-        sixteenPlusFilterInput.Should().NotBeNull();
-        sixteenPlusFilterInput!.GetAttribute("checked").Should().Be(null);
-    }
-
+            var sixteenPlusFilterInput = document.QuerySelector(HomePage.SixteenPlusFilterInput.Criteria);
+            sixteenPlusFilterInput.Should().NotBeNull();
+            sixteenPlusFilterInput!.GetAttribute("checked").Should().Be(null);
+        }
 
 
 
 
 
-    /// <summary>
-    /// Object contains search term, query parameter, query parameter value, page object and establishment status.
-    /// </summary>
-    public static IEnumerable<object[]> EstablishmentStatusElements()
-    {
-        yield return new object[] { "middle", "ESTABLISHMENTSTATUSNAME", "Open", HomePage.OpenFilterInput.Criteria, "Open" };
-        yield return new object[] { "academy", "ESTABLISHMENTSTATUSNAME", "Closed", HomePage.ClosedFilterInput.Criteria, "Closed" };
-        yield return new object[] { "school", "ESTABLISHMENTSTATUSNAME", "Proposed+to+open", HomePage.ProposedToOpenFilterInput.Criteria, "Proposed to open" };
-        yield return new object[] { "isle", "ESTABLISHMENTSTATUSNAME", "Open%2C+but+proposed+to+close", HomePage.OpenProposedToCloseFilterInput.Criteria, "Open" };
-    }
 
-    /// <summary>
-    /// Object contains search term, query parameter, query parameter value, page object and phase of education.
-    /// </summary>
-    public static IEnumerable<object[]> PhaseOfEducationElements()
-    {
-        yield return new object[] { "west", "PHASEOFEDUCATION", "Primary", HomePage.PrimaryFilterInput.Criteria, "Primary" };
-        yield return new object[] { "west", "PHASEOFEDUCATION", "Secondary", HomePage.SecondaryFilterInput.Criteria, "Secondary" };
-        yield return new object[] { "west", "PHASEOFEDUCATION", "Not+applicable", HomePage.NAFilterInput.Criteria, "Not applicable" };
-        yield return new object[] { "west", "PHASEOFEDUCATION", "All-through", HomePage.AllThroughFilterInput.Criteria, "All-through" };
-        yield return new object[] { "west", "PHASEOFEDUCATION", "Middle+deemed+secondary", HomePage.MiddleDeemedSecondaryFilterInput.Criteria, "Middle deemed secondary" };
-        yield return new object[] { "west", "PHASEOFEDUCATION", "16+plus", HomePage.SixteenPlusFilterInput.Criteria, "16 plus" };
-        yield return new object[] { "west", "PHASEOFEDUCATION", "Middle+deemed+primary", HomePage.MiddleDeemedPrimaryFilterInput.Criteria, "Middle deemed primary" };
-    }*/
+        /// <summary>
+        /// Object contains search term, query parameter, query parameter value, page object and establishment status.
+        /// </summary>
+        public static IEnumerable<object[]> EstablishmentStatusElements()
+        {
+            yield return new object[] { "middle", "ESTABLISHMENTSTATUSNAME", "Open", HomePage.OpenFilterInput.Criteria, "Open" };
+            yield return new object[] { "academy", "ESTABLISHMENTSTATUSNAME", "Closed", HomePage.ClosedFilterInput.Criteria, "Closed" };
+            yield return new object[] { "school", "ESTABLISHMENTSTATUSNAME", "Proposed+to+open", HomePage.ProposedToOpenFilterInput.Criteria, "Proposed to open" };
+            yield return new object[] { "isle", "ESTABLISHMENTSTATUSNAME", "Open%2C+but+proposed+to+close", HomePage.OpenProposedToCloseFilterInput.Criteria, "Open" };
+        }
 
+        /// <summary>
+        /// Object contains search term, query parameter, query parameter value, page object and phase of education.
+        /// </summary>
+        public static IEnumerable<object[]> PhaseOfEducationElements()
+        {
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Primary", HomePage.PrimaryFilterInput.Criteria, "Primary" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Secondary", HomePage.SecondaryFilterInput.Criteria, "Secondary" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Not+applicable", HomePage.NAFilterInput.Criteria, "Not applicable" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "All-through", HomePage.AllThroughFilterInput.Criteria, "All-through" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Middle+deemed+secondary", HomePage.MiddleDeemedSecondaryFilterInput.Criteria, "Middle deemed secondary" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "16+plus", HomePage.SixteenPlusFilterInput.Criteria, "16 plus" };
+            yield return new object[] { "west", "PHASEOFEDUCATION", "Middle+deemed+primary", HomePage.MiddleDeemedPrimaryFilterInput.Criteria, "Middle deemed primary" };
+        }*/
+
+}
