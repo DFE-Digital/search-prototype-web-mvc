@@ -57,8 +57,11 @@ public sealed class HomePage : BasePage
     public static By SearchResultEstablishmentPhase(int urn) => By.CssSelector($"#education-phase-{urn}");
     public static By ClearFiltersButton => By.CssSelector("#clearFilters");
     public static By EstablishmentStatusNameHeading => By.CssSelector("#FacetName-ESTABLISHMENTSTATUSNAME legend");
+
+    
     public string? GetHeading() => DomQueryClient.GetText(Heading.Criteria);
     public string? GetNavigationBarHomeText() => DomQueryClient.GetText(NavigationBarHomeLink.Criteria);
+    public string? GetNoSearchResultsHeading() => DomQueryClient.GetText(SearchNoResultText.Criteria);
     public string? GetSearchHeading() => DomQueryClient.GetText(SearchHeading.Criteria);
     public string? GetSearchSubheading() => DomQueryClient.GetText(SearchSubHeading.Criteria);
     public bool IsSearchInputExists() => DomQueryClient.ElementExists(SearchInput.Criteria);
@@ -70,5 +73,17 @@ public sealed class HomePage : BasePage
     public string? GetEstablishmentStatusFiltersHeading() => DomQueryClient.GetText("#FacetName-ESTABLISHMENTSTATUSNAME legend");
     public string? GetSearchFormInputName() => DomQueryClient.GetAttribute(SearchInput.Criteria, "name");
     public string? GetSearchResultsText() => DomQueryClient.GetText(SearchResultsNumber.Criteria);
-    public int GetSearchResultsCount() => DomQueryClient.GetCount(SearchResultsHeadings.Criteria);
+    public int GetSearchResultsContainerCount() => DomQueryClient.GetCount(SearchResultsHeadings.Criteria);
+    public IEnumerable<KeyValuePair<string, string>> GetEstablishmentStatusFiltersByValueToLabel()
+    {
+        return
+        [
+            new("Open", "Open (887)"),
+            new("Closed", "Closed (746)"),
+            new("Open, but proposed to close", "Open, but proposed to close (7)"),
+            new("Proposed to open", "Proposed to open (6)")
+        ];
+    }
+
+    public IEnumerable<string?> GetSearchResultsHeadings() => DomQueryClient.GetTexts(SearchResultsHeadings.Criteria) ?? [];
 }
