@@ -13,35 +13,10 @@ class DocumentBatchHelpers
         ArgumentNullException.ThrowIfNull(source);
 
         var list = source.ToList();
-        //for (int i = 0; i < list.Count; i += batchSize)
-        for (int i = 0; i < batchSize; i += batchSize)
+        for (int i = 0; i < list.Count; i += batchSize)
         {
             yield return list.Skip(i).Take(batchSize);
         }
-    }
-
-    public static string ConvertBatchToJson(IEnumerable<dynamic> batch)
-    {
-        var jsonDocuments = new
-        {
-            value = batch.Select(record => new
-            {
-                // Variable names are important here, and must be synchronised with names used on cognitive search (left)
-                // and the auto-generated properties based on CSV column names (right)
-                // COG_SEARCH_INDEX_NAME = record.SpreadsheetColumnName
-                id = record.URN,
-                ESTABLISHMENTNAME = record.EstablishmentName,
-                TOWN = record.Town,
-                TYPEOFESTABLISHMENTNAME = record.TypeOfEstablishmentName,
-                STREET = record.Street,
-                LOCALITY = record.Locality,
-                ADDRESS3 = record.Address3,
-                POSTCODE = record.Postcode,
-                ESTABLISHMENTSTATUSNAME = record.EstablishmentStatusName,
-                PHASEOFEDUCATION = record.PhaseOfEducation,
-            })
-        };
-        return JsonConvert.SerializeObject(jsonDocuments, Formatting.Indented);
     }
 
     public static async Task SendBatchToSearchService(AzureSearchServiceDetails searchDetails, string json)

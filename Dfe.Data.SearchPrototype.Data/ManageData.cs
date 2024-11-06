@@ -5,7 +5,7 @@ namespace Dfe.Data.SearchPrototype.Data;
 
 public class ManageData
 {
-    private const int BatchSize = 2; // max size for postcode lookup API
+    private const int BatchSize = 99; // max size for postcode lookup API
     private PostcodeLookupService _postcodeLookupService;
 
     public ManageData(PostcodeLookupService postcodeLookupService)
@@ -22,12 +22,11 @@ public class ManageData
             var batches = DocumentBatchHelpers.SplitDataIntoBatches(records, BatchSize);
             foreach (var batch in batches)
             {
-                //string json = DocumentBatchHelpers.ConvertBatchToJson(batch);
                 var postcodes = batch.Select(x => x.POSTCODE).Where(postcode => postcode != null).Cast<string>();
                 try
                 {
                     var geoLocations = await _postcodeLookupService.LookupPostcodes(postcodes);
-                    var establishmentsOut = new List<EstablishmentOut>();
+                    var establishmentsOut = new { value = new List<EstablishmentOut>() };
                     foreach (var establishment in batch)
                     {
                         var geolocation = geoLocations?.FirstOrDefault(x => x?.postcode == establishment.POSTCODE);
@@ -46,7 +45,7 @@ public class ManageData
                                 TOWN = establishment.TOWN,
                                 TYPEOFESTABLISHMENTNAME = establishment.TYPEOFESTABLISHMENTNAME,
                             };
-                            establishmentsOut.Add(establishmentOut);
+                            establishmentsOut.value.Add(establishmentOut);
                         }
                         else { Console.WriteLine($"No data for postcode {establishment.POSTCODE}"); }
                     }
@@ -58,22 +57,6 @@ public class ManageData
                 catch (Exception ex) {
                     // LookupPostcodes might have thrown
                 };
-
-                //var establishmentsOut = batch.Select(establishment => new EstablishmentOut(
-                //    latitude: geoLocations.Single(x => x.postcode == establishment.POSTCODE).latitude,
-                //    longitude:geoLocations.Single(x => x.postcode == establishment.POSTCODE).longitude)
-                //{
-                //    id = establishment.id,
-                //    ADDRESS3 = establishment.ADDRESS3,
-                //    POSTCODE = establishment.POSTCODE,
-                //    ESTABLISHMENTNAME = establishment.ESTABLISHMENTNAME,
-                //    ESTABLISHMENTSTATUSNAME = establishment.ESTABLISHMENTSTATUSNAME,
-                //    LOCALITY = establishment.LOCALITY,
-                //    PHASEOFEDUCATION = establishment.PHASEOFEDUCATION,
-                //    STREET = establishment.STREET,
-                //    TOWN = establishment.TOWN,
-                //    TYPEOFESTABLISHMENTNAME = establishment.TYPEOFESTABLISHMENTNAME,
-                //});
 
             }
         }
