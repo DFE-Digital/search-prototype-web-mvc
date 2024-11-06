@@ -1,8 +1,14 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
+﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
@@ -19,15 +25,18 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_Title_IsDisplayed()
     {
         // Arrange
-        HttpRequestMessage request = HttpRequestBuilder.Create()
+        HttpRequestMessage request = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
 
+        HttpClient httpClient = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         // Act
-        IDomQueryClient client = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
+        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(httpClient)
+            .CreateDocumentClientAsync(request);
 
         // Assert
-        HomePage homePage = new(client);
+        HomePage homePage = new(domQueryClient);
         homePage.GetHeading().Should().Be("Search prototype");
     }
 
@@ -35,15 +44,18 @@ public class HomePageTests : BaseHttpTest
     public async Task Header_Link_IsDisplayed()
     {
         // Arrange
-        HttpRequestMessage request = HttpRequestBuilder.Create()
+        HttpRequestMessage request = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
 
+        HttpClient httpClient = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         // Act
-        IDomQueryClient client = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
+        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(httpClient)
+            .CreateDocumentClientAsync(request);
 
         // Assert
-        HomePage homePage = new(client);
+        HomePage homePage = new(domQueryClient);
         homePage.GetNavigationBarHomeText().Should().Be("Home");
     }
 
@@ -52,16 +64,18 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_Establishment_IsDisplayed()
     {
         // Arrange
-        HttpRequestMessage request = HttpRequestBuilder.Create()
+        HttpRequestMessage request = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
 
-        // Assert
-        IDomQueryClient client = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(request);
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
+        // Act
+        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(request);
 
         // Assert
         // TODO expand to form parts need to be able to query within form container at the page level.
-        HomePage homePage = new(client);
+        HomePage homePage = new(domQueryClient);
         homePage.GetSearchHeading().Should().Be("Search");
         homePage.GetSearchSubheading().Should().Be("Search establishments");
         homePage.IsSearchFormExists().Should().BeTrue();
@@ -74,8 +88,19 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByName_Returns_LessThan100_Results()
     {
         // TODO stub out search results?
+        HttpClient client = ResolveService<CustomWebApplicationFactory>()
+            .WithWebHostBuilder((builder) =>
+            {
+                builder.ConfigureTestServices((services) =>
+                {
+                    services.RemoveAll<ISearchByKeywordClientProvider>();
+                    // TODO add a builder we control through TestServices that the fake depends on
+                    services.AddSingleton<ISearchByKeywordClientProvider, FakeSearchByKeywordClientProviderTestDouble>();
+                });
+            }).CreateClient();
+
         // Arrange
-        HttpRequestMessage searchByKeywordRequest = HttpRequestBuilder.Create()
+        HttpRequestMessage searchByKeywordRequest = ResolveService<HttpRequestBuilder>()
             .AddQuery(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
@@ -83,12 +108,12 @@ public class HomePageTests : BaseHttpTest
             .Build();
 
         // Act
-        IDomQueryClient searchResponseClient = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(searchByKeywordRequest);
+        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
 
         // Assert
-        HomePage searchResultsPage = new(searchResponseClient);
+        HomePage searchResultsPage = new(domQueryClient);
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
-        searchResultsPage.GetSearchResultsContainerCount().Should().BeLessThan(100);
+        searchResultsPage.GetSearchResultsContainerCount().Should().Be(1);
     }
 
     [Theory]
@@ -100,15 +125,17 @@ public class HomePageTests : BaseHttpTest
     {
         //TODO stub out results?
         // Arrange
-        HttpRequestMessage searchByKeywordRequest = HttpRequestBuilder.Create()
+        HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
             .AddQuery(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
                     value: keyword))
             .Build();
 
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         // Act
-        IDomQueryClient searchResponseClient = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(searchByKeywordRequest);
+        IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
 
         // Assert
         HomePage searchResultsPage = new(searchResponseClient);
@@ -123,16 +150,17 @@ public class HomePageTests : BaseHttpTest
         //TODO stub out results?
         // Arrange
         const string noResultsSearchKeyword = "zzz";
-        HttpRequestMessage searchByKeywordRequest = HttpRequestBuilder.Create()
+        HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
             .AddQuery(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
                     value: noResultsSearchKeyword))
             .Build();
 
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         // Act
-        IDomQueryClient searchResponseClient = await ResolveService<IDomQueryClientFactory>()
-            .CreateClientFromHttpRequestAsync(searchByKeywordRequest);
+        IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
 
         // Assert
         HomePage searchResultsPage = new(searchResponseClient);
@@ -143,15 +171,17 @@ public class HomePageTests : BaseHttpTest
     public async Task Filter_Controls_Are_Displayed()
     {
         //TODO stub out facets?
-        HttpRequestMessage request = HttpRequestBuilder.Create()
+        HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
             .AddQuery(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
 
-        IDomQueryClient client = await ResolveService<IDomQueryClientFactory>()
-                .CreateClientFromHttpRequestAsync(request);
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
-        HomePage homePage = new(client);
+        // Act
+        IDocumentClient searchResponseDocumentClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
+
+        HomePage homePage = new(searchResponseDocumentClient);
         homePage.GetFiltersHeading().Should().Be("Filters");
         homePage.GetApplyFiltersText().Should().Be("Apply filters");
         homePage.GetClearFiltersText().Should().Be("Clear filters");
@@ -163,15 +193,17 @@ public class HomePageTests : BaseHttpTest
     public async Task FilterS_ByEstablishmentStatus_Checkboxes_And_Labels_Displayed()
     {
         //TODO stub out facets - test no facets configured, 1 facet, many facets
-        HttpRequestMessage request = HttpRequestBuilder.Create()
+        HttpRequestMessage request = new HttpRequestBuilder()
             .AddQuery(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
 
-        IDomQueryClient client = await ResolveService<IDomQueryClientFactory>()
-            .CreateClientFromHttpRequestAsync(request);
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
-        HomePage homePage = new(client);
+        // Act
+        IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(request);
+
+        HomePage homePage = new(searchResponseClient);
 
         IEnumerable<KeyValuePair<string, string>> expectedFilterValuesToLabels = [
             new("Open", "Open (887)"),
@@ -188,17 +220,18 @@ public class HomePageTests : BaseHttpTest
     {
         //TODO stub out facets - test no facets configured, 1 facet, many facets
         // Arrange
-        HttpRequestMessage request = HttpRequestBuilder.Create()
+        HttpRequestMessage request = new HttpRequestBuilder()
             .AddQuery(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
 
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         // Act
-        IDomQueryClient client = await ResolveService<IDomQueryClientFactory>()
-            .CreateClientFromHttpRequestAsync(request);
+        IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(request);
 
         // Assert
-        HomePage homePage = new(client);
+        HomePage homePage = new(searchResponseClient);
         IEnumerable<KeyValuePair<string, string>> expectedFilterValuesToLabels = [
             new("Primary", "Primary (951)"),
             new("Not applicable", "Not applicable (457)"),

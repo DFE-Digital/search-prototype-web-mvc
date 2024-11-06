@@ -6,7 +6,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
 public sealed class HomePage : BasePage
 {
-    public HomePage(IDomQueryClient domQueryClient) : base(domQueryClient)
+    public HomePage(IDocumentClient domQueryClient) : base(domQueryClient)
     {
     }
 

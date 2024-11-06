@@ -4,7 +4,7 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Extensions;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 
-internal class AngleSharpQueryClient : IDomQueryClient
+internal class AngleSharpQueryClient : IDocumentClient
 {
     private readonly IHtmlDocument _htmlDocument;
     public AngleSharpQueryClient(IHtmlDocument document)

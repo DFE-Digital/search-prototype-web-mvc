@@ -7,11 +7,6 @@ public sealed class HttpRequestBuilder
 {
     private string? _path = Routes.HOME;
     private List<KeyValuePair<string, string>> _query = new();
-    private HttpRequestBuilder()
-    {
-    }
-
-    public static HttpRequestBuilder Create() => new();
 
     public HttpRequestBuilder SetPath(string path)
     {
