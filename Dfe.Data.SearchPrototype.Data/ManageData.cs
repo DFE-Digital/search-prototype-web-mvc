@@ -5,7 +5,7 @@ namespace Dfe.Data.SearchPrototype.Data;
 
 public class ManageData
 {
-    private const int BatchSize = 99; // max size for postcode lookup API
+    private const int BatchSize = 2; // max size for postcode lookup API
     private PostcodeLookupService _postcodeLookupService;
 
     public ManageData(PostcodeLookupService postcodeLookupService)
