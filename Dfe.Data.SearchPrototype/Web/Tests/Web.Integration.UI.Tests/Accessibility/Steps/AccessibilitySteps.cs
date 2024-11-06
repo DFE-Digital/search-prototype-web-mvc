@@ -1,4 +1,5 @@
 ﻿using Deque.AxeCore.Selenium;
+using Dfe.Data.SearchPrototype.Web;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Extensions;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
@@ -10,7 +11,7 @@ using TechTalk.SpecFlow;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.Acceptance.Tests.Steps
+namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Accessibility.Steps
 {
 
     [Binding]
