@@ -12,5 +12,6 @@ public static class Constants
     public static class Routes
     {
         public const string HOME = "/";
+        public const string SEARCH_KEYWORD_QUERY = "searchKeyWord";
     }
 }

@@ -23,7 +23,7 @@ public abstract class BaseHttpTest : IDisposable
         get => _serviceScope.ServiceProvider.GetService<HttpClient>() ?? throw new ArgumentNullException(nameof(ServerHttpClient));
     }
 
-    protected T ResolveTestService<T>()
+    protected T ResolveService<T>()
         => _serviceScope.ServiceProvider.GetService<T>()
             ?? throw new ArgumentNullException($"Unable to resolve type {typeof(T)}");
 
