@@ -9,20 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="Shared\SearchServiceAdapter\Resources\Establishments.json" />
-	</ItemGroup>
-
-	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-		<Copy SourceFiles="Shared\SearchServiceAdapter\Resources\Establishments.json" DestinationFolder="$(OutDir)" />
-	</Target>
-
-	<ItemGroup>
-		<Content Include="Shared\SearchServiceAdapter\Resources\Establishments.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="AngleSharp" Version="1.1.2" />
 		<PackageReference Include="AngleSharp.Io" Version="1.0.0" />
 		<PackageReference Include="Bogus" Version="35.6.1" />
