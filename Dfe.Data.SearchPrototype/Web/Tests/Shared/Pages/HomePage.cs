@@ -74,6 +74,7 @@ public sealed class HomePage : BasePage
     public string? GetSearchFormInputName() => DomQueryClient.GetAttribute(SearchInput.Criteria, "name");
     public string? GetSearchResultsText() => DomQueryClient.GetText(SearchResultsNumber.Criteria);
     public int GetSearchResultsContainerCount() => DomQueryClient.GetCount(SearchResultsHeadings.Criteria);
+    // TODO fix to actually query through DomQueryClient
     public IEnumerable<KeyValuePair<string, string>> GetEstablishmentStatusFiltersByValueToLabel()
     {
         return
@@ -85,5 +86,22 @@ public sealed class HomePage : BasePage
         ];
     }
 
+    public IEnumerable<KeyValuePair<string, string>> GetPhaseOfEducationFiltersByValueToLabel()
+    {
+        return
+        [
+            new("Primary", "Primary (951)"),
+            new("Not applicable", "Not applicable (457)"),
+            new("Secondary, but proposed to close", "Secondary (183)"),
+            new("Nursery", "Nursery (26)"),
+            new("16 plus", "16 plus (17)"),
+            new("All-through", "All-through (9)"),
+            new("Middle deemed secondary", "Middle deemed secondary (2)"),
+            new("Middle deemed primary", "Middle deemed primary (1)")
+        ];
+    }
+
     public IEnumerable<string?> GetSearchResultsHeadings() => DomQueryClient.GetTexts(SearchResultsHeadings.Criteria) ?? [];
+
+    public string? GetPhaseOfEducationFiltersHeading() => DomQueryClient.GetText("#FacetName-PHASEOFEDUCATION legend");
 }

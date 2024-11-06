@@ -131,7 +131,8 @@ public class HomePageTests : BaseHttpTest
             .Build();
 
         // Act
-        IDomQueryClient searchResponseClient = await ResolveService<IDomQueryClientFactory>().CreateClientFromHttpRequestAsync(searchByKeywordRequest);
+        IDomQueryClient searchResponseClient = await ResolveService<IDomQueryClientFactory>()
+            .CreateClientFromHttpRequestAsync(searchByKeywordRequest);
 
         // Assert
         HomePage searchResultsPage = new(searchResponseClient);
@@ -148,7 +149,7 @@ public class HomePageTests : BaseHttpTest
             .Build();
 
         IDomQueryClient client = await ResolveService<IDomQueryClientFactory>()
-            .CreateClientFromHttpRequestAsync(request);
+                .CreateClientFromHttpRequestAsync(request);
 
         HomePage homePage = new(client);
         homePage.GetFiltersHeading().Should().Be("Filters");
@@ -159,9 +160,9 @@ public class HomePageTests : BaseHttpTest
     }
 
     [Fact]
-    public async Task Filter_ByEstablishmentStatus_Checkboxes_And_Labels_Displayed()
+    public async Task FilterS_ByEstablishmentStatus_Checkboxes_And_Labels_Displayed()
     {
-        //TODO stub out SearchResults and Facets?
+        //TODO stub out facets - test no facets configured, 1 facet, many facets
         HttpRequestMessage request = HttpRequestBuilder.Create()
             .AddQuery(new(
                 key: "searchKeyWord", value: "Academy"))
@@ -179,95 +180,39 @@ public class HomePageTests : BaseHttpTest
             new("Proposed to open", "Proposed to open (6)")
         ];
         homePage.GetEstablishmentStatusFiltersHeading().Should().Be("Establishment status");
-        homePage.GetEstablishmentStatusFiltersByValueToLabel().Should().BeEquivalentTo(expectedFilterValuesToLabels); // () => List<KeyValuePairs<ValueOfCheckbox, LabelOfTheCheckbox>>
+        homePage.GetEstablishmentStatusFiltersByValueToLabel().Should().BeEquivalentTo(expectedFilterValuesToLabels);
     }
 
-    /*
     [Fact]
-    public async Task Filters_AreDisplayed()
+    public async Task Filters_ByPhaseOfEducation_Checkboxes_And_Labels_Displayed()
     {
-        IDomQueryClient client = await ResolveTestService<IDomQueryClientFactory>()
-            .CreateAsync("/?searchKeyWord=Academy");
+        //TODO stub out facets - test no facets configured, 1 facet, many facets
+        // Arrange
+        HttpRequestMessage request = HttpRequestBuilder.Create()
+            .AddQuery(new(
+                key: "searchKeyWord", value: "Academy"))
+            .Build();
+
+        // Act
+        IDomQueryClient client = await ResolveService<IDomQueryClientFactory>()
+            .CreateClientFromHttpRequestAsync(request);
+
+        // Assert
         HomePage homePage = new(client);
+        IEnumerable<KeyValuePair<string, string>> expectedFilterValuesToLabels = [
+            new("Primary", "Primary (951)"),
+            new("Not applicable", "Not applicable (457)"),
+            new("Secondary, but proposed to close", "Secondary (183)"),
+            new("Nursery", "Nursery (26)"),
+            new("16 plus", "16 plus (17)"),
+            new("All-through", "All-through (9)"),
+            new("Middle deemed secondary", "Middle deemed secondary (2)"),
+            new("Middle deemed primary", "Middle deemed primary (1)")
+        ];
 
-
-        var applyFiltersButton = document.GetElementText(HomePage.ApplyFiltersButton.Criteria);
-        applyFiltersButton.Should().Be("Apply filters");
-
-        var phaseOfEducation = document.GetElementText(HomePage.PhaseOfEducationHeading.Criteria);
-        phaseOfEducation.Should().Be("Phase of education");
-
-        var primaryInput = document.GetMultipleElements(HomePage.PrimaryFilterInput.Criteria);
-        primaryInput.Should().HaveCount(1);
-
-        var primaryLabel = document.GetElementText(HomePage.PrimaryFilterLabel.Criteria);
-        primaryLabel.Should().StartWith("Primary");
-
-        var secondaryInput = document.GetMultipleElements(HomePage.SecondaryFilterInput.Criteria);
-        secondaryInput.Should().HaveCount(1);
-
-        var secondaryLabel = document.GetElementText(HomePage.SecondaryFilterLabel.Criteria);
-        secondaryLabel.Should().StartWith("Secondary");
-
-        var naInput = document.GetMultipleElements(HomePage.NAFilterInput.Criteria);
-        naInput.Should().HaveCount(1);
-
-        var naLabel = document.GetElementText(HomePage.NAFilterLabel.Criteria);
-        naLabel.Should().StartWith("Not applicable");
-
-        var allThroughInput = document.GetMultipleElements(HomePage.AllThroughFilterInput.Criteria);
-        allThroughInput.Should().HaveCount(1);
-
-        var allThroughLabel = document.GetElementText(HomePage.AllThroughFilterLabel.Criteria);
-        allThroughLabel.Should().StartWith("All-through");
-
-        var middleDeemedSecondaryInput = document.GetMultipleElements(HomePage.MiddleDeemedSecondaryFilterInput.Criteria);
-        middleDeemedSecondaryInput.Should().HaveCount(1);
-
-        var middleDeemedSecondaryLabel = document.GetElementText(HomePage.MiddleDeemedSecondaryFilterLabel.Criteria);
-        middleDeemedSecondaryLabel.Should().StartWith("Middle deemed secondary");
-
-        var sixteenPlusInput = document.GetMultipleElements(HomePage.SixteenPlusFilterInput.Criteria);
-        sixteenPlusInput.Should().HaveCount(1);
-
-        var sixteenPlusLabel = document.GetElementText(HomePage.SixteenPlusFilterLabel.Criteria);
-        sixteenPlusLabel.Should().StartWith("16 plus");
-
-        var middleDeemedPrimaryInput = document.GetMultipleElements(HomePage.MiddleDeemedPrimaryFilterInput.Criteria);
-        middleDeemedPrimaryInput.Should().HaveCount(1);
-
-        var middleDeemedPrimaryLabel = document.GetElementText(HomePage.MiddleDeemedPrimaryFilterLabel.Criteria);
-        middleDeemedPrimaryLabel.Should().StartWith("Middle deemed primary");
-
-        var establishmentStatusName = document.GetElementText(HomePage.EstablishmentStatusNameHeading.Criteria);
-        establishmentStatusName.Should().Be("Establishment status");
-
-        var openInput = document.GetMultipleElements(HomePage.OpenFilterInput.Criteria);
-        openInput.Should().HaveCount(1);
-
-        var openLabel = document.GetElementText(HomePage.OpenFilterLabel.Criteria);
-        openLabel.Should().StartWith("Open");
-
-        var closedInput = document.GetMultipleElements(HomePage.ClosedFilterInput.Criteria);
-        closedInput.Should().HaveCount(1);
-
-        var closedLabel = document.GetElementText(HomePage.ClosedFilterLabel.Criteria);
-        closedLabel.Should().StartWith("Closed");
-
-        var proposedToOpenInput = document.GetMultipleElements(HomePage.ProposedToOpenFilterInput.Criteria);
-        proposedToOpenInput.Should().HaveCount(1);
-
-        var proposedToOpenLabel = document.GetElementText(HomePage.ProposedToOpenFilterLabel.Criteria);
-        proposedToOpenLabel.Should().StartWith("Proposed to open");
-
-        var openProposedToCloseInput = document.GetMultipleElements(HomePage.OpenProposedToCloseFilterInput.Criteria);
-        openProposedToCloseInput.Should().HaveCount(1);
-
-        var openProposedToCloseLabel = document.GetElementText(HomePage.OpenProposedToCloseFilterLabel.Criteria);
-        openProposedToCloseLabel.Should().StartWith("Open, but proposed to close");
-    }*/
-}
-
+        homePage.GetPhaseOfEducationFiltersHeading().Should().Be("Phase of education");
+        homePage.GetPhaseOfEducationFiltersByValueToLabel().Should().BeEquivalentTo(expectedFilterValuesToLabels);
+    }
 /*
     [Theory]
     [MemberData(nameof(EstablishmentStatusElements))]
