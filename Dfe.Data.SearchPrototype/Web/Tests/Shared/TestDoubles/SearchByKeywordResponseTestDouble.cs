@@ -42,7 +42,8 @@ public static class SearchByKeywordResponseTestDouble
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
             EstablishmentResults = new EstablishmentResults(establishmentResults),
-            EstablishmentFacetResults = new EstablishmentFacets(facetResults)
+            EstablishmentFacetResults = new EstablishmentFacets(facetResults),
+            TotalNumberOfEstablishments = establishmentResultsCount
         };
     }
     internal class PageSequence
@@ -60,7 +61,8 @@ public static class SearchByKeywordResponseTestDouble
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
             EstablishmentResults = new EstablishmentResults(establishmentResults),
-            EstablishmentFacetResults = new EstablishmentFacets(facetResults)
+            EstablishmentFacetResults = new EstablishmentFacets(facetResults),
+            TotalNumberOfEstablishments = 1
         };
     }
 

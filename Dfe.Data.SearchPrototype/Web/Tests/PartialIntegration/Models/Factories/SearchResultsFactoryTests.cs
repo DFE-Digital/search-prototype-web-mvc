@@ -22,7 +22,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
@@ -48,7 +48,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             result.SearchItems.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<Establishment>>();
             result.SearchResultsCount.Should().BeGreaterThanOrEqualTo(1);
             result.HasResults.Should().BeTrue();
-            result.Facets.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<Web.Models.ViewModels.Facet>>();
+            result.Facets.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<SearchPrototype.Web.Models.ViewModels.Facet>>();
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
@@ -92,7 +92,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
@@ -127,7 +127,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });

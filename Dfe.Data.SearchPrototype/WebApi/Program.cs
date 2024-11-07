@@ -1,7 +1,10 @@
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
+using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
-
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.WebApi.Controllers;
+using Dfe.Data.SearchPrototype.WebApi.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +18,11 @@ builder.Services.AddSwaggerGen();
 // Start of IOC container registrations
 //
 //
+builder.Services.AddDefaultSearchFilterServices(builder.Configuration);
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 builder.Services.AddCognitiveSearchAdaptorServices();// builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices(builder.Configuration);
+builder.Services.AddSingleton<IMapper<SearchRequest, IList<FilterRequest>?>, SearchRequestToFilterRequestsMapper>();
 //
 //
 // End of IOC container registrations

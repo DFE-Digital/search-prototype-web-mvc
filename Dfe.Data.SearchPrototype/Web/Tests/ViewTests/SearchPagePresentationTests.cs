@@ -53,7 +53,7 @@ public class SearchPagePresentationTests : SharedTestFixture
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Be("1 of 1 result");
         resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
+            .GetMultipleElements(HomePage.SearchResultsHeadings.Criteria)
             .Count().Should().Be(1);
     }
 
@@ -72,7 +72,7 @@ public class SearchPagePresentationTests : SharedTestFixture
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
             .TextContent.Should().Contain("results");
         resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
-            .GetMultipleElements(HomePage.SearchResultLinks.Criteria)
+            .GetMultipleElements(HomePage.SearchResultsHeadings.Criteria)
             .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);
     }
 

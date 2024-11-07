@@ -16,10 +16,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
         public void CreateViewModel_ValidInput_CallsMappers()
         {
             // arrange
-            Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
+            Mock<IMapper<EstablishmentResults?, List<SearchPrototype.Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
                 EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
-            Mock<IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
+            Mock<IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
@@ -46,10 +46,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
         public void CreateViewModel_NullEstablishmentResultParam_CallsMappers()
         {
             // arrange
-            Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
+            Mock<IMapper<EstablishmentResults?, List<SearchPrototype.Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
-            Mock<IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
+            Mock<IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
@@ -75,10 +75,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
         public void CreateViewModel_NullfacetsAndSelectedFacetsParam_CallsMappers()
         {
             // arrange
-            Mock<IMapper<EstablishmentResults?, List<Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
+            Mock<IMapper<EstablishmentResults?, List<SearchPrototype.Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
             EstablishmentResultsToEstablishmentsViewModelMapperTestDouble.MockFor([]);
 
-            Mock<IMapper<FacetsAndSelectedFacets, List<Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
+            Mock<IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?>> mockEstablishmentFacetsToFacetsViewModelMapper =
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =

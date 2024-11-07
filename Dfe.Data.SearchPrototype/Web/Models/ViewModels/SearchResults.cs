@@ -7,11 +7,15 @@ namespace Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 /// </summary>
 public sealed class SearchResults
 {
+    private List<Facet>? _facets;
+
     /// <summary>
     /// View model representation of the available facets.
     /// </summary>
-    public List<Facet>? Facets { get; set; }
-
+    public List<Facet>? Facets {
+        get => _facets;
+        set => _facets = value?.OrderBy(facet => facet.Name).ToList();
+    }
     /// <summary>
     /// View model representation of aggregated search results.
     /// </summary>

@@ -10,14 +10,14 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 {
-    public class HomePageTests : IClassFixture<PageWebApplicationFactory<Program>>
+    public class HomePageTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private const string uri = "http://localhost:5000";
         private readonly HttpClient _client;
         private readonly ITestOutputHelper _logger;
         private readonly WebApplicationFactory<Program> _factory;
 
-        public HomePageTests(PageWebApplicationFactory<Program> factory, ITestOutputHelper logger)
+        public HomePageTests(WebApplicationFactory<Program> factory, ITestOutputHelper logger)
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -83,7 +83,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
             resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("result");
-            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(1);
 
             resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Be("Duck School");
             resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("345678");
@@ -113,7 +112,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
             resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("results");
-            resultsPage.GetMultipleElements(HomePage.SearchResultLinks.Criteria).Count().Should().Be(2);
 
             resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Be("Goose Academy");
             resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("123456");

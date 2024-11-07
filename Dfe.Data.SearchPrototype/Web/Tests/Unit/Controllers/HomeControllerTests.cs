@@ -11,6 +11,7 @@ using Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ViewModels = Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 using Moq;
 using Xunit;
 
@@ -23,7 +24,7 @@ public class HomeControllerTests
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
 
-        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new ViewModels.SearchResults());
 
         Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -51,7 +52,7 @@ public class HomeControllerTests
     {
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
 
-        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new ViewModels.SearchResults());
 
         Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
@@ -89,7 +90,7 @@ public class HomeControllerTests
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
 
-        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new Web.Models.ViewModels.SearchResults());
+        Mock<ISearchResultsFactory> mockSearchResultsFactory = SearchResultsFactoryTestDouble.MockFor(new ViewModels.SearchResults());
 
         Mock<IMapper<Dictionary<string, List<string>>?, IList<FilterRequest>>> mockRequestMapper =
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
