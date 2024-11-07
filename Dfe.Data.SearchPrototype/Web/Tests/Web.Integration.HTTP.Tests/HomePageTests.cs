@@ -81,7 +81,7 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByPartialName_Returns_NoResults()
     {
         // Arrange
-        MockSearchForEstablishments(
+        MockSearchResponseWith(
             searchResponseBuilder => searchResponseBuilder.ClearEstablishments());
 
         HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
@@ -102,7 +102,7 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByName_Returns_A_Result()
     {
         // Arrange
-        MockSearchForEstablishments(
+        MockSearchResponseWith(
             (searchResponseBuilder) => searchResponseBuilder.AddEstablishment(new()
             {
                 TYPEOFESTABLISHMENTNAME = "Blah",
@@ -136,7 +136,7 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByPartialName_ReturnsMultipleResults(string keyword)
     {
         // Arrange
-        MockSearchForEstablishments((builder) =>
+        MockSearchResponseWith((builder) =>
             builder.AddEstablishment(new()
             {
                 TYPEOFESTABLISHMENTNAME = "Blah",
@@ -489,7 +489,7 @@ public class HomePageTests : BaseHttpTest
         }*/
 
 
-    private void MockSearchForEstablishments(Action<SearchResponseBuilder> configureSearchResponse)
+    private void MockSearchResponseWith(Action<SearchResponseBuilder> configureSearchResponse)
     {
 
         GetTestService<IConfigureWebHostHandler>()
