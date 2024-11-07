@@ -34,7 +34,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             FacetsAndSelectedFacets facetsAndSelectedFacets = FacetsAndSelectedFacetsTestDouble.Create();
 
             //act
-            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets, currentPageNumber: 1);
+            searchResultsFactory.CreateViewModel(
+                establishmentResults, facetsAndSelectedFacets, totalNumberOfEstablishments: 10, currentPageNumber: 1);
 
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(establishmentResults), Times.Once());
@@ -63,7 +64,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             FacetsAndSelectedFacets facetsAndSelectedFacets = FacetsAndSelectedFacetsTestDouble.Create();
 
             //act
-            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets, currentPageNumber: 1);
+            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets, totalNumberOfEstablishments: 10, currentPageNumber:1);
 
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Never());
@@ -92,7 +93,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                     mockEstablishmentFacetsToFacetsViewModelMapper.Object,
                     mockPaginationMapper.Object);
             //act
-            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets, currentPageNumber: 1);
+            searchResultsFactory.CreateViewModel(
+                establishmentResults, facetsAndSelectedFacets, totalNumberOfEstablishments: 10, currentPageNumber: 1);
 
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(establishmentResults), Times.Once());

@@ -2,7 +2,6 @@
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Resources;
 using Newtonsoft.Json.Linq;
-using System.Text.Json;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
 {
@@ -43,8 +42,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter
             return new SearchResults()
             {
                 Establishments =
-                    new EstablishmentResults(
-                        establishments, totalNumberOfEstablishments: establishments.Count)
+                    new EstablishmentResults(establishments)
             };
         }
     }

@@ -82,6 +82,7 @@ public class HomeController : Controller
                 response.EstablishmentResults,
                 new FacetsAndSelectedFacets(
                     response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets),
+                    response.TotalNumberOfEstablishments,
                     searchRequestViewModel.PageNumber);
 
         return View(viewModel);

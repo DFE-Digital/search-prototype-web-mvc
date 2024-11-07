@@ -36,7 +36,7 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase = new (
             mockSearchServiceAdapter,
-            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+            SearchByKeywordCriteriaTestDouble.Create());
 
         IOptions<PaginationOptions> paginationOptions =
             IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
@@ -74,7 +74,7 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase =
             new (mockSearchServiceAdapter,
-                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+                SearchByKeywordCriteriaTestDouble.Create());
 
         IOptions<PaginationOptions> paginationOptions =
             IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
@@ -115,7 +115,7 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase =
             new (mockSearchServiceAdapter,
-                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+                SearchByKeywordCriteriaTestDouble.Create());
 
         IOptions<PaginationOptions> paginationOptions =
             IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
@@ -164,7 +164,7 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase =
             new (mockSearchServiceAdapter,
-                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+                SearchByKeywordCriteriaTestDouble.Create());
 
         IOptions<PaginationOptions> paginationOptions =
             IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
@@ -217,7 +217,7 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase = new(
             mockSearchServiceAdapter,
-            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+            SearchByKeywordCriteriaTestDouble.Create());
 
         IOptions<PaginationOptions> paginationOptions =
             IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });

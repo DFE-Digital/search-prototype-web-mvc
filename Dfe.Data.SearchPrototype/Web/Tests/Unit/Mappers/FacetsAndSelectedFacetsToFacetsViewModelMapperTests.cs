@@ -2,10 +2,10 @@
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Xunit;
 using SearchResults = Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults;
-using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 {
@@ -83,14 +83,17 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
         public void Mapper_WithFacetResults_ReturnsSelectedFacetsTrue()
         {
             // arrange.
-            SearchByKeywordResponse response = new(new EstablishmentResults(),
-                new EstablishmentFacets(
-                new List<EstablishmentFacet>()
-                {
-                    EstablishmentFacetTestDouble.CreateWith("PHASEOFEDUCATION", "Primary", 2),
-                    EstablishmentFacetTestDouble.CreateWith("ESTABLISHMENTSTATUS", "Open", 21),
-                }),
-                SearchResponseStatus.Success);
+            SearchByKeywordResponse response = new(SearchResponseStatus.Success)
+            {
+                EstablishmentResults = new EstablishmentResults(),
+                EstablishmentFacetResults = new EstablishmentFacets(
+                    new List<EstablishmentFacet>()
+                    {
+                        EstablishmentFacetTestDouble.CreateWith("PHASEOFEDUCATION", "Primary", 2),
+                        EstablishmentFacetTestDouble.CreateWith("ESTABLISHMENTSTATUS", "Open", 21),
+                    }),
+                TotalNumberOfEstablishments = 10
+            };
    
             Dictionary<string, List<string>>? selectedFacets = new() {
                 {"PHASEOFEDUCATION",new List<string>{ } },

@@ -17,7 +17,7 @@ public static class EstablishmentResultsTestDouble
             
             totalNumberOFEstablishments += i;
         }
-        return new EstablishmentResults(establishments, totalNumberOFEstablishments);
+        return new EstablishmentResults(establishments);
     }
 
     public static EstablishmentResults CreateWithNoResults()

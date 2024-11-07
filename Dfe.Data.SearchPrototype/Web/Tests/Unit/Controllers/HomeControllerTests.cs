@@ -30,8 +30,7 @@ public class HomeControllerTests
 
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success)
         {
-            EstablishmentResults =
-            new EstablishmentResults([], totalNumberOfEstablishments: 0)
+            EstablishmentResults = new EstablishmentResults([])
         };
 
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
@@ -58,7 +57,7 @@ public class HomeControllerTests
             ViewModelSelectedFacetsToFilterRequestMapperTestDouble.MockFor([]);
 
         SearchByKeywordResponse response =
-            new(status: SearchResponseStatus.Success) { EstablishmentResults = new([], totalNumberOfEstablishments: 0) };
+            new(status: SearchResponseStatus.Success) { EstablishmentResults = new([]) };
 
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();
@@ -74,6 +73,7 @@ public class HomeControllerTests
             factory.CreateViewModel(
                 It.IsAny<EstablishmentResults?>(),
                 It.IsAny<FacetsAndSelectedFacets>(),
+                It.IsAny<int>(),
                 It.IsAny<int>()), Times.Once());
     }
 
@@ -84,7 +84,7 @@ public class HomeControllerTests
         Mock<ILogger<HomeController>> mockLogger = LoggerTestDouble.MockLogger();
 
         SearchByKeywordResponse response =
-           new(status: SearchResponseStatus.Success) { EstablishmentResults = new([], totalNumberOfEstablishments: 0) };
+           new(status: SearchResponseStatus.Success) { EstablishmentResults = new([]) };
 
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
             new SearchByKeywordUseCaseMockBuilder().WithHandleRequestReturnValue(response).Create();

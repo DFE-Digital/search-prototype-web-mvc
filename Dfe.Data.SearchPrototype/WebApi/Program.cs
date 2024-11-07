@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 //
 //
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
+builder.Services.AddCognitiveSearchAdaptorServices();// builder.Configuration);
 builder.Services.AddSearchForEstablishmentServices(builder.Configuration);
 //
 //

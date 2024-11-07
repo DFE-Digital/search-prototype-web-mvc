@@ -40,6 +40,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
                     facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create(),
+                    totalNumberOfEstablishments: 10,
                     currentPageNumber: 1);
 
             // assert
@@ -74,6 +75,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: null!,
                     facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create(),
+                    totalNumberOfEstablishments: 10,
                     currentPageNumber: 1);
 
             // assert
@@ -108,6 +110,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
                     facetsAndSelectedFacets: null!,
+                    totalNumberOfEstablishments: 10,
                     currentPageNumber: 1);
 
             // assert
@@ -142,6 +145,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
                     facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.CreateWith(establishmentFacets: null!, selectedFacets: null!),
+                    totalNumberOfEstablishments: 10,
                     currentPageNumber: 1);
 
             // assert

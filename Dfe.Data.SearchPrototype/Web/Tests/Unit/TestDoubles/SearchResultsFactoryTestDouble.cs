@@ -15,6 +15,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.TestDoubles
                 mapper.CreateViewModel(
                     It.IsAny<EstablishmentResults>(),
                     It.IsAny<FacetsAndSelectedFacets>(),
+                    It.IsAny<int>(),
                     It.IsAny<int>())).Returns(viewModel);
 
             return mockSearchResultsFactory;
