@@ -1,12 +1,10 @@
-﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using static Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests.HomePageTests;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
@@ -22,12 +20,8 @@ public abstract class BaseHttpTest : IDisposable
     }
 
     protected ITestOutputHelper TestOutputHelper { get; }
-    protected HttpClient ServerHttpClient
-    {
-        get => _serviceScope.ServiceProvider.GetService<HttpClient>() ?? throw new ArgumentNullException(nameof(ServerHttpClient));
-    }
 
-    protected T ResolveService<T>()
+    protected T GetTestService<T>()
         => _serviceScope.ServiceProvider.GetService<T>()
             ?? throw new ArgumentNullException($"Unable to resolve type {typeof(T)}");
 
@@ -40,31 +34,76 @@ public abstract class BaseHttpTest : IDisposable
 
 internal sealed class TestServices
 {
-    private readonly IServiceProvider _serviceProvider;
+    IServiceProvider _serviceProvider;
     internal TestServices()
     {
-        IServiceCollection services = new ServiceCollection();
-        services
-            .AddScoped<CustomWebApplicationFactory>()
+        IServiceCollection services = new ServiceCollection()
+            .AddScoped<IConfigureWebHostHandler, ConfigureWebHostHandler>()
+            .AddScoped<TestServerFactory>()
+            /*.AddSingleton<CustomWebApplicationFactory>()
+            .AddScoped<WebApplicationFactoryHttpClient>()*/
             .AddScoped<HttpRequestBuilder>()
-            //.AddScoped<IDomQueryClientFactory, AngleSharpDomQueryClientFactory>() not being resolved through container as depends on HttpClient which is created from factory at runtime. WithWebHostBuilder() does not persist configuration
-            
-            // mocked SearchClient responses
-            .AddScoped((provider) 
-                => provider.GetService<CustomWebApplicationFactory>()!.Services.GetService<ISearchByKeywordClientProvider>()!);
+            .AddScoped<IDocumentQueryClientProvider, AngleSharpDocumentClientProvider>()
+            // AddPages() for DI or is this creator enough?
+            .AddScoped<IPageFactory, PageFactory>();
 
         // TODO delaying the creation of the program so it can be overwritten in a test
-        // AddPages() for DI?
         _serviceProvider = services.BuildServiceProvider();
     }
 
     internal IServiceScope CreateServiceResolverScope() => _serviceProvider.CreateScope();
 }
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+public class TestServerFactory : WebApplicationFactory<Program>
 {
-    public CustomWebApplicationFactory()
-    {
+    private readonly IConfigureWebHostHandler _configureWebHostHandler;
 
+    public TestServerFactory(IConfigureWebHostHandler configureWebHostHandler)
+    {
+        _configureWebHostHandler = configureWebHostHandler;
     }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        base.ConfigureWebHost(builder);
+        var configure = _configureWebHostHandler.Create();
+        configure(builder);
+    }
+}
+
+public interface IConfigureWebHostHandler
+{
+    Action<IWebHostBuilder> Create();
+    void SetConfigure(Action<IWebHostBuilder> configure);
+}
+
+public sealed class ConfigureWebHostHandler : IConfigureWebHostHandler
+{
+    private Action<IWebHostBuilder>? _configure;
+    public void SetConfigure(Action<IWebHostBuilder> configure) => _configure = configure;
+
+    public Action<IWebHostBuilder> Create() => _configure ?? new Action<IWebHostBuilder>(builder => { }); // NOOP if not set
+}
+
+public sealed class PageFactory : IPageFactory
+{
+    private readonly IDocumentQueryClientProvider _documentClientFactory;
+
+    public PageFactory(IDocumentQueryClientProvider documentClientFactory)
+    {
+        _documentClientFactory = documentClientFactory;
+    }
+    public async Task<TPage> CreatePageAsync<TPage>(HttpRequestMessage httpRequestMessage) where TPage : BasePage, new()
+    {
+        TPage page = new()
+        {
+            DocumentClient = await _documentClientFactory.CreateDocumentClientAsync(httpRequestMessage)
+        };
+        return page;
+    }
+}
+
+public interface IPageFactory
+{
+    public Task<TPage> CreatePageAsync<TPage>(HttpRequestMessage httpRequest) where TPage : BasePage, new();
 }

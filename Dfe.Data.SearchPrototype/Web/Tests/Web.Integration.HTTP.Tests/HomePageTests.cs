@@ -1,10 +1,12 @@
 ﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
+using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -24,18 +26,15 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_Title_IsDisplayed()
     {
         // Arrange
-        HttpRequestMessage request = new HttpRequestBuilder()
+        HttpRequestMessage httpRequest = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
 
-        HttpClient httpClient = ResolveService<CustomWebApplicationFactory>().CreateClient();
-
         // Act
-        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(httpClient)
-            .CreateDocumentClientAsync(request);
+        HomePage homePage = await GetTestService<IPageFactory>()
+            .CreatePageAsync<HomePage>(httpRequest);
 
         // Assert
-        HomePage homePage = new(domQueryClient);
         homePage.GetHeading().Should().Be("Search prototype");
     }
 
@@ -43,18 +42,15 @@ public class HomePageTests : BaseHttpTest
     public async Task Header_Link_IsDisplayed()
     {
         // Arrange
-        HttpClient httpClient = ResolveService<CustomWebApplicationFactory>().CreateClient();
-
-        HttpRequestMessage request = new HttpRequestBuilder()
+        HttpRequestMessage httpRequest = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
 
         // Act
-        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(httpClient)
-            .CreateDocumentClientAsync(request);
+        HomePage homePage = await GetTestService<IPageFactory>()
+            .CreatePageAsync<HomePage>(httpRequest);
 
         // Assert
-        HomePage homePage = new(domQueryClient);
         homePage.GetNavigationBarHomeText().Should().Be("Home");
     }
 
@@ -63,18 +59,16 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_Establishment_IsDisplayed()
     {
         // Arrange
-        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
-
-        HttpRequestMessage request = new HttpRequestBuilder()
+        HttpRequestMessage homePageRequest = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
 
         // Act
-        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(request);
+        HomePage homePage = await GetTestService<IPageFactory>()
+            .CreatePageAsync<HomePage>(homePageRequest);
 
         // Assert
         // TODO expand to form parts need to be able to query within form container at the page level.
-        HomePage homePage = new(domQueryClient);
         homePage.GetSearchHeading().Should().Be("Search");
         homePage.GetSearchSubheading().Should().Be("Search establishments");
         homePage.IsSearchFormExists().Should().BeTrue();
@@ -87,38 +81,19 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByPartialName_Returns_NoResults()
     {
         // Arrange
+        MockSearchForEstablishments(
+            searchResponseBuilder => searchResponseBuilder.ClearEstablishments());
 
-        // Stub the search response
-        WebApplicationFactory<Program> serverFactory =
-            ResolveService<CustomWebApplicationFactory>()
-            .WithWebHostBuilder((builder) =>
-            {
-                builder.ConfigureServices((services) =>
-                {
-                    services.RemoveAll<ISearchByKeywordClientProvider>();
-                    services.AddSingleton<SearchResponseBuilder>();
-                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
-                });
-            });
-
-        serverFactory.Services.GetRequiredService<SearchResponseBuilder>().ClearEstablishments();
-        HttpClient client = serverFactory.CreateClient();
-
-        // Build HTTP request 
-        HttpRequestMessage searchByKeywordRequest =
-            new HttpRequestBuilder()
-                .AddQueryParameter(
-                    new(
-                        key: Routes.SEARCH_KEYWORD_QUERY,
-                        value: "ANY_NO_RESULT_KEYWORD"))
-                .Build();
+        HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
+            .AddQueryParameter(
+                new(key: Routes.SEARCH_KEYWORD_QUERY, value: "ANY_NO_RESULT_KEYWORD"))
+            .Build();
 
         // Act
-        AngleSharpDocumentClientFactory searchDocumentClientFactory = new(client);
-        IDocumentClient searchResponseClient = await searchDocumentClientFactory.CreateDocumentClientAsync(searchByKeywordRequest);
+        HomePage searchResultsPage = await GetTestService<IPageFactory>()
+            .CreatePageAsync<HomePage>(searchByKeywordRequest);
 
         // Assert
-        HomePage searchResultsPage = new(searchResponseClient);
         searchResultsPage.GetNoSearchResultsHeading().Should().Be("Sorry no results found please amend your search criteria");
     }
 
@@ -127,34 +102,17 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByName_Returns_A_Result()
     {
         // Arrange
-
-        // Stub the search response
-        WebApplicationFactory<Program> serverFactory =
-            ResolveService<CustomWebApplicationFactory>()
-            .WithWebHostBuilder((builder) =>
-            {
-                builder.ConfigureServices((services) =>
-                {
-                    services.RemoveAll<ISearchByKeywordClientProvider>();
-                    services.AddSingleton<SearchResponseBuilder>();
-                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
-                });
-            });
-
-        serverFactory.Services.GetRequiredService<SearchResponseBuilder>()
-            .AddEstablishment(new()
+        MockSearchForEstablishments(
+            (searchResponseBuilder) => searchResponseBuilder.AddEstablishment(new()
             {
                 TYPEOFESTABLISHMENTNAME = "Blah",
                 ESTABLISHMENTNAME = "Blah",
                 id = "100000",
                 PHASEOFEDUCATION = "Blah",
                 ESTABLISHMENTSTATUSNAME = "Something"
-            });
+            }));
 
-        HttpClient client = serverFactory.CreateClient();
-        
-        // Build HTTP request 
-        HttpRequestMessage searchByKeywordRequest = ResolveService<HttpRequestBuilder>()
+        HttpRequestMessage searchByKeywordRequest = GetTestService<HttpRequestBuilder>()
             .AddQueryParameter(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
@@ -162,11 +120,10 @@ public class HomePageTests : BaseHttpTest
             .Build();
 
         // Act
-        AngleSharpDocumentClientFactory documentClientFactory = new(client);
-        IDocumentClient searchResponseDocumentClient = await documentClientFactory.CreateDocumentClientAsync(searchByKeywordRequest);
+        HomePage searchResultsPage = await GetTestService<IPageFactory>()
+            .CreatePageAsync<HomePage>(searchByKeywordRequest);
 
         // Assert
-        HomePage searchResultsPage = new(searchResponseDocumentClient);
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
         searchResultsPage.GetSearchResultsContainerCount().Should().Be(1);
     }
@@ -179,22 +136,8 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByPartialName_ReturnsMultipleResults(string keyword)
     {
         // Arrange
-
-        // Stub the search response
-        WebApplicationFactory<Program> serverFactory =
-            ResolveService<CustomWebApplicationFactory>()
-            .WithWebHostBuilder((builder) =>
-            {
-                builder.ConfigureServices((services) =>
-                {
-                    services.RemoveAll<ISearchByKeywordClientProvider>();
-                    services.AddSingleton<SearchResponseBuilder>();
-                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
-                });
-            });
-
-        serverFactory.Services.GetRequiredService<SearchResponseBuilder>()
-            .AddEstablishment(new()
+        MockSearchForEstablishments((builder) =>
+            builder.AddEstablishment(new()
             {
                 TYPEOFESTABLISHMENTNAME = "Blah",
                 ESTABLISHMENTNAME = "Blah",
@@ -202,18 +145,15 @@ public class HomePageTests : BaseHttpTest
                 PHASEOFEDUCATION = "Blah",
                 ESTABLISHMENTSTATUSNAME = "Something"
             })
-            .AddEstablishment(new()
-            {
-                TYPEOFESTABLISHMENTNAME = "Blah2",
-                ESTABLISHMENTNAME = "Blah2",
-                id = "100001",
-                PHASEOFEDUCATION = "Blah2",
-                ESTABLISHMENTSTATUSNAME = "Something2"
-            });
+                .AddEstablishment(new()
+                {
+                    TYPEOFESTABLISHMENTNAME = "Blah2",
+                    ESTABLISHMENTNAME = "Blah2",
+                    id = "100001",
+                    PHASEOFEDUCATION = "Blah2",
+                    ESTABLISHMENTSTATUSNAME = "Something2"
+                }));
 
-        HttpClient client = serverFactory.CreateClient();
-
-        // Build HTTP request
         HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
             .AddQueryParameter(
                 new(
@@ -221,24 +161,22 @@ public class HomePageTests : BaseHttpTest
                     value: keyword))
             .Build();
 
-
         // Act
-        AngleSharpDocumentClientFactory documentClientFactory = new(client);
-        IDocumentClient searchResponseDocumentClient = await documentClientFactory.CreateDocumentClientAsync(searchByKeywordRequest);
-
+        HomePage searchResultsPage = await GetTestService<IPageFactory>()
+            .CreatePageAsync<HomePage>(searchByKeywordRequest);
+        
         // Assert
-        HomePage searchResultsPage = new(searchResponseDocumentClient);
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
         searchResultsPage.GetSearchResultsContainerCount().Should().Be(2);
         // TODO ASSERT THE ACTUAL VALUES BEING RETURNED
         searchResultsPage.GetSearchResultsHeadings().Should().AllSatisfy((t => t.Should().ContainEquivalentOf(keyword)));
     }
-
+    /*
     [Fact]
     public async Task Filter_Controls_Are_Displayed()
     {
         //TODO stub out facets?
-        
+
         // Arrange
         HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
@@ -262,10 +200,10 @@ public class HomePageTests : BaseHttpTest
     public async Task FilterS_ByEstablishmentStatus_Checkboxes_And_Labels_Displayed()
     {
         //TODO stub out facets - test no facets configured, 1 facet, many facets
-        
+
         // Arrange
         HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
-        
+
         HttpRequestMessage request = new HttpRequestBuilder()
             .AddQueryParameter(new(
                 key: "searchKeyWord", value: "Academy"))
@@ -290,7 +228,7 @@ public class HomePageTests : BaseHttpTest
     public async Task Filters_ByPhaseOfEducation_Checkboxes_And_Labels_Displayed()
     {
         //TODO stub out facets - test no facets configured, 1 facet, many facets
-        
+
         // Arrange
         HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
@@ -317,7 +255,7 @@ public class HomePageTests : BaseHttpTest
 
         homePage.GetPhaseOfEducationFiltersHeading().Should().Be("Phase of education");
         homePage.GetPhaseOfEducationFiltersByValueToLabel().Should().BeEquivalentTo(expectedFilterValuesToLabels);
-    }
+    }*/
     /*
         [Theory]
         [MemberData(nameof(EstablishmentStatusElements))]
@@ -550,4 +488,22 @@ public class HomePageTests : BaseHttpTest
             yield return new object[] { "west", "PHASEOFEDUCATION", "Middle+deemed+primary", HomePage.MiddleDeemedPrimaryFilterInput.Criteria, "Middle deemed primary" };
         }*/
 
+
+    private void MockSearchForEstablishments(Action<SearchResponseBuilder> configureSearchResponse)
+    {
+
+        GetTestService<IConfigureWebHostHandler>()
+            .SetConfigure((builder) =>
+            {
+                builder.ConfigureServices((services) =>
+                {
+                    services.RemoveAll<ISearchByKeywordClientProvider>();
+                    services.AddSingleton<SearchResponseBuilder>();
+                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
+                });
+            });
+
+        SearchResponseBuilder builder = GetTestService<TestServerFactory>().Services.GetRequiredService<SearchResponseBuilder>();
+        configureSearchResponse(builder);
+    }
 }

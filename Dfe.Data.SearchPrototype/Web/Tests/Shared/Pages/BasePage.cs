@@ -5,12 +5,18 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
 public abstract class BasePage
 {
-    internal IWebDriverContext DriverContext { get; }
-    protected IDocumentClient DomQueryClient { get; }
+    private IDocumentClient? _documentClient;
 
-    public BasePage(IDocumentClient domQueryClient)
+    internal IWebDriverContext DriverContext { get; }
+    protected internal IDocumentClient DocumentClient
     {
-        ArgumentNullException.ThrowIfNull(domQueryClient);
-        DomQueryClient = domQueryClient;
+        get => _documentClient ?? throw new ArgumentNullException(nameof(_documentClient), "documentClient has not been set ");
+        set => _documentClient = value ?? throw new ArgumentNullException(nameof(_documentClient));
+    }
+
+    public BasePage(/*IDocumentClient domQueryClient*/)
+    {
+        /*ArgumentNullException.ThrowIfNull(domQueryClient);
+        DomQueryClient = domQueryClient;*/
     }
 }

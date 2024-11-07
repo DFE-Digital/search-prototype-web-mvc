@@ -1,14 +1,15 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 
-public class AngleSharpDocumentClientFactory : IDocumentClientFactory
+public class AngleSharpDocumentClientProvider : IDocumentQueryClientProvider
 {
     private readonly HttpClient _client;
 
-    public AngleSharpDocumentClientFactory(HttpClient client)
+    public AngleSharpDocumentClientProvider(TestServerFactory factory)
     {
-        _client = client;
+        _client = factory.CreateClient();
     }
     public async Task<IDocumentClient> CreateDocumentClientAsync(HttpRequestMessage httpRequestMessage)
     {
