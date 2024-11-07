@@ -15,7 +15,7 @@ public sealed class HttpRequestBuilder
         return this;
     }
 
-    public HttpRequestBuilder AddQuery(KeyValuePair<string, string> query)
+    public HttpRequestBuilder AddQueryParameter(KeyValuePair<string, string> query)
     {
         _query.Add(query);
         return this;

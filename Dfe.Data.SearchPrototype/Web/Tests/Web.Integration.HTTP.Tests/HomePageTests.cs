@@ -1,11 +1,12 @@
 ﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.Infrastructure.DataTransferObjects;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -85,33 +86,88 @@ public class HomePageTests : BaseHttpTest
     }
 
     [Fact]
-    public async Task Search_ByName_Returns_LessThan100_Results()
+    public async Task Search_ByPartialName_Returns_NoResults()
     {
-        // TODO stub out search results?
-        HttpClient client = ResolveService<CustomWebApplicationFactory>()
+        // Arrange
+
+        // Stub the search response
+        WebApplicationFactory<Program> serverFactory =
+            ResolveService<CustomWebApplicationFactory>()
             .WithWebHostBuilder((builder) =>
             {
-                builder.ConfigureTestServices((services) =>
+                builder.ConfigureServices((services) =>
                 {
                     services.RemoveAll<ISearchByKeywordClientProvider>();
-                    // TODO add a builder we control through TestServices that the fake depends on
-                    services.AddSingleton<ISearchByKeywordClientProvider, FakeSearchByKeywordClientProviderTestDouble>();
+                    services.AddSingleton<SearchResponseBuilder>();
+                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
                 });
-            }).CreateClient();
+            });
 
+        serverFactory.Services.GetRequiredService<SearchResponseBuilder>().ClearEstablishments();
+
+        // Build the request 
+        HttpClient client = serverFactory.CreateClient();
+        HttpRequestMessage searchByKeywordRequest =
+            new HttpRequestBuilder()
+                .AddQueryParameter(
+                    new(
+                        key: Routes.SEARCH_KEYWORD_QUERY,
+                        value: "ANY_NO_RESULT_KEYWORD"))
+                .Build();
+
+        // Act
+        AngleSharpDocumentClientFactory searchDocumentClientFactory = new(client);
+        IDocumentClient searchResponseClient = await searchDocumentClientFactory.CreateDocumentClientAsync(searchByKeywordRequest);
+
+        // Assert
+        HomePage searchResultsPage = new(searchResponseClient);
+        searchResultsPage.GetNoSearchResultsHeading().Should().Be("Sorry no results found please amend your search criteria");
+    }
+
+
+    [Fact]
+    public async Task Search_ByName_Returns_A_Result()
+    {
         // Arrange
+
+        // Stub the search response
+        WebApplicationFactory<Program> serverFactory =
+            ResolveService<CustomWebApplicationFactory>()
+            .WithWebHostBuilder((builder) =>
+            {
+                builder.ConfigureServices((services) =>
+                {
+                    services.RemoveAll<ISearchByKeywordClientProvider>();
+                    services.AddSingleton<SearchResponseBuilder>();
+                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
+                });
+            });
+
+        serverFactory.Services.GetRequiredService<SearchResponseBuilder>()
+            .AddEstablishment(new()
+            {
+                TYPEOFESTABLISHMENTNAME = "Blah",
+                ESTABLISHMENTNAME = "Blah",
+                id = "100000",
+                PHASEOFEDUCATION = "Blah",
+                ESTABLISHMENTSTATUSNAME = "Something"
+            });
+
+        // Build the request 
+        HttpClient client = serverFactory.CreateClient();
         HttpRequestMessage searchByKeywordRequest = ResolveService<HttpRequestBuilder>()
-            .AddQuery(
+            .AddQueryParameter(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
                     value: "One"))
             .Build();
 
         // Act
-        IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
+        AngleSharpDocumentClientFactory documentClientFactory = new(client);
+        IDocumentClient searchResponseDocumentClient = await documentClientFactory.CreateDocumentClientAsync(searchByKeywordRequest);
 
         // Assert
-        HomePage searchResultsPage = new(domQueryClient);
+        HomePage searchResultsPage = new(searchResponseDocumentClient);
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
         searchResultsPage.GetSearchResultsContainerCount().Should().Be(1);
     }
@@ -124,47 +180,58 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByPartialName_ReturnsMultipleResults(string keyword)
     {
         //TODO stub out results?
+
+        // Stub the search response
+        WebApplicationFactory<Program> serverFactory =
+            ResolveService<CustomWebApplicationFactory>()
+            .WithWebHostBuilder((builder) =>
+            {
+                builder.ConfigureServices((services) =>
+                {
+                    services.RemoveAll<ISearchByKeywordClientProvider>();
+                    services.AddSingleton<SearchResponseBuilder>();
+                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
+                });
+            });
+
+        serverFactory.Services.GetRequiredService<SearchResponseBuilder>()
+            .AddEstablishment(new()
+            {
+                TYPEOFESTABLISHMENTNAME = "Blah",
+                ESTABLISHMENTNAME = "Blah",
+                id = "100000",
+                PHASEOFEDUCATION = "Blah",
+                ESTABLISHMENTSTATUSNAME = "Something"
+            })
+            .AddEstablishment(new()
+            {
+                TYPEOFESTABLISHMENTNAME = "Blah2",
+                ESTABLISHMENTNAME = "Blah2",
+                id = "100001",
+                PHASEOFEDUCATION = "Blah2",
+                ESTABLISHMENTSTATUSNAME = "Something2"
+            });
+
         // Arrange
+        HttpClient client = serverFactory.CreateClient();
         HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
-            .AddQuery(
+            .AddQueryParameter(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
                     value: keyword))
             .Build();
 
-        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
         // Act
-        IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
+        AngleSharpDocumentClientFactory documentClientFactory = new(client);
+        IDocumentClient searchResponseDocumentClient = await documentClientFactory.CreateDocumentClientAsync(searchByKeywordRequest);
 
         // Assert
-        HomePage searchResultsPage = new(searchResponseClient);
+        HomePage searchResultsPage = new(searchResponseDocumentClient);
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
-        searchResultsPage.GetSearchResultsContainerCount().Should().BeGreaterThan(1);
-        searchResultsPage.GetSearchResultsHeadings().Should().AllSatisfy((t => t.Contains(keyword, StringComparison.OrdinalIgnoreCase)));
-    }
-
-    [Fact]
-    public async Task Search_ByPartialName_Returns_NoResults()
-    {
-        //TODO stub out results?
-        // Arrange
-        const string noResultsSearchKeyword = "zzz";
-        HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
-            .AddQuery(
-                new(
-                    key: Routes.SEARCH_KEYWORD_QUERY,
-                    value: noResultsSearchKeyword))
-            .Build();
-
-        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
-
-        // Act
-        IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
-
-        // Assert
-        HomePage searchResultsPage = new(searchResponseClient);
-        searchResultsPage.GetNoSearchResultsHeading().Should().Be("Sorry no results found please amend your search criteria");
+        searchResultsPage.GetSearchResultsContainerCount().Should().Be(2);
+        // ASSERT THE ACTUAL VALUES BEING RETURNED
+        searchResultsPage.GetSearchResultsHeadings().Should().AllSatisfy((t => t.Should().ContainEquivalentOf(keyword)));
     }
 
     [Fact]
@@ -172,7 +239,7 @@ public class HomePageTests : BaseHttpTest
     {
         //TODO stub out facets?
         HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
-            .AddQuery(new(
+            .AddQueryParameter(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
 
@@ -194,7 +261,7 @@ public class HomePageTests : BaseHttpTest
     {
         //TODO stub out facets - test no facets configured, 1 facet, many facets
         HttpRequestMessage request = new HttpRequestBuilder()
-            .AddQuery(new(
+            .AddQueryParameter(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
 
@@ -221,7 +288,7 @@ public class HomePageTests : BaseHttpTest
         //TODO stub out facets - test no facets configured, 1 facet, many facets
         // Arrange
         HttpRequestMessage request = new HttpRequestBuilder()
-            .AddQuery(new(
+            .AddQueryParameter(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
 
