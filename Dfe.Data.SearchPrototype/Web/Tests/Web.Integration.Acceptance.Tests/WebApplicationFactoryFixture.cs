@@ -63,29 +63,29 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests
         /// </param>
         private void ConfigureServices(IServiceCollection services)
         {
-            // Remove registration of the default ISearchServiceAdapter (i.e. CognitiveSearchServiceAdapter).
-            var searchServiceAdapterDescriptor =
-                    services.SingleOrDefault(
-                        serviceDescriptor => serviceDescriptor.ServiceType ==
-                            typeof(ISearchServiceAdapter));
+            //// Remove registration of the default ISearchServiceAdapter (i.e. CognitiveSearchServiceAdapter).
+            //var searchServiceAdapterDescriptor =
+            //        services.SingleOrDefault(
+            //            serviceDescriptor => serviceDescriptor.ServiceType ==
+            //                typeof(ISearchServiceAdapter));
 
-            services.Remove(searchServiceAdapterDescriptor!);
+            //services.Remove(searchServiceAdapterDescriptor!);
 
-            // Register our dummy search service adapter.
-            services.AddSingleton<IJsonFileLoader, JsonFileLoader>();
-            services.AddScoped(
-                typeof(ISearchServiceAdapter),
-                typeof(DummySearchServiceAdapter<Infrastructure.DataTransferObjects.Establishment>));
+            //// Register our dummy search service adapter.
+            //services.AddSingleton<IJsonFileLoader, JsonFileLoader>();
+            //services.AddScoped(
+            //    typeof(ISearchServiceAdapter),
+            //    typeof(DummySearchServiceAdapter<Infrastructure.DataTransferObjects.Establishment>));
 
-            string fileName =
-                new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("appsettings.test.json", false)
-                                .Build()["dummySearchServiceAdapter:fileName"]!;
+            //string fileName =
+            //    new ConfigurationBuilder()
+            //            .SetBasePath(Directory.GetCurrentDirectory())
+            //                .AddJsonFile("appsettings.test.json", false)
+            //                    .Build()["dummySearchServiceAdapter:fileName"]!;
 
-            services.AddOptions<DummySearchServiceAdapterOptions>()
-                .Configure((options) =>
-                    options.FileName = fileName);
+            //services.AddOptions<DummySearchServiceAdapterOptions>()
+            //    .Configure((options) =>
+            //        options.FileName = fileName);
         }
 
         /// <summary>
