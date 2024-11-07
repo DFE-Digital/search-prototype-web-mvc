@@ -63,6 +63,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             document.GetMultipleElements(HomePage.SearchButton.Criteria).Count().Should().Be(1);
         }
 
+        // TODO: Ask Antony's opinion on this stuff!
         [Fact]
         public async Task Search_ByName_ReturnsSingleResult()
         {
@@ -113,13 +114,15 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
 
             resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("results");
 
+            // TODO: Ask Antony's opinion on this stuff!
+            //
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Be("Goose Academy");
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("123456");
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Goose Street, Goose Locality, Goose Address 3, Goose Town, GOO OSE");
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Academy");
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Open");
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.GOOSE_ACADEMY).Criteria).Should().Contain("Secondary");
-                                                         
+
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Be("Horse Academy");
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("234567");
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Horse Street, Horse Locality, Horse Address 3, Horse Town, HOR SEE");
@@ -132,6 +135,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         [InlineData("ant")]
         public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
         {
+            // TODO: Ask Antony's opinion on this stuff!
+            //
             //var response = await _client.GetAsync(uri);
             //var document = await HtmlHelpers.GetDocumentAsync(response);
 
