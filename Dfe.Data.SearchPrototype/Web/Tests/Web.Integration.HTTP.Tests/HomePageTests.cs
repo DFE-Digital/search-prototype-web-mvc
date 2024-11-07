@@ -1,5 +1,4 @@
 ﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
-using Dfe.Data.SearchPrototype.Infrastructure.DataTransferObjects;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
@@ -7,7 +6,6 @@ using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
@@ -106,7 +104,7 @@ public class HomePageTests : BaseHttpTest
         serverFactory.Services.GetRequiredService<SearchResponseBuilder>().ClearEstablishments();
         HttpClient client = serverFactory.CreateClient();
 
-        // Build the request 
+        // Build HTTP request 
         HttpRequestMessage searchByKeywordRequest =
             new HttpRequestBuilder()
                 .AddQueryParameter(
@@ -155,7 +153,7 @@ public class HomePageTests : BaseHttpTest
 
         HttpClient client = serverFactory.CreateClient();
         
-        // Build the request 
+        // Build HTTP request 
         HttpRequestMessage searchByKeywordRequest = ResolveService<HttpRequestBuilder>()
             .AddQueryParameter(
                 new(
@@ -215,6 +213,7 @@ public class HomePageTests : BaseHttpTest
 
         HttpClient client = serverFactory.CreateClient();
 
+        // Build HTTP request
         HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
             .AddQueryParameter(
                 new(
