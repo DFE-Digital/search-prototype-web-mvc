@@ -45,11 +45,11 @@ public class HomePageTests : BaseHttpTest
     public async Task Header_Link_IsDisplayed()
     {
         // Arrange
+        HttpClient httpClient = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         HttpRequestMessage request = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
-
-        HttpClient httpClient = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
         // Act
         IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(httpClient)
@@ -65,11 +65,11 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_Establishment_IsDisplayed()
     {
         // Arrange
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         HttpRequestMessage request = new HttpRequestBuilder()
             .SetPath(Routes.HOME)
             .Build();
-
-        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
         // Act
         IDocumentClient domQueryClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(request);
@@ -104,9 +104,9 @@ public class HomePageTests : BaseHttpTest
             });
 
         serverFactory.Services.GetRequiredService<SearchResponseBuilder>().ClearEstablishments();
+        HttpClient client = serverFactory.CreateClient();
 
         // Build the request 
-        HttpClient client = serverFactory.CreateClient();
         HttpRequestMessage searchByKeywordRequest =
             new HttpRequestBuilder()
                 .AddQueryParameter(
@@ -153,8 +153,9 @@ public class HomePageTests : BaseHttpTest
                 ESTABLISHMENTSTATUSNAME = "Something"
             });
 
-        // Build the request 
         HttpClient client = serverFactory.CreateClient();
+        
+        // Build the request 
         HttpRequestMessage searchByKeywordRequest = ResolveService<HttpRequestBuilder>()
             .AddQueryParameter(
                 new(
@@ -179,7 +180,7 @@ public class HomePageTests : BaseHttpTest
     [InlineData("Academy")]
     public async Task Search_ByPartialName_ReturnsMultipleResults(string keyword)
     {
-        //TODO stub out results?
+        // Arrange
 
         // Stub the search response
         WebApplicationFactory<Program> serverFactory =
@@ -212,8 +213,8 @@ public class HomePageTests : BaseHttpTest
                 ESTABLISHMENTSTATUSNAME = "Something2"
             });
 
-        // Arrange
         HttpClient client = serverFactory.CreateClient();
+
         HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
             .AddQueryParameter(
                 new(
@@ -230,7 +231,7 @@ public class HomePageTests : BaseHttpTest
         HomePage searchResultsPage = new(searchResponseDocumentClient);
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
         searchResultsPage.GetSearchResultsContainerCount().Should().Be(2);
-        // ASSERT THE ACTUAL VALUES BEING RETURNED
+        // TODO ASSERT THE ACTUAL VALUES BEING RETURNED
         searchResultsPage.GetSearchResultsHeadings().Should().AllSatisfy((t => t.Should().ContainEquivalentOf(keyword)));
     }
 
@@ -238,12 +239,14 @@ public class HomePageTests : BaseHttpTest
     public async Task Filter_Controls_Are_Displayed()
     {
         //TODO stub out facets?
+        
+        // Arrange
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
             .AddQueryParameter(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
-
-        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
         // Act
         IDocumentClient searchResponseDocumentClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(searchByKeywordRequest);
@@ -260,12 +263,14 @@ public class HomePageTests : BaseHttpTest
     public async Task FilterS_ByEstablishmentStatus_Checkboxes_And_Labels_Displayed()
     {
         //TODO stub out facets - test no facets configured, 1 facet, many facets
+        
+        // Arrange
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+        
         HttpRequestMessage request = new HttpRequestBuilder()
             .AddQueryParameter(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
-
-        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
         // Act
         IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(request);
@@ -286,13 +291,14 @@ public class HomePageTests : BaseHttpTest
     public async Task Filters_ByPhaseOfEducation_Checkboxes_And_Labels_Displayed()
     {
         //TODO stub out facets - test no facets configured, 1 facet, many facets
+        
         // Arrange
+        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
+
         HttpRequestMessage request = new HttpRequestBuilder()
             .AddQueryParameter(new(
                 key: "searchKeyWord", value: "Academy"))
             .Build();
-
-        HttpClient client = ResolveService<CustomWebApplicationFactory>().CreateClient();
 
         // Act
         IDocumentClient searchResponseClient = await new AngleSharpDocumentClientFactory(client).CreateDocumentClientAsync(request);
