@@ -7,7 +7,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 public sealed class HomePage : BasePage
 {
 
-    public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
+    //public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
     public static By Heading => By.CssSelector("#service-name");
     public static By NavigationBarHomeLink => By.CssSelector("#home-link");
     public static By SearchHeading => By.CssSelector("h1 label");

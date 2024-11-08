@@ -1,12 +1,10 @@
 ﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -26,7 +24,7 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_Title_IsDisplayed()
     {
         // Arrange
-        HttpRequestMessage httpRequest = new HttpRequestBuilder()
+        HttpRequestMessage httpRequest = GetTestService<IHttpRequestBuilder>()
             .SetPath(Routes.HOME)
             .Build();
 
@@ -42,7 +40,7 @@ public class HomePageTests : BaseHttpTest
     public async Task Header_Link_IsDisplayed()
     {
         // Arrange
-        HttpRequestMessage httpRequest = new HttpRequestBuilder()
+        HttpRequestMessage httpRequest = GetTestService<IHttpRequestBuilder>()
             .SetPath(Routes.HOME)
             .Build();
 
@@ -59,7 +57,7 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_Establishment_IsDisplayed()
     {
         // Arrange
-        HttpRequestMessage homePageRequest = new HttpRequestBuilder()
+        HttpRequestMessage homePageRequest = GetTestService<IHttpRequestBuilder>()
             .SetPath(Routes.HOME)
             .Build();
 
@@ -84,7 +82,7 @@ public class HomePageTests : BaseHttpTest
         MockSearchResponseWith(
             searchResponseBuilder => searchResponseBuilder.ClearEstablishments());
 
-        HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
+        HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
                 new(key: Routes.SEARCH_KEYWORD_QUERY, value: "ANY_NO_RESULT_KEYWORD"))
             .Build();
@@ -112,7 +110,7 @@ public class HomePageTests : BaseHttpTest
                 ESTABLISHMENTSTATUSNAME = "Something"
             }));
 
-        HttpRequestMessage searchByKeywordRequest = GetTestService<HttpRequestBuilder>()
+        HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
@@ -154,7 +152,7 @@ public class HomePageTests : BaseHttpTest
                     ESTABLISHMENTSTATUSNAME = "Something2"
                 }));
 
-        HttpRequestMessage searchByKeywordRequest = new HttpRequestBuilder()
+        HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
@@ -164,7 +162,7 @@ public class HomePageTests : BaseHttpTest
         // Act
         HomePage searchResultsPage = await GetTestService<IPageFactory>()
             .CreatePageAsync<HomePage>(searchByKeywordRequest);
-        
+
         // Assert
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
         searchResultsPage.GetSearchResultsContainerCount().Should().Be(2);
@@ -493,7 +491,7 @@ public class HomePageTests : BaseHttpTest
     {
 
         GetTestService<IConfigureWebHostHandler>()
-            .SetConfigure((builder) =>
+            .ConfigureWith((builder) =>
             {
                 builder.ConfigureServices((services) =>
                 {
@@ -503,7 +501,7 @@ public class HomePageTests : BaseHttpTest
                 });
             });
 
-        SearchResponseBuilder builder = GetTestService<TestServerFactory>().Services.GetRequiredService<SearchResponseBuilder>();
+        SearchResponseBuilder builder = GetTestService<WebApplicationFactory<Program>>().Services.GetRequiredService<SearchResponseBuilder>();
         configureSearchResponse(builder);
     }
 }

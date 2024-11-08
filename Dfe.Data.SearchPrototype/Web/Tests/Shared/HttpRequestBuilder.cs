@@ -1,23 +1,41 @@
-﻿using System.Text;
+﻿using Newtonsoft.Json;
+using System.Text;
+using System.Text.Json;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
 
 namespace DfE.Data.SearchPrototype.Web.Tests.Shared;
 
-public sealed class HttpRequestBuilder
+public interface IHttpRequestBuilder
+{
+    public IHttpRequestBuilder SetPath(string path);
+    public IHttpRequestBuilder AddQueryParameter(KeyValuePair<string, string> queryParameter);
+    public IHttpRequestBuilder SetBody<T>(T value) where T : class;
+    public HttpRequestMessage Build();
+}
+
+public sealed class HttpRequestBuilder : IHttpRequestBuilder
 {
     private string? _path = Routes.HOME;
     private List<KeyValuePair<string, string>> _query = new();
+    private object? _body = null;
 
-    public HttpRequestBuilder SetPath(string path)
+    public IHttpRequestBuilder SetPath(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
         _path = path;
         return this;
     }
 
-    public HttpRequestBuilder AddQueryParameter(KeyValuePair<string, string> query)
+    public IHttpRequestBuilder AddQueryParameter(KeyValuePair<string, string> query)
     {
         _query.Add(query);
+        return this;
+    }
+
+    public IHttpRequestBuilder SetBody<T>(T value) where T : class
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        _body = value;
         return this;
     }
 
@@ -27,13 +45,21 @@ public sealed class HttpRequestBuilder
         {
             Path = _path,
             Query = _query.ToList()
-            .Aggregate(new StringBuilder(), (init, queryPairs) => init.Append($"{queryPairs.Key}={queryPairs.Value}"))
+                .Aggregate(
+                    new StringBuilder(), (init, queryPairs) => init.Append($"{queryPairs.Key}={queryPairs.Value}"))
                 .ToString()
         };
 
-        return new HttpRequestMessage()
+        HttpRequestMessage requestMessage = new()
         {
             RequestUri = uri.Uri
         };
+
+        if (_body != null)
+        {
+            requestMessage.Content = new StringContent(JsonConvert.SerializeObject(_body));
+        }
+
+        return requestMessage;
     }
 }
