@@ -1,11 +1,37 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
+
+public sealed class NavigationBarComponent
+{
+    private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
+
+    public NavigationBarComponent(IDocumentQueryClientAccessor documentQueryClientAccessor)
+    {
+        ArgumentNullException.ThrowIfNull(documentQueryClientAccessor);
+        _documentQueryClientAccessor = documentQueryClientAccessor;
+    }
+
+    public string? GetHomeLinkText() 
+        => _documentQueryClientAccessor.DocumentQueryClient.Query(
+            new QueryCommand<string>(
+                query: new CssSelector("#home-link"),
+                processor: (t) => t.Text.Trim()));
+}
+
 public sealed class HomePage : BasePage
 {
+    public HomePage(NavigationBarComponent navigationBarComponent)
+    {
+        ArgumentNullException.ThrowIfNull(navigationBarComponent);
+        NavBar = navigationBarComponent;
+    }
+
+    public NavigationBarComponent NavBar { get; }
 
     //public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
     public static By Heading => By.CssSelector("#service-name");
@@ -55,7 +81,7 @@ public sealed class HomePage : BasePage
     public static By ClearFiltersButton => By.CssSelector("#clearFilters");
     public static By EstablishmentStatusNameHeading => By.CssSelector("#FacetName-ESTABLISHMENTSTATUSNAME legend");
 
-    
+
     public string? GetHeading() => DocumentClient.GetText(Heading.Criteria);
     public string? GetNavigationBarHomeText() => DocumentClient.GetText(NavigationBarHomeLink.Criteria);
     public string? GetNoSearchResultsHeading() => DocumentClient.GetText(SearchNoResultText.Criteria);

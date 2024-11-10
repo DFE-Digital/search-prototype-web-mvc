@@ -2,5 +2,5 @@
 
 public interface IDocumentQueryClientProvider
 {
-    Task<IDocumentClient> CreateDocumentClientAsync(HttpRequestMessage httpRequestMessage);
+    Task<IDocumentQueryClient> CreateDocumentClientAsync(HttpRequestMessage httpRequestMessage);
 }

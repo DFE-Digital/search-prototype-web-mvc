@@ -49,7 +49,7 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(httpRequest);
 
         // Assert
-        homePage.GetNavigationBarHomeText().Should().Be("Home");
+        homePage.NavBar.GetHomeLinkText().Should().Be("Home");
     }
 
 
@@ -143,14 +143,14 @@ public class HomePageTests : BaseHttpTest
                 PHASEOFEDUCATION = "Blah",
                 ESTABLISHMENTSTATUSNAME = "Something"
             })
-                .AddEstablishment(new()
-                {
-                    TYPEOFESTABLISHMENTNAME = "Blah2",
-                    ESTABLISHMENTNAME = "Blah2",
-                    id = "100001",
-                    PHASEOFEDUCATION = "Blah2",
-                    ESTABLISHMENTSTATUSNAME = "Something2"
-                }));
+            .AddEstablishment(new()
+            {
+                TYPEOFESTABLISHMENTNAME = "Blah2",
+                ESTABLISHMENTNAME = "Blah2",
+                id = "100001",
+                PHASEOFEDUCATION = "Blah2",
+                ESTABLISHMENTSTATUSNAME = "Something2"
+            }));
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(

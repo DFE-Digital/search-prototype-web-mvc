@@ -1,10 +1,13 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.HomePage;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
@@ -40,8 +43,11 @@ internal sealed class TestServices
         IServiceCollection services = new ServiceCollection()
             .AddScoped<IConfigureWebHostHandler, ConfigureWebHostHandler>()
             .AddScoped<WebApplicationFactory<Program>, TestServerFactory>()
-            .AddScoped<IDocumentQueryClientProvider, AngleSharpDocumentClientProvider>()
+            .AddScoped<IDocumentQueryClientProvider, AngleSharpDocumentQueryClientProvider>()
+            .AddScoped<IDocumentQueryClientAccessor, DocumentQueryClientAccessor>()
             // AddPages() for DI or is this creator enough?
+            .AddScoped<NavigationBarComponent>()
+            .AddScoped<HomePage>()
             .AddScoped<IPageFactory, PageFactory>()
             .AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
 
@@ -50,4 +56,19 @@ internal sealed class TestServices
     }
 
     internal IServiceScope CreateServiceScopeResolver() => _serviceProvider.CreateScope();
+}
+
+public interface IDocumentQueryClientAccessor
+{
+    IDocumentQueryClient DocumentQueryClient { get; set; }
+}
+
+public sealed class DocumentQueryClientAccessor : IDocumentQueryClientAccessor
+{
+    private IDocumentQueryClient? _documentQueryClient;
+    public IDocumentQueryClient DocumentQueryClient
+    {
+        get => _documentQueryClient ?? throw new ArgumentNullException(nameof(_documentQueryClient));
+        set => _documentQueryClient = value;
+    }
 }
