@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
 using FluentAssertions.Common;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
 public interface IConfigureWebHostHandler
@@ -14,13 +9,18 @@ public interface IConfigureWebHostHandler
 
 public sealed class ConfigureWebHostHandler : IConfigureWebHostHandler
 {
-    private Action<IWebHostBuilder>? _configure;
-    public void ConfigureWith(Action<IWebHostBuilder> configure) => _configure = configure;
+    private List<Action<IWebHostBuilder>> _configure = new();
+    public void ConfigureWith(Action<IWebHostBuilder> configure) 
+        => _configure.Add(
+                configure ?? throw new ArgumentNullException(nameof(_configure)));
 
     public IWebHostBuilder Handle(IWebHostBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
-        _configure?.Invoke(builder);
+        _configure.ToList().ForEach(t =>
+        {
+            t?.Invoke(builder);
+        });
         return builder;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
 using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
