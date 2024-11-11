@@ -2,7 +2,7 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
 using FluentAssertions;

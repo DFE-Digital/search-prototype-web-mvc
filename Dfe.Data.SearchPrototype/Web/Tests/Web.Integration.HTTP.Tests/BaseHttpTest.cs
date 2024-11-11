@@ -4,6 +4,7 @@ using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,10 +47,11 @@ internal sealed class TestServices
             .AddScoped<IDocumentQueryClientProvider, AngleSharpDocumentQueryClientProvider>()
             .AddScoped<IDocumentQueryClientAccessor, DocumentQueryClientAccessor>()
             // AddPages() for DI or is this creator enough?
+            .AddScoped<IPageFactory, PageFactory>()
+            .AddScoped<LinkFactory>()
             .AddTransient<SearchComponent>()
             .AddTransient<NavigationBarComponent>()
             .AddTransient<HomePage>()
-            .AddScoped<IPageFactory, PageFactory>()
             .AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
 
         // TODO delaying the creation of the program so it can be overwritten in a test

@@ -17,13 +17,13 @@ public sealed class SearchComponent
         _documentQueryClientAccessor.DocumentQueryClient.Query(
             new QueryCommand<string>(
                     query: new CssSelector("#search-page-search-establishments-form-label"),
-                    scope: Container,
+                    queryScope: Container,
                     processor: (t) => t.Text));
 
     public string GetSubheading()
         => _documentQueryClientAccessor.DocumentQueryClient.Query(
             new QueryCommand<string>(
                     query: new CssSelector("#searchKeyWord-hint"),
-                    scope: Container,
+                    queryScope: Container,
                     processor: (t) => t.Text));
 }

@@ -23,13 +23,13 @@ public class QueryCommand<TResult>
     public QueryCommand(
         IQuerySelector query, 
         Func<IDocumentPart, TResult> processor, 
-        IQuerySelector? scope = null)
+        IQuerySelector? queryScope = null)
     {
         ArgumentNullException.ThrowIfNull(query);
         ArgumentNullException.ThrowIfNull(processor);
         Processor = processor;
         Query = query;
-        QueryScope = scope;
+        QueryScope = queryScope;
     }
 }
 
