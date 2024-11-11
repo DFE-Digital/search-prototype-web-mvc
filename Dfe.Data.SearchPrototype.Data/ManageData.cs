@@ -1,4 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Data.Configuration;
+using Dfe.Data.SearchPrototype.Data.models;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace Dfe.Data.SearchPrototype.Data;
@@ -7,10 +9,12 @@ public class ManageData
 {
     private const int BatchSize = 99; // max size for postcode lookup API
     private PostcodeLookupService _postcodeLookupService;
+    private ILogger _logger;
 
-    public ManageData(PostcodeLookupService postcodeLookupService)
+    public ManageData(PostcodeLookupService postcodeLookupService, ILogger logger)
     {
         _postcodeLookupService = postcodeLookupService;
+        _logger = logger;
     }
 
     public async Task ExtractAndUploadData(AzureSearchServiceDetails searchDetails, string filePath)
@@ -47,7 +51,7 @@ public class ManageData
                             };
                             establishmentsOut.value.Add(establishmentOut);
                         }
-                        else { Console.WriteLine($"No data for postcode {establishment.POSTCODE}"); }
+                        else { _logger.LogInformation($"No data for postcode {establishment.POSTCODE}"); }
                     }
                     string json = JsonSerializer.Serialize(establishmentsOut);
 

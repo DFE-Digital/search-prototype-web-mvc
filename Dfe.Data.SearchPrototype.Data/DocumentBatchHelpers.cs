@@ -1,4 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.Data.Configuration;
+using Dfe.Data.SearchPrototype.Data.models;
 using Newtonsoft.Json;
 using System.Text;
 

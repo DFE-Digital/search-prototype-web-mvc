@@ -3,6 +3,7 @@ using Dfe.Data.SearchPrototype.Data.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 class Program
 {
@@ -32,8 +33,11 @@ class Program
 
         using IHost host = builder.Build();
 
+        var loggerFactory = LoggerFactory.Create(
+            builder => builder.AddConsole());
+
         //run app
-        var dataManager = new ManageData(host.Services.GetRequiredService<PostcodeLookupService>());
+        var dataManager = new ManageData(host.Services.GetRequiredService<PostcodeLookupService>(), loggerFactory.CreateLogger<Program>());
         await dataManager.ExtractAndUploadData(searchDetails, builder.Configuration["filePath"]!);
     }
 }

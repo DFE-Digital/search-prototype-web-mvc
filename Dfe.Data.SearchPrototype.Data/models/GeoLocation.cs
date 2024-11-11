@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Data;
+﻿namespace Dfe.Data.SearchPrototype.Data.models;
 
 public class GeoLocation
 {

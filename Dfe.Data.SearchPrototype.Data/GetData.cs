@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Dfe.Data.SearchPrototype.Data.models;
 using System.Globalization;
 
 namespace Dfe.Data.SearchPrototype.Data;
