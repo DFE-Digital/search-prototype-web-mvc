@@ -77,8 +77,11 @@ public class HomePageTests : BaseHttpTest
 
         // Assert
         // TODO expand to form parts need to be able to query within form container at the page level.
+        
+        
         homePage.Search.GetHeading().Should().Be("Search");
         homePage.Search.GetSubheading().Should().Be("Search establishments");
+        //homePage.Search.Form
 /*        homePage.IsSearchFormExists().Should().BeTrue();
         homePage.IsSearchInputExists().Should().BeTrue();
         homePage.GetSearchFormInputName().Should().Be(Routes.SEARCH_KEYWORD_QUERY);
