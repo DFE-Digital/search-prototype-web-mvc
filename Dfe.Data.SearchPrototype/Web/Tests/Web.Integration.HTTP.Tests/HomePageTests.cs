@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
+using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.NavigationBarComponent;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
@@ -33,7 +34,12 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(httpRequest);
 
         // Assert
-        homePage.GetHeading().Should().Be("Search prototype");
+        Link headingLink = new(
+            link: Routes.HOME, 
+            text: "Search prototype", 
+            opensInNewTab: false);
+
+        homePage.NavigationBar.GetHeading().Should().Be(headingLink);
     }
 
     [Fact]
@@ -49,7 +55,7 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(httpRequest);
 
         // Assert
-        homePage.NavBar.GetHomeLinkText().Should().Be("Home");
+        homePage.NavigationBar.GetHomeLinkText().Should().Be("Home");
     }
 
 

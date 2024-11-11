@@ -11,21 +11,42 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 public sealed class NavigationBarComponent
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
-    private static IQuerySelector Container => new CssSelector("#navigation");
+    private static IQuerySelector Container => new CssSelector("#navigation-bar");
 
-    public NavigationBarComponent(IDocumentQueryClientAccessor documentQueryClientAccessor)
+    public NavigationBarComponent(
+        
+        IDocumentQueryClientAccessor documentQueryClientAccessor
+    )
     {
         ArgumentNullException.ThrowIfNull(documentQueryClientAccessor);
         _documentQueryClientAccessor = documentQueryClientAccessor;
     }
 
-    public string? GetHomeLinkText() 
+    public string GetHomeLinkText()
         => _documentQueryClientAccessor.DocumentQueryClient.Query(
             new QueryCommand<string>(
                 query: new CssSelector("#home-link"),
                 scope: Container,
                 processor: (part) => part.Text.Trim()));
+
+    public Link GetHeading()
+        => _documentQueryClientAccessor.DocumentQueryClient.Query(
+            new QueryCommand<Link>(
+                query: new CssSelector("#navigation-bar-service-name-link"),
+                scope: Container,
+                processor: 
+                    (part) => new(
+                        part.GetAttribute("href"), 
+                        part.Text, 
+                        opensInNewTab: part.GetAttribute("target") == "_blank")));
 }
+
+
+
+public record Link(
+    string link, 
+    string text, 
+    bool opensInNewTab);
 
 public sealed class HomePage : BasePage
 {
@@ -33,10 +54,10 @@ public sealed class HomePage : BasePage
     public HomePage(IDocumentQueryClientAccessor documentQueryClientAccessor, NavigationBarComponent navigationBarComponent) : base(documentQueryClientAccessor)
     {
         ArgumentNullException.ThrowIfNull(navigationBarComponent);
-        NavBar = navigationBarComponent;
+        NavigationBar = navigationBarComponent;
     }
 
-    public NavigationBarComponent NavBar { get; }
+    public NavigationBarComponent NavigationBar { get; }
 
     //public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
     public static By Heading => By.CssSelector("#service-name");
