@@ -29,7 +29,7 @@
         {
             <div id="filters-container" class="govuk-grid-column-one-third">
                 <h3 id="filters-heading">Filters</h3>
-                <button type="submit" class="govuk-button" data-module="govuk-button">
+                <button id="filters-button" type="submit" class="govuk-button" data-module="govuk-button">
                     Apply filters
                 </button>
                 <button id="clearFilters" type="submit" name="ClearFilters" value="true" class="govuk-button govuk-button--secondary" data-module="govuk-button">
@@ -41,7 +41,7 @@
                     {
                         <govuk-checkboxes name="selectedFacets[@facet.Name]">
                             <govuk-checkboxes-fieldset id="FacetName-@facet.Name">
-                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
+                                <govuk-checkboxes-fieldset-legend id="@facet.Name" class="govuk-fieldset__legend--s">
                                     @Localizer[facet.Name]
                                 </govuk-checkboxes-fieldset-legend>
 

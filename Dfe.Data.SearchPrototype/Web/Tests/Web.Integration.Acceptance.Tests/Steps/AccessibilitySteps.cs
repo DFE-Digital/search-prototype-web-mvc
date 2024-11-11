@@ -10,7 +10,7 @@ using TechTalk.SpecFlow;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Steps
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.Acceptance.Tests.Steps
 {
 
     [Binding]
