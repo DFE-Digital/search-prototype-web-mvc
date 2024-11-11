@@ -48,7 +48,7 @@ internal sealed class TestServices
             .AddScoped<IDocumentQueryClientAccessor, DocumentQueryClientAccessor>()
             // AddPages() for DI or is this creator enough?
             .AddScoped<IPageFactory, PageFactory>()
-            .AddScoped<LinkFactory>()
+            .AddScoped<LinkQueryCommand>()
             .AddTransient<SearchComponent>()
             .AddTransient<NavigationBarComponent>()
             .AddTransient<HomePage>()

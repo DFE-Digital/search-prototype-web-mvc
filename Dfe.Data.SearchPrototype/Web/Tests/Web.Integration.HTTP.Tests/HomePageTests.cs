@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Input;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
@@ -35,8 +36,8 @@ public class HomePageTests : BaseHttpTest
 
         // Assert
         Link expectedHeadingLink = new(
-            link: Routes.HOME, 
-            text: "Search prototype", 
+            link: Routes.HOME,
+            text: "Search prototype",
             opensInNewTab: false);
 
         homePage.NavigationBar.GetHeading().Should().Be(expectedHeadingLink);
@@ -77,15 +78,24 @@ public class HomePageTests : BaseHttpTest
 
         // Assert
         // TODO expand to form parts need to be able to query within form container at the page level.
-        
-        
+
+        TextInput formInput = new()
+        {
+            Name = "searchKeyWord",
+            Value = "",
+            PlaceHolder = "Search by keyword",
+            Type = "text"
+        };
+
         homePage.Search.GetHeading().Should().Be("Search");
         homePage.Search.GetSubheading().Should().Be("Search establishments");
+        homePage.Search.GetSearchInput().Should().Be(formInput);
+
         //homePage.Search.Form
-/*        homePage.IsSearchFormExists().Should().BeTrue();
-        homePage.IsSearchInputExists().Should().BeTrue();
-        homePage.GetSearchFormInputName().Should().Be(Routes.SEARCH_KEYWORD_QUERY);
-        homePage.IsSearchButtonExists().Should().BeTrue();*/
+        /*        homePage.IsSearchFormExists().Should().BeTrue();
+                homePage.IsSearchInputExists().Should().BeTrue();
+                homePage.GetSearchFormInputName().Should().Be(Routes.SEARCH_KEYWORD_QUERY);
+                homePage.IsSearchButtonExists().Should().BeTrue();*/
     }
 
     [Fact]

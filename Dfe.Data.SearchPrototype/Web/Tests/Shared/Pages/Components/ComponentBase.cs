@@ -8,14 +8,11 @@ public abstract class ComponentBase
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
 
-    protected ComponentBase(IDocumentQueryClientAccessor documentQueryClientAccessor, LinkFactory linkFactory)
+    protected ComponentBase(IDocumentQueryClientAccessor documentQueryClientAccessor)
     {
         ArgumentNullException.ThrowIfNull(documentQueryClientAccessor);
-        ArgumentNullException.ThrowIfNull(linkFactory);
         _documentQueryClientAccessor = documentQueryClientAccessor;
-        LinkFactory = linkFactory;
     }
-
+    internal abstract IQuerySelector Container { get; }
     protected IDocumentQueryClient DocumentQueryClient => _documentQueryClientAccessor.DocumentQueryClient;
-    protected LinkFactory LinkFactory { get; }
 }
