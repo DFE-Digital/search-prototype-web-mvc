@@ -60,6 +60,7 @@ public class ManageData
                 }
                 catch (Exception ex) {
                     // LookupPostcodes might have thrown
+                    _logger.LogError(ex.Message);
                 };
 
             }
