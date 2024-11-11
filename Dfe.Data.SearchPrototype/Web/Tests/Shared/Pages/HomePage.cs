@@ -26,7 +26,8 @@ public sealed class NavigationBarComponent
 
 public sealed class HomePage : BasePage
 {
-    public HomePage(NavigationBarComponent navigationBarComponent)
+
+    public HomePage(IDocumentQueryClientAccessor documentQueryClientAccessor, NavigationBarComponent navigationBarComponent) : base(documentQueryClientAccessor)
     {
         ArgumentNullException.ThrowIfNull(navigationBarComponent);
         NavBar = navigationBarComponent;
@@ -83,21 +84,21 @@ public sealed class HomePage : BasePage
     public static By EstablishmentStatusNameHeading => By.CssSelector("#FacetName-ESTABLISHMENTSTATUSNAME legend");
 
 
-    public string? GetHeading() => DocumentClient.GetText(Heading.Criteria);
-    public string? GetNavigationBarHomeText() => DocumentClient.GetText(NavigationBarHomeLink.Criteria);
-    public string? GetNoSearchResultsHeading() => DocumentClient.GetText(SearchNoResultText.Criteria);
-    public string? GetSearchHeading() => DocumentClient.GetText(SearchHeading.Criteria);
-    public string? GetSearchSubheading() => DocumentClient.GetText(SearchSubHeading.Criteria);
-    public bool IsSearchInputExists() => DocumentClient.ElementExists(SearchInput.Criteria);
-    public bool IsSearchButtonExists() => DocumentClient.ElementExists(SearchButton.Criteria);
-    public bool IsSearchFormExists() => DocumentClient.ElementExists(SearchForm.Criteria);
-    public string? GetApplyFiltersText() => DocumentClient.GetText(ApplyFiltersButton.Criteria);
-    public string? GetClearFiltersText() => DocumentClient.GetText("#clearFilters");
-    public string? GetFiltersHeading() => DocumentClient.GetText("#filters-heading");
-    public string? GetEstablishmentStatusFiltersHeading() => DocumentClient.GetText("#FacetName-ESTABLISHMENTSTATUSNAME legend");
-    public string? GetSearchFormInputName() => DocumentClient.GetAttribute(SearchInput.Criteria, "name");
-    public string? GetSearchResultsText() => DocumentClient.GetText(SearchResultsNumber.Criteria);
-    public int GetSearchResultsContainerCount() => DocumentClient.GetCount(SearchResultsHeadings.Criteria);
+    public string? GetHeading() => DocumentQueryClient.GetText(Heading.Criteria);
+    public string? GetNavigationBarHomeText() => DocumentQueryClient.GetText(NavigationBarHomeLink.Criteria);
+    public string? GetNoSearchResultsHeading() => DocumentQueryClient.GetText(SearchNoResultText.Criteria);
+    public string? GetSearchHeading() => DocumentQueryClient.GetText(SearchHeading.Criteria);
+    public string? GetSearchSubheading() => DocumentQueryClient.GetText(SearchSubHeading.Criteria);
+    public bool IsSearchInputExists() => DocumentQueryClient.ElementExists(SearchInput.Criteria);
+    public bool IsSearchButtonExists() => DocumentQueryClient.ElementExists(SearchButton.Criteria);
+    public bool IsSearchFormExists() => DocumentQueryClient.ElementExists(SearchForm.Criteria);
+    public string? GetApplyFiltersText() => DocumentQueryClient.GetText(ApplyFiltersButton.Criteria);
+    public string? GetClearFiltersText() => DocumentQueryClient.GetText("#clearFilters");
+    public string? GetFiltersHeading() => DocumentQueryClient.GetText("#filters-heading");
+    public string? GetEstablishmentStatusFiltersHeading() => DocumentQueryClient.GetText("#FacetName-ESTABLISHMENTSTATUSNAME legend");
+    public string? GetSearchFormInputName() => DocumentQueryClient.GetAttribute(SearchInput.Criteria, "name");
+    public string? GetSearchResultsText() => DocumentQueryClient.GetText(SearchResultsNumber.Criteria);
+    public int GetSearchResultsContainerCount() => DocumentQueryClient.GetCount(SearchResultsHeadings.Criteria);
     // TODO fix to actually query through DomQueryClient
     public IEnumerable<KeyValuePair<string, string>> GetEstablishmentStatusFiltersByValueToLabel()
     {
@@ -125,7 +126,7 @@ public sealed class HomePage : BasePage
         ];
     }
 
-    public IEnumerable<string?> GetSearchResultsHeadings() => DocumentClient.GetTexts(SearchResultsHeadings.Criteria) ?? [];
+    public IEnumerable<string?> GetSearchResultsHeadings() => DocumentQueryClient.GetTexts(SearchResultsHeadings.Criteria) ?? [];
 
-    public string? GetPhaseOfEducationFiltersHeading() => DocumentClient.GetText("#FacetName-PHASEOFEDUCATION legend");
+    public string? GetPhaseOfEducationFiltersHeading() => DocumentQueryClient.GetText("#FacetName-PHASEOFEDUCATION legend");
 }
