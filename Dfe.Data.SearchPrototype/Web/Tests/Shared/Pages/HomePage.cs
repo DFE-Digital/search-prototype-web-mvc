@@ -1,69 +1,27 @@
-﻿using AngleSharp.Css.Dom;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
-using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
-
-public sealed class NavigationBarComponent
-{
-    private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
-    private static IQuerySelector Container => new CssSelector("#navigation-bar");
-
-    public NavigationBarComponent(
-        
-        IDocumentQueryClientAccessor documentQueryClientAccessor
-    )
-    {
-        ArgumentNullException.ThrowIfNull(documentQueryClientAccessor);
-        _documentQueryClientAccessor = documentQueryClientAccessor;
-    }
-
-    public string GetHomeLinkText()
-        => _documentQueryClientAccessor.DocumentQueryClient.Query(
-            new QueryCommand<string>(
-                query: new CssSelector("#home-link"),
-                scope: Container,
-                processor: (part) => part.Text.Trim()));
-
-    public Link GetHeading()
-        => _documentQueryClientAccessor.DocumentQueryClient.Query(
-            new QueryCommand<Link>(
-                query: new CssSelector("#navigation-bar-service-name-link"),
-                scope: Container,
-                processor: 
-                    (part) => new(
-                        part.GetAttribute("href"), 
-                        part.Text, 
-                        opensInNewTab: part.GetAttribute("target") == "_blank")));
-}
-
-
-
-public record Link(
-    string link, 
-    string text, 
-    bool opensInNewTab);
-
 public sealed class HomePage : BasePage
 {
 
-    public HomePage(IDocumentQueryClientAccessor documentQueryClientAccessor, NavigationBarComponent navigationBarComponent) : base(documentQueryClientAccessor)
+    public HomePage(
+        IDocumentQueryClientAccessor documentQueryClientAccessor,
+        NavigationBarComponent navigationBarComponent,
+        SearchComponent searchComponent) : base(documentQueryClientAccessor)
     {
         ArgumentNullException.ThrowIfNull(navigationBarComponent);
+        ArgumentNullException.ThrowIfNull(searchComponent);
         NavigationBar = navigationBarComponent;
+        Search = searchComponent;
     }
 
     public NavigationBarComponent NavigationBar { get; }
+    public SearchComponent Search { get; }
 
-    //public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
-    public static By Heading => By.CssSelector("#service-name");
-    public static By NavigationBarHomeLink => By.CssSelector("#home-link");
-    public static By SearchHeading => By.CssSelector("h1 label");
-    public static By SearchSubHeading => By.CssSelector("#searchKeyWord-hint");
     public By SearchHiddenDiv => By.CssSelector("#searchKeyWord + div");
     public static By SearchInput => By.CssSelector("#searchKeyWord");
     public static By SearchForm => By.CssSelector("#search-establishments-form");
@@ -108,11 +66,7 @@ public sealed class HomePage : BasePage
     public static By EstablishmentStatusNameHeading => By.CssSelector("#FacetName-ESTABLISHMENTSTATUSNAME legend");
 
 
-    public string? GetHeading() => DocumentQueryClient.GetText(Heading.Criteria);
-    public string? GetNavigationBarHomeText() => DocumentQueryClient.GetText(NavigationBarHomeLink.Criteria);
     public string? GetNoSearchResultsHeading() => DocumentQueryClient.GetText(SearchNoResultText.Criteria);
-    public string? GetSearchHeading() => DocumentQueryClient.GetText(SearchHeading.Criteria);
-    public string? GetSearchSubheading() => DocumentQueryClient.GetText(SearchSubHeading.Criteria);
     public bool IsSearchInputExists() => DocumentQueryClient.ElementExists(SearchInput.Criteria);
     public bool IsSearchButtonExists() => DocumentQueryClient.ElementExists(SearchButton.Criteria);
     public bool IsSearchFormExists() => DocumentQueryClient.ElementExists(SearchForm.Criteria);

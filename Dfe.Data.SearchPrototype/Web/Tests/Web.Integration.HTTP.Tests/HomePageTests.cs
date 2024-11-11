@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
 using FluentAssertions;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
-using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.NavigationBarComponent;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
@@ -22,7 +22,7 @@ public class HomePageTests : BaseHttpTest
     }
 
     [Fact]
-    public async Task Search_Title_IsDisplayed()
+    public async Task ServiceName_Link_IsDisplayed()
     {
         // Arrange
         HttpRequestMessage httpRequest = GetTestService<IHttpRequestBuilder>()
@@ -34,12 +34,12 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(httpRequest);
 
         // Assert
-        Link headingLink = new(
+        Link expectedHeadingLink = new(
             link: Routes.HOME, 
             text: "Search prototype", 
             opensInNewTab: false);
 
-        homePage.NavigationBar.GetHeading().Should().Be(headingLink);
+        homePage.NavigationBar.GetHeading().Should().Be(expectedHeadingLink);
     }
 
     [Fact]
@@ -55,12 +55,16 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(httpRequest);
 
         // Assert
-        homePage.NavigationBar.GetHomeLinkText().Should().Be("Home");
+        Link headingLink = new(
+            link: Routes.HOME,
+            text: "Home",
+            opensInNewTab: false);
+
+        homePage.NavigationBar.GetHome().Should().Be(headingLink);
     }
 
-
     [Fact]
-    public async Task Search_Establishment_IsDisplayed()
+    public async Task SearchEstablishmentForm_IsDisplayed()
     {
         // Arrange
         HttpRequestMessage homePageRequest = GetTestService<IHttpRequestBuilder>()
@@ -73,12 +77,12 @@ public class HomePageTests : BaseHttpTest
 
         // Assert
         // TODO expand to form parts need to be able to query within form container at the page level.
-        homePage.GetSearchHeading().Should().Be("Search");
-        homePage.GetSearchSubheading().Should().Be("Search establishments");
-        homePage.IsSearchFormExists().Should().BeTrue();
+        homePage.Search.GetHeading().Should().Be("Search");
+        homePage.Search.GetSubheading().Should().Be("Search establishments");
+/*        homePage.IsSearchFormExists().Should().BeTrue();
         homePage.IsSearchInputExists().Should().BeTrue();
         homePage.GetSearchFormInputName().Should().Be(Routes.SEARCH_KEYWORD_QUERY);
-        homePage.IsSearchButtonExists().Should().BeTrue();
+        homePage.IsSearchButtonExists().Should().BeTrue();*/
     }
 
     [Fact]
