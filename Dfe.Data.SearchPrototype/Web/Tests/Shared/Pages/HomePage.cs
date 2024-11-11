@@ -1,4 +1,5 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
+﻿using AngleSharp.Css.Dom;
+using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
@@ -10,6 +11,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 public sealed class NavigationBarComponent
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
+    private static IQuerySelector Container => new CssSelector("#navigation");
 
     public NavigationBarComponent(IDocumentQueryClientAccessor documentQueryClientAccessor)
     {
@@ -21,7 +23,8 @@ public sealed class NavigationBarComponent
         => _documentQueryClientAccessor.DocumentQueryClient.Query(
             new QueryCommand<string>(
                 query: new CssSelector("#home-link"),
-                processor: (t) => t.Text.Trim()));
+                scope: Container,
+                processor: (part) => part.Text.Trim()));
 }
 
 public sealed class HomePage : BasePage

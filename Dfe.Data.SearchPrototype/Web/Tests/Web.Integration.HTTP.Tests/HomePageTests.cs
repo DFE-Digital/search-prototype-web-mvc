@@ -124,6 +124,8 @@ public class HomePageTests : BaseHttpTest
         // Assert
         searchResultsPage.GetSearchResultsText().Should().Contain("Result");
         searchResultsPage.GetSearchResultsContainerCount().Should().Be(1);
+
+        //TODO expand to establishment results?
     }
 
     [Theory]

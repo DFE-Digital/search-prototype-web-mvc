@@ -67,7 +67,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         throw new NotImplementedException();
     }
 
-    private static IElement QueryFromParentFor(IParentNode parent, IQueryLocator queryLocator)
+    private static IElement QueryFromParentFor(IParentNode parent, IQuerySelector queryLocator)
      => parent.QuerySelectorAll(queryLocator.ToSelector())
             .ThrowIfNullOrEmpty()
             .ThrowIfMultiple()
@@ -92,7 +92,7 @@ public sealed class AngleSharpDocumentPart : IDocumentPart
     public string GetAttribute(string attributeName)
         => _element.GetAttribute(attributeName ?? throw new ArgumentNullException(nameof(attributeName))) ?? string.Empty;
 
-    public IDocumentPart? GetChild(IQueryLocator selector)
+    public IDocumentPart? GetChild(IQuerySelector selector)
     {
         IElement? child = _element.QuerySelector(selector.ToSelector());
         return null == child ? null : new AngleSharpDocumentPart(child);

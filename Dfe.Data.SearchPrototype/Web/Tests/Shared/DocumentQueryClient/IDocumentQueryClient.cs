@@ -17,13 +17,13 @@ public interface IDocumentQueryClient
 
 public class QueryCommand<TResult>
 {
-    public IQueryLocator Query { get; }
+    public IQuerySelector Query { get; }
     public Func<IDocumentPart, TResult> Processor { get; }
-    public IQueryLocator? QueryScope { get; } = null;
+    public IQuerySelector? QueryScope { get; } = null;
     public QueryCommand(
-        IQueryLocator query, 
+        IQuerySelector query, 
         Func<IDocumentPart, TResult> processor, 
-        IQueryLocator? scope = null)
+        IQuerySelector? scope = null)
     {
         ArgumentNullException.ThrowIfNull(query);
         ArgumentNullException.ThrowIfNull(processor);
@@ -34,12 +34,12 @@ public class QueryCommand<TResult>
 }
 
 
-public interface IQueryLocator
+public interface IQuerySelector
 {
     string ToSelector();
 }
 
-public sealed class CssSelector : IQueryLocator
+public sealed class CssSelector : IQuerySelector
 {
     private readonly string _locator;
 
@@ -59,5 +59,5 @@ public interface IDocumentPart
     string GetAttribute(string attributeName);
     //IDictionary<string, string> GetAttributes();
     IEnumerable<IDocumentPart> GetChildren();
-    IDocumentPart? GetChild(IQueryLocator selector);
+    IDocumentPart? GetChild(IQuerySelector selector);
 }
