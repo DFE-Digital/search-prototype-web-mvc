@@ -1,4 +1,6 @@
-﻿namespace Dfe.Testing.Pages;
+﻿using Dfe.Testing.Pages.Pages.Factory;
+
+namespace Dfe.Testing.Pages;
 
 public static class DependencyInjection
 {

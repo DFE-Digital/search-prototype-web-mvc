@@ -1,4 +1,4 @@
-﻿namespace Dfe.Testing.Pages.Pages;
+﻿namespace Dfe.Testing.Pages.Pages.Factory;
 internal sealed class PageFactory : IPageFactory
 {
     private readonly IServiceProvider _provider;
