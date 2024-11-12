@@ -79,7 +79,7 @@ public class HomePageTests : BaseHttpTest
         // Assert
         // TODO expand to form parts need to be able to query within form container at the page level.
 
-        TextInput formInput = new()
+        Input textInput = new()
         {
             Name = "searchKeyWord",
             Value = "",
@@ -89,7 +89,7 @@ public class HomePageTests : BaseHttpTest
 
         homePage.Search.GetHeading().Should().Be("Search");
         homePage.Search.GetSubheading().Should().Be("Search establishments");
-        homePage.Search.GetSearchInput().Should().Be(formInput);
+        homePage.Search.GetSearchInput().Should().Be(textInput);
 
         //homePage.Search.Form
         /*        homePage.IsSearchFormExists().Should().BeTrue();
@@ -97,6 +97,8 @@ public class HomePageTests : BaseHttpTest
                 homePage.GetSearchFormInputName().Should().Be(Routes.SEARCH_KEYWORD_QUERY);
                 homePage.IsSearchButtonExists().Should().BeTrue();*/
     }
+
+    //TODO add one in for no results (client validation, server validation)?
 
     [Fact]
     public async Task Search_ByPartialName_Returns_NoResults()
@@ -107,7 +109,9 @@ public class HomePageTests : BaseHttpTest
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
-                new(key: Routes.SEARCH_KEYWORD_QUERY, value: "ANY_NO_RESULT_KEYWORD"))
+                new(
+                    key: Routes.SEARCH_KEYWORD_QUERY, 
+                    value: "ANY_NO_RESULT_KEYWORD"))
             .Build();
 
         // Act
@@ -115,9 +119,8 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(searchByKeywordRequest);
 
         // Assert
-        searchResultsPage.GetNoSearchResultsHeading().Should().Be("Sorry no results found please amend your search criteria");
+        searchResultsPage.Search.GetNoSearchResultsMessage().Should().Be("Sorry no results found please amend your search criteria");
     }
-
 
     [Fact]
     public async Task Search_ByName_Returns_A_Result()
@@ -526,7 +529,9 @@ public class HomePageTests : BaseHttpTest
                 });
             });
 
-        SearchResponseBuilder builder = GetTestService<WebApplicationFactory<Program>>().Services.GetRequiredService<SearchResponseBuilder>();
+        SearchResponseBuilder builder = GetTestService<WebApplicationFactory<Program>>().Services
+            .GetRequiredService<SearchResponseBuilder>();
+
         configureSearchResponse(builder);
     }
 }

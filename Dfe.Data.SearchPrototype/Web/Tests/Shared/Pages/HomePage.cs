@@ -6,7 +6,7 @@ using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
-public sealed class HomePage : BasePage
+public sealed class HomePage : PageBase
 {
 
     public HomePage(
@@ -66,8 +66,6 @@ public sealed class HomePage : BasePage
     public static By ClearFiltersButton => By.CssSelector("#clearFilters");
     public static By EstablishmentStatusNameHeading => By.CssSelector("#FacetName-ESTABLISHMENTSTATUSNAME legend");
 
-
-    public string? GetNoSearchResultsHeading() => DocumentQueryClient.GetText(SearchNoResultText.Criteria);
     public bool IsSearchInputExists() => DocumentQueryClient.ElementExists(SearchInput.Criteria);
     public bool IsSearchButtonExists() => DocumentQueryClient.ElementExists(SearchButton.Criteria);
     public bool IsSearchFormExists() => DocumentQueryClient.ElementExists(SearchForm.Criteria);

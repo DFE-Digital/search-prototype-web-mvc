@@ -1,6 +1,6 @@
 ﻿namespace DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Input;
 
-public record TextInput
+public record Input
 {
     public required string Name { get; init; }
     public required string Value { get; init; }

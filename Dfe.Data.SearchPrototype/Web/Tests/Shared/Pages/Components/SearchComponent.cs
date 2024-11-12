@@ -28,12 +28,12 @@ public sealed class SearchComponent : ComponentBase
                 queryScope: Container,
                 processor: (t) => t.Text));
 
-    public TextInput GetSearchInput()
+    public Input.Input GetSearchInput()
         => DocumentQueryClient.Query(
-            new QueryCommand<TextInput>(
+            new QueryCommand<Input.Input>(
                 query: new CssSelector("#searchKeyWord"),
                 queryScope: Container,
-                processor: (t) => new TextInput()
+                processor: (t) => new()
                 {
                     Name = t.GetAttribute("name"),
                     Value = t.GetAttribute("value"),
@@ -41,4 +41,11 @@ public sealed class SearchComponent : ComponentBase
                     Type = t.GetAttribute("type")
                 }
                 ));
+
+    public string GetNoSearchResultsMessage()
+        => DocumentQueryClient.Query(
+            new QueryCommand<string>(
+                query: new CssSelector("#no-results"),
+                queryScope: Container,
+                processor: (t) => t.Text.Trim()));
 }

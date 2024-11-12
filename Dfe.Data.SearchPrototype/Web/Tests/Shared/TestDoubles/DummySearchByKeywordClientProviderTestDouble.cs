@@ -59,14 +59,7 @@ public sealed class SearchResponseBuilder
     public Response<SearchResults<Establishment>> Build()
     {
         var responseMock = new Mock<Response>();
-        /*        Establishment myMock = new()
-                {
-                    TYPEOFESTABLISHMENTNAME = "Blah",
-                    ESTABLISHMENTNAME = "Blah",
-                    id = "100000",
-                    PHASEOFEDUCATION = "Blah",
-                    ESTABLISHMENTSTATUSNAME = "Something"
-                };*/
+
         IEnumerable<SearchResult<Establishment>> searchResults = 
             _establishments.Select(
                 (establishment) => SearchModelFactory.SearchResult(
