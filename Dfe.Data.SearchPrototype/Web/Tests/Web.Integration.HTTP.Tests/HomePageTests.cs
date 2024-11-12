@@ -110,7 +110,7 @@ public class HomePageTests : BaseHttpTest
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
                 new(
-                    key: Routes.SEARCH_KEYWORD_QUERY, 
+                    key: Routes.SEARCH_KEYWORD_QUERY,
                     value: "ANY_NO_RESULT_KEYWORD"))
             .Build();
 
@@ -127,14 +127,13 @@ public class HomePageTests : BaseHttpTest
     {
         // Arrange
         MockSearchResponseWith(
-            (searchResponseBuilder) => searchResponseBuilder.AddEstablishment(new()
-            {
-                TYPEOFESTABLISHMENTNAME = "Blah",
-                ESTABLISHMENTNAME = "Blah",
-                id = "100000",
-                PHASEOFEDUCATION = "Blah",
-                ESTABLISHMENTSTATUSNAME = "Something"
-            }));
+            (searchResponseBuilder) => searchResponseBuilder.AddEstablishment(
+                    (establishmentBuilder) => establishmentBuilder
+                            .SetTypeOfEstablishment("Blah")
+                            .SetName("Blah2")
+                            .SetId("100000")
+                            .SetPhaseOfEducation("Blah3")
+                            .SetStatus("Something")));
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
@@ -148,7 +147,7 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(searchByKeywordRequest);
 
         // Assert
-        searchResultsPage.GetSearchResultsText().Should().Contain("Result");
+        searchResultsPage.Search.SearchResults.GetResultsHeading().Should().Be("1 Result");
         searchResultsPage.GetSearchResultsContainerCount().Should().Be(1);
 
         //TODO expand to establishment results?
@@ -162,23 +161,23 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByPartialName_ReturnsMultipleResults(string keyword)
     {
         // Arrange
-        MockSearchResponseWith((builder) =>
-            builder.AddEstablishment(new()
-            {
-                TYPEOFESTABLISHMENTNAME = "Blah",
-                ESTABLISHMENTNAME = "Blah",
-                id = "100000",
-                PHASEOFEDUCATION = "Blah",
-                ESTABLISHMENTSTATUSNAME = "Something"
-            })
-            .AddEstablishment(new()
-            {
-                TYPEOFESTABLISHMENTNAME = "Blah2",
-                ESTABLISHMENTNAME = "Blah2",
-                id = "100001",
-                PHASEOFEDUCATION = "Blah2",
-                ESTABLISHMENTSTATUSNAME = "Something2"
-            }));
+        /*        MockSearchResponseWith((builder) =>
+                    builder.AddEstablishment(new()
+                    {
+                        TYPEOFESTABLISHMENTNAME = "Blah",
+                        ESTABLISHMENTNAME = "Blah",
+                        id = "100000",
+                        PHASEOFEDUCATION = "Blah",
+                        ESTABLISHMENTSTATUSNAME = "Something"
+                    })
+                    .AddEstablishment(new()
+                    {
+                        TYPEOFESTABLISHMENTNAME = "Blah2",
+                        ESTABLISHMENTNAME = "Blah2",
+                        id = "100001",
+                        PHASEOFEDUCATION = "Blah2",
+                        ESTABLISHMENTSTATUSNAME = "Something2"
+                    }));*/
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
@@ -523,9 +522,10 @@ public class HomePageTests : BaseHttpTest
             {
                 builder.ConfigureServices((services) =>
                 {
-                    services.RemoveAll<ISearchByKeywordClientProvider>();
-                    services.AddSingleton<SearchResponseBuilder>();
-                    services.AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>();
+                    services.RemoveAll<ISearchByKeywordClientProvider>()
+                    .AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>()
+                    .AddSingleton<IEstablishmentBuilder, EstablishmentBuilder>()
+                    .AddSingleton<SearchResponseBuilder>();
                 });
             });
 

@@ -18,7 +18,7 @@ public class DummySearchByKeywordClientProviderTestDouble : ISearchByKeywordClie
 
     public Task<SearchClient> InvokeSearchClientAsync(string indexName)
     {
-        var clientMock = new Mock<SearchClient>(() 
+        var clientMock = new Mock<SearchClient>(()
             => new(
                 new Uri("https://localhost"), indexName, new AzureKeyCredential("key")));
 
@@ -39,11 +39,18 @@ public class DummySearchByKeywordClientProviderTestDouble : ISearchByKeywordClie
 
 public sealed class SearchResponseBuilder
 {
-    private readonly List<Establishment> _establishments  = [];
-    
-    public SearchResponseBuilder AddEstablishment(Establishment establishment)
+    private readonly IEstablishmentBuilder _establishmentBuilder;
+    private readonly List<Establishment> _establishments = [];
+
+    public SearchResponseBuilder(IEstablishmentBuilder establishmentBuilder)
     {
-        ArgumentNullException.ThrowIfNull(establishment);
+        ArgumentNullException.ThrowIfNull(establishmentBuilder);
+        _establishmentBuilder = establishmentBuilder;
+    }
+
+    public SearchResponseBuilder AddEstablishment(Func<IEstablishmentBuilder, IEstablishmentBuilder> configureBuilder)
+    {
+        Establishment establishment = configureBuilder(_establishmentBuilder).Build();
         _establishments.Add(establishment);
         return this;
     }
@@ -60,11 +67,11 @@ public sealed class SearchResponseBuilder
     {
         var responseMock = new Mock<Response>();
 
-        IEnumerable<SearchResult<Establishment>> searchResults = 
+        IEnumerable<SearchResult<Establishment>> searchResults =
             _establishments.Select(
                 (establishment) => SearchModelFactory.SearchResult(
-                    document: establishment, 
-                    score: 0.9, 
+                    document: establishment,
+                    score: 0.9,
                     highlights: null));
 
         return Response.FromValue(
@@ -75,5 +82,66 @@ public sealed class SearchResponseBuilder
                     null,
                     responseMock.Object),
                 responseMock.Object);
+    }
+}
+
+public interface IEstablishmentBuilder
+{
+    IEstablishmentBuilder SetName(string establishmentName);
+    IEstablishmentBuilder SetTypeOfEstablishment(string typeOfEstablishment);
+    IEstablishmentBuilder SetId(string id);
+    IEstablishmentBuilder SetPhaseOfEducation(string phaseOfEducation);
+    IEstablishmentBuilder SetStatus(string status);
+    Establishment Build();
+}
+
+public sealed class EstablishmentBuilder : IEstablishmentBuilder
+{
+    private string? _establishmentName = null;
+    private string? _id = null;
+    private string? _typeOfEstablishmentName = null;
+    private string? _phaseOfEducation = null;
+    private string? _establishmentStatus = null;
+    public EstablishmentBuilder()
+    {
+        
+    }
+    public Establishment Build()
+        => new()
+        {
+            ESTABLISHMENTNAME = _establishmentName,
+            id = _id,
+            TYPEOFESTABLISHMENTNAME = _typeOfEstablishmentName,
+            PHASEOFEDUCATION = _phaseOfEducation,
+            ESTABLISHMENTSTATUSNAME = _establishmentStatus,
+        };
+
+    public IEstablishmentBuilder SetName(string establishmentName)
+    {
+        _establishmentName = establishmentName;
+        return this;
+    }
+    public IEstablishmentBuilder SetStatus(string establishmentStatus)
+    {
+        _establishmentStatus = establishmentStatus;
+        return this;
+    }
+
+    public IEstablishmentBuilder SetId(string id)
+    {
+        _id = id;
+        return this;
+    }
+
+    public IEstablishmentBuilder SetPhaseOfEducation(string phaseOfEducation)
+    {
+        _phaseOfEducation = phaseOfEducation;
+        return this;
+    }
+
+    public IEstablishmentBuilder SetTypeOfEstablishment(string typeOfEstablishmentName)
+    {
+        _typeOfEstablishmentName = typeOfEstablishmentName;
+        return this;
     }
 }

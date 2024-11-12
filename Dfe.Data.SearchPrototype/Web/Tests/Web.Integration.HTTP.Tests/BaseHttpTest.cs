@@ -5,6 +5,7 @@ using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +53,7 @@ internal sealed class TestServices
             .AddTransient<SearchComponent>()
             .AddTransient<NavigationBarComponent>()
             .AddTransient<HomePage>()
+            .AddTransient<SearchResultsComponent>()
             .AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
 
         // TODO delaying the creation of the program so it can be overwritten in a test
