@@ -1,5 +1,4 @@
-﻿using Dfe.Data.SearchPrototype.WebApi;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
@@ -9,20 +8,18 @@ using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.APITests;
 
-public class ApiSearchResults : IClassFixture<WebApplicationFactory<Program>>
+public class ApiSearchResults : IClassFixture<WebApplicationFactory<WebApi.Program>>
 {
     private const string SEARCHKEYWORD_ENDPOINT = "/establishments?SearchKeyword=";
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _logger;
-    private readonly WebApplicationFactory<Program> _factory;
-
-    public ApiSearchResults(WebApplicationFactory<Program> factory, ITestOutputHelper logger)
+    
+    public ApiSearchResults(WebApplicationFactory<WebApi.Program> factory, ITestOutputHelper logger)
     {
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = true
         });
-        _factory = factory;
         _logger = logger;
     }
 
