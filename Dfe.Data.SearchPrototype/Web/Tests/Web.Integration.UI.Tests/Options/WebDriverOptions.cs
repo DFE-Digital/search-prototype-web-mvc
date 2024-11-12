@@ -1,4 +1,4 @@
-﻿namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+﻿namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
 public sealed class WebDriverOptions
 {

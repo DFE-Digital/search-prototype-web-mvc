@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions;
 
 public static class StringExtensions
 {

@@ -7,7 +7,7 @@ using Xunit;
 using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.APITests;
+namespace Dfe.Data.SearchPrototype.Web.Tests.APITests;
 
 public class ApiSearchResults : IClassFixture<WebApplicationFactory<Program>>
 {

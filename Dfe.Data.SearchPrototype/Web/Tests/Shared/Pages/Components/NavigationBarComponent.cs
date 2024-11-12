@@ -1,9 +1,9 @@
-﻿using DfE.Tests.Pages.DocumentQueryClient.Accessor;
-using DfE.Tests.Pages.DocumentQueryClient.Selector;
-using DfE.Tests.Pages.Pages.Components;
-using DfE.Tests.Pages.Pages.Components.AnchorLink;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
+using Dfe.Testing.Pages.DocumentQueryClient.Selector;
+using Dfe.Testing.Pages.Pages.Components;
+using Dfe.Testing.Pages.Pages.Components.AnchorLink;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class NavigationBarComponent : ComponentBase
 {

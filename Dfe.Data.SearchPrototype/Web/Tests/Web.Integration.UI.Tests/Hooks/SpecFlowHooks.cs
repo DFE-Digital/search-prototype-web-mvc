@@ -1,10 +1,10 @@
 ﻿using BoDi;
 using TechTalk.SpecFlow;
 using Microsoft.Extensions.Options;
-using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
-using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Hooks
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Hooks
 {
     [Binding]
     public class SpecFlowHooks

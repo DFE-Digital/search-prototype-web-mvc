@@ -3,9 +3,9 @@ using OpenQA.Selenium;
 using System.Drawing;
 using Microsoft.Extensions.Options;
 using Xunit.Abstractions;
-using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
 
 public class WebDriverContext : IWebDriverContext
 {

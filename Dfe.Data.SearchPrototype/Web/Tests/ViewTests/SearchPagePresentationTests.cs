@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
 using Xunit;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.ViewTests;
+namespace Dfe.Data.SearchPrototype.Web.Tests.ViewTests;
 
 public class SearchPagePresentationTests : SharedTestFixture
 {

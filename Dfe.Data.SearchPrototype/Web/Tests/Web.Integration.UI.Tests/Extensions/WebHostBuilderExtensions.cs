@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.NetworkInformation;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions
 {
     /// <summary>
     /// Extension method used to establish the url the web host will listen to with an available port.

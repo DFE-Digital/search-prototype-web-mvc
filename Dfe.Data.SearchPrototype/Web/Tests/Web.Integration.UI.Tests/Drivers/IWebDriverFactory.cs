@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
 
 public interface IWebDriverFactory
 {

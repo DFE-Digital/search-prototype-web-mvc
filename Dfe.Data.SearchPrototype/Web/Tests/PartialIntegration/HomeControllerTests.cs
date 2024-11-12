@@ -11,10 +11,10 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
-using DfE.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+using Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.PartialIntegration;
+namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration;
 
 public class HomeControllerTests
 {

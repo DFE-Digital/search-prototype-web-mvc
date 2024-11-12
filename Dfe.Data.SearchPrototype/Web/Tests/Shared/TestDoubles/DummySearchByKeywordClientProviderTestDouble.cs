@@ -5,7 +5,7 @@ using Moq;
 using Azure;
 using Dfe.Data.SearchPrototype.Infrastructure.DataTransferObjects;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
 public class DummySearchByKeywordClientProviderTestDouble : ISearchByKeywordClientProvider
 {

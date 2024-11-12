@@ -1,16 +1,16 @@
 ﻿using Deque.AxeCore.Selenium;
 using Dfe.Data.SearchPrototype.Web;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
-using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
-using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions;
-using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Accessibility.Steps
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Accessibility.Steps
 {
 
     [Binding]

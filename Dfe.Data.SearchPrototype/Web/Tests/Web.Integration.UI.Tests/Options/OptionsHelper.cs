@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using static Microsoft.Extensions.Options.Options;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
 public static class OptionsHelper
 {

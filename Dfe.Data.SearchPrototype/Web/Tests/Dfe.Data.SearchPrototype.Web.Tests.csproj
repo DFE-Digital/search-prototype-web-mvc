@@ -20,13 +20,13 @@
 		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="130.0.6723.6900" />
 		<PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.35.0" />
 		<PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
-		<PackageReference Include="WireMock.Net" Version="1.6.7"/>
+		<PackageReference Include="WireMock.Net" Version="1.6.7" />
 		<PackageReference Include="xunit" Version="2.9.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\DfE.Tests.Pages\DfE.Tests.Pages.csproj" />
+		<ProjectReference Include="..\..\..\Dfe.Testing.Pages\Dfe.Testing.Pages.csproj" />
 		<ProjectReference Include="..\..\WebApi\Dfe.Data.SearchPrototype.WebApi.csproj" />
 		<ProjectReference Include="..\Dfe.Data.SearchPrototype.Web.csproj" />
 	</ItemGroup>

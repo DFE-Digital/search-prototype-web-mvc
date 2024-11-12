@@ -1,6 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
-using DfE.Tests.Pages;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+using Dfe.Testing.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 

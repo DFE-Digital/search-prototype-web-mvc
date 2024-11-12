@@ -3,9 +3,9 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium;
 using Microsoft.Extensions.Options;
 using System.Drawing;
-using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
 
 public sealed class WebDriverFactory : IWebDriverFactory
 {

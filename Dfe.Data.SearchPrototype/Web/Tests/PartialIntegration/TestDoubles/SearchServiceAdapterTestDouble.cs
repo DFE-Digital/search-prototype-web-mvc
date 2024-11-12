@@ -1,7 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
 using Moq;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
+namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
 
 public static class SearchServiceAdapterTestDouble
 {

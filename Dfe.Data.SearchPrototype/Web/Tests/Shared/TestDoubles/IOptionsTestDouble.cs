@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Moq;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
 public static class IOptionsTestDouble
 {
