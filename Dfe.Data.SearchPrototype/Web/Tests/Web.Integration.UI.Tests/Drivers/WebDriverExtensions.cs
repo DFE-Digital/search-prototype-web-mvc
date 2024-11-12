@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using Xunit;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
+namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
 
 public static class WebDriverExtensions
 {

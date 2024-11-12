@@ -1,10 +1,10 @@
 ﻿using BoDi;
 using TechTalk.SpecFlow;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
 using Microsoft.Extensions.Options;
+using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
-namespace UnitTestProject1
+namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Hooks
 {
     [Binding]
     public class SpecFlowHooks
@@ -20,7 +20,7 @@ namespace UnitTestProject1
             {
                 driverOptions.Value.DriverBinaryDirectory = Directory.GetCurrentDirectory();
             }
-            container.BaseContainer.RegisterInstanceAs<IOptions<WebDriverOptions>>(driverOptions);
+            container.BaseContainer.RegisterInstanceAs(driverOptions);
             var accessibilityOptions = OptionsHelper.GetOptions<AccessibilityOptions>(AccessibilityOptions.Key);
             accessibilityOptions.Value.CreateArtifactOutputDirectory();
             container.BaseContainer.RegisterInstanceAs(accessibilityOptions);

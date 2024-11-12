@@ -1,10 +1,9 @@
 ﻿using Deque.AxeCore.Selenium;
 using Dfe.Data.SearchPrototype.Web;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Extensions;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
-using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions;
+using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow;

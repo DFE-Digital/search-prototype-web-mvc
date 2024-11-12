@@ -3,10 +3,10 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium;
 using Microsoft.Extensions.Options;
 using System.Drawing;
-using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
- 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
- 
+using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+
+namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Drivers;
+
 public sealed class WebDriverFactory : IWebDriverFactory
 {
     private static readonly IEnumerable<string> DEFAULT_OPTIONS = new[]
@@ -17,20 +17,20 @@ public sealed class WebDriverFactory : IWebDriverFactory
             "--start-maximized",
             "--start-fullscreen"
     };
- 
+
     private static readonly Dictionary<string, (int x, int y)> MOBILE_VIEWPORTS = new()
     {
         { "desktop", (1920, 1080) },
         { "iphone14", (390, 844) },
         { "iphone11", (414, 896) }
     };
- 
+
     private static TimeSpan DEFAULT_PAGE_LOAD_TIMEOUT = TimeSpan.FromSeconds(30);
 
     private readonly WebDriverOptions _webDriverOptions;
 
     private readonly WebDriverSessionOptions _sessionOptions;
- 
+
     public WebDriverFactory(
         IOptions<WebDriverOptions> webDriverOptions,
         WebDriverSessionOptions sessionOptions
@@ -39,7 +39,7 @@ public sealed class WebDriverFactory : IWebDriverFactory
         _webDriverOptions = webDriverOptions?.Value ?? throw new ArgumentNullException(nameof(webDriverOptions));
         _sessionOptions = sessionOptions ?? throw new ArgumentNullException(nameof(_sessionOptions));
     }
- 
+
     public IWebDriver CreateDriver()
     {
         // viewports are expressed as cartesian coordinates (x,y)
@@ -63,9 +63,9 @@ public sealed class WebDriverFactory : IWebDriverFactory
         driver.Manage().Cookies.DeleteAllCookies();
         driver.Manage().Timeouts().PageLoad = DEFAULT_PAGE_LOAD_TIMEOUT;
         return driver;
- 
+
     }
- 
+
     private static ChromeDriver CreateChromeDriver(
         WebDriverOptions driverOptions
     )
@@ -73,7 +73,7 @@ public sealed class WebDriverFactory : IWebDriverFactory
         ChromeOptions option = new();
 
         option.AddArguments(DEFAULT_OPTIONS);
- 
+
         // chromium based browsers using new headless switch https://www.selenium.dev/blog/2023/headless-is-going-away/
 
         if (driverOptions.Headless)
@@ -87,7 +87,7 @@ public sealed class WebDriverFactory : IWebDriverFactory
         option.AddArgument("--window-size=1920,1080");
         return new ChromeDriver(driverOptions.DriverBinaryDirectory, option);
     }
- 
+
     private static FirefoxDriver CreateFirefoxDriver(
         WebDriverOptions driverOptions,
         WebDriverSessionOptions sessionOptions
@@ -99,9 +99,9 @@ public sealed class WebDriverFactory : IWebDriverFactory
             AcceptInsecureCertificates = true,
             EnableDevToolsProtocol = true,
         };
- 
+
         options.AddArguments(DEFAULT_OPTIONS);
- 
+
         if (driverOptions.Headless)
         {
             options.AddArgument("--headless");

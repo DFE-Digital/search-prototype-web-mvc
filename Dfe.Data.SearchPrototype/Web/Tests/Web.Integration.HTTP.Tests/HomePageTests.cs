@@ -1,12 +1,12 @@
 ﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
-using DfE.Data.SearchPrototype.Web.Tests.Shared;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Input;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObjects;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
+using DfE.Tests.Pages.Http;
+using DfE.Tests.Pages.Pages;
+using DfE.Tests.Pages.Pages.Components.AnchorLink;
+using DfE.Tests.Pages.Pages.Components.Input;
+using DfE.Tests.Pages.WebApplicationFactory;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
-using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
@@ -44,6 +43,8 @@ public class HomePageTests : BaseHttpTest
 
         homePage.NavigationBar.GetHeading().Should().Be(expectedHeadingLink);
     }
+
+    //TODO GOV.UK link
 
     [Fact]
     public async Task Header_Link_IsDisplayed()
@@ -162,12 +163,12 @@ public class HomePageTests : BaseHttpTest
             .Build();
 
         // Act
-        HomePage searchResultsPage = await GetTestService<IPageFactory>()
+        HomePage homePage = await GetTestService<IPageFactory>()
             .CreatePageAsync<HomePage>(searchByKeywordRequest);
 
         // Assert
-        searchResultsPage.Search.SearchResults.GetResultsHeading().Should().Be("1 Result");
-        searchResultsPage.Search.SearchResults.GetResults()
+        homePage.Search.SearchResults.GetResultsHeading().Should().Be("1 Result");
+        homePage.Search.SearchResults.GetResults()
             .Should()
             .BeEquivalentTo(establishmentSearchResults);
 
@@ -194,17 +195,17 @@ public class HomePageTests : BaseHttpTest
                 status: "MyStatus2")
         ];
 
-        expectedSearchResults.ForEach(t =>
+        expectedSearchResults.ForEach(establishment =>
             MockSearchResponseWith(
                 (searchResponseBuilder) 
                     => searchResponseBuilder.AddEstablishment(
                         (establishmentBuilder) =>
                             establishmentBuilder
-                                .SetTypeOfEstablishment(t.typeOfEstablishment)
-                                .SetName(t.name)
-                                .SetId(t.urn)
-                                .SetPhaseOfEducation(t.phase)
-                                .SetStatus(t.status))));
+                                .SetTypeOfEstablishment(establishment.typeOfEstablishment)
+                                .SetName(establishment.name)
+                                .SetId(establishment.urn)
+                                .SetPhaseOfEducation(establishment.phase)
+                                .SetStatus(establishment.status))));
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
@@ -223,6 +224,7 @@ public class HomePageTests : BaseHttpTest
             .Should()
             .BeEquivalentTo(expectedSearchResults);
     }
+
     /*
     [Fact]
     public async Task Filter_Controls_Are_Displayed()

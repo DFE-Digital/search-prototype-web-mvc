@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Extensions;
+﻿namespace DfE.Tests.Pages.Extensions;
 
 internal static class CollectionExtensions
 {

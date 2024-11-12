@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.NetworkInformation;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests.Extensions
+namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions
 {
     /// <summary>
     /// Extension method used to establish the url the web host will listen to with an available port.
@@ -19,7 +19,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests.Extensions
         {
             int IpPort = 5000;
 
-            if (!IsIpPortAvailable(IpPort)){
+            if (!IsIpPortAvailable(IpPort))
+            {
                 IpPort = NextAvailableIpPort(IpPort);
             }
 
@@ -65,7 +66,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests.Extensions
         private static int NextAvailableIpPort(int port = 5000)
         {
             port =
-                (port > 0) ? port :
+                port > 0 ? port :
                     new Random().Next(1, 65535); // set the port range from 5001 to 65535
 
             while (!IsIpPortAvailable(port))

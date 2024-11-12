@@ -1,13 +1,6 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
-using DfE.Data.SearchPrototype.Web.Tests.Shared;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
-using Microsoft.AspNetCore.Mvc.Testing;
+using DfE.Tests.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -43,18 +36,11 @@ internal sealed class TestServices
     internal TestServices()
     {
         IServiceCollection services = new ServiceCollection()
-            .AddScoped<IConfigureWebHostHandler, ConfigureWebHostHandler>()
-            .AddScoped<WebApplicationFactory<Program>, TestServerFactory>()
-            .AddScoped<IDocumentQueryClientProvider, AngleSharpDocumentQueryClientProvider>()
-            .AddScoped<IDocumentQueryClientAccessor, DocumentQueryClientAccessor>()
-            // AddPages() for DI or is this creator enough?
-            .AddScoped<IPageFactory, PageFactory>()
-            .AddScoped<LinkQueryCommand>()
             .AddTransient<SearchComponent>()
             .AddTransient<NavigationBarComponent>()
             .AddTransient<HomePage>()
             .AddTransient<SearchResultsComponent>()
-            .AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
+            .AddPages<Program>();
 
         // TODO delaying the creation of the program so it can be overwritten in a test
         _serviceProvider = services.BuildServiceProvider();

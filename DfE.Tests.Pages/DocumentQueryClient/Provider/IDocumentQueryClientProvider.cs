@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Factory;
+﻿namespace DfE.Tests.Pages.DocumentQueryClient.Provider;
 
 public interface IDocumentQueryClientProvider
 {

@@ -1,10 +1,6 @@
-﻿using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Extensions;
+﻿namespace DfE.Tests.Pages.DocumentQueryClient.Provider.AngleSharp;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
-
-internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
+public class AngleSharpDocumentQueryClient : IDocumentQueryClient
 {
     private readonly IHtmlDocument _htmlDocument;
     public AngleSharpDocumentQueryClient(IHtmlDocument document)
@@ -63,16 +59,16 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
     public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> command)
     {
-        if(command.QueryScope == null)
+        if (command.QueryScope == null)
         {
             return QueryForMultipleFromScope(_htmlDocument, command.Query)
                     .Select(
                         (element) => command.Processor(new AngleSharpDocumentPart(element)));
         }
 
-        var scope = _htmlDocument.QuerySelector(command.QueryScope.ToSelector()) 
+        var scope = _htmlDocument.QuerySelector(command.QueryScope.ToSelector())
             ?? throw new ArgumentNullException($"scope not found {command.QueryScope.ToSelector()}", nameof(command.QueryScope));
-        
+
         var store = QueryForMultipleFromScope(scope, command.Query)
                 .Select(
                     (element) => command.Processor(new AngleSharpDocumentPart(element)));
@@ -89,32 +85,37 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
          => parent.QuerySelectorAll(queryLocator.ToSelector())
             .ThrowIfNullOrEmpty();
 
-}
 
-public sealed class AngleSharpDocumentPart : IDocumentPart
-{
-    private readonly IElement _element;
-
-    public AngleSharpDocumentPart(IElement element)
+    private sealed class AngleSharpDocumentPart : IDocumentPart
     {
-        _element = element;
+        private readonly IElement _element;
+
+        public AngleSharpDocumentPart(IElement element)
+        {
+            _element = element;
+        }
+
+        public string Text
+        {
+            get => _element.TextContent;
+            set => _element.TextContent = value;
+        }
+
+        public string GetAttribute(string attributeName)
+            => _element.GetAttribute(attributeName ?? throw new ArgumentNullException(nameof(attributeName))) ?? string.Empty;
+
+        public IDictionary<string, string> GetAttributes()
+            => _element.Attributes.ToDictionary(
+                    keySelector: (attr) => attr.Name,
+                    elementSelector: (attr) => attr.Value);
+
+        public IDocumentPart? GetChild(IQuerySelector selector)
+        {
+            IElement? child = _element.QuerySelector(selector.ToSelector());
+            return null == child ? null : new AngleSharpDocumentPart(child);
+        }
+
+        public IEnumerable<IDocumentPart> GetChildren()
+            => _element.Children?.Select(t => (IDocumentPart)new AngleSharpDocumentPart(t)) ?? [];
     }
-
-    public string Text
-    {
-        get => _element.TextContent;
-        set => _element.TextContent = value;
-    }
-
-    public string GetAttribute(string attributeName)
-        => _element.GetAttribute(attributeName ?? throw new ArgumentNullException(nameof(attributeName))) ?? string.Empty;
-
-    public IDocumentPart? GetChild(IQuerySelector selector)
-    {
-        IElement? child = _element.QuerySelector(selector.ToSelector());
-        return null == child ? null : new AngleSharpDocumentPart(child);
-    }
-
-    public IEnumerable<IDocumentPart> GetChildren()
-        => _element.Children?.Select(t => (IDocumentPart)new AngleSharpDocumentPart(t)) ?? [];
 }

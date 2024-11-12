@@ -1,11 +1,11 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
 using Moq;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests.TestDoubles;
+namespace DfE.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
 
 public static class SearchServiceAdapterTestDouble
 {
-    public static Mock<ISearchServiceAdapter> MockFor(SearchForEstablishments.Models.SearchResults stubSearchResults)
+    public static Mock<ISearchServiceAdapter> MockFor(Dfe.Data.SearchPrototype.SearchForEstablishments.Models.SearchResults stubSearchResults)
     {
         Mock<ISearchServiceAdapter> mockSearchServiceAdapter = DefaultMock();
 

@@ -1,11 +1,8 @@
-﻿using Dfe.Data.SearchPrototype.Infrastructure.Tests.TestDoubles.Shared;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
-using Dfe.Data.SearchPrototype.Tests.SearchForEstablishments.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Models;
 using FluentAssertions;
@@ -14,8 +11,10 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+using DfE.Data.SearchPrototype.Web.Tests.PartialIntegration.TestDoubles;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests;
+namespace DfE.Data.SearchPrototype.Web.Tests.PartialIntegration;
 
 public class HomeControllerTests
 {
@@ -25,13 +24,15 @@ public class HomeControllerTests
     public async Task Index_WithSearchTerm_ReturnsModel()
     {
         // arrange
-        SearchForEstablishments.Models.SearchResults stubSearchResults = new() {
-            Establishments = EstablishmentResultsTestDouble.Create() };
+        Dfe.Data.SearchPrototype.SearchForEstablishments.Models.SearchResults stubSearchResults = new()
+        {
+            Establishments = EstablishmentResultsTestDouble.Create()
+        };
 
         ISearchServiceAdapter mockSearchServiceAdapter =
             SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
 
-        SearchByKeywordUseCase useCase = new (
+        SearchByKeywordUseCase useCase = new(
             mockSearchServiceAdapter,
             IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
@@ -48,7 +49,7 @@ public class HomeControllerTests
 
         // assert
         ViewResult viewResult = Assert.IsType<ViewResult>(result);
-        Models.ViewModels.SearchResults viewModel = Assert.IsType<Models.ViewModels.SearchResults>(viewResult.Model);
+        Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults viewModel = Assert.IsType<Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults>(viewResult.Model);
 
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
@@ -59,14 +60,16 @@ public class HomeControllerTests
     public async Task Index_WithNoResults_ReturnsNoSearchResultsOnModel()
     {
         // arrange
-        SearchForEstablishments.Models.SearchResults stubSearchResults = new() {
-            Establishments = EstablishmentResultsTestDouble.CreateWithNoResults() };
+        SearchResults stubSearchResults = new()
+        {
+            Establishments = EstablishmentResultsTestDouble.CreateWithNoResults()
+        };
 
         ISearchServiceAdapter mockSearchServiceAdapter =
              SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
 
         SearchByKeywordUseCase useCase =
-            new (mockSearchServiceAdapter,
+            new(mockSearchServiceAdapter,
                 IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
         HomeController controller =
@@ -82,7 +85,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<Models.ViewModels.SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults>(viewResult.Model);
 
         viewModel.SearchItems.Should().BeNull();
         viewModel.HasResults.Should().BeFalse();
@@ -93,8 +96,9 @@ public class HomeControllerTests
     public async Task SearchWithFilters_WithSearchRequestAndNoMatchingSelectedFacets_ReturnsModelNoFacetsSelected()
     {
         // arrange
-        SearchForEstablishments.Models.SearchResults stubSearchResults =
-            new () {
+        SearchResults stubSearchResults =
+            new()
+            {
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.Create()
             };
@@ -103,9 +107,9 @@ public class HomeControllerTests
              SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
 
         SearchByKeywordUseCase useCase =
-            new (mockSearchServiceAdapter,
+            new(mockSearchServiceAdapter,
                 IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
-        
+
         var controller =
             new HomeController(_logger.Object, useCase,
             new SearchResultsFactory(
@@ -125,7 +129,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<Models.ViewModels.SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults>(viewResult.Model);
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
@@ -138,8 +142,9 @@ public class HomeControllerTests
         // arrange
         const string FacetValueKey = "Facet_1";
 
-        SearchForEstablishments.Models.SearchResults stubSearchResults =
-            new(){
+        Dfe.Data.SearchPrototype.SearchForEstablishments.Models.SearchResults stubSearchResults =
+            new()
+            {
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.CreateWithNoResults()
             };
@@ -148,11 +153,11 @@ public class HomeControllerTests
              SearchServiceAdapterTestDouble.MockFor(stubSearchResults).Object;
 
         SearchByKeywordUseCase useCase =
-            new (mockSearchServiceAdapter,
+            new(mockSearchServiceAdapter,
                 IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
 
         HomeController controller =
-            new (_logger.Object, useCase,
+            new(_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
                     new FacetsAndSelectedFacetsToFacetsViewModelMapper()
@@ -170,7 +175,7 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<Models.ViewModels.SearchResults>(viewResult.Model);
+        var viewModel = Assert.IsType<Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults>(viewResult.Model);
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
@@ -179,7 +184,7 @@ public class HomeControllerTests
 
     [Fact]
     public async Task SearchWithFilters_WithSearchRequestAndMatchingSelectedFacets_ReturnsModelWithMatchingFacetSelected()
-{
+    {
         // arrange
         const string FacetValueKey = "Facet_1";
 
@@ -187,8 +192,9 @@ public class HomeControllerTests
             EstablishmentFacetTestDouble.CreateWith(
                 facetName: FacetValueKey, facetResultValue: FacetValueKey, facetResultCount: 1);
 
-        SearchForEstablishments.Models.SearchResults stubSearchResults =
-            new(){
+        SearchResults stubSearchResults =
+            new()
+            {
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.CreateWith([testEstablishmentFacet])
             };
@@ -219,8 +225,8 @@ public class HomeControllerTests
 
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        var viewModel = Assert.IsType<Models.ViewModels.SearchResults>(viewResult.Model);
-        
+        var viewModel = Assert.IsType<Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults>(viewResult.Model);
+
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);

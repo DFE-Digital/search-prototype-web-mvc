@@ -1,4 +1,4 @@
-﻿namespace DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Input;
+﻿namespace DfE.Tests.Pages.Pages.Components.Input;
 
 public record Input
 {

@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
+﻿namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
 public sealed class WebOptions
 {

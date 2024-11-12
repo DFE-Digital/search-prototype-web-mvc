@@ -1,12 +1,14 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
+﻿using DfE.Tests.Pages.DocumentQueryClient.Accessor;
+using DfE.Tests.Pages.DocumentQueryClient.Selector;
+using DfE.Tests.Pages.Pages.Components;
+using DfE.Tests.Pages.Pages.Components.AnchorLink;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
+namespace DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class NavigationBarComponent : ComponentBase
 {
+    internal static IQuerySelector Container => new ElementSelector("#navigation-bar");
     private readonly LinkQueryCommand _linkCommand;
-    internal override IQuerySelector Container => new ElementSelector("#navigation-bar");
 
     public NavigationBarComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,

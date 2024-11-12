@@ -1,10 +1,10 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests.Extensions;
+﻿using DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests
+namespace DfE.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests
 {
     /// <summary>
     /// Factory for bootstrapping the web application in memory for functional end to end tests.

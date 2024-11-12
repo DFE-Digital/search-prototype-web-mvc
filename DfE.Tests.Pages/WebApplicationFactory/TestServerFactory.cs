@@ -1,10 +1,5 @@
-﻿using Dfe.Data.SearchPrototype.Web;
-using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-
-namespace DfE.Data.SearchPrototype.Web.Tests.Shared.WebApplicationFactory;
-public class TestServerFactory : WebApplicationFactory<Program>
+﻿namespace DfE.Tests.Pages.WebApplicationFactory;
+internal class TestServerFactory<T> : WebApplicationFactory<T> where T : class
 {
     private readonly IConfigureWebHostHandler _configureWebHostHandler;
 

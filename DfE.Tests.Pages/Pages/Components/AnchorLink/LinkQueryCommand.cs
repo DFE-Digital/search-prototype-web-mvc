@@ -1,7 +1,4 @@
-﻿using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
-
-namespace DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
+﻿namespace DfE.Tests.Pages.Pages.Components.AnchorLink;
 public sealed class LinkQueryCommand
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
@@ -11,7 +8,7 @@ public sealed class LinkQueryCommand
         _documentQueryClientAccessor = documentQueryClientAccessor;
     }
 
-    private static Func<IDocumentPart, Link> MapToLink => 
+    private static Func<IDocumentPart, Link> MapToLink =>
             (documentPart) => new(
                 link: documentPart.GetAttribute("href"),
                 text: documentPart.Text.Trim(),

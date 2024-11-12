@@ -1,8 +1,4 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
-
-namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+﻿namespace DfE.Tests.Pages.Pages;
 
 public abstract class PageBase
 {

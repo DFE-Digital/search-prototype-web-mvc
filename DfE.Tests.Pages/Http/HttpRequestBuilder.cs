@@ -1,21 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Text;
-using System.Text.Json;
-using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
+﻿namespace DfE.Tests.Pages.Http;
 
-namespace DfE.Data.SearchPrototype.Web.Tests.Shared;
-
-public interface IHttpRequestBuilder
+internal sealed class HttpRequestBuilder : IHttpRequestBuilder
 {
-    public IHttpRequestBuilder SetPath(string path);
-    public IHttpRequestBuilder AddQueryParameter(KeyValuePair<string, string> queryParameter);
-    public IHttpRequestBuilder SetBody<T>(T value) where T : class;
-    public HttpRequestMessage Build();
-}
-
-public sealed class HttpRequestBuilder : IHttpRequestBuilder
-{
-    private string? _path = Routes.HOME;
+    private string _path = "/";
     private List<KeyValuePair<string, string>> _query = new();
     private object? _body = null;
 

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Dfe.Data.SearchPrototype.WebApi;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
@@ -6,7 +7,7 @@ using Xunit;
 using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
 
-namespace Dfe.Data.SearchPrototype.WebApi.Tests.APITests;
+namespace DfE.Data.SearchPrototype.Web.Tests.APITests;
 
 public class ApiSearchResults : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -117,7 +118,7 @@ public class ApiSearchResults : IClassFixture<WebApplicationFactory<Program>>
 
         results.EstablishmentResults!.Establishments.Should().HaveCount(0);
     }
-    
+
     [Fact]
     public async Task GET_Search_SpecialCharacter_Returns_NoEstablishmentData()
     {
@@ -128,7 +129,7 @@ public class ApiSearchResults : IClassFixture<WebApplicationFactory<Program>>
 
         results.EstablishmentResults!.Establishments.Should().HaveCount(0);
     }
-    
+
     [Fact]
     public async Task GET_Search_NoSearchTerm_Returns_400()
     {

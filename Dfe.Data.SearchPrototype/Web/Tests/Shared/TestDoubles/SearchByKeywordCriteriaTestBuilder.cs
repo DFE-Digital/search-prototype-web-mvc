@@ -1,6 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
-namespace Dfe.Data.SearchPrototype.Tests.SearchForEstablishments.TestDoubles;
+namespace DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
 public static class SearchByKeywordCriteriaTestDouble
 {

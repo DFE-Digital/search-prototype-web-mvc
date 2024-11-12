@@ -1,7 +1,6 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.DocumentQueryClient.Accessor;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
-using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
+﻿using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+using DfE.Tests.Pages.DocumentQueryClient.Accessor;
+using DfE.Tests.Pages.Pages;
 using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
@@ -66,7 +65,7 @@ public sealed class HomePage : PageBase
     public static By ClearFiltersButton => By.CssSelector("#clearFilters");
     public static By EstablishmentStatusNameHeading => By.CssSelector("#FacetName-ESTABLISHMENTSTATUSNAME legend");
 
-    public bool IsSearchInputExists() => DocumentQueryClient.ElementExists(SearchInput.Criteria);
+/*    public bool IsSearchInputExists() => DocumentQueryClient.ElementExists(SearchInput.Criteria);
     public bool IsSearchButtonExists() => DocumentQueryClient.ElementExists(SearchButton.Criteria);
     public bool IsSearchFormExists() => DocumentQueryClient.ElementExists(SearchForm.Criteria);
     public string? GetApplyFiltersText() => DocumentQueryClient.GetText(ApplyFiltersButton.Criteria);
@@ -75,7 +74,7 @@ public sealed class HomePage : PageBase
     public string? GetEstablishmentStatusFiltersHeading() => DocumentQueryClient.GetText("#FacetName-ESTABLISHMENTSTATUSNAME legend");
     public string? GetSearchFormInputName() => DocumentQueryClient.GetAttribute(SearchInput.Criteria, "name");
     public string? GetSearchResultsText() => DocumentQueryClient.GetText(SearchResultsNumber.Criteria);
-    public int GetSearchResultsContainerCount() => DocumentQueryClient.GetCount(SearchResultsHeadings.Criteria);
+    public int GetSearchResultsContainerCount() => DocumentQueryClient.GetCount(SearchResultsHeadings.Criteria);*/
     // TODO fix to actually query through DomQueryClient
     public IEnumerable<KeyValuePair<string, string>> GetEstablishmentStatusFiltersByValueToLabel()
     {
@@ -103,7 +102,7 @@ public sealed class HomePage : PageBase
         ];
     }
 
-    public IEnumerable<string?> GetSearchResultsHeadings() => DocumentQueryClient.GetTexts(SearchResultsHeadings.Criteria) ?? [];
+/*    public IEnumerable<string?> GetSearchResultsHeadings() => DocumentQueryClient.GetTexts(SearchResultsHeadings.Criteria) ?? [];
 
-    public string? GetPhaseOfEducationFiltersHeading() => DocumentQueryClient.GetText("#FacetName-PHASEOFEDUCATION legend");
+    public string? GetPhaseOfEducationFiltersHeading() => DocumentQueryClient.GetText("#FacetName-PHASEOFEDUCATION legend");*/
 }

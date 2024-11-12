@@ -1,6 +1,7 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+using Dfe.Data.SearchPrototype.Web;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
@@ -10,15 +11,15 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
 using Xunit;
 
-namespace Dfe.Data.SearchPrototype.Web.Tests.PresentationLayerTests;
+namespace DfE.Data.SearchPrototype.Web.Tests.ViewTests;
 
 public class SearchPagePresentationTests : SharedTestFixture
 {
     private const string homeUri = "http://localhost";
 
-    public SearchPagePresentationTests(WebApplicationFactory<Program> factory) :base(factory)
+    public SearchPagePresentationTests(WebApplicationFactory<Program> factory) : base(factory)
     {
-        
+
     }
 
     [Fact]
