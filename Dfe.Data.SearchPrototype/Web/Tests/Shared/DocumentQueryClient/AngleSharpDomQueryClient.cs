@@ -1,7 +1,6 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient.Extensions;
-using WireMock.Pact.Models.V2;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.DomQueryClient;
 
@@ -48,7 +47,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         {
             return command.Processor(
                 new AngleSharpDocumentPart(
-                    element: QueryFromParentFor(
+                    element: QueryFromScope(
                         _htmlDocument, command.Query)));
         }
 
@@ -57,21 +56,38 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
         return command.Processor(
             new AngleSharpDocumentPart(
-                QueryFromParentFor(
+                QueryFromScope(
                     scoped, command.Query)));
 
     }
 
-    public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> queryCommand)
+    public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> command)
     {
-        throw new NotImplementedException();
+        if(command.QueryScope == null)
+        {
+            return QueryForMultipleFromScope(_htmlDocument, command.Query)
+                    .Select(
+                        (element) => command.Processor(new AngleSharpDocumentPart(element)));
+        }
+
+        var scope = _htmlDocument.QuerySelector(command.QueryScope.ToSelector()) 
+            ?? throw new ArgumentNullException($"scope not found {command.QueryScope.ToSelector()}", nameof(command.QueryScope));
+        
+        var store = QueryForMultipleFromScope(scope, command.Query)
+                .Select(
+                    (element) => command.Processor(new AngleSharpDocumentPart(element)));
+        return store;
     }
 
-    private static IElement QueryFromParentFor(IParentNode parent, IQuerySelector queryLocator)
-     => parent.QuerySelectorAll(queryLocator.ToSelector())
-            .ThrowIfNullOrEmpty()
-            .ThrowIfMultiple()
-            .Single();
+    private static IElement QueryFromScope(IParentNode parent, IQuerySelector queryLocator)
+         => parent.QuerySelectorAll(queryLocator.ToSelector())
+                .ThrowIfNullOrEmpty()
+                .ThrowIfMultiple()
+                .Single();
+
+    private static IEnumerable<IElement> QueryForMultipleFromScope(IParentNode parent, IQuerySelector queryLocator)
+         => parent.QuerySelectorAll(queryLocator.ToSelector())
+            .ThrowIfNullOrEmpty();
 
 }
 
@@ -83,6 +99,7 @@ public sealed class AngleSharpDocumentPart : IDocumentPart
     {
         _element = element;
     }
+
     public string Text
     {
         get => _element.TextContent;

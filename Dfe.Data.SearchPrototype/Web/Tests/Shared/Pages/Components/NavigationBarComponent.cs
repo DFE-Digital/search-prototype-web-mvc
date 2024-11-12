@@ -6,7 +6,7 @@ namespace DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
 public sealed class NavigationBarComponent : ComponentBase
 {
     private readonly LinkQueryCommand _linkCommand;
-    internal override IQuerySelector Container => new CssSelector("#navigation-bar");
+    internal override IQuerySelector Container => new ElementSelector("#navigation-bar");
 
     public NavigationBarComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,
@@ -15,7 +15,7 @@ public sealed class NavigationBarComponent : ComponentBase
         _linkCommand = linkCommand;
     }
 
-    public Link GetHome() => _linkCommand.GetLink(selector: new CssSelector("#home-link"), scope: Container);
+    public Link GetHome() => _linkCommand.GetLink(selector: new ElementSelector("#home-link"), scope: Container);
 
-    public Link GetHeading() => _linkCommand.GetLink(selector: new CssSelector("#navigation-bar-service-name-link"), scope: Container);
+    public Link GetHeading() => _linkCommand.GetLink(selector: new ElementSelector("#navigation-bar-service-name-link"), scope: Container);
 }

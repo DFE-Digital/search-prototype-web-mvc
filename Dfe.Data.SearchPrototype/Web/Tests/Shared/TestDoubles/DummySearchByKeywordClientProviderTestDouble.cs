@@ -48,10 +48,11 @@ public sealed class SearchResponseBuilder
         _establishmentBuilder = establishmentBuilder;
     }
 
-    public SearchResponseBuilder AddEstablishment(Func<IEstablishmentBuilder, IEstablishmentBuilder> configureBuilder)
+    public SearchResponseBuilder AddEstablishment(Action<IEstablishmentBuilder> configureBuilder)
     {
-        Establishment establishment = configureBuilder(_establishmentBuilder).Build();
-        _establishments.Add(establishment);
+        configureBuilder(_establishmentBuilder);
+        _establishments.Add(
+            _establishmentBuilder.Build());
         return this;
     }
 
@@ -92,6 +93,7 @@ public interface IEstablishmentBuilder
     IEstablishmentBuilder SetId(string id);
     IEstablishmentBuilder SetPhaseOfEducation(string phaseOfEducation);
     IEstablishmentBuilder SetStatus(string status);
+    IEstablishmentBuilder SetAddress(string address);
     Establishment Build();
 }
 
@@ -102,6 +104,7 @@ public sealed class EstablishmentBuilder : IEstablishmentBuilder
     private string? _typeOfEstablishmentName = null;
     private string? _phaseOfEducation = null;
     private string? _establishmentStatus = null;
+    private string? _address = null;
     public EstablishmentBuilder()
     {
         
@@ -114,6 +117,7 @@ public sealed class EstablishmentBuilder : IEstablishmentBuilder
             TYPEOFESTABLISHMENTNAME = _typeOfEstablishmentName,
             PHASEOFEDUCATION = _phaseOfEducation,
             ESTABLISHMENTSTATUSNAME = _establishmentStatus,
+            
         };
 
     public IEstablishmentBuilder SetName(string establishmentName)
@@ -142,6 +146,12 @@ public sealed class EstablishmentBuilder : IEstablishmentBuilder
     public IEstablishmentBuilder SetTypeOfEstablishment(string typeOfEstablishmentName)
     {
         _typeOfEstablishmentName = typeOfEstablishmentName;
+        return this;
+    }
+
+    public IEstablishmentBuilder SetAddress(string address)
+    {
+        _address = address;
         return this;
     }
 }

@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using DfE.Data.SearchPrototype.Web.Tests.Shared;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Input;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.Link;
 using DfE.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Constants;
+using static Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers.ApiHelpers;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests;
 
@@ -126,14 +128,31 @@ public class HomePageTests : BaseHttpTest
     public async Task Search_ByName_Returns_A_Result()
     {
         // Arrange
-        MockSearchResponseWith(
-            (searchResponseBuilder) => searchResponseBuilder.AddEstablishment(
-                    (establishmentBuilder) => establishmentBuilder
-                            .SetTypeOfEstablishment("Blah")
-                            .SetName("Blah2")
-                            .SetId("100000")
-                            .SetPhaseOfEducation("Blah3")
-                            .SetStatus("Something")));
+        List<EstablishmentSearchResult> establishmentSearchResults =
+        [
+            new EstablishmentSearchResult(
+                name: "Blah2",
+                urn: "100000",
+                typeOfEstablishment: "MyTypeOfEstab",
+                phase: "Blah3",
+                status: "MyStatus")
+        ];
+
+        establishmentSearchResults.ForEach((searchResult) =>
+            MockSearchResponseWith(
+                (searchResponseBuilder) => searchResponseBuilder.AddEstablishment(
+                    (establishmentBuilder) =>
+                    {
+                        establishmentBuilder
+                            .SetTypeOfEstablishment(searchResult.typeOfEstablishment)
+                            .SetName(searchResult.name)
+                            .SetId(searchResult.urn)
+                            .SetPhaseOfEducation(searchResult.phase)
+                            .SetStatus(searchResult.status);
+                    })));
+
+        /*.SetAddress("123 Cherry lane")*/
+
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
@@ -148,42 +167,50 @@ public class HomePageTests : BaseHttpTest
 
         // Assert
         searchResultsPage.Search.SearchResults.GetResultsHeading().Should().Be("1 Result");
-        searchResultsPage.GetSearchResultsContainerCount().Should().Be(1);
+        searchResultsPage.Search.SearchResults.GetResults()
+            .Should()
+            .BeEquivalentTo(establishmentSearchResults);
 
-        //TODO expand to establishment results?
+        //TODO labels on the search results
     }
 
-    [Theory]
-    [InlineData("St")]
-    [InlineData("Jos")]
-    [InlineData("Cath")]
-    [InlineData("Academy")]
-    public async Task Search_ByPartialName_ReturnsMultipleResults(string keyword)
+    [Fact]
+    public async Task Search_ByPartialName_ReturnsMultipleResults()
     {
-        // Arrange
-        /*        MockSearchResponseWith((builder) =>
-                    builder.AddEstablishment(new()
-                    {
-                        TYPEOFESTABLISHMENTNAME = "Blah",
-                        ESTABLISHMENTNAME = "Blah",
-                        id = "100000",
-                        PHASEOFEDUCATION = "Blah",
-                        ESTABLISHMENTSTATUSNAME = "Something"
-                    })
-                    .AddEstablishment(new()
-                    {
-                        TYPEOFESTABLISHMENTNAME = "Blah2",
-                        ESTABLISHMENTNAME = "Blah2",
-                        id = "100001",
-                        PHASEOFEDUCATION = "Blah2",
-                        ESTABLISHMENTSTATUSNAME = "Something2"
-                    }));*/
+        List<EstablishmentSearchResult> expectedSearchResults =
+        [
+            new(
+                name: "TestName1",
+                urn: "100000",
+                typeOfEstablishment: "MyTypeOfEstab",
+                phase: "Blah",
+                status: "MyStatus"),
+
+            new(
+                name: "TestName2",
+                urn: "100001",
+                typeOfEstablishment: "TypeOfEstab2",
+                phase: "Blah2",
+                status: "MyStatus2")
+        ];
+
+        expectedSearchResults.ForEach(t =>
+            MockSearchResponseWith(
+                (searchResponseBuilder) 
+                    => searchResponseBuilder.AddEstablishment(
+                        (establishmentBuilder) =>
+                            establishmentBuilder
+                                .SetTypeOfEstablishment(t.typeOfEstablishment)
+                                .SetName(t.name)
+                                .SetId(t.urn)
+                                .SetPhaseOfEducation(t.phase)
+                                .SetStatus(t.status))));
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
                 new(
                     key: Routes.SEARCH_KEYWORD_QUERY,
-                    value: keyword))
+                    value: "RETURNS_MULTIPLE_RESULTS"))
             .Build();
 
         // Act
@@ -191,10 +218,10 @@ public class HomePageTests : BaseHttpTest
             .CreatePageAsync<HomePage>(searchByKeywordRequest);
 
         // Assert
-        searchResultsPage.GetSearchResultsText().Should().Contain("Result");
-        searchResultsPage.GetSearchResultsContainerCount().Should().Be(2);
-        // TODO ASSERT THE ACTUAL VALUES BEING RETURNED
-        searchResultsPage.GetSearchResultsHeadings().Should().AllSatisfy((t => t.Should().ContainEquivalentOf(keyword)));
+        searchResultsPage.Search.SearchResults.GetResultsHeading().Should().Be("2 Results");
+        searchResultsPage.Search.SearchResults.GetResults()
+            .Should()
+            .BeEquivalentTo(expectedSearchResults);
     }
     /*
     [Fact]

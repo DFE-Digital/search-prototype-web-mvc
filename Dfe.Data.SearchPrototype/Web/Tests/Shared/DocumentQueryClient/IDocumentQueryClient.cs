@@ -39,11 +39,11 @@ public interface IQuerySelector
     string ToSelector();
 }
 
-public sealed class CssSelector : IQuerySelector
+public sealed class ElementSelector : IQuerySelector
 {
     private readonly string _locator;
 
-    public CssSelector(string locator)
+    public ElementSelector(string locator)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(locator, nameof(locator));
         _locator = locator;
