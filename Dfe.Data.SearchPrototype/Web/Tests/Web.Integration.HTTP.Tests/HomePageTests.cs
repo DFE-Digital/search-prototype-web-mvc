@@ -1,180 +1,196 @@
-﻿using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
+﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Helpers;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles.Builder;
+using Dfe.Testing.Pages.Http;
+using Dfe.Testing.Pages.Pages;
+using Dfe.Testing.Pages.Pages.Components.AnchorLink;
+using Dfe.Testing.Pages.Pages.Components.Inputs;
+using Dfe.Testing.Pages.WebApplicationFactory;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
 {
-    public class HomePageTests : IClassFixture<WebApplicationFactory<Program>>
+    public class HomePageTests : BaseHttpTest
     {
-        private const string uri = "http://localhost:5000";
-        private readonly HttpClient _client;
-        private readonly ITestOutputHelper _logger;
-        private readonly WebApplicationFactory<Program> _factory;
+        private const string HOME_ROUTE = "/";
+        private readonly string SEARCH_KEYWORD_QUERY = "searchKeyWord";
 
-        public HomePageTests(WebApplicationFactory<Program> factory, ITestOutputHelper logger)
+        public HomePageTests(ITestOutputHelper logger) : base(logger)
         {
-            _factory = factory;
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = true
-            });
-            _logger = logger;
         }
 
         [Fact]
-        public async Task Search_Title_IsDisplayed()
+        public async Task ServiceName_Link_IsDisplayed()
         {
-            var response = await _client.GetAsync(uri);
+            // Arrange
 
-            var document = await response.GetDocumentAsync();
+            HttpRequestMessage httpRequest = GetTestService<IHttpRequestBuilder>()
+                .SetPath(HOME_ROUTE)
+                .Build();
 
-            document.GetElementText(HomePage.Heading.Criteria).Should().Be("Search prototype");
+            // Act
+            HomePage homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(httpRequest);
+
+            // Assert   
+            Link expectedHeadingLink = new(
+                link: HOME_ROUTE,
+                text: "Search prototype",
+                opensInNewTab: false);
+
+            homePage.NavigationBar.GetHeading().Should().Be(expectedHeadingLink);
         }
 
         [Fact]
         public async Task Header_Link_IsDisplayed()
         {
-            var response = await _client.GetAsync(uri);
+            // Arrange
+            HttpRequestMessage httpRequest = GetTestService<IHttpRequestBuilder>()
+                .SetPath(HOME_ROUTE)
+                .Build();
 
-            var document = await response.GetDocumentAsync();
+            // Act
+            HomePage homePage = await GetTestService<IPageFactory>()
+                .CreatePageAsync<HomePage>(httpRequest);
 
-            document.GetElementText(HomePage.HomeLink.Criteria).Should().Be("Home");
+            // Assert
+            Link headingLink = new(
+                link: HOME_ROUTE,
+                text: "Home",
+                opensInNewTab: false);
+
+            homePage.NavigationBar.GetHome().Should().Be(headingLink);
         }
 
         [Fact]
-        public async Task Search_Establishment_IsDisplayed()
+        public async Task SearchEstablishmentForm_IsDisplayed()
         {
-            var response = await _client.GetAsync(uri);
+            // Arrange
+            HttpRequestMessage homePageRequest = GetTestService<IHttpRequestBuilder>()
+                .SetPath(HOME_ROUTE)
+                .Build();
 
-            var document = await response.GetDocumentAsync();
+            // Act
+            HomePage homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(homePageRequest);
 
-            document.GetElementText(HomePage.SearchHeading.Criteria).Should().Be("Search");
+            // Assert
 
-            document.GetElementText(HomePage.SearchSubHeading.Criteria).Should().Be("Search establishments");
+            // TODO expand to form parts need to be able to query within form container at the page level.
 
-            document.GetMultipleElements(HomePage.SearchInput.Criteria).Count().Should().Be(1);
+            Input textInput = new()
+            {
+                Name = "searchKeyWord",
+                Value = "",
+                PlaceHolder = "Search by keyword",
+                Type = "text"
+            };
 
-            document.GetMultipleElements(HomePage.SearchButton.Criteria).Count().Should().Be(1);
+            homePage.Search.GetHeading().Should().Be("Search");
+            homePage.Search.GetSubheading().Should().Be("Search establishments");
+            homePage.Search.GetSearchInput().Should().Be(textInput);
+        }
+
+        [Fact]
+        public async Task Search_ByPartialName_Returns_NoResults()
+        {
+            // Arrange
+            MockSearchResponseWith(
+                searchResponseBuilder => searchResponseBuilder.ClearEstablishments());
+
+            HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
+                .AddQueryParameter(
+                    new(
+                        key: SEARCH_KEYWORD_QUERY,
+                        value: "ANY_NO_RESULT_KEYWORD"))
+                .Build();
+
+            // Act
+            HomePage searchResultsPage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(searchByKeywordRequest);
+
+            // Assert
+            searchResultsPage.Search.GetNoSearchResultsMessage().Should().Be("Sorry no results found please amend your search criteria");
         }
 
         [Fact]
         public async Task Search_ByName_Returns_LessThan100_Results()
         {
-            var response = await _client.GetAsync(uri);
-            var document = await response.GetDocumentAsync();
+            // Arrange
+            List<EstablishmentSearchResult> expectedSearchResults =
+            [
+                new EstablishmentSearchResult(
+                    Name: "TestEstablishmentName",
+                    Urn: "100000",
+                    TypeOfEstablishment: "TestTypeOfEstab",
+                    Phase: "TestEstablishmentPhase",
+                    Status: "TestEstablishmentStatus")
+            ];
 
-            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
-            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+            MockSearchResponseWithEstablishments(expectedSearchResults);
 
-            var formResponse = await _client.SendAsync(
-                formElement,
-                formButton,
-                new Dictionary<string, string>
-                {
-                    ["searchKeyWord"] = "One"
-                });
+            HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
+             .AddQueryParameter(
+                 new(
+                     key: SEARCH_KEYWORD_QUERY,
+                     value: "RETURNS_ONE_RESULT"))
+             .Build();
 
-            var resultsPage = await formResponse.GetDocumentAsync();
+            // Act
+            HomePage homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(searchByKeywordRequest);
 
-            var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
-            searchResultsNumber.Should().Contain("Result");
+            // Assert
+            homePage.Search.SearchResults.GetResultsHeading().Should().Be("1 Result");
+            homePage.Search.SearchResults.GetResults().Should().BeEquivalentTo(expectedSearchResults);
 
-            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().BeLessThan(100);
+            //TODO labels on the search results
         }
 
         [Fact]
         public async Task Search_ByName_ReturnsMultipleResults()
         {
-            var response = await _client.GetAsync(uri);
-            var document = await response.GetDocumentAsync();
+            List<EstablishmentSearchResult> expectedSearchResults =
+            [
+                new(
+                    Name: "TestName1",
+                    Urn: "100000",
+                    TypeOfEstablishment: "MyTypeOfEstab",
+                    Phase: "Blah",
+                    Status: "MyStatus"),
+                new(
+                    Name: "TestName2",
+                    Urn: "100001",
+                    TypeOfEstablishment: "TypeOfEstab2",
+                    Phase: "Blah2",
+                    Status: "MyStatus2")
+            ];
 
-            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+            MockSearchResponseWithEstablishments(expectedSearchResults);
 
-            var formResponse = await _client.SendAsync(
-                formElement,
-                formButton,
-                new Dictionary<string, string>
-                {
-                    ["searchKeyWord"] = "Academy"
-                });
+            HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
+                .AddQueryParameter(
+                    new(
+                        key: SEARCH_KEYWORD_QUERY,
+                        value: "RETURNS_MULTIPLE_RESULTS"))
+                .Build();
 
-            var resultsPage = await formResponse.GetDocumentAsync();
+            // Act
+            HomePage searchResultsPage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(searchByKeywordRequest);
 
-            resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Results");
-            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().Be(100);
-        }
-
-        [Theory]
-        [InlineData("St")]
-        [InlineData("Jos")]
-        [InlineData("Cath")]
-        public async Task Search_ByPartialName_ReturnsResults(string term)
-        {
-            var response = await _client.GetAsync(uri);
-            var document = await response.GetDocumentAsync();
-
-            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
-
-            var formResponse = await _client.SendAsync(
-                formElement,
-                formButton,
-                new Dictionary<string, string>
-                {
-                    ["searchKeyWord"] = term
-                });
-
-            var resultsPage = await formResponse.GetDocumentAsync();
-
-            var resultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
-            resultsNumber.Should().Contain("Results");
-
-            var resultsHeadingsText = resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria);
-            resultsHeadingsText.Should().HaveCountGreaterThan(1);
-
-            var resultsHeadings = resultsPage.QuerySelector(HomePage.SearchResultsHeadings.Criteria);
-            foreach (var headings in resultsHeadings!.Text())
-            {
-                resultsHeadings!.TextContent.Should().ContainAny(term);
-            }
-
-        }
-
-        [Theory]
-        [InlineData("abcd")]
-        [InlineData("zzz")]
-        public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
-        {
-            var response = await _client.GetAsync(uri);
-            var document = await response.GetDocumentAsync();
-
-            var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-            var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
-
-            var formResponse = await _client.SendAsync(
-                formElement,
-                formButton,
-                new Dictionary<string, string>
-                {
-                    ["searchKeyWord"] = searchTerm
-                });
-
-            var resultsPage = await formResponse.GetDocumentAsync();
-
-            var noResultText = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
-            noResultText.Should().Contain("Sorry no results found please amend your search criteria");
+            // Assert
+            searchResultsPage.Search.SearchResults.GetResultsHeading().Should().Be("2 Results");
+            searchResultsPage.Search.SearchResults.GetResults().Should().BeEquivalentTo(expectedSearchResults);
         }
 
         [Fact]
         public async Task Filters_AreDisplayed()
         {
-            var response = await _client.GetAsync(uri + "/?searchKeyWord=Academy");
+            var response = await GetTestService<HttpClient>().GetAsync("/?searchKeyWord=Academy");
             var document = await response.GetDocumentAsync();
 
             var applyFiltersButton = document.GetElementText(HomePage.ApplyFiltersButton.Criteria);
@@ -251,6 +267,39 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
 
             var openProposedToCloseLabel = document.GetElementText(HomePage.OpenProposedToCloseFilterLabel.Criteria);
             openProposedToCloseLabel.Should().StartWith("Open, but proposed to close");
+        }
+
+        private void MockSearchResponseWithEstablishments(IEnumerable<EstablishmentSearchResult> results)
+         =>
+            results.ToList().ForEach((establishment)
+                => MockSearchResponseWith((searchResponseBuilder)
+                    => searchResponseBuilder.AddEstablishment(
+                        (establishmentBuilder) =>
+                            establishmentBuilder
+                                .SetTypeOfEstablishment(establishment.TypeOfEstablishment)
+                                .SetName(establishment.Name)
+                                .SetId(establishment.Urn)
+                                .SetPhaseOfEducation(establishment.Phase)
+                                .SetStatus(establishment.Status))));
+
+        private void MockSearchResponseWith(Action<SearchResponseBuilder> configureSearchResponse)
+        {
+            GetTestService<IConfigureWebHostHandler>()
+                .ConfigureWith((builder) =>
+                {
+                    builder.ConfigureServices((services) =>
+                    {
+                        services.RemoveAll<ISearchByKeywordClientProvider>();
+                        services.AddSingleton<ISearchByKeywordClientProvider, SearchByKeywordClientProviderTestDouble>()
+                            .AddSingleton<IEstablishmentBuilder, EstablishmentBuilder>()
+                            .AddSingleton<SearchResponseBuilder>();
+                    });
+                });
+
+            SearchResponseBuilder builder = GetTestService<WebApplicationFactory<Program>>().Services
+                .GetRequiredService<SearchResponseBuilder>();
+
+            configureSearchResponse(builder);
         }
     }
 }

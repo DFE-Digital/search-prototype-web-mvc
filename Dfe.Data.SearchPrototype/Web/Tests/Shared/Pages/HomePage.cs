@@ -1,15 +1,26 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Drivers;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
+using Dfe.Testing.Pages.Pages;
 using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
-public sealed class HomePage : BasePage
+public sealed class HomePage : PageBase
 {
-    public HomePage(IWebDriverContext driverContext) : base(driverContext)
+    public HomePage(
+        IDocumentQueryClientAccessor documentQueryClientAccessor, 
+        NavigationBarComponent navigationBarComponent,
+        SearchComponent searchComponent) : base(documentQueryClientAccessor)
     {
+        ArgumentNullException.ThrowIfNull(navigationBarComponent);
+        ArgumentNullException.ThrowIfNull(searchComponent);
+        NavigationBar = navigationBarComponent;
+        Search = searchComponent;
     }
 
-    public IWebElement HeadingElement => DriverContext.Wait.UntilElementExists(By.CssSelector("header div div:nth-of-type(2) a"));
+    public NavigationBarComponent NavigationBar { get; }
+    public SearchComponent Search { get; }
     public static By Heading => By.CssSelector("header div div:nth-of-type(2) a");
     public static By HomeLink => By.CssSelector("nav a");
     public static By SearchHeading => By.CssSelector("h1 label");
@@ -49,6 +60,7 @@ public sealed class HomePage : BasePage
     public static By OpenProposedToCloseFilterInput => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-4");
     public static By OpenProposedToCloseFilterLabel => By.CssSelector("#selectedFacets_ESTABLISHMENTSTATUSNAME_-4 + label");
     public static By EstablishmentStatusNameHeading => By.CssSelector("#ESTABLISHMENTSTATUSNAME");
+
     public static By SearchResultEstablishmentName(int urn) => By.CssSelector($"#name-{urn}");
     public static By SearchResultEstablishmentUrn(int urn) => By.CssSelector($"#urn-{urn}");
     public static By SearchResultEstablishmentAddress(int urn) => By.CssSelector($"#address-{urn}");

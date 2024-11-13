@@ -42,6 +42,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Dfe.Testing.Pages\Dfe.Testing.Pages.csproj" />
     <ProjectReference Include="..\..\WebApi\Dfe.Data.SearchPrototype.WebApi.csproj" />
     <ProjectReference Include="..\Dfe.Data.SearchPrototype.Web.csproj" />
   </ItemGroup>

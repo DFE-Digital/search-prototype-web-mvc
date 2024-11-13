@@ -3,7 +3,7 @@ internal class AngleSharpDocumentQueryClientProvider : IDocumentQueryClientProvi
 {
     private readonly HttpClient _client;
 
-    internal AngleSharpDocumentQueryClientProvider(HttpClient httpClient)
+    public AngleSharpDocumentQueryClientProvider(HttpClient httpClient)
     {
         _client = httpClient;
     }

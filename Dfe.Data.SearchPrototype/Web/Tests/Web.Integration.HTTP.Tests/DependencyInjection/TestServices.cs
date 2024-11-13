@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using Dfe.Testing.Pages;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests.DependencyInjection;
@@ -13,8 +16,12 @@ internal sealed class TestServices
 
     TestServices()
     {
-        IServiceCollection services = new ServiceCollection();
-        // TODO dependencies
+        IServiceCollection services = new ServiceCollection()
+            .AddTransient<SearchComponent>()
+            .AddTransient<NavigationBarComponent>()
+            .AddTransient<HomePage>()
+            .AddTransient<SearchResultsComponent>()
+            .AddPages<Program>();
 
         _serviceProvider = services.BuildServiceProvider();
     }
