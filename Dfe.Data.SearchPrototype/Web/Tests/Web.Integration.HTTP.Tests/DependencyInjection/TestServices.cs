@@ -14,7 +14,7 @@ internal sealed class TestServices
     {
     }
 
-    TestServices()
+    private TestServices()
     {
         IServiceCollection services = new ServiceCollection()
             .AddTransient<SearchComponent>()
