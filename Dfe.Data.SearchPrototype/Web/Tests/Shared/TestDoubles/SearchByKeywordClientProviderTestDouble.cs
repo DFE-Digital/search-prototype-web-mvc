@@ -7,11 +7,11 @@ using Dfe.Data.SearchPrototype.Infrastructure.DataTransferObjects;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
-public class DummySearchByKeywordClientProviderTestDouble : ISearchByKeywordClientProvider
+public class SearchByKeywordClientProviderTestDouble : ISearchByKeywordClientProvider
 {
     private readonly SearchResponseBuilder _builder;
 
-    public DummySearchByKeywordClientProviderTestDouble(SearchResponseBuilder builder)
+    public SearchByKeywordClientProviderTestDouble(SearchResponseBuilder builder)
     {
         _builder = builder;
     }

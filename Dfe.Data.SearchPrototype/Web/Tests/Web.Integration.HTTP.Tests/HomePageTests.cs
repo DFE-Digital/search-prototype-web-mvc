@@ -168,9 +168,7 @@ public class HomePageTests : BaseHttpTest
 
         // Assert
         homePage.Search.SearchResults.GetResultsHeading().Should().Be("1 Result");
-        homePage.Search.SearchResults.GetResults()
-            .Should()
-            .BeEquivalentTo(establishmentSearchResults);
+        homePage.Search.SearchResults.GetResults().Should().BeEquivalentTo(establishmentSearchResults);
 
         //TODO labels on the search results
     }
@@ -195,17 +193,16 @@ public class HomePageTests : BaseHttpTest
                 status: "MyStatus2")
         ];
 
-        expectedSearchResults.ForEach(establishment =>
-            MockSearchResponseWith(
-                (searchResponseBuilder) 
-                    => searchResponseBuilder.AddEstablishment(
-                        (establishmentBuilder) =>
-                            establishmentBuilder
-                                .SetTypeOfEstablishment(establishment.typeOfEstablishment)
-                                .SetName(establishment.name)
-                                .SetId(establishment.urn)
-                                .SetPhaseOfEducation(establishment.phase)
-                                .SetStatus(establishment.status))));
+        expectedSearchResults.ForEach((establishment)
+            => MockSearchResponseWith((searchResponseBuilder)
+                => searchResponseBuilder.AddEstablishment(
+                    (establishmentBuilder) =>
+                        establishmentBuilder
+                            .SetTypeOfEstablishment(establishment.typeOfEstablishment)
+                            .SetName(establishment.name)
+                            .SetId(establishment.urn)
+                            .SetPhaseOfEducation(establishment.phase)
+                            .SetStatus(establishment.status))));
 
         HttpRequestMessage searchByKeywordRequest = GetTestService<IHttpRequestBuilder>()
             .AddQueryParameter(
@@ -220,9 +217,7 @@ public class HomePageTests : BaseHttpTest
 
         // Assert
         searchResultsPage.Search.SearchResults.GetResultsHeading().Should().Be("2 Results");
-        searchResultsPage.Search.SearchResults.GetResults()
-            .Should()
-            .BeEquivalentTo(expectedSearchResults);
+        searchResultsPage.Search.SearchResults.GetResults().Should().BeEquivalentTo(expectedSearchResults);
     }
 
     /*
@@ -552,7 +547,7 @@ public class HomePageTests : BaseHttpTest
                 builder.ConfigureServices((services) =>
                 {
                     services.RemoveAll<ISearchByKeywordClientProvider>()
-                    .AddSingleton<ISearchByKeywordClientProvider, DummySearchByKeywordClientProviderTestDouble>()
+                    .AddSingleton<ISearchByKeywordClientProvider, SearchByKeywordClientProviderTestDouble>()
                     .AddSingleton<IEstablishmentBuilder, EstablishmentBuilder>()
                     .AddSingleton<SearchResponseBuilder>();
                 });

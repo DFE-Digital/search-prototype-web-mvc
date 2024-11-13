@@ -15,7 +15,7 @@ public static class DependencyInjection
                 // Pages
                 .AddScoped<IPageFactory, PageFactory>()
                 // Components
-                .AddScoped<LinkQueryCommand>()
+                .AddTransient<LinkQueryCommand>()
                 .AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
 }
 
