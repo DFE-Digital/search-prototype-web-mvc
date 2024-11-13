@@ -1,9 +1,9 @@
 ﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
-public class AngleSharpDocumentQueryClientProvider : IDocumentQueryClientProvider
+internal class AngleSharpDocumentQueryClientProvider : IDocumentQueryClientProvider
 {
     private readonly HttpClient _client;
 
-    public AngleSharpDocumentQueryClientProvider(HttpClient httpClient)
+    internal AngleSharpDocumentQueryClientProvider(HttpClient httpClient)
     {
         _client = httpClient;
     }
