@@ -1,3 +1,9 @@
 ﻿global using Dfe.Testing.Pages.DocumentQueryClient;
 global using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 global using Dfe.Testing.Pages.DocumentQueryClient.Selector;
+global using Dfe.Testing.Pages.Extensions;
+global using AngleSharp;
+global using AngleSharp.Dom;
+global using AngleSharp.Html.Dom;
+global using AngleSharp.Io;
+global using System.Net.Http.Headers;
