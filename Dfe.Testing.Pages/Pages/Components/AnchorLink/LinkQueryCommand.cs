@@ -9,7 +9,7 @@ public sealed class LinkQueryCommand
     }
 
     private static Func<IDocumentPart, Link> MapToLink =>
-        (documentPart) 
+        (documentPart)
             => new Link(
                 link: documentPart.GetAttribute("href"),
                 text: documentPart.Text.Trim(),
