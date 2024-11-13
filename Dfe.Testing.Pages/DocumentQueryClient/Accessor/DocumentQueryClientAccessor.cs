@@ -9,3 +9,4 @@ internal sealed class DocumentQueryClientAccessor : IDocumentQueryClientAccessor
         set => _documentQueryClient = value;
     }
 }
+    
