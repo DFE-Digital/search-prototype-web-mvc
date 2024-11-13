@@ -39,5 +39,5 @@ public sealed class SearchResults
     /// <summary>
     /// 
     /// </summary>
-    public Pagination Pagination { get; set; }
+    public Pagination? Pagination { get; set; }
 }

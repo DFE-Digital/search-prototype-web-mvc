@@ -64,34 +64,34 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
         }
 
         // TODO: Ask Antony's opinion on this stuff!
-        [Fact]
-        public async Task Search_ByName_ReturnsSingleResult()
-        {
-            //var response = await _client.GetAsync(uri);
-            //var document = await HtmlHelpers.GetDocumentAsync(response);
+        //[Fact]
+        //public async Task Search_ByName_ReturnsSingleResult()
+        //{
+        //var response = await _client.GetAsync(uri);
+        //var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            //var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
-            //var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+        //var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the search form");
+        //var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
-            //var formResponse = await _client.SendAsync(
-            //    formElement,
-            //    formButton,
-            //    new Dictionary<string, string>
-            //    {
-            //        ["searchKeyWord"] = "School"
-            //    });
+        //var formResponse = await _client.SendAsync(
+        //    formElement,
+        //    formButton,
+        //    new Dictionary<string, string>
+        //    {
+        //        ["searchKeyWord"] = "School"
+        //    });
 
-            //var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+        //var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-            //resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("result");
+        //resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("result");
 
-            //resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Be("Duck School");
-            //resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("345678");
-            //resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Duck Street, Duck Locality, Duck Address 3, Duck Town, DUU CKK");
-            //resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Community School");
-            //resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Open");
-            //resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Primary");
-        }
+        //resultsPage.GetElementText(HomePage.SearchResultEstablishmentName(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Be("Duck School");
+        //resultsPage.GetElementText(HomePage.SearchResultEstablishmentUrn(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("345678");
+        //resultsPage.GetElementText(HomePage.SearchResultEstablishmentAddress(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Duck Street, Duck Locality, Duck Address 3, Duck Town, DUU CKK");
+        //resultsPage.GetElementText(HomePage.SearchResultEstablishmentType(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Community School");
+        //resultsPage.GetElementText(HomePage.SearchResultEstablishmentStatus(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Open");
+        //resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.DUCK_SCHOOL).Criteria).Should().Contain("Primary");
+        //}
 
         [Fact]
         public async Task Search_ByName_ReturnsMultipleResults()
@@ -131,37 +131,37 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Integration
             //resultsPage.GetElementText(HomePage.SearchResultEstablishmentPhase(Constants.Urns.HORSE_ACADEMY).Criteria).Should().Contain("Post 16");
         }
 
-        [Theory]
-        [InlineData("ant")]
-        public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
-        {
-            // TODO: Ask Antony's opinion on this stuff!
-            //
-            //var response = await _client.GetAsync(uri);
-            //var document = await HtmlHelpers.GetDocumentAsync(response);
+        //[Theory]
+        //[InlineData("ant")]
+        //public async Task Search_ByName_NoMatch_ReturnsNoResults(string searchTerm)
+        //{
+        // TODO: Ask Antony's opinion on this stuff!
+        //
+        //var response = await _client.GetAsync(uri);
+        //var document = await HtmlHelpers.GetDocumentAsync(response);
 
-            //// using Anglesharp to get document elements
-            //var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
-            //var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
+        //// using Anglesharp to get document elements
+        //var formElement = document.QuerySelector<IHtmlFormElement>(HomePage.SearchForm.Criteria) ?? throw new Exception("Unable to find the sign in form");
+        //var formButton = document.QuerySelector<IHtmlButtonElement>(HomePage.SearchButton.Criteria) ?? throw new Exception("Unable to find the submit button on search form");
 
-            //var formResponse = await _client.SendAsync(
-            //    formElement,
-            //    formButton,
-            //    new Dictionary<string, string>
-            //    {
-            //        ["searchKeyWord"] = searchTerm
-            //    });
+        //var formResponse = await _client.SendAsync(
+        //    formElement,
+        //    formButton,
+        //    new Dictionary<string, string>
+        //    {
+        //        ["searchKeyWord"] = searchTerm
+        //    });
 
-            //_logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
-            //_logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
+        //_logger.WriteLine("SendAsync client base address: " + _client.BaseAddress);
+        //_logger.WriteLine("SendAsync request message: " + formResponse.RequestMessage!.ToString());
 
-            //var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
+        //var resultsPage = await HtmlHelpers.GetDocumentAsync(formResponse);
 
-            //_logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
+        //_logger.WriteLine("Document: " + resultsPage.Body!.OuterHtml);
 
-            //// using the selenium selector under the hood
-            //var thingToTest = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
-            //thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
-        }
+        //// using the selenium selector under the hood
+        //var thingToTest = resultsPage.GetElementText(HomePage.SearchNoResultText.Criteria);
+        //thingToTest.Should().Contain("Sorry no results found please amend your search criteria");
+        //    }
     }
 }
