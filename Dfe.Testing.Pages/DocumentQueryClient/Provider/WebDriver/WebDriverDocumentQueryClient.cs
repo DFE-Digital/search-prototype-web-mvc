@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Selector.Extensions;
+using Microsoft.Extensions.Options;
+using OpenQA.Selenium;
 using System.Collections.ObjectModel;
 
 namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
@@ -25,7 +27,6 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
 
     private sealed class WebDriverDocumentPart : IDocumentPart
     {
-        private const string childOfDocumentXpathPrefix = ".//";
         private readonly IWebElement _element;
 
         public WebDriverDocumentPart(IWebElement element)
@@ -52,18 +53,13 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         public IEnumerable<IDocumentPart> GetChildren()
             => WrapElementsAsDocumentPart(
                 FindMany(
-                    CreateXPathSelector(childOfDocumentXpathPrefix)));
+                    AsXPath(new ChildXPathSelector())));
 
         private WebDriverDocumentPart FindDocumentPart(IElementSelector selector)
         {
-            const string entireDocumentPrefix = "//";
-            var selectWith = selector.ToSelector();
-
-            By webDriverSelector =
-                // infer if the locator mechanism is xpath
-                (selectWith.StartsWith(entireDocumentPrefix) || selectWith.StartsWith(childOfDocumentXpathPrefix)) ?
-                    CreateXPathSelector(selectWith) :
-                    CreateCssSelector(selectWith);
+            By webDriverSelector = selector.IsSelectorXPathConvention() ?
+                    AsXPath(selector) :
+                    AsCssSelector(selector);
 
             // TODO pass in an error message into the collection extensions?
             return WrapElementsAsDocumentPart(
@@ -73,13 +69,63 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
                     .Single();
         }
 
-        private ReadOnlyCollection<IWebElement> FindMany(By by)  => _element.FindElements(by) ?? Array.Empty<IWebElement>().AsReadOnly();
+        private ReadOnlyCollection<IWebElement> FindMany(By by) => _element.FindElements(by) ?? Array.Empty<IWebElement>().AsReadOnly();
 
-        private static IEnumerable<WebDriverDocumentPart> WrapElementsAsDocumentPart(IEnumerable<IWebElement> elements) 
+        private static IEnumerable<WebDriverDocumentPart> WrapElementsAsDocumentPart(IEnumerable<IWebElement> elements)
             => elements.Select(
                 (element) => new WebDriverDocumentPart(element));
 
-        private static By CreateXPathSelector(string selector) => By.XPath(selector);
-        private static By CreateCssSelector(string selector) => By.CssSelector(selector);
+        private static By AsXPath(IElementSelector selector) => By.XPath(selector.ToSelector());
+        private static By AsCssSelector(IElementSelector selector) => By.CssSelector(selector.ToSelector());
     }
+}
+
+internal interface IWebDriverProvider
+{
+    // TODO consider a wrapper around operations to not leak WebDriver out
+    Task<IWebDriver> CreateWebDriver(WebDriverSessionOptions options);
+}
+
+public sealed class WebDriverProvider : IWebDriverProvider
+{
+    private readonly IOptions<WebDriverSessionOptions> _defaultWebDriverSessionOptions;
+
+    public WebDriverProvider(IOptions<WebDriverSessionOptions> defaultWebDriverSessionOptions)
+    {
+        _defaultWebDriverSessionOptions = defaultWebDriverSessionOptions;
+    }
+    public Task<IWebDriver> CreateWebDriver(WebDriverSessionOptions options)
+    {
+        throw new NotImplementedException();
+    }
+}
+// TODO consder an external bindable object for JSON configuration which we validate and map to our internal WebDriverSessionOptions
+
+public class WebDriverSessionOptions
+{
+    public BrowserType BrowserType { get; set; }
+    public TimeSpan PageLoadTimeout { get; set; }
+    public TimeSpan RequestTimeout { get; set; }
+    public bool IsNetworkInterceptionEnabled { get; set; }
+    // TODO should the options be a list or dict<list> mapping? { chrome: { ... }, { edge: { ... }, {default: {...}
+    public IDictionary<BrowserType, IEnumerable<string>> BrowserOptions { get; set; } = new Dictionary<BrowserType, IEnumerable<string>>();
+}
+
+public enum BrowserType
+{
+    Chrome,
+    Firefox,
+    Edge
+}
+
+internal static class BrowserTypeExtensions
+{
+    internal static string ToBrowserName(this BrowserType browserType)
+        => browserType switch
+        {
+            BrowserType.Chrome => "chrome",
+            BrowserType.Firefox => "firefox",
+            BrowserType.Edge => "edge",
+            _ => throw new NotImplementedException($"unsupported browser type {browserType}")
+        };
 }
