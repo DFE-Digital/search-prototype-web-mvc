@@ -30,7 +30,7 @@
         /// Determines the previous page number and defaults
         /// to the last page number if the current page is the last page.
         /// </summary>
-        public int NextPageNumber => (CurrentPageNumber < TotalNumberOfPages) ? CurrentPageNumber + 1 : TotalNumberOfPages;
+        public int? NextPageNumber => (CurrentPageNumber < TotalNumberOfPages) ? CurrentPageNumber + 1 : null;
 
         /// <summary>
         /// Determines the total number of pages available for pagination.
@@ -50,7 +50,9 @@
         /// <summary>
         /// Determines whether the current page is the last page in the sequence.
         /// </summary>
-        public bool IsLastPage => CurrentPageNumber == TotalNumberOfPages;
+        //public bool IsLastPage => CurrentPageNumber == TotalNumberOfPages;
+
+        public bool IsLastPage => NextPageNumber == null;
 
         /// <summary>
         /// Determines whether the current page is the first page in the sequence.

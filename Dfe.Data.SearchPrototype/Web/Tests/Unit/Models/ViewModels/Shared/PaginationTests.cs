@@ -51,7 +51,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             };
 
             // act
-            int result = pagination.NextPageNumber;
+            int? result = pagination.NextPageNumber;
 
             // assert
             result.Should().Be(12);
@@ -69,10 +69,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             };
 
             // act
-            int result = pagination.NextPageNumber;
-
+            int? result = pagination.NextPageNumber;
+            bool isLastPage = pagination.IsLastPage; 
             // assert
-            result.Should().Be(12);
+            result.Should().Be(null);
+            isLastPage.Should().BeTrue();
         }
 
         [Fact]

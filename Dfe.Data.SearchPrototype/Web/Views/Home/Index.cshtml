@@ -74,7 +74,7 @@
         @if (Model.HasResults)
         {
             <div class="govuk-grid-column-two-thirds" id="results">
-                <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount of @Model.Pagination.TotalRecordCount @(Model.Pagination.TotalRecordCount > 1 ? "results" : "result")</h3>
+                <h3 class="govuk-heading-m" id="search-results-count">@Model.SearchResultsCount of @Model.Pagination?.TotalRecordCount @(Model.Pagination?.TotalRecordCount > 1 ? "results" : "result")</h3>
                 <div style="padding-bottom: 10px"></div>
                 @* pagination *@
                 @await Html.PartialAsync("_pagination", Model.Pagination)
