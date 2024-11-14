@@ -22,7 +22,7 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithCurrentPageInLowerPaddingBoundry_ShowsCorrectPaginationElements()
+    public async Task Pagination_WithCurrentPageInLowerPaddingBoundary_ShowsCorrectPaginationElements()
     {
         //The result of this test should create the following sequence: 1,2,3,4,5 ... 8 next>>
         //
@@ -106,7 +106,7 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithCurrentPageOutsideLowerAndUpperBoundry_ShowsCorrectPaginationElements()
+    public async Task Pagination_WithCurrentPageOutsideLowerAndUpperBoundary_ShowsCorrectPaginationElements()
     {
         //The result of this test should create the following sequence: <<previous 1 ... 19,20,21,22,23 ... 31 next>>
         //
@@ -189,7 +189,7 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithCurrentPageInsideUpperBoundry_ShowsCorrectPaginationElements()
+    public async Task Pagination_WithCurrentPageInsideUpperBoundary_ShowsCorrectPaginationElements()
     {
         //The result of this test should create the following sequence: <<previous 1 ... 12 13 14 15 16
         //

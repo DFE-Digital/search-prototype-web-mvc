@@ -17,7 +17,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             };
 
             // act
-            int result = pagination.PreviousPageNumber;
+            int? result = pagination.PreviousPageNumber;
 
             // assert
             result.Should().Be(1);
@@ -33,10 +33,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             };
 
             // act
-            int result = pagination.PreviousPageNumber;
-
+            int? result = pagination.PreviousPageNumber;
+            bool isFirstPage = pagination.IsFirstPage;
             // assert
-            result.Should().Be(1);
+            result.Should().Be(null);
+            isFirstPage.Should().BeTrue();
         }
 
         [Fact]
@@ -177,7 +178,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
 
             Pagination pagination = new(mockPager.Object)
             {
-                TotalRecordCount = 20,
+                TotalRecordCount = 10,
                 RecordsPerPage = 10
             };
 

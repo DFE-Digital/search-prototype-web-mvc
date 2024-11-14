@@ -1,4 +1,7 @@
-﻿@* @* partial view for pagination*@
+﻿@using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+@model Pagination
+
+@* @* partial view for pagination*@
 <style>
     button.paginationButton {
         background: none;
@@ -22,7 +25,6 @@
                         name="PageNumber"
                         value=@Model.PreviousPageNumber
                         class="paginationButton"
-                        value=@Model.PreviousPageNumber
                         id="previous-page">
                     « previous
                 </button>
@@ -33,7 +35,6 @@
                         name="PageNumber"
                         value=@Model.FirstPageNumber
                         class="paginationButton"
-                        value=@Model.FirstPageNumber
                         id="first-page">
                     @Model.FirstPageNumber
                 </button>

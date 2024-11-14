@@ -28,7 +28,7 @@ public class SearchPagePresentationTests : SharedTestFixture
             .ReturnsAsync(useCaseResponse);
 
         // act
-        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyWord=anything");
+        var resultsPage = await _context.OpenAsync($"{homeUri}?searchKeyword=anything");
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchNoResultText.Criteria)!

@@ -17,13 +17,16 @@
         /// <summary>
         /// Determines whether the current page falls within the lower paging boundary,
         /// i.e. less than 2 (given the constrained page sequence padding size).
+        /// Used to display "first page button" if current page is at least 3 
+        /// "first page button ... 3 4 5 6 7 ...last page button"
+        /// Determines if the first page of page sequence is less than pageSequencePaddingSize(2)
+        /// 2 3 4 5 6
         /// </summary>
         /// <param name="currentPageNumber">
         /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
-        /// The total number of pages available based on the total number of records
-        /// and the page sequence width.
+        /// The total number of pages available.
         /// </param>
         /// <returns>
         /// True or false based on whether the condition is met (i.e. the
@@ -36,13 +39,17 @@
         /// <summary>
         /// Determines whether the current page falls on the lower paging threshold,
         /// i.e. is equal to padding size + 1 (given the constrained page sequence padding size of 2).
+        ///  /// Determines if the first page of page sequence is less than pageSequencePaddingSize(2) + 1
+        ///  to display elipsis in front 
+        ///  i.e page sequence 3 4 5 6 7 would be " 1 ... 3 4 5 6 7 ... last page"
+        ///  if less than no elipsis would show
+        ///  
         /// </summary>
         /// <param name="currentPageNumber">
         /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
-        /// The total number of pages available based on the total number of records
-        /// and the page sequence width.
+        /// The total number of pages available.
         /// </param>
         /// <returns>
         /// True or false based on whether the condition is met (i.e. the
@@ -61,8 +68,7 @@
         /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
-        /// The total number of pages available based on the total number of records
-        /// and the page sequence width.
+        /// The total number of pages available.
         /// </param>
         /// <returns>
         /// True or false based on whether the condition is met (i.e. the
@@ -83,8 +89,7 @@
         /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
-        /// The total number of pages available based on the total number of records
-        /// and the page sequence width.
+        /// The total number of pages available.
         /// </param>
         /// <returns>
         /// True or false based on whether the condition is met (i.e. the
@@ -106,8 +111,7 @@
         /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
-        /// The total number of pages available based on the total number of records
-        /// and the page sequence width.
+        /// The total number of pages available.
         /// </param>
         /// <returns>
         /// An integer array which represents the pages to be contained within a given pagination sequence.
@@ -142,8 +146,7 @@
         /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
-        /// The total number of pages available based on the total number of records
-        /// and the page sequence width.
+        /// The total number of pages available.
         /// </param>
         /// <returns>
         /// The first page available within the given pagination sequence.

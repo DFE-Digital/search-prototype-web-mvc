@@ -26,7 +26,7 @@ builder.Services.AddGovUkFrontend();
 //
 builder.Services.AddDefaultSearchFilterServices(builder.Configuration);
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddCognitiveSearchAdaptorServices();// builder.Configuration);
+builder.Services.AddCognitiveSearchAdaptorServices();
 builder.Services.AddSearchForEstablishmentServices(builder.Configuration);
 builder.Services.AddScoped<ISearchResultsFactory, SearchResultsFactory>();
 builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?>, EstablishmentResultsToEstablishmentsViewModelMapper>();

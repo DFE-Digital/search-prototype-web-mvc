@@ -24,7 +24,7 @@
         /// Determines the previous page number and defaults to one
         /// if the current page is the first page.
         /// </summary>
-        public int PreviousPageNumber => (CurrentPageNumber > 1) ? CurrentPageNumber - 1 : 1;
+        public int? PreviousPageNumber => (CurrentPageNumber > 1) ? CurrentPageNumber - 1 : null;
 
         /// <summary>
         /// Determines the previous page number and defaults
@@ -40,7 +40,7 @@
         /// <summary>
         /// Determines whether pagination can be applied i.e. page sequence length has values.
         /// </summary>
-        public bool IsPageable => CurrentPageSequence.Length > 1;
+        public bool IsPageable => TotalNumberOfPages > 1;
 
         /// <summary>
         /// Sets the default first page number to 1.
@@ -57,7 +57,7 @@
         /// <summary>
         /// Determines whether the current page is the first page in the sequence.
         /// </summary>
-        public bool IsFirstPage => CurrentPageNumber == FirstPageNumber;
+        public bool IsFirstPage => PreviousPageNumber == null;
 
         /// <summary>
         /// Determines the current page sequence (i.e. array of page numbers)
@@ -68,7 +68,7 @@
 
         /// <summary>
         /// Determines whether the current page falls within the lower paging
-        /// boundary, given the total number of pages provisioned.
+        /// boundary, given the total number of pages.
         /// </summary>
         public bool CurrentPageInLowerPagingBoundary =>
             pager.IsCurrentPageInLowerPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
@@ -93,9 +93,7 @@
             pager.IsCurrentPageInUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
-        /// Gets the total number of pages available based on the Total record count divided by the number
-        /// of records allowed per-page. Using the modulus operator, if we have a remainder greater than
-        /// zero then we can expect to provision an extra page which may be partially provisioned with records.
+        /// Gets the total number of pages.
         /// </summary>
         /// <returns>
         /// The calculated number of pages available.

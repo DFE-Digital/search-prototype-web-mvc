@@ -47,7 +47,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
         [Theory]
         [InlineData(3, 113, new int[] { 1, 2, 3, 4, 5 })]
         [InlineData(2, 113, new int[] { 1, 2, 3, 4, 5 })]
-        public void MapFrom_WithCurrentPageInLowerPageBoundry(
+        public void MapFrom_WithCurrentPageInLowerPageBoundary(
             int currentPage, int totalRecordCount, int[] expectedPageSequence)
         {
             // act
@@ -66,7 +66,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
         [Theory]
         [InlineData(12, 113, new int[] { 8, 9, 10, 11, 12 })]
         [InlineData(11, 113, new int[] { 8, 9, 10, 11, 12 })]
-        public void MapFrom_WithCurrentPageInUpperPageBoundry(
+        public void MapFrom_WithCurrentPageInUpperPageBoundary(
             int currentPage, int totalRecordCount, int[] expectedPageSequence)
         {
             // act
