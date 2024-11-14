@@ -70,14 +70,14 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
         public string Text
         {
-            get => _element.TextContent;
+            get => _element.TextContent ?? string.Empty;
             set => _element.TextContent = value;
         }
 
-        public string GetAttribute(string attributeName)
+        public string? GetAttribute(string attributeName)
         {
             ArgumentNullException.ThrowIfNull(attributeName);
-            return _element.GetAttribute(attributeName) ?? string.Empty;
+            return _element.GetAttribute(attributeName);
         }
 
         public IDictionary<string, string> GetAttributes()
