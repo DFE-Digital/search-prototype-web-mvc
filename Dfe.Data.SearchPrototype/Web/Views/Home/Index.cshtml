@@ -1,7 +1,6 @@
 ﻿@using Dfe.Data.SearchPrototype.Web.Models.ViewModels
-@using Microsoft.AspNetCore.Mvc.Localization
 @model SearchResults
-@inject IViewLocalizer Localizer;
+
 @{
     ViewData["Title"] = "Search Results";
 
@@ -10,13 +9,10 @@
 <form asp-action="Index" asp-controller="Home" method="get" id="search-establishments-form">
     @* search component *@
     @await Html.PartialAsync("_SearchComponent")
-    @* end of search component *@
 
     @* filters *@
     @await Html.PartialAsync("_FiltersComponent", Model)
-    @* end of filters *@
-    
+
     @* display results *@
     @await Html.PartialAsync("_DisplayResultsComponent", Model)
-    @* end of display results *@
 </form>
