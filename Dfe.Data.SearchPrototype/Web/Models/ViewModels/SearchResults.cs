@@ -37,7 +37,7 @@ public sealed class SearchResults
     public int SearchResultsCount => SearchItems?.Count ?? 0;
 
     /// <summary>
-    /// 
+    /// View model to deal with pagination for search results.
     /// </summary>
     public Pagination? Pagination { get; set; }
 }

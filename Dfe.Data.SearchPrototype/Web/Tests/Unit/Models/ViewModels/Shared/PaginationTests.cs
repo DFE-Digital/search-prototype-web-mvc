@@ -95,7 +95,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
         }
 
         [Fact]
-        public void TotalNumberOfPages_WithTotalRecordsLessThanRecordsPerPage_ReturnsMultiplePages()
+        public void TotalNumberOfPages_WithTotalRecordsLessThanRecordsPerPage_ReturnsOnePage()
         {
             // arrange
             Pagination pagination = new(new Mock<IPager>().Object)
@@ -177,23 +177,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             mockPager.Setup(pager => pager.GetPageSequence(It.IsAny<int>(), It.IsAny<int>())).Returns([1]);
 
             Pagination pagination = new(mockPager.Object)
-            {
-                TotalRecordCount = 10,
-                RecordsPerPage = 10
-            };
-
-            // act
-            bool result = pagination.IsPageable;
-
-            // assert
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsPageable_WithMoreThanOnePage_ReturnsFalse()
-        {
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
             {
                 TotalRecordCount = 10,
                 RecordsPerPage = 10
