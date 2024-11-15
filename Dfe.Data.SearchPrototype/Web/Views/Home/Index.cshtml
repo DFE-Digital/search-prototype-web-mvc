@@ -7,12 +7,27 @@
 }
 
 <form asp-action="Index" asp-controller="Home" method="get" id="search-establishments-form">
+
     @* search component *@
     @await Html.PartialAsync("_SearchComponent")
 
-    @* filters *@
-    @await Html.PartialAsync("_FiltersComponent", Model)
-
-    @* display results *@
-    @await Html.PartialAsync("_DisplayResultsComponent", Model)
+    @if (Model != null)
+    {
+        @if (Model.HasResults)
+        {
+            @* filters *@
+            @await Html.PartialAsync("_FiltersComponent", Model)
+        }
+        @if (Model.HasResults)
+        {
+            @* display results *@
+            @await Html.PartialAsync("_DisplayResultsComponent", Model)
+        }
+        else
+        {
+            <div class="govuk-grid-column-two-thirds" id="no-results">
+                <p>Sorry no results found please amend your search criteria</p>
+            </div>
+        }
+    }
 </form>
