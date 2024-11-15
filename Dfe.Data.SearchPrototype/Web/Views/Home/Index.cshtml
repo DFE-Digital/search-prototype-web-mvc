@@ -13,7 +13,7 @@
 
     @if (Model != null)
     {
-        @if (Model.HasResults)
+        @if (Model.HasFilters)
         {
             @* filters *@
             @await Html.PartialAsync("_FiltersComponent", Model)

@@ -30,4 +30,5 @@ public class SearchResults
     /// Property determining the number of search results.
     /// </summary>
     public int SearchResultsCount => SearchItems?.Count ?? 0;
+    public bool HasFilters => Facets?.Count > 0 ? true : false;
 }
