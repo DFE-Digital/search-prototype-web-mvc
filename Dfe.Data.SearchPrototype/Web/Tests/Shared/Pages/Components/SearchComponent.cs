@@ -54,4 +54,9 @@ public sealed class SearchComponent : ComponentBase
                 query: new ElementSelector("#no-results"),
                 queryScope: Container,
                 Mapper: (t) => t.Text.Trim()));
+
+    public SearchComponent SearchForEstablishmentWith(string term)
+    {
+        return this;
+    }
 }

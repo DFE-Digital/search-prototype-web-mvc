@@ -20,7 +20,7 @@ public sealed class ExampleUITest : BaseEndToEndTest
     // internal logic across providers to have a CachedDocumentFactory?
 
     [Fact]
-    public async Task TestConsumptionOf_FullQUeryClient_AsyncScope()
+    public async Task SearchResults()
     {
         HttpRequestMessage request = new()
         {
@@ -28,6 +28,6 @@ public sealed class ExampleUITest : BaseEndToEndTest
         };
 
         var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(request);
-        homePage.Search.GetSubheading().Should().Be("Search establishments");
+        homePage.Search.SearchForEstablishmentWith("Col");
     }
 }
