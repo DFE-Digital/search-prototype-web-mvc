@@ -15,4 +15,8 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Selenium.WebDriver" Version="4.25.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Dfe.Testing.Pages.UnitTests" />
+	</ItemGroup>
 </Project>
