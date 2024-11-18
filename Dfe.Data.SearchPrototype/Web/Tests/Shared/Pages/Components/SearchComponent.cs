@@ -25,21 +25,21 @@ public sealed class SearchComponent : ComponentBase
             new QueryCommand<string>(
                     query: new ElementSelector("#search-page-search-establishments-form-label"),
                     queryScope: Container,
-                    processor: (t) => t.Text));
+                    Mapper: (t) => t.Text));
 
     public string GetSubheading()
         => DocumentQueryClient.Query(
             new QueryCommand<string>(
                 query: new ElementSelector("#searchKeyWord-hint"),
                 queryScope: Container,
-                processor: (t) => t.Text));
+                Mapper: (t) => t.Text));
 
     public Input GetSearchInput()
         => DocumentQueryClient.Query(
             new QueryCommand<Input>(
                 query: new ElementSelector("#searchKeyWord"),
                 queryScope: Container,
-                processor: (t) => new()
+                Mapper: (t) => new()
                 {
                     Name = t.GetAttribute("name"),
                     Value = t.GetAttribute("value"),
@@ -53,5 +53,5 @@ public sealed class SearchComponent : ComponentBase
             new QueryCommand<string>(
                 query: new ElementSelector("#no-results"),
                 queryScope: Container,
-                processor: (t) => t.Text.Trim()));
+                Mapper: (t) => t.Text.Trim()));
 }

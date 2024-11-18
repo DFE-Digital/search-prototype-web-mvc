@@ -1,9 +1,23 @@
-﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
+
+namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
 
 internal sealed class WebDriverDocumentQueryClientProvider : IDocumentQueryClientProvider
 {
-    public Task<IDocumentQueryClient> CreateDocumentClientAsync(HttpRequestMessage httpRequestMessage)
+    private readonly IWebDriverAdaptorProvider _webDriverAdaptorProvider;
+
+    public WebDriverDocumentQueryClientProvider(IWebDriverAdaptorProvider webDriverAdaptorProvider)
     {
-        throw new NotImplementedException();
+        _webDriverAdaptorProvider = webDriverAdaptorProvider;
+    }
+    public async Task<IDocumentQueryClient> CreateDocumentClientAsync(HttpRequestMessage httpRequestMessage)
+    {
+        ArgumentNullException.ThrowIfNull(httpRequestMessage, nameof(httpRequestMessage));
+        ArgumentNullException.ThrowIfNull(httpRequestMessage.RequestUri, nameof(httpRequestMessage.RequestUri));
+        var webDriver = await _webDriverAdaptorProvider.CreateAsync();
+        ArgumentNullException.ThrowIfNull(webDriver, nameof(webDriver));
+
+        await webDriver.NavigateToAsync(httpRequestMessage.RequestUri);
+        return new WebDriverDocumentQueryClient(webDriver);
     }
 }

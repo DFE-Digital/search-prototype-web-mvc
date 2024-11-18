@@ -10,18 +10,18 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
     public TResult Query<TResult>(QueryCommand<TResult> command)
     {
-        if (command.QueryScope == null)
+        if (command.QueryInScope == null)
         {
-            return command.Processor(
+            return command.MapToResult(
                 new AngleSharpDocumentPart(
                     element: QueryFromScope(
                         _htmlDocument, command.Query)));
         }
 
         IElement scoped = _htmlDocument.QuerySelector(
-            command.QueryScope.ToSelector()) ?? throw new ArgumentException($"could not find document part {command.QueryScope.ToSelector()}");
+            command.QueryInScope.ToSelector()) ?? throw new ArgumentException($"could not find document part {command.QueryInScope.ToSelector()}");
 
-        return command.Processor(
+        return command.MapToResult(
             new AngleSharpDocumentPart(
                 QueryFromScope(
                     scoped, command.Query)));
@@ -30,19 +30,19 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
     public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> command)
     {
-        if (command.QueryScope == null)
+        if (command.QueryInScope == null)
         {
             return QueryForMultipleFromScope(_htmlDocument, command.Query)
                     .Select(
-                        (element) => command.Processor(new AngleSharpDocumentPart(element)));
+                        (element) => command.MapToResult(new AngleSharpDocumentPart(element)));
         }
 
-        var scope = _htmlDocument.QuerySelector(command.QueryScope.ToSelector())
-            ?? throw new ArgumentNullException($"scope not found {command.QueryScope.ToSelector()}", nameof(command.QueryScope));
+        var scope = _htmlDocument.QuerySelector(command.QueryInScope.ToSelector())
+            ?? throw new ArgumentNullException($"scope not found {command.QueryInScope.ToSelector()}", nameof(command.QueryInScope));
 
         var store = QueryForMultipleFromScope(scope, command.Query)
                 .Select(
-                    (element) => command.Processor(new AngleSharpDocumentPart(element)));
+                    (element) => command.MapToResult(new AngleSharpDocumentPart(element)));
         return store;
     }
 

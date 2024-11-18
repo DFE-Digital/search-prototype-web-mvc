@@ -21,7 +21,7 @@ internal sealed class TestServices
             .AddTransient<NavigationBarComponent>()
             .AddTransient<HomePage>()
             .AddTransient<SearchResultsComponent>()
-            .AddPages<Program>();
+            .AddHttpServices<Program>();
 
         _serviceProvider = services.BuildServiceProvider();
     }

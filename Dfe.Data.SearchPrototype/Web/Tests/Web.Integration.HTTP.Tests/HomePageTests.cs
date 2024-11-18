@@ -41,9 +41,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
 
             // Assert   
             Link expectedHeadingLink = new(
-                link: HOME_ROUTE,
-                text: "Search prototype",
-                opensInNewTab: false);
+                LinkValue: HOME_ROUTE,
+                Text: "Search prototype",
+                OpensInNewTab: false);
 
             homePage.NavigationBar.GetHeading().Should().Be(expectedHeadingLink);
         }
@@ -62,9 +62,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
 
             // Assert
             Link headingLink = new(
-                link: HOME_ROUTE,
-                text: "Home",
-                opensInNewTab: false);
+                LinkValue: HOME_ROUTE,
+                Text: "Home",
+                OpensInNewTab: false);
 
             homePage.NavigationBar.GetHome().Should().Be(headingLink);
         }

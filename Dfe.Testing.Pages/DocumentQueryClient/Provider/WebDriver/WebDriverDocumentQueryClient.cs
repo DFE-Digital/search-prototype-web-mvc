@@ -1,5 +1,4 @@
-﻿using Dfe.Testing.Pages.DocumentQueryClient.Selector.Extensions;
-using Microsoft.Extensions.Options;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
 using OpenQA.Selenium;
 using System.Collections.ObjectModel;
 
@@ -7,43 +6,63 @@ namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
 
 internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
 {
-    private readonly IWebDriver _webDriver;
+    private readonly IWebDriverAdaptor _webDriverAdaptor;
 
-    public WebDriverDocumentQueryClient(IWebDriver webDriver)
+    public WebDriverDocumentQueryClient(IWebDriverAdaptor webDriverAdaptor)
     {
-        ArgumentNullException.ThrowIfNull(webDriver);
-        _webDriver = webDriver;
+        ArgumentNullException.ThrowIfNull(webDriverAdaptor);
+        _webDriverAdaptor = webDriverAdaptor;
     }
 
     public TResult Query<TResult>(QueryCommand<TResult> queryCommand)
     {
-        throw new NotImplementedException();
+        IDocumentPart? documentPartToMap =
+            WebDriverDocumentPart.Create(
+                queryCommand.QueryInScope == null ?
+                    _webDriverAdaptor.FindElement(queryCommand.Query) :
+                    _webDriverAdaptor.FindElement(queryCommand.QueryInScope)
+                        .FindElement(
+                            WebDriverByLocatorHelpers.CreateLocator(queryCommand.Query)));
+
+        return queryCommand.MapToResult(documentPartToMap);
     }
 
     public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> queryCommand)
     {
-        throw new NotImplementedException();
+        IEnumerable<IWebElement> queryResults = 
+            queryCommand.QueryInScope == null ?
+                _webDriverAdaptor.FindElements(queryCommand.Query) :
+                _webDriverAdaptor.FindElement(queryCommand.QueryInScope)
+                    .FindElements(
+                        WebDriverByLocatorHelpers.CreateLocator(queryCommand.Query));
+
+        return queryResults
+            .Select(WebDriverDocumentPart.Create)
+            .Select(t => queryCommand.MapToResult(t));
     }
 
     private sealed class WebDriverDocumentPart : IDocumentPart
     {
-        private readonly IWebElement _element;
+        private readonly IWebElement _wrappedElement;
 
         public WebDriverDocumentPart(IWebElement element)
         {
-            _element = element;
+            ArgumentNullException.ThrowIfNull(element);
+            _wrappedElement = element;
         }
+
+        public static WebDriverDocumentPart Create(IWebElement element) => new(element);
 
         public string Text
         {
-            get => _element.Text ?? string.Empty;
-            set => _element.SendKeys(value);
+            get => _wrappedElement.Text ?? string.Empty;
+            set => _wrappedElement.SendKeys(value);
         }
 
         public string? GetAttribute(string attributeName)
         {
             ArgumentException.ThrowIfNullOrEmpty(attributeName);
-            return _element.GetAttribute(attributeName);
+            return _wrappedElement.GetAttribute(attributeName);
         }
 
         public IDictionary<string, string> GetAttributes() => throw new NotImplementedException("TODO GetAttributes in WebDriver - parsing over the top or JS");
@@ -51,81 +70,23 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         public IDocumentPart? GetChild(IElementSelector selector) => FindDocumentPart(selector);
 
         public IEnumerable<IDocumentPart> GetChildren()
-            => WrapElementsAsDocumentPart(
+            => AsDocumentPart(
                 FindMany(
-                    AsXPath(new ChildXPathSelector())));
+                    WebDriverByLocatorHelpers.AsXPath(new ChildXPathSelector())));
 
         private WebDriverDocumentPart FindDocumentPart(IElementSelector selector)
-        {
-            By webDriverSelector = selector.IsSelectorXPathConvention() ?
-                    AsXPath(selector) :
-                    AsCssSelector(selector);
-
             // TODO pass in an error message into the collection extensions?
-            return WrapElementsAsDocumentPart(
-                FindMany(webDriverSelector)
-                    .ThrowIfNullOrEmpty()
-                    .ThrowIfMultiple())
-                    .Single();
-        }
+            => AsDocumentPart(
+                FindMany(
+                    WebDriverByLocatorHelpers.CreateLocator(selector))
+                .ThrowIfNullOrEmpty()
+                .ThrowIfMultiple())
+                .Single();
 
-        private ReadOnlyCollection<IWebElement> FindMany(By by) => _element.FindElements(by) ?? Array.Empty<IWebElement>().AsReadOnly();
+        private ReadOnlyCollection<IWebElement> FindMany(By by) => _wrappedElement.FindElements(by) ?? Array.Empty<IWebElement>().AsReadOnly();
 
-        private static IEnumerable<WebDriverDocumentPart> WrapElementsAsDocumentPart(IEnumerable<IWebElement> elements)
-            => elements.Select(
-                (element) => new WebDriverDocumentPart(element));
-
-        private static By AsXPath(IElementSelector selector) => By.XPath(selector.ToSelector());
-        private static By AsCssSelector(IElementSelector selector) => By.CssSelector(selector.ToSelector());
+        private static IEnumerable<WebDriverDocumentPart> AsDocumentPart(IEnumerable<IWebElement> elements)
+            => elements?.Select(
+                (element) => new WebDriverDocumentPart(element)) ?? [];
     }
-}
-
-internal interface IWebDriverProvider
-{
-    // TODO consider a wrapper around operations to not leak WebDriver out
-    Task<IWebDriver> CreateWebDriver(WebDriverSessionOptions options);
-}
-
-public sealed class WebDriverProvider : IWebDriverProvider
-{
-    private readonly IOptions<WebDriverSessionOptions> _defaultWebDriverSessionOptions;
-
-    public WebDriverProvider(IOptions<WebDriverSessionOptions> defaultWebDriverSessionOptions)
-    {
-        _defaultWebDriverSessionOptions = defaultWebDriverSessionOptions;
-    }
-    public Task<IWebDriver> CreateWebDriver(WebDriverSessionOptions options)
-    {
-        throw new NotImplementedException();
-    }
-}
-// TODO consder an external bindable object for JSON configuration which we validate and map to our internal WebDriverSessionOptions
-
-public class WebDriverSessionOptions
-{
-    public BrowserType BrowserType { get; set; }
-    public TimeSpan PageLoadTimeout { get; set; }
-    public TimeSpan RequestTimeout { get; set; }
-    public bool IsNetworkInterceptionEnabled { get; set; }
-    // TODO should the options be a list or dict<list> mapping? { chrome: { ... }, { edge: { ... }, {default: {...}
-    public IDictionary<BrowserType, IEnumerable<string>> BrowserOptions { get; set; } = new Dictionary<BrowserType, IEnumerable<string>>();
-}
-
-public enum BrowserType
-{
-    Chrome,
-    Firefox,
-    Edge
-}
-
-internal static class BrowserTypeExtensions
-{
-    internal static string ToBrowserName(this BrowserType browserType)
-        => browserType switch
-        {
-            BrowserType.Chrome => "chrome",
-            BrowserType.Firefox => "firefox",
-            BrowserType.Edge => "edge",
-            _ => throw new NotImplementedException($"unsupported browser type {browserType}")
-        };
 }

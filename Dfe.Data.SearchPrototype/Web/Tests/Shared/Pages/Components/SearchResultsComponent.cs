@@ -18,14 +18,14 @@ public sealed class SearchResultsComponent : ComponentBase
             new QueryCommand<string>(
                 query: new ElementSelector("#search-results-count"),
                 queryScope: Container,
-                processor: (documentPart) => documentPart.Text.Trim()));
+                Mapper: (documentPart) => documentPart.Text.Trim()));
 
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
             new QueryCommand<EstablishmentSearchResult>(
                 query: new ElementSelector("#establishment-search-results > ul"),
                 queryScope: Container,
-                processor: (documentPart) 
+                Mapper: (documentPart) 
                     => new EstablishmentSearchResult(
                         Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),
                         Urn: documentPart.GetChild(new ElementSelector("li:nth-of-type(2) > span"))!.Text.Trim(),

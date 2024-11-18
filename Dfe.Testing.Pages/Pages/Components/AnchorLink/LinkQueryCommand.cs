@@ -10,10 +10,10 @@ public sealed class LinkQueryCommand
 
     private static Func<IDocumentPart, Link> MapToLink =>
         (documentPart)
-            => new Link(
-                link: documentPart.GetAttribute("href"),
-                text: documentPart.Text.Trim(),
-                opensInNewTab: documentPart.GetAttribute("target") == "_blank");
+            => new(
+                LinkValue: documentPart.GetAttribute("href")!,
+                Text: documentPart.Text.Trim(),
+                OpensInNewTab: documentPart.GetAttribute("target") == "_blank");
 
     public Link GetLink(IElementSelector selector, IElementSelector? scope = null)
     {
