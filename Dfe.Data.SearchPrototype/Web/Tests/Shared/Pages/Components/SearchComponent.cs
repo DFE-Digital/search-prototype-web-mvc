@@ -57,6 +57,19 @@ public sealed class SearchComponent : ComponentBase
 
     public SearchComponent SearchForEstablishmentWith(string term)
     {
+        var query = QueryCommandBuilder<NOOPResult>.Create()
+                .WithQuery(new ElementSelector("#searchKeyWord"))
+                .WithScope(Container)
+                .WithProcessor((t) =>
+                {
+                    t.Text = term;
+                    return new NOOPResult();
+                }).Build();
+
+        DocumentQueryClient.Query(query);
         return this;
+    }
+    private sealed class NOOPResult
+    {
     }
 }

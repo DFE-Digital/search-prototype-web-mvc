@@ -12,7 +12,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
     {
         if (command.QueryInScope == null)
         {
-            return command.MapToResult(
+            return command.Processor(
                 new AngleSharpDocumentPart(
                     element: QueryFromScope(
                         _htmlDocument, command.Query)));
@@ -21,7 +21,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         IElement scoped = _htmlDocument.QuerySelector(
             command.QueryInScope.ToSelector()) ?? throw new ArgumentException($"could not find document part {command.QueryInScope.ToSelector()}");
 
-        return command.MapToResult(
+        return command.Processor(
             new AngleSharpDocumentPart(
                 QueryFromScope(
                     scoped, command.Query)));
@@ -34,7 +34,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         {
             return QueryForMultipleFromScope(_htmlDocument, command.Query)
                     .Select(
-                        (element) => command.MapToResult(new AngleSharpDocumentPart(element)));
+                        (element) => command.Processor(new AngleSharpDocumentPart(element)));
         }
 
         var scope = _htmlDocument.QuerySelector(command.QueryInScope.ToSelector())
@@ -42,7 +42,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
         var store = QueryForMultipleFromScope(scope, command.Query)
                 .Select(
-                    (element) => command.MapToResult(new AngleSharpDocumentPart(element)));
+                    (element) => command.Processor(new AngleSharpDocumentPart(element)));
         return store;
     }
 

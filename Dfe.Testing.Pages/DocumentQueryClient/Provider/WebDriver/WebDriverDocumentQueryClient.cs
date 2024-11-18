@@ -24,7 +24,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
                         .FindElement(
                             WebDriverByLocatorHelpers.CreateLocator(queryCommand.Query)));
 
-        return queryCommand.MapToResult(documentPartToMap);
+        return queryCommand.Processor(documentPartToMap);
     }
 
     public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> queryCommand)
@@ -38,7 +38,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
 
         return queryResults
             .Select(WebDriverDocumentPart.Create)
-            .Select(t => queryCommand.MapToResult(t));
+            .Select(t => queryCommand.Processor(t));
     }
 
     private sealed class WebDriverDocumentPart : IDocumentPart
