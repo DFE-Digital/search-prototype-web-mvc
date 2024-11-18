@@ -9,6 +9,18 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 public sealed class SearchComponent : ComponentBase
 {
     internal static ElementSelector Container => new("#search-establishments-form");
+    internal static QueryArgs SearchInput => new(query: new ElementSelector("#searchKeyWord"), scope: Container);
+    internal static QueryArgs Heading => new(
+        query: new ElementSelector("#search-page-search-establishments-form-label"),
+        scope: Container);
+    internal static QueryArgs SubHeading => new(
+        query: new ElementSelector("#searchKeyWord-hint"),
+        scope: Container);
+
+    internal static QueryArgs NoSearchResultsHeading => new(
+        query: new ElementSelector("#no-results"),
+        scope: Container);
+
 
     public SearchComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,
@@ -20,56 +32,22 @@ public sealed class SearchComponent : ComponentBase
 
     public SearchResultsComponent SearchResults { get; }
 
-    public string GetHeading() =>
-        DocumentQueryClient.Query(
-            new QueryCommand<string>(
-                    query: new ElementSelector("#search-page-search-establishments-form-label"),
-                    queryScope: Container,
-                    Mapper: (t) => t.Text));
-
-    public string GetSubheading()
-        => DocumentQueryClient.Query(
-            new QueryCommand<string>(
-                query: new ElementSelector("#searchKeyWord-hint"),
-                queryScope: Container,
-                Mapper: (t) => t.Text));
-
+    public string GetHeading() => DocumentQueryClient.Query(Heading, mapper: (t) => t.Text);
+    public string GetSubheading() => DocumentQueryClient.Query(Heading, mapper: (t) => t.Text);
     public Input GetSearchInput()
-        => DocumentQueryClient.Query(
-            new QueryCommand<Input>(
-                query: new ElementSelector("#searchKeyWord"),
-                queryScope: Container,
-                Mapper: (t) => new()
-                {
-                    Name = t.GetAttribute("name"),
-                    Value = t.GetAttribute("value"),
-                    PlaceHolder = t.GetAttribute("placeholder"),
-                    Type = t.GetAttribute("type")
-                }
-                ));
+        => DocumentQueryClient.Query(SearchInput, mapper: (t) => new Input()
+        {
+            Name = t.GetAttribute("name"),
+            Value = t.GetAttribute("value"),
+            PlaceHolder = t.GetAttribute("placeholder"),
+            Type = t.GetAttribute("type")
+        });
 
-    public string GetNoSearchResultsMessage()
-        => DocumentQueryClient.Query(
-            new QueryCommand<string>(
-                query: new ElementSelector("#no-results"),
-                queryScope: Container,
-                Mapper: (t) => t.Text.Trim()));
+    public string GetNoSearchResultsMessage() => DocumentQueryClient.Query(NoSearchResultsHeading, mapper: (t) => t.Text);
 
     public SearchComponent SearchForEstablishmentWith(string term)
     {
-        var query = QueryCommandBuilder<NOOPResult>.Create()
-                .WithQuery(new ElementSelector("#searchKeyWord"))
-                .WithScope(Container)
-                .WithProcessor((t) =>
-                {
-                    t.Text = term;
-                    return new NOOPResult();
-                }).Build();
-
-        DocumentQueryClient.Query(query);
+        DocumentQueryClient.Run(SearchInput, (input) => input.Text = term);
         return this;
-    }
-    private sealed class NOOPResult
-    {
     }
 }

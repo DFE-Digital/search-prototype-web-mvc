@@ -1,12 +1,4 @@
-﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
-internal interface IWebDriverSessionOptionsBuilder
-{
-    IWebDriverSessionOptionsBuilder WithBrowserType(string browserType);
-    IWebDriverSessionOptionsBuilder WithPageLoadTimeout(int pageLoadTimeoutSeconds);
-    IWebDriverSessionOptionsBuilder WithRequestTimeout(int requestTimeoutSeconds);
-    IWebDriverSessionOptionsBuilder WithNetworkInterception(bool enable);
-    WebDriverSessionOptions Build();
-}
+﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.SessionOptions;
 
 internal sealed class WebDriverSessionOptionsBuilder : IWebDriverSessionOptionsBuilder
 {
@@ -66,14 +58,4 @@ internal sealed class WebDriverSessionOptionsBuilder : IWebDriverSessionOptionsB
             _ => BrowserType.Chrome
         };
     }
-}
-
-public class WebDriverSessionOptions
-{
-    public BrowserType BrowserType { get; set; }
-    public TimeSpan PageLoadTimeout { get; set; }
-    public TimeSpan RequestTimeout { get; set; }
-    public bool IsNetworkInterceptionEnabled { get; set; }
-    // TODO should the options be a list or dict<list> mapping? { chrome: { ... }, { edge: { ... }, {default: {...}
-    public IDictionary<BrowserType, IEnumerable<string>> BrowserOptions { get; set; } = new Dictionary<BrowserType, IEnumerable<string>>();
 }

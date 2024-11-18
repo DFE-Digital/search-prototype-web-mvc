@@ -7,11 +7,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 public sealed class NavigationBarComponent : ComponentBase
 {
     internal static ElementSelector Container => new("#navigation-bar");
-    private readonly LinkQueryCommand _linkCommand;
+    private readonly LinkMapper _linkCommand;
 
     public NavigationBarComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,
-        LinkQueryCommand linkCommand) : base(documentQueryClientAccessor)
+        LinkMapper linkCommand) : base(documentQueryClientAccessor)
     {
         _linkCommand = linkCommand;
     }

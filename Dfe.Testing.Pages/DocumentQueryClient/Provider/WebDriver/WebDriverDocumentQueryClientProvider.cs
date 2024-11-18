@@ -1,4 +1,4 @@
-﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider;
 
 namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
 

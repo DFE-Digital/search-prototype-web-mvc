@@ -1,11 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider.Adaptor;
+using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider.WebDriverFactory;
+using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.SessionOptions;
+using Microsoft.Extensions.Options;
 
-namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
-internal interface IWebDriverAdaptorProvider
-{
-    Task<IWebDriverAdaptor> CreateAsync();
-}
-
+namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider;
 internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider, IDisposable, IAsyncDisposable
 {
     private static readonly SemaphoreSlim _semaphore = new(1, 1);
@@ -26,7 +24,6 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
         _applicationNavigatorAccessor = applicationNavigatorAccessor;
     }
 
-    //TODO WebDriverSessionOptionsBuilder mapping in from an external POCO
     public async Task<IWebDriverAdaptor> CreateAsync()
     {
         //WebDriverSessionOptions options = _webDriverSessionOptionsBuilder.WithNetworkInterception(options.)

@@ -1,4 +1,5 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
+using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider.Adaptor;
 using OpenQA.Selenium;
 using System.Collections.ObjectModel;
 
@@ -14,32 +15,56 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         _webDriverAdaptor = webDriverAdaptor;
     }
 
-    public TResult Query<TResult>(QueryCommand<TResult> queryCommand)
+    public void Run(QueryArgs args, Action<IDocumentPart> handler)
     {
+        if (args.Scope == null)
+        {
+            handler(
+                WebDriverDocumentPart.Create(
+                    Find(args.Query)));
+            return;
+        }
+
+        handler(
+            WebDriverDocumentPart.Create(
+                Find(args.Scope)
+                    .FindElement(
+                        WebDriverByLocatorHelpers.CreateLocator(args.Query))));
+    }
+
+    public TResult Query<TResult>(QueryArgs queryArgs, Func<IDocumentPart, TResult> mapper)
+    {
+        ArgumentNullException.ThrowIfNull(queryArgs);
+        ArgumentNullException.ThrowIfNull(mapper);
         IDocumentPart? documentPartToMap =
             WebDriverDocumentPart.Create(
-                queryCommand.QueryInScope == null ?
-                    _webDriverAdaptor.FindElement(queryCommand.Query) :
-                    _webDriverAdaptor.FindElement(queryCommand.QueryInScope)
+                queryArgs.Query == null ?
+                    _webDriverAdaptor.FindElement(queryArgs.Query!) :
+                    _webDriverAdaptor.FindElement(queryArgs.Scope!)
                         .FindElement(
-                            WebDriverByLocatorHelpers.CreateLocator(queryCommand.Query)));
+                            WebDriverByLocatorHelpers.CreateLocator(queryArgs.Query)));
 
-        return queryCommand.Processor(documentPartToMap);
+        return mapper(documentPartToMap);
     }
 
-    public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> queryCommand)
+    public IEnumerable<TResult> QueryMany<TResult>(QueryArgs queryArgs, Func<IDocumentPart, TResult> mapper)
     {
-        IEnumerable<IWebElement> queryResults = 
-            queryCommand.QueryInScope == null ?
-                _webDriverAdaptor.FindElements(queryCommand.Query) :
-                _webDriverAdaptor.FindElement(queryCommand.QueryInScope)
-                    .FindElements(
-                        WebDriverByLocatorHelpers.CreateLocator(queryCommand.Query));
+        ArgumentNullException.ThrowIfNull(queryArgs);
+        ArgumentNullException.ThrowIfNull(mapper);
+        IEnumerable<IWebElement>? elements =
+                queryArgs.Query == null ?
+                    _webDriverAdaptor.FindElements(queryArgs.Query!) :
+                    _webDriverAdaptor.FindElement(queryArgs.Scope!)
+                        .FindElements(
+                            WebDriverByLocatorHelpers.CreateLocator(queryArgs.Query));
 
-        return queryResults
+        return elements
             .Select(WebDriverDocumentPart.Create)
-            .Select(t => queryCommand.Processor(t));
+            .Select(mapper);
     }
+
+    private IWebElement Find(IElementSelector selector) => _webDriverAdaptor.FindElement(selector);
+
 
     private sealed class WebDriverDocumentPart : IDocumentPart
     {
@@ -88,5 +113,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         private static IEnumerable<WebDriverDocumentPart> AsDocumentPart(IEnumerable<IWebElement> elements)
             => elements?.Select(
                 (element) => new WebDriverDocumentPart(element)) ?? [];
+
+        public void Click() => _wrappedElement.Click();
     }
 }

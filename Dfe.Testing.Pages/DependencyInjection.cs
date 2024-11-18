@@ -1,5 +1,6 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
-using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
+using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider;
+using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.SessionOptions;
 using Microsoft.Extensions.Options;
 
 namespace Dfe.Testing.Pages;
@@ -26,7 +27,7 @@ public static class DependencyInjection
             // Pages
             .AddScoped<IPageFactory, PageFactory>()
             // Common Components
-            .AddTransient<LinkQueryCommand>()
+            .AddTransient<LinkMapper>()
             // Helpers    
             .AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
 

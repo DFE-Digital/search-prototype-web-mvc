@@ -1,9 +1,9 @@
 ﻿namespace Dfe.Testing.Pages.Pages.Components.AnchorLink;
-public sealed class LinkQueryCommand
+public sealed class LinkMapper
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
 
-    public LinkQueryCommand(IDocumentQueryClientAccessor documentQueryClientAccessor)
+    public LinkMapper(IDocumentQueryClientAccessor documentQueryClientAccessor)
     {
         _documentQueryClientAccessor = documentQueryClientAccessor;
     }
@@ -16,14 +16,12 @@ public sealed class LinkQueryCommand
                 OpensInNewTab: documentPart.GetAttribute("target") == "_blank");
 
     public Link GetLink(IElementSelector selector, IElementSelector? scope = null)
-    {
-        QueryCommand<Link> queryCommand = new(selector, MapToLink, scope);
-        return _documentQueryClientAccessor.DocumentQueryClient.Query(queryCommand);
-    }
+        => _documentQueryClientAccessor.DocumentQueryClient.Query(
+            args: new QueryArgs(selector, scope), 
+            mapper: MapToLink);
 
     public IEnumerable<Link> GetMultipleLinks(IElementSelector selector, IElementSelector? scope = null)
-    {
-        QueryCommand<Link> queryCommand = new(selector, MapToLink, scope);
-        return _documentQueryClientAccessor.DocumentQueryClient.QueryMany(queryCommand);
-    }
+        => _documentQueryClientAccessor.DocumentQueryClient.QueryMany(
+            args: new QueryArgs(selector, scope),
+            mapper: MapToLink);
 }

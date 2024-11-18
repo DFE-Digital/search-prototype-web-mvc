@@ -15,21 +15,18 @@ public sealed class SearchResultsComponent : ComponentBase
 
     public string GetResultsHeading()
         => DocumentQueryClient.Query(
-            new QueryCommand<string>(
-                query: new ElementSelector("#search-results-count"),
-                queryScope: Container,
-                Mapper: (documentPart) => documentPart.Text.Trim()));
+            new QueryArgs(
+                query: new ElementSelector("#search-results-count"), scope: Container),
+                mapper: (documentPart) => documentPart.Text.Trim());
 
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
-            new QueryCommand<EstablishmentSearchResult>(
-                query: new ElementSelector("#establishment-search-results > ul"),
-                queryScope: Container,
-                Mapper: (documentPart) 
-                    => new EstablishmentSearchResult(
+            args: new QueryArgs(query: new ElementSelector("#establishment-search-results > ul"), scope: Container),
+            mapper: (documentPart) 
+                => new EstablishmentSearchResult(
                         Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),
                         Urn: documentPart.GetChild(new ElementSelector("li:nth-of-type(2) > span"))!.Text.Trim(),
                         TypeOfEstablishment: documentPart.GetChild(new ElementSelector("li:nth-of-type(4) > span"))!.Text.Trim(),
                         Status: documentPart.GetChild(new ElementSelector("li:nth-of-type(5) > span"))!.Text.Trim(),
-                        Phase: documentPart.GetChild(new ElementSelector("li:nth-of-type(6) > span"))!.Text.Trim())));
+                        Phase: documentPart.GetChild(new ElementSelector("li:nth-of-type(6) > span"))!.Text.Trim()));
 }

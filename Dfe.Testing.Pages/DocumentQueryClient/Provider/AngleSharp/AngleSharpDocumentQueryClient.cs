@@ -1,4 +1,6 @@
-﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
+﻿using AngleSharp.Dom;
+
+namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
 internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 {
     private readonly IHtmlDocument _htmlDocument;
@@ -8,55 +10,80 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         _htmlDocument = document;
     }
 
-    public TResult Query<TResult>(QueryCommand<TResult> command)
+    public void Run(QueryArgs args, Action<IDocumentPart> handler)
     {
-        if (command.QueryInScope == null)
+        if (args.Scope == null)
         {
-            return command.Processor(
-                new AngleSharpDocumentPart(
-                    element: QueryFromScope(
-                        _htmlDocument, command.Query)));
+            handler(
+                AsDocumentPart(
+                    QueryForElementInScope(_htmlDocument, args.Query)));
+            return;
         }
 
-        IElement scoped = _htmlDocument.QuerySelector(
-            command.QueryInScope.ToSelector()) ?? throw new ArgumentException($"could not find document part {command.QueryInScope.ToSelector()}");
-
-        return command.Processor(
-            new AngleSharpDocumentPart(
-                QueryFromScope(
-                    scoped, command.Query)));
-
+        var scope = QueryForElementInScope(scope: _htmlDocument, selector: args.Scope);
+        handler(
+            AsDocumentPart(
+                QueryForElementInScope(scope, args.Query)));
     }
 
-    public IEnumerable<TResult> QueryMany<TResult>(QueryCommand<TResult> command)
+    public TResult Query<TResult>(QueryArgs queryArgs, Func<IDocumentPart, TResult> Mapper)
     {
-        if (command.QueryInScope == null)
-        {
-            return QueryForMultipleFromScope(_htmlDocument, command.Query)
-                    .Select(
-                        (element) => command.Processor(new AngleSharpDocumentPart(element)));
-        }
+        IElement element = queryArgs.Scope == null ?
+            QueryForElementInScope(_htmlDocument, queryArgs.Query) :
+                // find the scope and query within
+                QueryForElementInScope(
+                        scope: QueryForElementInScope(
+                            scope: _htmlDocument,
+                            selector: queryArgs.Scope),
+                        selector: queryArgs.Query);
 
-        var scope = _htmlDocument.QuerySelector(command.QueryInScope.ToSelector())
-            ?? throw new ArgumentNullException($"scope not found {command.QueryInScope.ToSelector()}", nameof(command.QueryInScope));
-
-        var store = QueryForMultipleFromScope(scope, command.Query)
-                .Select(
-                    (element) => command.Processor(new AngleSharpDocumentPart(element)));
-        return store;
+        return Mapper(
+            AsDocumentPart(element));
     }
 
-    private static IElement QueryFromScope(IParentNode parent, IElementSelector queryLocator)
-         => parent.QuerySelectorAll(queryLocator.ToSelector())
-                .ThrowIfNullOrEmpty()
-                .ThrowIfMultiple()
-                .Single();
 
-    private static IEnumerable<IElement> QueryForMultipleFromScope(IParentNode parent, IElementSelector queryLocator)
-         => parent.QuerySelectorAll(
-                    queryLocator.ToSelector())
-                .ThrowIfNullOrEmpty();
+    public IEnumerable<TResult> QueryMany<TResult>(QueryArgs queryArgs, Func<IDocumentPart, TResult> Mapper)
+    {
+        IEnumerable<IElement> elements = queryArgs.Scope == null ?
+            QueryForMultipleElementsFromScope(scope: _htmlDocument, selector: queryArgs.Query) :
+                // find the scope and query within
+                QueryForMultipleElementsFromScope(
+                    scope: QueryForElementInScope(scope: _htmlDocument, selector: queryArgs.Query),
+                    selector: queryArgs.Query);
 
+        return AsDocumentParts(elements)
+            .Select(t => Mapper(t));
+    }
+
+
+
+    private static IElement QueryForElementInScope(IParentNode scope, IElementSelector selector)
+    {
+        var elements = scope.QuerySelectorAll(selector.ToSelector());
+        if (elements == null || elements.Length == 0)
+        {
+            throw new ArgumentException($"No elements found in scope using selector {selector.ToSelector()}");
+        }
+        if (elements.Length > 1)
+        {
+            throw new ArgumentException($"Multiple elements found in scope using selector {selector.ToSelector()}");
+        };
+        return elements.Single();
+    }
+
+    private static IEnumerable<IElement> QueryForMultipleElementsFromScope(IParentNode scope, IElementSelector selector)
+    {
+        var elements = scope.QuerySelectorAll(selector.ToSelector());
+        if (elements == null || elements.Length == 0)
+        {
+            throw new ArgumentException($"No elements found in scope using selector {selector.ToSelector()}");
+        }
+        return elements;
+    }
+
+
+    private static AngleSharpDocumentPart AsDocumentPart(IElement element) => new(element);
+    private static IEnumerable<AngleSharpDocumentPart> AsDocumentParts(IEnumerable<IElement> elements) => elements.Select(AsDocumentPart);
 
     private sealed class AngleSharpDocumentPart : IDocumentPart
     {
@@ -72,6 +99,11 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         {
             get => _element.TextContent ?? string.Empty;
             set => _element.TextContent = value;
+        }
+
+        public void Click()
+        {
+            throw new NotImplementedException("Clicking is not available with an AngleSharp client");
         }
 
         public string? GetAttribute(string attributeName)
