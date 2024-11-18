@@ -16,7 +16,7 @@ internal sealed class WebDriverDocumentQueryClientProvider : IDocumentQueryClien
         ArgumentNullException.ThrowIfNull(httpRequestMessage.RequestUri, nameof(httpRequestMessage.RequestUri));
         var webDriver = await _webDriverAdaptorProvider.CreateAsync();
         ArgumentNullException.ThrowIfNull(webDriver, nameof(webDriver));
-
+        // TODO options will determine if we navigate
         await webDriver.NavigateToAsync(httpRequestMessage.RequestUri);
         return new WebDriverDocumentQueryClient(webDriver);
     }

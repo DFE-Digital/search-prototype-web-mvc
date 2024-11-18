@@ -11,7 +11,7 @@ internal static class BrowserTypeExtensions
     internal static string ToBrowserName(this BrowserType browserType)
         => browserType switch
         {
-            BrowserType.Chrome => "chrome",
+            BrowserType.Default or BrowserType.Chrome => "chrome",
             BrowserType.Firefox => "firefox",
             BrowserType.Edge => "edge",
             _ => throw new NotImplementedException($"unsupported browser type {browserType}")

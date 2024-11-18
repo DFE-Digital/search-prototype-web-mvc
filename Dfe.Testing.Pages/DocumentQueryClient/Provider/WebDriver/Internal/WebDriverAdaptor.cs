@@ -10,7 +10,7 @@ public interface IApplicationNavigator
     Task ReloadAsync();
 }
 
-public interface IWebDriverAdaptor : IApplicationNavigator, IAsyncDisposable
+public interface IWebDriverAdaptor : IApplicationNavigator, IDisposable, IAsyncDisposable
 {
     Task StartAsync();
     System.Net.Cookie? GetCookie(string cookieName);
@@ -24,16 +24,16 @@ public interface IWebDriverAdaptor : IApplicationNavigator, IAsyncDisposable
 }
 
 // Wraps WebDriver operations with lazy init
-internal sealed class LazyWebDriverAdaptor : IWebDriverAdaptor
+internal class LazyWebDriverAdaptor : IWebDriverAdaptor
 {
-    private readonly Lazy<IWebDriver> _driver;
+    private readonly Lazy<IWebDriver> _getDriver;
 
     public LazyWebDriverAdaptor(Func<IWebDriver> getDriver)
     {
         ArgumentNullException.ThrowIfNull(getDriver, nameof(getDriver));
-        _driver = new Lazy<IWebDriver>(getDriver);
+        _getDriver = new Lazy<IWebDriver>(getDriver);
     }
-    private IWebDriver Driver => _driver.Value ?? throw new ArgumentNullException(nameof(_driver.Value));
+    private IWebDriver Driver => _getDriver?.Value ?? throw new ArgumentNullException(nameof(_getDriver.Value));
 
     public Task StartAsync()
     {
@@ -43,15 +43,39 @@ internal sealed class LazyWebDriverAdaptor : IWebDriverAdaptor
 
     public async Task NavigateToAsync(Uri uri) => await Driver.Navigate().GoToUrlAsync(uri);
 
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
     public async ValueTask DisposeAsync()
     {
+        await DisposeAsyncCore().ConfigureAwait(false);
+
+        Dispose(disposing: false);
         GC.SuppressFinalize(this);
-        using (Driver)
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            await Driver.Manage().Network.StopMonitoring();
-            Driver.Quit();
+            using (Driver)
+            {
+                Driver?.Quit();
+            }
         }
     }
+
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        using (Driver)
+        {
+            await Driver.Manage().Network.StopMonitoring().ConfigureAwait(false);
+        }
+    }
+
 
     // TODO for these operations need to queue commands
     public Task BackAsync()
@@ -83,7 +107,7 @@ internal sealed class LazyWebDriverAdaptor : IWebDriverAdaptor
         => Driver.FindElement(
             WebDriverByLocatorHelpers.CreateLocator(selector));
 
-    public IReadOnlyCollection<IWebElement> FindElements(IElementSelector selector) 
+    public IReadOnlyCollection<IWebElement> FindElements(IElementSelector selector)
         => Driver.FindElements(
             WebDriverByLocatorHelpers.CreateLocator(selector));
 

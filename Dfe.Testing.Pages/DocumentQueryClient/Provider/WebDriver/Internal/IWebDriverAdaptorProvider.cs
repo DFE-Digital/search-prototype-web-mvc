@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 
 namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
-public interface IWebDriverAdaptorProvider
+internal interface IWebDriverAdaptorProvider
 {
     Task<IWebDriverAdaptor> CreateAsync();
 }
 
-internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
+internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider, IDisposable, IAsyncDisposable
 {
     private static readonly SemaphoreSlim _semaphore = new(1, 1);
     private readonly WebDriverClientSessionOptions _webDriverClientSessionOptions;
@@ -59,5 +59,55 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
             }
         }
         return _instance;
+    }
+
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore().ConfigureAwait(false);
+
+        Dispose(disposing: false);
+        GC.SuppressFinalize(this);
+    }
+
+    void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _instance?.Dispose();
+            _instance = null;
+
+            if (_instance is IDisposable disposable)
+            {
+                disposable.Dispose();
+                _instance = null;
+            }
+        }
+    }
+
+    async ValueTask DisposeAsyncCore()
+    {
+        if (_instance is not null)
+        {
+            await _instance.DisposeAsync().ConfigureAwait(false);
+        }
+
+        if (_instance is IAsyncDisposable disposable)
+        {
+            await disposable.DisposeAsync().ConfigureAwait(false);
+        }
+        else
+        {
+            _instance?.Dispose();
+        }
+
+        _instance = null;
+        _instance = null;
     }
 }

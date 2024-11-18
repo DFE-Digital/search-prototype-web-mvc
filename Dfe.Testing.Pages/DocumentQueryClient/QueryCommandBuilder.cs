@@ -8,7 +8,7 @@ public sealed class QueryCommandBuilder<TResult>
 
     public QueryCommandBuilder<TResult> Create() => new();
 
-    public QueryCommandBuilder<TResult> SetQuyeryInScope(IElementSelector selector)
+    public QueryCommandBuilder<TResult> SetQueryInScope(IElementSelector selector)
     {
         QueryInsideScope = selector;
         return this;
