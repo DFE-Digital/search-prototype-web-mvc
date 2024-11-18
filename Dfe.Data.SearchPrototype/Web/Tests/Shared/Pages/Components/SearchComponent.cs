@@ -33,7 +33,7 @@ public sealed class SearchComponent : ComponentBase
     public SearchResultsComponent SearchResults { get; }
 
     public string GetHeading() => DocumentQueryClient.Query(Heading, mapper: (t) => t.Text);
-    public string GetSubheading() => DocumentQueryClient.Query(Heading, mapper: (t) => t.Text);
+    public string GetSubheading() => DocumentQueryClient.Query(SubHeading, mapper: (t) => t.Text);
     public Input GetSearchInput()
         => DocumentQueryClient.Query(SearchInput, mapper: (t) => new Input()
         {

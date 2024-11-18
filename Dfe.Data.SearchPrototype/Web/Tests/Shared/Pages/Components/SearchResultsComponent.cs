@@ -21,7 +21,8 @@ public sealed class SearchResultsComponent : ComponentBase
 
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
-            args: new QueryArgs(query: new ElementSelector("#establishment-search-results > ul"), scope: Container),
+            args: new QueryArgs(
+                query: new ElementSelector("#establishment-search-results > ul"), scope: Container),
             mapper: (documentPart) 
                 => new EstablishmentSearchResult(
                         Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),

@@ -48,7 +48,8 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
             QueryForMultipleElementsFromScope(scope: _htmlDocument, selector: queryArgs.Query) :
                 // find the scope and query within
                 QueryForMultipleElementsFromScope(
-                    scope: QueryForElementInScope(scope: _htmlDocument, selector: queryArgs.Query),
+                    scope: QueryForElementInScope(
+                        scope: _htmlDocument, selector: queryArgs.Scope),
                     selector: queryArgs.Query);
 
         return AsDocumentParts(elements)

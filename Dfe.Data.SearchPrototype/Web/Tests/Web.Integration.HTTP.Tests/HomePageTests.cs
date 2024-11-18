@@ -115,7 +115,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
             HomePage searchResultsPage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(searchByKeywordRequest);
 
             // Assert
-            searchResultsPage.Search.GetNoSearchResultsMessage().Should().Be("Sorry no results found please amend your search criteria");
+            searchResultsPage.Search.GetNoSearchResultsMessage().Trim().Should().Be("Sorry no results found please amend your search criteria");
         }
 
         [Fact]
