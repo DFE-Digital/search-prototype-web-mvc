@@ -49,7 +49,7 @@ public sealed class ExampleUITest : BaseEndToEndTest
         };
 
         var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(request);
-        
+
         List<Facet> facetsAvailable = homePage.Filters.GetDisplayedFacets().ToList();
         Facet facetBeingApplied = facetsAvailable.First();
         FacetValue facetValueToApply = facetBeingApplied.FacetValues.First();
@@ -71,6 +71,39 @@ public sealed class ExampleUITest : BaseEndToEndTest
             .Single().FacetValues
             .Should().BeEquivalentTo(new[] { facetValueToApply });
 
+        homePage.Search.SearchResults.GetResults().Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task Clear_Facets_And_Applied_FacetValues()
+    {
+        // Arrange
+        HttpRequestMessage request = new()
+        {
+            RequestUri = new("https://localhost:7042/?searchKeyWord=Col")
+        };
+
+        var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(request);
+
+        List<Facet> facetsAvailable = homePage.Filters.GetDisplayedFacets().ToList();
+        FacetValue firstFacetWithAnyFacetValue = facetsAvailable.First().FacetValues.First();
+        FacetValue secondFacetWithAnyFacetValue = facetsAvailable[1].FacetValues.First();
+
+        homePage.Filters
+            .ApplyFacet(firstFacetWithAnyFacetValue)
+            .ApplyFacet(secondFacetWithAnyFacetValue)
+            .SubmitFilters();
+
+        // Guard to check the facetValues are selected
+        homePage.Filters.GetDisplayedFacets()
+            .SelectMany(t => t.FacetValues)
+            .Should().HaveCount(2);
+
+        // Act
+        homePage.Filters.ClearFilters();
+
+        // Assert
+        homePage.Filters.GetDisplayedFacets().Should().BeEquivalentTo(facetsAvailable);
         homePage.Search.SearchResults.GetResults().Should().NotBeNullOrEmpty();
     }
 }

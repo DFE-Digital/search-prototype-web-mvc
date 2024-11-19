@@ -11,14 +11,19 @@ public sealed class FilterComponent : ComponentBase
 {
     internal static IElementSelector FiltersContainer => new ElementSelector("#filters-container");
 
-    private static QueryArgs FacetValueByValue(FacetValue facetValue)
-        => new(
+    private static QueryArgs FacetValueByValue(FacetValue facetValue) => 
+        new(
             query: new ElementSelector($"input[value={facetValue.Value}]"),
             scope: FiltersContainer);
 
     private static QueryArgs SubmitFiltersButton =>
         new(
             query: new ElementSelector("#filters-button"),
+            scope: FiltersContainer);
+
+    private static QueryArgs ClearFiltersButton => 
+        new(
+            query: new ElementSelector("#clearFilters"),
             scope: FiltersContainer);
 
     public FilterComponent(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)
@@ -37,16 +42,14 @@ public sealed class FilterComponent : ComponentBase
                         Name: part.GetChild(new ElementSelector("legend"))!.Text.Trim(),
                         FacetValues: // TODO library work to abstract checkboxes and labels
                             (part.GetChildren(new ElementSelector(".govuk-checkboxes__item")) ?? throw new ArgumentNullException("could not find checkboxes"))
-                                .Select((checkboxWrapper) => new FacetValue(
-                                    Label: checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__label"))!.Text!,
-                                    Value:
-                                        (checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__input")) ?? throw new ArgumentNullException("could not find input"))
-                                                .GetAttribute("value")!))
+                                .Select((checkboxWrapper) 
+                                    => new FacetValue(
+                                        Label: checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__label"))!.Text!,
+                                        Value: (checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__input")) ?? throw new ArgumentNullException("could not find input"))
+                                            .GetAttribute("value")!))
                                 .ToList());
                 });
     }
-
-
 
     public FilterComponent ApplyFacet(FacetValue applyFacet)
     {
@@ -58,6 +61,12 @@ public sealed class FilterComponent : ComponentBase
     public FilterComponent SubmitFilters()
     {
         DocumentQueryClient.Run(SubmitFiltersButton, (part) => part.Click());
+        return this;
+    }
+
+    public FilterComponent ClearFilters()
+    {
+        DocumentQueryClient.Run(ClearFiltersButton, (part) => part.Click());
         return this;
     }
 }
