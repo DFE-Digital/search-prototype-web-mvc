@@ -1,27 +1,27 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 using Dfe.Testing.Pages.DocumentQueryClient;
-using Dfe.Testing.Pages.Pages.Components.Inputs;
-using Dfe.Testing.Pages.Pages.Components;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.Inputs;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class SearchComponent : ComponentBase
 {
     internal static ElementSelector Container => new("#search-establishments-form");
-    internal static QueryArgs SearchInput => new(query: new ElementSelector("#searchKeyWord"), scope: Container);
-    internal static QueryArgs Heading => new(
+    internal static ElementQueryArguments SearchInput => new(query: new ElementSelector("#searchKeyWord"), scope: Container);
+    internal static ElementQueryArguments Heading => new(
         query: new ElementSelector("#search-page-search-establishments-form-label"),
         scope: Container);
-    internal static QueryArgs SubHeading => new(
+    internal static ElementQueryArguments SubHeading => new(
         query: new ElementSelector("#searchKeyWord-hint"),
         scope: Container);
 
-    internal static QueryArgs NoSearchResultsHeading => new(
+    internal static ElementQueryArguments NoSearchResultsHeading => new(
         query: new ElementSelector("#no-results"),
         scope: Container);
 
-    internal static QueryArgs SearchButton => new(
+    internal static ElementQueryArguments SearchButton => new(
         query: new ElementSelector("#search"),
         scope: Container);
 

@@ -1,8 +1,8 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 using Dfe.Testing.Pages.DocumentQueryClient;
-using Dfe.Testing.Pages.Pages.Components;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 public sealed class SearchResultsComponent : ComponentBase
@@ -15,13 +15,13 @@ public sealed class SearchResultsComponent : ComponentBase
 
     public string GetResultsHeading()
         => DocumentQueryClient.Query(
-            new QueryArgs(
+            new ElementQueryArguments(
                 query: new ElementSelector("#search-results-count"), scope: Container),
                 mapper: (documentPart) => documentPart.Text.Trim());
 
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
-            new QueryArgs(
+            new ElementQueryArguments(
                 query: new ElementSelector("#establishment-search-results > div"), scope: Container),
                 mapper:
                     (documentPart) => new EstablishmentSearchResult(

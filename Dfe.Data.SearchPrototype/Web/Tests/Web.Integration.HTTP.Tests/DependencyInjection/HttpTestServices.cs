@@ -16,7 +16,7 @@ internal sealed class HttpTestServices
     {
         IServiceCollection services = new ServiceCollection()
             .AddPages()
-            .AddAngleSharpQueryClient<Program>();
+            .AddAngleSharp<Program>();
 
         _serviceProvider = services.BuildServiceProvider();
     }

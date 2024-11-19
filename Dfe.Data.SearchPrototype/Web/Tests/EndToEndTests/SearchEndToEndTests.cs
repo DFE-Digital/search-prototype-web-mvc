@@ -1,7 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.EndToEndTests.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
-using Dfe.Testing.Pages.Pages;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;

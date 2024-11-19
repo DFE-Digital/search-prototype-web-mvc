@@ -2,8 +2,8 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
 using Dfe.Testing.Pages.DocumentQueryClient;
 using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
-using Dfe.Testing.Pages.Pages.Components;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
@@ -11,17 +11,17 @@ public sealed class FilterComponent : ComponentBase
 {
     internal static IElementSelector FiltersContainer => new ElementSelector("#filters-container");
 
-    private static QueryArgs FacetValueByValue(FacetValue facetValue) => 
+    private static ElementQueryArguments FacetValueByValue(FacetValue facetValue) => 
         new(
             query: new ElementSelector($"input[value={facetValue.Value}]"),
             scope: FiltersContainer);
 
-    private static QueryArgs SubmitFiltersButton =>
+    private static ElementQueryArguments SubmitFiltersButton =>
         new(
             query: new ElementSelector("#filters-button"),
             scope: FiltersContainer);
 
-    private static QueryArgs ClearFiltersButton => 
+    private static ElementQueryArguments ClearFiltersButton => 
         new(
             query: new ElementSelector("#clearFilters"),
             scope: FiltersContainer);
@@ -33,7 +33,7 @@ public sealed class FilterComponent : ComponentBase
     public IEnumerable<Facet> GetDisplayedFacets()
     {
         return DocumentQueryClient.QueryMany<Facet>(
-                new QueryArgs(
+                new ElementQueryArguments(
                     query: new ElementSelector(".govuk-fieldset"),
                     scope: FiltersContainer),
                 (part) =>

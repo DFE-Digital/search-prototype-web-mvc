@@ -1,5 +1,5 @@
-﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal;
-using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider.Adaptor;
+﻿using Dfe.Testing.Pages.WebDriver.Internal;
+using Dfe.Testing.Pages.WebDriver.Internal.Provider.Adaptor;
 using OpenQA.Selenium;
 using System.Collections.ObjectModel;
 
@@ -15,7 +15,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         _webDriverAdaptor = webDriverAdaptor;
     }
 
-    public void Run(QueryArgs args, Action<IDocumentPart> handler)
+    public void Run(ElementQueryArguments args, Action<IDocumentPart> handler)
     {
         if (args.Scope == null)
         {
@@ -32,7 +32,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
                         WebDriverByLocatorHelpers.CreateLocator(args.Query))));
     }
 
-    public TResult Query<TResult>(QueryArgs queryArgs, Func<IDocumentPart, TResult> mapper)
+    public TResult Query<TResult>(ElementQueryArguments queryArgs, Func<IDocumentPart, TResult> mapper)
     {
         ArgumentNullException.ThrowIfNull(queryArgs);
         ArgumentNullException.ThrowIfNull(mapper);
@@ -47,7 +47,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         return mapper(documentPartToMap);
     }
 
-    public IEnumerable<TResult> QueryMany<TResult>(QueryArgs queryArgs, Func<IDocumentPart, TResult> mapper)
+    public IEnumerable<TResult> QueryMany<TResult>(ElementQueryArguments queryArgs, Func<IDocumentPart, TResult> mapper)
     {
         ArgumentNullException.ThrowIfNull(queryArgs);
         ArgumentNullException.ThrowIfNull(mapper);
@@ -106,7 +106,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         public IEnumerable<IDocumentPart> GetChildren(IElementSelector selector)
             => FindMany(
                     WebDriverByLocatorHelpers.CreateLocator(selector))
-                .Select(WebDriverDocumentPart.Create)
+                .Select(Create)
                 .ToList<IDocumentPart>();
 
         private WebDriverDocumentPart FindDocumentPart(IElementSelector selector)
@@ -118,7 +118,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
                 .ThrowIfMultiple())
                 .Single();
 
-        private ReadOnlyCollection<IWebElement> FindMany(By by) 
+        private ReadOnlyCollection<IWebElement> FindMany(By by)
             => _wrappedElement.FindElements(by) ?? Array.Empty<IWebElement>().AsReadOnly();
 
         private static IEnumerable<WebDriverDocumentPart> AsDocumentPart(IEnumerable<IWebElement> elements)

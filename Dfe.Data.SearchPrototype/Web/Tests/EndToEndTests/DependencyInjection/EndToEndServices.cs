@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 using Dfe.Data.SearchPrototype.Web.Tests.EndToEndTests.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
-using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
+using Dfe.Testing.Pages.WebDriver;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.EndToEndTests.DependencyInjection;
 internal sealed class EndToEndServices
