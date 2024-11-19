@@ -1,21 +1,18 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 using Dfe.Testing.Pages;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests.DependencyInjection;
 
-internal sealed class TestServices
+internal sealed class HttpTestServices
 {
-    private static readonly TestServices _instance = new();
+    private static readonly HttpTestServices _instance = new();
     private readonly IServiceProvider _serviceProvider;
-    static TestServices()
+    static HttpTestServices()
     {
     }
 
-    private TestServices()
+    private HttpTestServices()
     {
         IServiceCollection services = new ServiceCollection()
             .AddPages()
@@ -24,7 +21,7 @@ internal sealed class TestServices
         _serviceProvider = services.BuildServiceProvider();
     }
 
-    public static TestServices Instance
+    public static HttpTestServices Instance
     {
         get
         {
