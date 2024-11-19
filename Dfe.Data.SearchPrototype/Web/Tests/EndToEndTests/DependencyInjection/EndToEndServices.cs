@@ -10,15 +10,15 @@ using Dfe.Data.SearchPrototype.Web.Tests.Acceptance.Options;
 using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.EndToEndTests.DependencyInjection;
-internal sealed class Services
+internal sealed class EndToEndServices
 {
-    private static readonly Services _instance = new();
+    private static readonly EndToEndServices _instance = new();
     private readonly IServiceProvider _serviceProvider;
-    static Services()
+    static EndToEndServices()
     {
     }
 
-    private Services()
+    private EndToEndServices()
     {
         IConfiguration config = new ConfigurationBuilder()
             .AddJsonFile("testsettings.json", optional: false)
@@ -37,7 +37,7 @@ internal sealed class Services
         _serviceProvider = services.BuildServiceProvider();
     }
 
-    public static Services Instance
+    public static EndToEndServices Instance
     {
         get
         {

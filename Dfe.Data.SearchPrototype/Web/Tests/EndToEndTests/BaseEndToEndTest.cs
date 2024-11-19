@@ -10,7 +10,7 @@ public class BaseEndToEndTest : IDisposable
 
     protected BaseEndToEndTest(ITestOutputHelper testOutputHelper)
     {
-        _serviceScope = Services.Instance.CreateScope();
+        _serviceScope = EndToEndServices.Instance.CreateScope();
         TestOutputHelper = testOutputHelper;
     }
 

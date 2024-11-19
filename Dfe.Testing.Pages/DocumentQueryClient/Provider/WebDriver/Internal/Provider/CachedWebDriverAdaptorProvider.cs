@@ -1,7 +1,6 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider.Adaptor;
 using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider.WebDriverFactory;
 using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.SessionOptions;
-using Microsoft.Extensions.Options;
 
 namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider;
 internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider, IDisposable, IAsyncDisposable
