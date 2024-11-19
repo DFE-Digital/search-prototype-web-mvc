@@ -26,18 +26,16 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
 
     public async Task<IWebDriverAdaptor> CreateAsync()
     {
-        //WebDriverSessionOptions options = _webDriverSessionOptionsBuilder.WithNetworkInterception(options.)
-        // switch on options.BrowserType to choose which concrete WebDriverFactory, wrap the result in a Lazy() and pass it into the WebDriverAdaptor.
-
-        //TODO handle monitoring here as part of the Lazy delegate - await driver.Manage().Network.StartMonitoring();
-        // TODO use the WebDriverSessionOptionsBuilder to pass in the sessionOptions into the factory
         if (_instance == null)
         {
             try
             {
+                // TODO switch on options.BrowserType to choose which concrete WebDriverFactory, wrap the result in a Lazy() and pass it into the WebDriverAdaptor.
                 var factory = new ChromeDriverFactory();
                 await _semaphore.WaitAsync();
-                // TODO browser options Dictionary and browser version
+                // TODO browser options Dictionary
+                // TODO browser version
+                // TODO handle monitoring here as part of the Lazy delegate - await driver.Manage().Network.StartMonitoring() if sessionOptions.EnableNetworkInterception
                 WebDriverSessionOptions sessionOptions = _webDriverSessionOptionsBuilder
                     .WithBrowserType(_webDriverClientSessionOptions.BrowserName)
                     .WithNetworkInterception(_webDriverClientSessionOptions.EnableNetworkInterception)
