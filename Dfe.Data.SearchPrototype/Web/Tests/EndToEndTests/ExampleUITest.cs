@@ -19,12 +19,12 @@ public sealed class ExampleUITest : BaseEndToEndTest
     [Fact]
     public async Task Search_Submission_Displays_Search_Results()
     {
-        HttpRequestMessage request = new()
+        ApplicationOptions options = GetTestService<ApplicationOptions>();
+        var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(new()
         {
-            RequestUri = new("https://localhost:7042/")
-        };
+            RequestUri = new Uri(options.BaseUrl, "/")
+        });
 
-        var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(request);
         homePage.Search.SearchForEstablishmentWith("Col");
         homePage.Search.SubmitSearch();
         IEnumerable<EstablishmentSearchResult> searchResults = homePage.Search.SearchResults.GetResults();

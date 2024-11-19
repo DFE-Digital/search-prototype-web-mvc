@@ -1,0 +1,7 @@
+{
+  "ApplicationOptions": {
+    "Scheme": "https",
+    "Port": 7042,
+    "Domain": "localhost"
+  }
+}
