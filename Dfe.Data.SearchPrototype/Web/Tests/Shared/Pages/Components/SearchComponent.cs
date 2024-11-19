@@ -21,6 +21,9 @@ public sealed class SearchComponent : ComponentBase
         query: new ElementSelector("#no-results"),
         scope: Container);
 
+    internal static QueryArgs SearchButton => new(
+        query: new ElementSelector("#search"),
+        scope: Container);
 
     public SearchComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,
@@ -48,6 +51,12 @@ public sealed class SearchComponent : ComponentBase
     public SearchComponent SearchForEstablishmentWith(string term)
     {
         DocumentQueryClient.Run(SearchInput, (input) => input.Text = term);
+        return this;
+    }
+
+    public SearchComponent SubmitSearch()
+    {
+        DocumentQueryClient.Run(SearchButton, (button) => button.Click());
         return this;
     }
 }

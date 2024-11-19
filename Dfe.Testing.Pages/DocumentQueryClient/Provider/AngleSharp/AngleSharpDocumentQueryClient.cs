@@ -1,6 +1,4 @@
-﻿using AngleSharp.Dom;
-
-namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
+﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
 internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 {
     private readonly IHtmlDocument _htmlDocument;
@@ -32,10 +30,8 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
             QueryForElementInScope(_htmlDocument, queryArgs.Query) :
                 // find the scope and query within
                 QueryForElementInScope(
-                        scope: QueryForElementInScope(
-                            scope: _htmlDocument,
-                            selector: queryArgs.Scope),
-                        selector: queryArgs.Query);
+                    scope: QueryForElementInScope(scope: _htmlDocument, selector: queryArgs.Scope),
+                    selector: queryArgs.Query);
 
         return Mapper(
             AsDocumentPart(element));
@@ -48,8 +44,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
             QueryForMultipleElementsFromScope(scope: _htmlDocument, selector: queryArgs.Query) :
                 // find the scope and query within
                 QueryForMultipleElementsFromScope(
-                    scope: QueryForElementInScope(
-                        scope: _htmlDocument, selector: queryArgs.Scope),
+                    scope: QueryForElementInScope(scope: _htmlDocument, selector: queryArgs.Scope),
                     selector: queryArgs.Query);
 
         return AsDocumentParts(elements)

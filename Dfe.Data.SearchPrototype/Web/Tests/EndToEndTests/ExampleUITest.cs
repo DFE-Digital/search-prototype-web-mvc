@@ -1,5 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
 using Dfe.Testing.Pages;
 using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver;
 using Dfe.Testing.Pages.Pages;
@@ -24,10 +25,21 @@ public sealed class ExampleUITest : BaseEndToEndTest
     {
         HttpRequestMessage request = new()
         {
-            RequestUri = new("https://searchprototype.azurewebsites.net/")
+            RequestUri = new("https://localhost:7042/")
         };
 
         var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(request);
         homePage.Search.SearchForEstablishmentWith("Col");
+        homePage.Search.SubmitSearch();
+        IEnumerable<EstablishmentSearchResult> searchResults = homePage.Search.SearchResults.GetResults();
+        searchResults.Should().NotBeNullOrEmpty();
+        searchResults.ToList().ForEach((result) =>
+        {
+            result.Name.Should().NotBeNullOrEmpty();
+            result.Urn.Should().NotBeNullOrEmpty();
+            result.TypeOfEstablishment.Should().NotBeNullOrEmpty();
+            result.Status.Should().NotBeNullOrEmpty();
+            result.Phase.Should().NotBeNullOrEmpty();
+        });
     }
 }

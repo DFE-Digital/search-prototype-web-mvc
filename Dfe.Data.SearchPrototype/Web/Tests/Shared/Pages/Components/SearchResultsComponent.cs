@@ -23,11 +23,11 @@ public sealed class SearchResultsComponent : ComponentBase
         => DocumentQueryClient.QueryMany(
             args: new QueryArgs(
                 query: new ElementSelector("#establishment-search-results > ul"), scope: Container),
-            mapper: (documentPart) 
-                => new EstablishmentSearchResult(
-                        Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),
-                        Urn: documentPart.GetChild(new ElementSelector("li:nth-of-type(2) > span"))!.Text.Trim(),
-                        TypeOfEstablishment: documentPart.GetChild(new ElementSelector("li:nth-of-type(4) > span"))!.Text.Trim(),
-                        Status: documentPart.GetChild(new ElementSelector("li:nth-of-type(5) > span"))!.Text.Trim(),
-                        Phase: documentPart.GetChild(new ElementSelector("li:nth-of-type(6) > span"))!.Text.Trim()));
+                mapper: (documentPart) 
+                    => new EstablishmentSearchResult(
+                            Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),
+                            Urn: documentPart.GetChild(new ElementSelector("li:nth-of-type(2) > span"))!.Text.Trim(),
+                            TypeOfEstablishment: documentPart.GetChild(new ElementSelector("li:nth-of-type(4) > span"))!.Text.Trim(),
+                            Status: documentPart.GetChild(new ElementSelector("li:nth-of-type(5) > span"))!.Text.Trim(),
+                            Phase: documentPart.GetChild(new ElementSelector("li:nth-of-type(6) > span"))!.Text.Trim()));
 }
