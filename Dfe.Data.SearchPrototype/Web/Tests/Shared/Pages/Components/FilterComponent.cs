@@ -33,15 +33,13 @@ public sealed class FilterComponent : ComponentBase
                     scope: FiltersContainer),
                 (part) =>
                 {
-                    return new Facet(
+                    return new(
                         Name: part.GetChild(new ElementSelector("legend"))!.Text.Trim(),
-                        FacetValues: 
+                        FacetValues: // TODO library work to abstract checkboxes and labels
                             (part.GetChildren(new ElementSelector(".govuk-checkboxes__item")) ?? throw new ArgumentNullException("could not find checkboxes"))
-                                .Select(
-                                // TODO could map this into an IEnumerable<Checkbox> with labels in there for easier mapping into the FacetValue?
-                                (checkboxWrapper) => new FacetValue(
+                                .Select((checkboxWrapper) => new FacetValue(
                                     Label: checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__label"))!.Text!,
-                                    Value: 
+                                    Value:
                                         (checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__input")) ?? throw new ArgumentNullException("could not find input"))
                                                 .GetAttribute("value")!))
                                 .ToList());

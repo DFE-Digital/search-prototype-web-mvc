@@ -97,13 +97,13 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
 
         public IDocumentPart? GetChild(IElementSelector selector) => FindDocumentPart(selector);
 
-        public List<IDocumentPart> GetChildren()
+        public IEnumerable<IDocumentPart> GetChildren()
             => AsDocumentPart(
                 FindMany(
                     WebDriverByLocatorHelpers.AsXPath(new ChildXPathSelector())))
                 .ToList<IDocumentPart>();
 
-        public List<IDocumentPart> GetChildren(IElementSelector selector)
+        public IEnumerable<IDocumentPart> GetChildren(IElementSelector selector)
             => FindMany(
                     WebDriverByLocatorHelpers.CreateLocator(selector))
                 .Select(WebDriverDocumentPart.Create)
