@@ -103,8 +103,6 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
         {
             _instance?.Dispose();
         }
-
-        _instance = null;
         _instance = null;
     }
 }
