@@ -12,14 +12,14 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
     private readonly IApplicationNavigatorAccessor _applicationNavigatorAccessor;
     private IWebDriverAdaptor? _instance = null;
     public CachedWebDriverAdaptorProvider(
-        IOptions<WebDriverClientSessionOptions> webDriverClientSessionOptions,
+        WebDriverClientSessionOptions webDriverClientSessionOptions,
         IWebDriverSessionOptionsBuilder webDriverSessionOptionsBuilder,
         IApplicationNavigatorAccessor applicationNavigatorAccessor)
     {
         ArgumentNullException.ThrowIfNull(webDriverClientSessionOptions);
         ArgumentNullException.ThrowIfNull(webDriverSessionOptionsBuilder);
         ArgumentNullException.ThrowIfNull(applicationNavigatorAccessor);
-        _webDriverClientSessionOptions = webDriverClientSessionOptions.Value;
+        _webDriverClientSessionOptions = webDriverClientSessionOptions;
         _webDriverSessionOptionsBuilder = webDriverSessionOptionsBuilder;
         _applicationNavigatorAccessor = applicationNavigatorAccessor;
     }
