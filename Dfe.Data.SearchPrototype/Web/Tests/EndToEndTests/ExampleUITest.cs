@@ -21,7 +21,7 @@ public sealed class ExampleUITest : BaseEndToEndTest
     // internal logic across providers to have a CachedDocumentFactory?
 
     [Fact]
-    public async Task SearchResults()
+    public async Task Search_Submission_Displays_Search_Results()
     {
         HttpRequestMessage request = new()
         {
