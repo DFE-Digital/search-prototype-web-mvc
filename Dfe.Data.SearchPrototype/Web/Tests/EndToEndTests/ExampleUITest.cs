@@ -65,19 +65,20 @@ public sealed class ExampleUITest : BaseEndToEndTest
 
         // Assert
 
+        // Top level facets should have the same count and labels
         var displayedFacetsAfterApplying = homePage.Filters.GetDisplayedFacets();
         displayedFacetsAfterApplying.Count().Should().Be(facetsAvailable.Count());
         displayedFacetsAfterApplying.Select(t => t.Name).Should().BeEquivalentTo(facetsAvailable.Select(t => t.Name));
 
-        // the selected facet should be applied and equivalen
-        homePage.Filters.GetDisplayedFacets()
+        // the selected facet should have been applied and be the only facetValue displayed in the facet
+        var facetValueApplied = homePage.Filters.GetDisplayedFacets()
             .Where(t => t.Name == facetBeingApplied.Name)
-            .Single()
-            .FacetValues
-            .Should().BeEquivalentTo(new[] { facetValueToApply });
+            .Single().FacetValues;
+        
+        facetValueApplied.Should().BeEquivalentTo(new[] { facetValueToApply });
 
-        // the unselected facets counts will be updated on their label, but their values will remain
-        // TODO maybe some work to separate the count displayed from the label of the facet
+        // the unselected facets counts will have updated (count) labels e.g Secondary (1000) -> Secondary (150), but their values will remain the same
+        // TODO maybe some work to mapping of count displayed from the label of the facet
         var notBeingAppliedFacetsDisplayed = homePage.Filters.GetDisplayedFacets()
             .Where(t => t.Name != facetBeingApplied.Name)
             .SelectMany(t => t.FacetValues)
