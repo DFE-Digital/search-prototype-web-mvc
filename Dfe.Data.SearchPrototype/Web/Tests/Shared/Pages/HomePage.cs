@@ -10,16 +10,20 @@ public sealed class HomePage : PageBase
     public HomePage(
         IDocumentQueryClientAccessor documentQueryClientAccessor, 
         NavigationBarComponent navigationBarComponent,
-        SearchComponent searchComponent) : base(documentQueryClientAccessor)
+        SearchComponent searchComponent,
+        FilterComponent filterComponent) : base(documentQueryClientAccessor)
     {
         ArgumentNullException.ThrowIfNull(navigationBarComponent);
         ArgumentNullException.ThrowIfNull(searchComponent);
+        ArgumentNullException.ThrowIfNull(filterComponent);
         NavigationBar = navigationBarComponent;
         Search = searchComponent;
+        Filters = filterComponent;
     }
 
     public NavigationBarComponent NavigationBar { get; }
     public SearchComponent Search { get; }
+    public FilterComponent Filters { get; }
     public static By Heading => By.CssSelector("header div div:nth-of-type(2) a");
     public static By HomeLink => By.CssSelector("nav a");
     public static By SearchHeading => By.CssSelector("h1 label");

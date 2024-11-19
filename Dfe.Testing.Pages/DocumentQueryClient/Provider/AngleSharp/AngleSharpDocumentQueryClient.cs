@@ -120,6 +120,10 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
             return null == child ? null : new AngleSharpDocumentPart(child);
         }
 
-        public IEnumerable<IDocumentPart> GetChildren() => _element.Children?.Select(t => (IDocumentPart)new AngleSharpDocumentPart(t)) ?? [];
+        public List<IDocumentPart> GetChildren() => _element.Children?.Select(t => (IDocumentPart)new AngleSharpDocumentPart(t)).ToList() ?? [];
+        public List<IDocumentPart> GetChildren(IElementSelector selector) 
+            => _element.QuerySelectorAll(selector.ToSelector())
+                .Select(AsDocumentPart)
+                .ToList<IDocumentPart>();
     }
 }

@@ -4,7 +4,8 @@ public interface IDocumentPart
     string Text { get; set;  }
     string? GetAttribute(string attributeName);
     IDictionary<string, string> GetAttributes();
-    IEnumerable<IDocumentPart> GetChildren();
+    List<IDocumentPart> GetChildren();
+    List<IDocumentPart> GetChildren(IElementSelector selector);
     IDocumentPart? GetChild(IElementSelector selector);
     void Click();
 }

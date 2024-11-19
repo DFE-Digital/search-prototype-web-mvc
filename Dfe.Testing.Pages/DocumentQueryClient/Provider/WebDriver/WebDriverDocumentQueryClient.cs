@@ -60,7 +60,10 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
 
         return elements
             .Select(WebDriverDocumentPart.Create)
-            .Select(mapper);
+            .Select(mapper)
+            // TODO expression is evaluated immediately on IEnumerable<T> because otherwise stale references to elements that have changed...
+            // Could improve design by capturing scope inside of DocumentPart so it's retryable if reference chanes?
+            .ToList();
     }
 
     private IWebElement Find(IElementSelector selector) => _webDriverAdaptor.FindElement(selector);
@@ -94,10 +97,17 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
 
         public IDocumentPart? GetChild(IElementSelector selector) => FindDocumentPart(selector);
 
-        public IEnumerable<IDocumentPart> GetChildren()
+        public List<IDocumentPart> GetChildren()
             => AsDocumentPart(
                 FindMany(
-                    WebDriverByLocatorHelpers.AsXPath(new ChildXPathSelector())));
+                    WebDriverByLocatorHelpers.AsXPath(new ChildXPathSelector())))
+                .ToList<IDocumentPart>();
+
+        public List<IDocumentPart> GetChildren(IElementSelector selector)
+            => FindMany(
+                    WebDriverByLocatorHelpers.CreateLocator(selector))
+                .Select(WebDriverDocumentPart.Create)
+                .ToList<IDocumentPart>();
 
         private WebDriverDocumentPart FindDocumentPart(IElementSelector selector)
             // TODO pass in an error message into the collection extensions?
@@ -108,7 +118,8 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
                 .ThrowIfMultiple())
                 .Single();
 
-        private ReadOnlyCollection<IWebElement> FindMany(By by) => _wrappedElement.FindElements(by) ?? Array.Empty<IWebElement>().AsReadOnly();
+        private ReadOnlyCollection<IWebElement> FindMany(By by) 
+            => _wrappedElement.FindElements(by) ?? Array.Empty<IWebElement>().AsReadOnly();
 
         private static IEnumerable<WebDriverDocumentPart> AsDocumentPart(IEnumerable<IWebElement> elements)
             => elements?.Select(

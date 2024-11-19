@@ -19,6 +19,7 @@ internal sealed class Services
             .AddTransient<NavigationBarComponent>()
             .AddTransient<HomePage>()
             .AddTransient<SearchResultsComponent>()
+            .AddTransient<FilterComponent>()
             .AddWebDriver();
 
         _serviceProvider = services.BuildServiceProvider();

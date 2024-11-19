@@ -7,7 +7,7 @@ public sealed class ChildXPathSelector : IElementSelector
 
     public ChildXPathSelector(string? selector = null)
     {
-        _xpath = string.IsNullOrEmpty(selector) ? string.Empty  : selector;
+        _xpath = string.IsNullOrEmpty(selector) ? "*"  : selector;
     }
 
     public string ToSelector()
