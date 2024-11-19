@@ -30,7 +30,7 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
         {
             try
             {
-                // TODO switch on options.BrowserType to choose which concrete WebDriverFactory, wrap the result in a Lazy() and pass it into the WebDriverAdaptor.
+                // TODO switch on options.BrowserType to choose which concrete WebDriverFactory
                 var factory = new ChromeDriverFactory();
                 await _semaphore.WaitAsync();
                 // TODO browser options Dictionary
