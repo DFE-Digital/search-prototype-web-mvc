@@ -23,9 +23,9 @@ public sealed class SearchResultsComponent : ComponentBase
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
             new QueryCommand<EstablishmentSearchResult>(
-                query: new ElementSelector("#establishment-search-results > ul"),
+                query: new ElementSelector("#establishment-search-results > div"),
                 queryScope: Container,
-                processor: (documentPart) 
+                processor: (documentPart)  
                     => new EstablishmentSearchResult(
                         Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),
                         Urn: documentPart.GetChild(new ElementSelector("li:nth-of-type(2) > span"))!.Text.Trim(),
