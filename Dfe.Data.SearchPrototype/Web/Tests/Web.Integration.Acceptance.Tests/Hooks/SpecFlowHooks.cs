@@ -13,9 +13,9 @@ namespace UnitTestProject1
         public static void BeforeTest(ObjectContainer container)
         {
 
-            container.BaseContainer.RegisterInstanceAs(OptionsHelper.GetOptions<WebOptions>(WebOptions.Key));
+            //container.BaseContainer.RegisterInstanceAs(OptionsHelper.GetOptions<WebOptions>(WebOptions.Key));
 
-            var driverOptions = OptionsHelper.GetOptions<WebDriverOptions>(WebDriverOptions.Key);
+/*            var driverOptions = OptionsHelper.GetOptions<WebDriverOptions>(WebDriverOptions.Key);
             if (string.IsNullOrEmpty(driverOptions.Value.DriverBinaryDirectory))
             {
                 driverOptions.Value.DriverBinaryDirectory = Directory.GetCurrentDirectory();
@@ -23,7 +23,7 @@ namespace UnitTestProject1
             container.BaseContainer.RegisterInstanceAs<IOptions<WebDriverOptions>>(driverOptions);
             var accessibilityOptions = OptionsHelper.GetOptions<AccessibilityOptions>(AccessibilityOptions.Key);
             accessibilityOptions.Value.CreateArtifactOutputDirectory();
-            container.BaseContainer.RegisterInstanceAs(accessibilityOptions);
+            container.BaseContainer.RegisterInstanceAs(accessibilityOptions);*/
         }
 
         [BeforeScenario]
