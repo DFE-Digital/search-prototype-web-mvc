@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.SessionOptions;
+using OpenQA.Selenium;
 
 namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Provider.Adaptor;
 
@@ -8,18 +9,24 @@ namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.WebDriver.Internal.Prov
 internal class LazyWebDriverAdaptor : IWebDriverAdaptor
 {
     private readonly Lazy<IWebDriver> _getDriver;
+    private readonly WebDriverSessionOptions _sessionOptions;
 
-    public LazyWebDriverAdaptor(Func<IWebDriver> getDriver)
+    public LazyWebDriverAdaptor(Func<IWebDriver> getDriver, WebDriverSessionOptions sessionOptions)
     {
         ArgumentNullException.ThrowIfNull(getDriver, nameof(getDriver));
+        ArgumentNullException.ThrowIfNull(sessionOptions, nameof(sessionOptions));
         _getDriver = new Lazy<IWebDriver>(getDriver);
+        _sessionOptions = sessionOptions;
     }
     private IWebDriver Driver => _getDriver?.Value ?? throw new ArgumentNullException(nameof(_getDriver.Value));
 
-    public Task StartAsync()
+    public async Task StartAsync()
     {
         _ = Driver;
-        return Task.CompletedTask;
+        if (_sessionOptions.IsNetworkInterceptionEnabled)
+        {
+            await Driver.Manage().Network.StartMonitoring();
+        }
     }
 
     public async Task NavigateToAsync(Uri uri) => await Driver.Navigate().GoToUrlAsync(uri);

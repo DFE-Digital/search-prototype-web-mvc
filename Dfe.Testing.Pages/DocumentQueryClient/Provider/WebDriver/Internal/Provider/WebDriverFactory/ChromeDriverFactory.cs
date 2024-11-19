@@ -8,6 +8,7 @@ internal sealed class ChromeDriverFactory : WebDriverFactoryBase<ChromeDriver>
     {
         // TODO could enable caching driverService in the abstract class - so that when new ChromeDriver it's created from the cached instance?
         var driverService = ChromeDriverService.CreateDefaultService();
-        return Task.FromResult(() => new ChromeDriver(driverService));
+        return Task.FromResult(
+            () => new ChromeDriver(driverService));
     }
 }

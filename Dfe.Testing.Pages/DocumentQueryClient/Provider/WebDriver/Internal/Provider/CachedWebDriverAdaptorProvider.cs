@@ -10,7 +10,7 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
     private readonly WebDriverClientSessionOptions _webDriverClientSessionOptions;
     private readonly IWebDriverSessionOptionsBuilder _webDriverSessionOptionsBuilder;
     private readonly IApplicationNavigatorAccessor _applicationNavigatorAccessor;
-    private IWebDriverAdaptor? _instance = null;
+    private IWebDriverAdaptor? _cachedWebDriverInstance = null;
     public CachedWebDriverAdaptorProvider(
         WebDriverClientSessionOptions webDriverClientSessionOptions,
         IWebDriverSessionOptionsBuilder webDriverSessionOptionsBuilder,
@@ -26,7 +26,7 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
 
     public async Task<IWebDriverAdaptor> CreateAsync()
     {
-        if (_instance == null)
+        if (_cachedWebDriverInstance == null)
         {
             try
             {
@@ -35,7 +35,6 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
                 await _semaphore.WaitAsync();
                 // TODO browser options Dictionary
                 // TODO browser version
-                // TODO handle monitoring here as part of the Lazy delegate - await driver.Manage().Network.StartMonitoring() if sessionOptions.EnableNetworkInterception
                 WebDriverSessionOptions sessionOptions = _webDriverSessionOptionsBuilder
                     .WithBrowserType(_webDriverClientSessionOptions.BrowserName)
                     .WithNetworkInterception(_webDriverClientSessionOptions.EnableNetworkInterception)
@@ -43,17 +42,18 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
                     .WithRequestTimeout(_webDriverClientSessionOptions.RequestTimeout)
                     .Build();
 
-                _instance = new LazyWebDriverAdaptor(
-                    getDriver: await factory.CreateDriver(sessionOptions));
+                _cachedWebDriverInstance = new LazyWebDriverAdaptor(
+                    getDriver: await factory.CreateDriver(sessionOptions),
+                    sessionOptions);
 
-                _applicationNavigatorAccessor.Navigator = _instance;
+                _applicationNavigatorAccessor.Navigator = _cachedWebDriverInstance;
             }
             finally
             {
                 _semaphore.Release();
             }
         }
-        return _instance;
+        return _cachedWebDriverInstance;
     }
 
 
@@ -75,32 +75,32 @@ internal sealed class CachedWebDriverAdaptorProvider : IWebDriverAdaptorProvider
     {
         if (disposing)
         {
-            _instance?.Dispose();
-            _instance = null;
+            _cachedWebDriverInstance?.Dispose();
+            _cachedWebDriverInstance = null;
 
-            if (_instance is IDisposable disposable)
+            if (_cachedWebDriverInstance is IDisposable disposable)
             {
                 disposable.Dispose();
-                _instance = null;
+                _cachedWebDriverInstance = null;
             }
         }
     }
 
     async ValueTask DisposeAsyncCore()
     {
-        if (_instance is not null)
+        if (_cachedWebDriverInstance is not null)
         {
-            await _instance.DisposeAsync().ConfigureAwait(false);
+            await _cachedWebDriverInstance.DisposeAsync().ConfigureAwait(false);
         }
 
-        if (_instance is IAsyncDisposable disposable)
+        if (_cachedWebDriverInstance is IAsyncDisposable disposable)
         {
             await disposable.DisposeAsync().ConfigureAwait(false);
         }
         else
         {
-            _instance?.Dispose();
+            _cachedWebDriverInstance?.Dispose();
         }
-        _instance = null;
+        _cachedWebDriverInstance = null;
     }
 }
