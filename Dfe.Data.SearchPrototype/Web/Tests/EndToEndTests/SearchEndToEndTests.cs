@@ -7,9 +7,9 @@ using Xunit.Abstractions;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.EndToEndTests;
 
-public sealed class ExampleUITest : BaseEndToEndTest
+public sealed class SearchEndToEndTests : BaseEndToEndTest
 {
-    public ExampleUITest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+    public SearchEndToEndTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
 

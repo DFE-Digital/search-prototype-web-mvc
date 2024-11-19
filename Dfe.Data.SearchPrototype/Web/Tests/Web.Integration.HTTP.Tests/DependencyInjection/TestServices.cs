@@ -3,6 +3,7 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Testing.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests.DependencyInjection;
 
@@ -17,11 +18,7 @@ internal sealed class TestServices
     private TestServices()
     {
         IServiceCollection services = new ServiceCollection()
-            .AddTransient<SearchComponent>()
-            .AddTransient<NavigationBarComponent>()
-            .AddTransient<HomePage>()
-            .AddTransient<SearchResultsComponent>()
-            .AddTransient<FilterComponent>()
+            .AddPages()
             .AddAngleSharpQueryClient<Program>();
 
         _serviceProvider = services.BuildServiceProvider();
