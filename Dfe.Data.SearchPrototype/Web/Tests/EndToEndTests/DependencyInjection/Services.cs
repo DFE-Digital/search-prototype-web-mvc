@@ -42,8 +42,3 @@ internal sealed class Services
 
     internal IServiceScope CreateScope() => _serviceProvider.CreateScope();
 }
-
-internal abstract class BaseServices
-{
-
-}
