@@ -10,6 +10,8 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
     public void Run(QueryRequest args, Action<IDocumentPart> handler)
     {
+        ArgumentNullException.ThrowIfNull(args);
+        ArgumentNullException.ThrowIfNull(args.Query);
         if (args.Scope == null)
         {
             handler(
@@ -26,6 +28,8 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
     public TResult Query<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> Mapper)
     {
+        ArgumentNullException.ThrowIfNull(queryArgs);
+        ArgumentNullException.ThrowIfNull(queryArgs.Query);
         IElement element = queryArgs.Scope == null ?
             QueryForElementInScope(_htmlDocument, queryArgs.Query) :
                 // find the scope and query within
@@ -40,6 +44,8 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
 
     public IEnumerable<TResult> QueryMany<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> Mapper)
     {
+        ArgumentNullException.ThrowIfNull(queryArgs);
+        ArgumentNullException.ThrowIfNull(queryArgs.Query);
         IEnumerable<IElement> elements = queryArgs.Scope == null ?
             QueryForMultipleElementsFromScope(scope: _htmlDocument, selector: queryArgs.Query) :
                 // find the scope and query within

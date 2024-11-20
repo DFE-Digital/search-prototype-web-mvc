@@ -1,12 +1,12 @@
-﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.CheckboxInput;
+﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.CheckboxWithLabel;
 
-public sealed class CheckboxWithLabelComponentFactory : ComponentFactoryBase<CheckboxWithLabel>
+public sealed class CheckboxWithLabelFactory : ComponentFactoryBase<CheckboxWithLabel>
 {
     internal static IElementSelector Checkbox => new ElementSelector(".govuk-checkboxes__item");
     internal static IElementSelector Input => new ElementSelector(".govuk-checkboxes__input");
     internal static IElementSelector Label => new ElementSelector(".govuk-checkboxes__label");
 
-    public CheckboxWithLabelComponentFactory(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)
+    public CheckboxWithLabelFactory(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)
     {
     }
 
@@ -30,10 +30,11 @@ public sealed class CheckboxWithLabelComponentFactory : ComponentFactoryBase<Che
 
     public override List<CheckboxWithLabel> GetMany(QueryRequest? request = null)
     {
-        IElementSelector? scope = request?.Scope;
-        QueryRequest queryRequest = new(
-            query: request?.Query ?? Checkbox,
-            scope);
+        QueryRequest queryRequest = new()
+        {
+            Query = request?.Query ?? Checkbox,
+            Scope = request?.Scope
+        };
 
         return DocumentQueryClient.QueryMany(
                 args: queryRequest,

@@ -1,4 +1,6 @@
-﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.CheckboxInput;
+﻿using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents;
+
+namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.CheckboxWithLabel;
 
 public sealed record CheckboxWithLabel : IComponent
 {

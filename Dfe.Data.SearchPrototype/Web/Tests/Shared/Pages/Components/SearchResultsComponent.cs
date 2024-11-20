@@ -15,14 +15,20 @@ public sealed class SearchResultsComponent : PagePartBase
 
     public string GetResultsHeading()
         => DocumentQueryClient.Query(
-            new QueryRequest(
-                query: new ElementSelector("#search-results-count"), scope: Container),
-                mapper: (documentPart) => documentPart.Text.Trim());
+            new QueryRequest()
+            {
+                Query = new ElementSelector("#search-results-count"),
+                Scope = Container
+            },
+            mapper: (documentPart) => documentPart.Text.Trim());
 
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
-            new QueryRequest(
-                query: new ElementSelector("#establishment-search-results > div"), scope: Container),
+                args: new QueryRequest()
+                {
+                    Query = new ElementSelector("#establishment-search-results > div"),
+                    Scope = Container,
+                },
                 mapper:
                     (documentPart) => new EstablishmentSearchResult(
                             Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),

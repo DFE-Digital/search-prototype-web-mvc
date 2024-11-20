@@ -1,29 +1,33 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 using Dfe.Testing.Pages.DocumentQueryClient;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.Inputs;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Inputs;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class SearchComponent : PagePartBase
 {
     internal static ElementSelector Container => new("#search-establishments-form");
-    internal static QueryRequest SearchInput => new(query: new ElementSelector("#searchKeyWord"), scope: Container);
-    internal static QueryRequest Heading => new(
-        query: new ElementSelector("#search-page-search-establishments-form-label"),
-        scope: Container);
-    internal static QueryRequest SubHeading => new(
-        query: new ElementSelector("#searchKeyWord-hint"),
-        scope: Container);
+    internal static QueryRequest SearchInput => new() { Query = new ElementSelector("#searchKeyWord"), Scope = Container };
+    internal static QueryRequest Heading => new() { Query = new ElementSelector("#search-page-search-establishments-form-label"), Scope = Container };
+    internal static QueryRequest SubHeading => new()
+    {
+        Query = new ElementSelector("#searchKeyWord-hint"),
+        Scope = Container
+    };
 
-    internal static QueryRequest NoSearchResultsHeading => new(
-        query: new ElementSelector("#no-results"),
-        scope: Container);
+    internal static QueryRequest NoSearchResultsHeading => new()
+    {
+        Query = new ElementSelector("#no-results"),
+        Scope = Container
+    };
 
-    internal static QueryRequest SearchButton => new(
-        query: new ElementSelector("#search"),
-        scope: Container);
+    internal static QueryRequest SearchButton => new()
+    {
+        Query = new ElementSelector("#search"),
+        Scope = Container
+    };
 
     public SearchComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,

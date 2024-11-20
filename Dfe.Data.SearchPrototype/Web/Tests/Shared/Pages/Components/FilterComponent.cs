@@ -2,40 +2,40 @@
 using Dfe.Testing.Pages.DocumentQueryClient;
 using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.Form;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Form;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class FilterComponent : PagePartBase
 {
-    private readonly FormComponentFactory _formComponent;
+    private readonly FormFactory _formComponent;
 
     internal static IElementSelector FiltersContainer => new ElementSelector("#filters-container");
 
     private static QueryRequest FacetValueByValue(FacetValue facetValue) =>
-        new(
-            query: new ElementSelector($"input[value={facetValue.Value}]"),
-            scope: FiltersContainer);
+        new()
+        {
+            Query = new ElementSelector($"input[value={facetValue.Value}]"),
+            Scope = FiltersContainer
+        };
 
     private static QueryRequest SubmitFiltersButton =>
-        new(
-            query: new ElementSelector("#filters-button"),
-            scope: FiltersContainer);
-
+        new()
+        {
+            Query = new ElementSelector("#filters-button"),
+            Scope = FiltersContainer
+        };
     private static QueryRequest ClearFiltersButton =>
-        new(
-            query: new ElementSelector("#clearFilters"),
-            scope: FiltersContainer);
-
-    private static QueryRequest Facets =>
-        new(
-            query: new ElementSelector(".govuk-fieldset"),
-            scope: FiltersContainer);
+        new()
+        {
+            Query = new ElementSelector("#clearFilters"),
+            Scope = FiltersContainer
+        };
 
     public FilterComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,
-        FormComponentFactory formComponent) : base(documentQueryClientAccessor)
+        FormFactory formComponent) : base(documentQueryClientAccessor)
     {
         _formComponent = formComponent;
     }

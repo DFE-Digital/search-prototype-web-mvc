@@ -17,6 +17,8 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
 
     public void Run(QueryRequest args, Action<IDocumentPart> handler)
     {
+        ArgumentNullException.ThrowIfNull(args);
+        ArgumentNullException.ThrowIfNull(args.Query);
         if (args.Scope == null)
         {
             handler(
@@ -35,6 +37,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
     public TResult Query<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> mapper)
     {
         ArgumentNullException.ThrowIfNull(queryArgs);
+        ArgumentNullException.ThrowIfNull(queryArgs.Query);
         ArgumentNullException.ThrowIfNull(mapper);
         IDocumentPart? documentPartToMap =
             WebDriverDocumentPart.Create(
@@ -50,6 +53,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
     public IEnumerable<TResult> QueryMany<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> mapper)
     {
         ArgumentNullException.ThrowIfNull(queryArgs);
+        ArgumentNullException.ThrowIfNull(queryArgs.Query);
         ArgumentNullException.ThrowIfNull(mapper);
         IEnumerable<IWebElement>? elements =
                 queryArgs.Scope == null ?

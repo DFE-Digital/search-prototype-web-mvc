@@ -1,4 +1,4 @@
-﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.Inputs;
+﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Inputs;
 public record Input
 {
     public required string Name { get; init; }

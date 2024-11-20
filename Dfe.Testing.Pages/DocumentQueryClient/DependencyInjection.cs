@@ -1,8 +1,9 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Pages;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.AnchorLink;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.CheckboxInput;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.FieldSet;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.Form;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.AnchorLink;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Buttons;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.CheckboxWithLabel;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.FieldSet;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Form;
 
 namespace Dfe.Testing.Pages.DocumentQueryClient;
 
@@ -15,10 +16,11 @@ internal static class DependencyInjection
             // Pages
             .AddScoped<IPageFactory, PageFactory>()
             // Common Components
-            .AddTransient<AnchorLinkComponentFactory>()
-            .AddTransient<FormComponentFactory>()
-            .AddTransient<FieldSetComponentFactory>()
-            .AddTransient<CheckboxWithLabelComponentFactory>()
+            .AddTransient<AnchorLinkFactory>()
+            .AddTransient<FormFactory>()
+            .AddTransient<FieldsetFactory>()
+            .AddTransient<CheckboxWithLabelFactory>()
+            .AddTransient<ButtonFactory>()
             // Helpers    
             .AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
 }
