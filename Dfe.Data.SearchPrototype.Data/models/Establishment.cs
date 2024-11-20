@@ -1,30 +1,6 @@
 ﻿using CsvHelper.Configuration.Attributes;
-using System.Text.Json.Serialization;
 
 namespace Dfe.Data.SearchPrototype.Data.Models;
-
-public class GeographyPoint
-{
-    public GeographyPoint(double latitude, double longitude)
-    {
-        coordinates = new List<double>() { longitude, latitude };
-    }
-    public string type => "Point";
-    public List<double> coordinates { get; }
-}
-
-public class EstablishmentOut : Establishment
-{
-    public EstablishmentOut(double latitude, double longitude)
-    {
-        geoLocation = new GeographyPoint(latitude, longitude);
-    }
-    public GeographyPoint geoLocation { get; }
-
-    [JsonPropertyName("@search.action")]
-    public string action { get => "mergeOrUpload"; }
-}
-
 
 public class Establishment
 {
