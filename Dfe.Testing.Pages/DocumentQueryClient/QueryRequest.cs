@@ -1,5 +1,5 @@
 ﻿namespace Dfe.Testing.Pages.DocumentQueryClient;
-public class QueryRequest
+public sealed class QueryRequest
 {
     public IElementSelector Query { get; }
     public IElementSelector? Scope { get; }

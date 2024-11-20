@@ -1,8 +1,8 @@
 ﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages;
-public abstract class PageBase
+public abstract class PagePartBase
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
-    protected PageBase(IDocumentQueryClientAccessor documentQueryClientAccessor)
+    protected PagePartBase(IDocumentQueryClientAccessor documentQueryClientAccessor)
     {
         ArgumentNullException.ThrowIfNull(documentQueryClientAccessor, nameof(documentQueryClientAccessor));
         _documentQueryClientAccessor = documentQueryClientAccessor;

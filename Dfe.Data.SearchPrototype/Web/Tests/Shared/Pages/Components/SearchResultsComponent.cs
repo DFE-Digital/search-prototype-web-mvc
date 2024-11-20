@@ -2,10 +2,10 @@
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 using Dfe.Testing.Pages.DocumentQueryClient;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
-public sealed class SearchResultsComponent : ComponentBase
+public sealed class SearchResultsComponent : PagePartBase
 {
     internal static ElementSelector Container => new("#results");
     public SearchResultsComponent(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)

@@ -1,15 +1,13 @@
 ﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.CheckboxInput;
 
-public sealed class CheckboxWithLabelComponent
+public sealed class CheckboxWithLabelComponentFactory : ComponentFactoryBase<CheckboxWithLabel>
 {
-    private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
     internal static IElementSelector Checkbox => new ElementSelector(".govuk-checkboxes__item");
     internal static IElementSelector Input => new ElementSelector(".govuk-checkboxes__input");
     internal static IElementSelector Label => new ElementSelector(".govuk-checkboxes__label");
 
-    public CheckboxWithLabelComponent(IDocumentQueryClientAccessor documentQueryClientAccessor)
+    public CheckboxWithLabelComponentFactory(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)
     {
-        _documentQueryClientAccessor = documentQueryClientAccessor;
     }
 
     // TODO Checkbox component
@@ -30,16 +28,20 @@ public sealed class CheckboxWithLabelComponent
             };
         };
 
-    public IEnumerable<CheckboxWithLabel> GetCheckboxes(IElementSelector? scope = null)
+    public override List<CheckboxWithLabel> GetMany(QueryRequest? request = null)
     {
-        QueryRequest queryRequest = new(Checkbox, scope);
+        IElementSelector? scope = request?.Scope;
+        QueryRequest queryRequest = new(
+            query: request?.Query ?? Checkbox,
+            scope);
 
-        return _documentQueryClientAccessor.DocumentQueryClient.QueryMany(
+        return DocumentQueryClient.QueryMany(
                 args: queryRequest,
-                mapper: MapCheckboxes);
+                mapper: MapCheckboxes)
+            .ToList();
     }
 
-    public IEnumerable<CheckboxWithLabel> GetCheckboxesFromPart(IDocumentPart? part)
+    internal List<CheckboxWithLabel> GetCheckboxesFromPart(IDocumentPart? part)
         => part?
             .GetChildren(Checkbox)?
             .Select(MapCheckboxes)

@@ -87,7 +87,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
             set => _wrappedElement.SendKeys(value);
         }
 
-        public string TagName => throw new NotImplementedException();
+        public string TagName => _wrappedElement.TagName;
 
         public bool HasAttribute(string attributeName) => GetAttribute(attributeName) != null;
         public string? GetAttribute(string attributeName)

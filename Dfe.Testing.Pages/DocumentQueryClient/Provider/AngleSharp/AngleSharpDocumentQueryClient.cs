@@ -97,7 +97,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
             set => _element.TextContent = value;
         }
 
-        public string TagName => throw new NotImplementedException();
+        public string TagName => _element.TagName;
 
         public void Click()
         {

@@ -3,14 +3,14 @@ using HttpMethod = System.Net.Http.HttpMethod;
 
 namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.Form;
 
-public sealed class FormComponent : ComponentBase
+public sealed class FormComponentFactory : ComponentFactoryBase<Form>
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
-    private readonly FieldSetComponent _fieldSetComponent;
+    private readonly FieldSetComponentFactory _fieldSetComponent;
 
-    public FormComponent(
+    public FormComponentFactory(
         IDocumentQueryClientAccessor documentQueryClientAccessor,
-        FieldSetComponent fieldSetComponent) : base(documentQueryClientAccessor)
+        FieldSetComponentFactory fieldSetComponent) : base(documentQueryClientAccessor)
     {
         _documentQueryClientAccessor = documentQueryClientAccessor;
         _fieldSetComponent  = fieldSetComponent;
@@ -19,21 +19,25 @@ public sealed class FormComponent : ComponentBase
     // may not be appropriate if there are multiple forms on the page
     internal IElementSelector DefaultFormQuery = new ElementSelector("form");
 
-
-
-    public Form Get(IElementSelector? formQuery = null, IElementSelector? scope = null)
+    public override List<Form> GetMany(QueryRequest? request = null)
     {
-        QueryRequest queryRequest = new(formQuery ?? DefaultFormQuery, scope);
-        return DocumentQueryClient.Query(
-            queryRequest, 
+        IElementSelector? scope = request?.Scope;
+        QueryRequest queryRequest = new(
+            query: request?.Query ?? DefaultFormQuery, 
+            scope);
+
+        return DocumentQueryClient.QueryMany(
+            queryRequest,
             mapper: (part) => new Form()
             {
-                Method = HttpMethod.Parse(part.GetAttribute("method") 
+                TagName = part.TagName,
+                Method = HttpMethod.Parse(part.GetAttribute("method")
                     ?? throw new ArgumentNullException(nameof(Form.Method), "method on form is null")),
-                FieldSets = _fieldSetComponent.GetFieldSets(scope),
-                Action = part.GetAttribute("action") 
+                FieldSets = _fieldSetComponent.GetMany(),
+                Action = part.GetAttribute("action")
                     ?? throw new ArgumentNullException(nameof(Form.Action), "action on form is null"),
                 IsFormValidatedWithHTML = part.HasAttribute("novalidate")
-            });
+            })
+            .ToList();
     }
 }

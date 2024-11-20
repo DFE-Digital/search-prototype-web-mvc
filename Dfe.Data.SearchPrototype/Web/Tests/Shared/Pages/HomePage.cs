@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 
-public sealed class HomePage : PageBase
+public sealed class HomePage : PagePartBase
 {
     public HomePage(
         IDocumentQueryClientAccessor documentQueryClientAccessor, 
