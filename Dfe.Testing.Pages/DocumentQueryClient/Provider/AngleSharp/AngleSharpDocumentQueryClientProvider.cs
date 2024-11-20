@@ -1,4 +1,6 @@
-﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
+﻿using AngleSharp;
+
+namespace Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
 internal class AngleSharpDocumentQueryClientProvider : IDocumentQueryClientProvider
 {
     private readonly HttpClient _client;
@@ -17,7 +19,10 @@ internal class AngleSharpDocumentQueryClientProvider : IDocumentQueryClientProvi
     private static async Task<IHtmlDocument> GetDocumentAsync(HttpResponseMessage response)
     {
         var content = await response.Content.ReadAsStringAsync();
-        var config = Configuration.Default.WithDefaultLoader();
+        var config = Configuration.Default
+            .WithDefaultLoader(new LoaderOptions { IsResourceLoadingEnabled = true })
+            .WithCss();
+
         var document = await
             BrowsingContext.New(config)
                     .OpenAsync(ResponseFactory, CancellationToken.None);

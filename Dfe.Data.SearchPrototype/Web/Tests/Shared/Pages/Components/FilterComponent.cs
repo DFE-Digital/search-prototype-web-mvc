@@ -2,6 +2,7 @@
 using Dfe.Testing.Pages.DocumentQueryClient;
 using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Buttons;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Form;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 
@@ -9,7 +10,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class FilterComponent : PagePartBase
 {
-    private readonly FormFactory _formComponent;
+    private readonly FormFactory _formFactory;
 
     internal static IElementSelector FiltersContainer => new ElementSelector("#filters-container");
 
@@ -37,16 +38,18 @@ public sealed class FilterComponent : PagePartBase
         IDocumentQueryClientAccessor documentQueryClientAccessor,
         FormFactory formComponent) : base(documentQueryClientAccessor)
     {
-        _formComponent = formComponent;
+        _formFactory = formComponent;
     }
 
     public IEnumerable<Facet> GetDisplayedFacets()
-        => _formComponent.Get().FieldSets
+        => _formFactory.Get().FieldSets
                 .Select(
                     (fieldSet) => new Facet(
                         Name: fieldSet.Legend,
                         FacetValues: fieldSet.Checkboxes.Select(
                             (checkbox) => new FacetValue(checkbox.Label, checkbox.Value))));
+
+    public IEnumerable<Button> GetFilterButtons() => _formFactory.Get().Buttons;
 
     public FilterComponent ApplyFacetValue(FacetValue applyFacet)
     {

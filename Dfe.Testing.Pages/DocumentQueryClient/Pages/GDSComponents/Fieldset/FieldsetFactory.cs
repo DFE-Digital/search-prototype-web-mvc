@@ -24,12 +24,11 @@ public sealed class FieldsetFactory : ComponentFactoryBase<Fieldset>
 
         return DocumentQueryClient.QueryMany(
             queryRequest,
-            mapper:
-                (part) => new Fieldset()
-                {
-                    TagName = part.TagName,
-                    Legend = part.GetChild(new ElementSelector("legend"))?.Text ?? throw new ArgumentNullException("legend on fieldset is null"),
-                    Checkboxes = _checkboxWithLabelComponent.GetCheckboxesFromPart(part)
-                }).ToList();
+            mapper: (part) => new Fieldset()
+            {
+                TagName = part.TagName,
+                Legend = part.GetChild(new ElementSelector("legend"))?.Text ?? throw new ArgumentNullException("legend on fieldset is null"),
+                Checkboxes = _checkboxWithLabelComponent.GetCheckboxesFromPart(part)
+            }).ToList();
     }
 }

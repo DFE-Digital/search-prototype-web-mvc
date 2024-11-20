@@ -46,12 +46,13 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
     {
         ArgumentNullException.ThrowIfNull(queryArgs);
         ArgumentNullException.ThrowIfNull(queryArgs.Query);
-        IEnumerable<IElement> elements = queryArgs.Scope == null ?
-            QueryForMultipleElementsFromScope(scope: _htmlDocument, selector: queryArgs.Query) :
-                // find the scope and query within
-                QueryForMultipleElementsFromScope(
-                    scope: QueryForElementInScope(scope: _htmlDocument, selector: queryArgs.Scope),
-                    selector: queryArgs.Query);
+        List<IElement> elements =
+            (queryArgs.Scope == null ?
+                QueryForMultipleElementsFromScope(scope: _htmlDocument, selector: queryArgs.Query) :
+                    // find the scope and query within
+                    QueryForMultipleElementsFromScope(
+                        scope: QueryForElementInScope(scope: _htmlDocument, selector: queryArgs.Scope),
+                        selector: queryArgs.Query)).ToList();
 
         return AsDocumentParts(elements)
             .Select(t => Mapper(t));
@@ -78,7 +79,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         var elements = scope.QuerySelectorAll(selector.ToSelector());
         if (elements == null || elements.Length == 0)
         {
-            throw new ArgumentException($"No elements found in scope using selector {selector.ToSelector()}");
+            return [];
         }
         return elements;
     }

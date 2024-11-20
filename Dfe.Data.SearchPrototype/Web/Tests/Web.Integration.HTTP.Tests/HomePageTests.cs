@@ -136,8 +136,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
             // Assert
             homePage.Search.SearchResults.GetResultsHeading().Should().Be("1 Result");
             homePage.Search.SearchResults.GetResults().Should().BeEquivalentTo(expectedSearchResults);
-
-            //TODO labels on the search results
+            // TODO labels on the search results
+            // TODO MOCK FACETS SO THAT THEY APPEAR UNDER FILTER BUTTONS
         }
 
         [Fact]
@@ -174,6 +174,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
             // Assert
             searchResultsPage.Search.SearchResults.GetResultsHeading().Should().Be("2 Results");
             searchResultsPage.Search.SearchResults.GetResults().Should().BeEquivalentTo(expectedSearchResults);
+            // TODO MOCK FACETS SO THAT THEY APPEAR UNDER FILTER BUTTONS
         }
 
         [Fact]

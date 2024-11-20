@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Buttons;
+﻿namespace Dfe.Testing.Pages.DocumentQueryClient.Pages.GDSComponents.Buttons;
 
 public sealed class ButtonFactory : ComponentFactoryBase<Button>
 {
-    internal static IElementSelector Button => new ElementSelector(".govuk-button");
+    internal static IElementSelector Button => new ElementSelector("button");
     public ButtonFactory(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)
     {
     }
@@ -31,7 +25,7 @@ public sealed class ButtonFactory : ComponentFactoryBase<Button>
                     ButtonType =
                             classStyles.Contains("govuk-button--secondary") ? ButtonStyleType.Secondary :
                             classStyles.Contains("gov-uk-button--warning") ? ButtonStyleType.Warning : ButtonStyleType.Primary,
-                    Text = part.Text ?? string.Empty,
+                    Text = part.Text?.Trim() ?? string.Empty,
                     TagName = part.TagName,
                     Disabled = part.HasAttribute("disabled"),
                     Type = part.GetAttribute("type") ?? string.Empty

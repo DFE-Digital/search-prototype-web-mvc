@@ -37,8 +37,8 @@ public sealed class FormFactory : ComponentFactoryBase<Form>
             {
                 TagName = part.TagName,
                 Method = HttpMethod.Parse(part.GetAttribute("method") ?? throw new ArgumentNullException(nameof(Form.Method), "method on form is null")),
-                FieldSets = _fieldSetFactory.GetMany(),
-                Buttons = _buttonFactory.GetMany(),
+                FieldSets = _fieldSetFactory.GetMany(new QueryRequest() { Scope = queryRequest.Scope }),
+                Buttons = _buttonFactory.GetMany(new QueryRequest() { Scope = queryRequest.Scope }),
                 Action = part.GetAttribute("action") ?? throw new ArgumentNullException(nameof(Form.Action), "action on form is null"),
                 IsFormValidatedWithHTML = part.HasAttribute("novalidate")
             })
