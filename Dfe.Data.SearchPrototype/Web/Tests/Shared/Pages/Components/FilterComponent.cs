@@ -1,5 +1,4 @@
-﻿using AngleSharp.Dom;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
 using Dfe.Testing.Pages.DocumentQueryClient;
 using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
@@ -34,7 +33,9 @@ public sealed class FilterComponent : ComponentBase
             query: new ElementSelector(".govuk-fieldset"),
             scope: FiltersContainer);
 
-    public FilterComponent(IDocumentQueryClientAccessor documentQueryClientAccessor, CheckboxWithLabelComponent checkboxWithLabelComponent) : base(documentQueryClientAccessor)
+    public FilterComponent(
+        IDocumentQueryClientAccessor documentQueryClientAccessor, 
+        CheckboxWithLabelComponent checkboxWithLabelComponent) : base(documentQueryClientAccessor)
     {
         _checkboxWithLabelComponent = checkboxWithLabelComponent;
     }

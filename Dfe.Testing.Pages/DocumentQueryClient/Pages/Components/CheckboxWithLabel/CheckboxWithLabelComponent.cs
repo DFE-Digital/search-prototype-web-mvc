@@ -38,5 +38,6 @@ public sealed class CheckboxWithLabelComponent
     public IEnumerable<CheckboxWithLabel> GetCheckboxesFromPart(IDocumentPart? part)
         => part?
             .GetChildren(new ElementSelector(".govuk-checkboxes__item"))
-            ?.Select(MapCheckboxes) ?? throw new ArgumentNullException(nameof(part));
+            ?.Select(MapCheckboxes)
+            .ToList() ?? throw new ArgumentNullException(nameof(part));
 }
