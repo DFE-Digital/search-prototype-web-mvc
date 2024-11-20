@@ -2,7 +2,7 @@
 
 public sealed class ButtonFactory : ComponentFactoryBase<Button>
 {
-    internal static IElementSelector Button => new ElementSelector("button");
+    internal static IElementSelector Button => new ElementSelector(".govuk-button");
     public ButtonFactory(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)
     {
     }
