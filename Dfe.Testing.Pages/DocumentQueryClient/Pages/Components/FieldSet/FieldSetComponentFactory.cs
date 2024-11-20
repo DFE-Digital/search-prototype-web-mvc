@@ -13,8 +13,6 @@ public sealed class FieldSetComponentFactory : ComponentFactoryBase<FieldSet>
         _checkboxWithLabelComponent = checkboxWithLabelComponent;
     }
 
-    private IEnumerable<CheckboxWithLabel> Checkboxes => _checkboxWithLabelComponent.GetMany();
-
     public override List<FieldSet> GetMany(QueryRequest? request = null)
     {
         IElementSelector? scope = request?.Scope;
