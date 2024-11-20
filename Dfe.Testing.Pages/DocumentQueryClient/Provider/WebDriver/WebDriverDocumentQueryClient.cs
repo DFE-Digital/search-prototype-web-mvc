@@ -15,7 +15,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         _webDriverAdaptor = webDriverAdaptor;
     }
 
-    public void Run(ElementQueryArguments args, Action<IDocumentPart> handler)
+    public void Run(QueryRequest args, Action<IDocumentPart> handler)
     {
         if (args.Scope == null)
         {
@@ -32,7 +32,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
                         WebDriverByLocatorHelpers.CreateLocator(args.Query))));
     }
 
-    public TResult Query<TResult>(ElementQueryArguments queryArgs, Func<IDocumentPart, TResult> mapper)
+    public TResult Query<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> mapper)
     {
         ArgumentNullException.ThrowIfNull(queryArgs);
         ArgumentNullException.ThrowIfNull(mapper);
@@ -47,12 +47,12 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         return mapper(documentPartToMap);
     }
 
-    public IEnumerable<TResult> QueryMany<TResult>(ElementQueryArguments queryArgs, Func<IDocumentPart, TResult> mapper)
+    public IEnumerable<TResult> QueryMany<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> mapper)
     {
         ArgumentNullException.ThrowIfNull(queryArgs);
         ArgumentNullException.ThrowIfNull(mapper);
         IEnumerable<IWebElement>? elements =
-                queryArgs.Query == null ?
+                queryArgs.Scope == null ?
                     _webDriverAdaptor.FindElements(queryArgs.Query!) :
                     _webDriverAdaptor.FindElement(queryArgs.Scope!)
                         .FindElements(
@@ -87,6 +87,9 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
             set => _wrappedElement.SendKeys(value);
         }
 
+        public string TagName => throw new NotImplementedException();
+
+        public bool HasAttribute(string attributeName) => GetAttribute(attributeName) != null;
         public string? GetAttribute(string attributeName)
         {
             ArgumentException.ThrowIfNullOrEmpty(attributeName);

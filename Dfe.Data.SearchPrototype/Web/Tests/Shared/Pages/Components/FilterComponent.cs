@@ -3,53 +3,51 @@ using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
 using Dfe.Testing.Pages.DocumentQueryClient;
 using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.CheckboxInput;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class FilterComponent : ComponentBase
 {
+    private readonly CheckboxWithLabelComponent _checkboxWithLabelComponent;
+
     internal static IElementSelector FiltersContainer => new ElementSelector("#filters-container");
 
-    private static ElementQueryArguments FacetValueByValue(FacetValue facetValue) => 
+    private static QueryRequest FacetValueByValue(FacetValue facetValue) =>
         new(
             query: new ElementSelector($"input[value={facetValue.Value}]"),
             scope: FiltersContainer);
 
-    private static ElementQueryArguments SubmitFiltersButton =>
+    private static QueryRequest SubmitFiltersButton =>
         new(
             query: new ElementSelector("#filters-button"),
             scope: FiltersContainer);
 
-    private static ElementQueryArguments ClearFiltersButton => 
+    private static QueryRequest ClearFiltersButton =>
         new(
             query: new ElementSelector("#clearFilters"),
             scope: FiltersContainer);
 
-    public FilterComponent(IDocumentQueryClientAccessor documentQueryClientAccessor) : base(documentQueryClientAccessor)
+    private static QueryRequest Facets =>
+        new(
+            query: new ElementSelector(".govuk-fieldset"),
+            scope: FiltersContainer);
+
+    public FilterComponent(IDocumentQueryClientAccessor documentQueryClientAccessor, CheckboxWithLabelComponent checkboxWithLabelComponent) : base(documentQueryClientAccessor)
     {
+        _checkboxWithLabelComponent = checkboxWithLabelComponent;
     }
 
     public IEnumerable<Facet> GetDisplayedFacets()
-    {
-        return DocumentQueryClient.QueryMany<Facet>(
-                new ElementQueryArguments(
-                    query: new ElementSelector(".govuk-fieldset"),
-                    scope: FiltersContainer),
-                (part) =>
-                {
-                    return new(
-                        Name: part.GetChild(new ElementSelector("legend"))!.Text.Trim(),
-                        FacetValues: // TODO library work to abstract checkboxes and labels
-                            (part.GetChildren(new ElementSelector(".govuk-checkboxes__item")) ?? throw new ArgumentNullException("could not find checkboxes"))
-                                .Select((checkboxWrapper) 
-                                    => new FacetValue(
-                                        Label: checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__label"))!.Text!,
-                                        Value: (checkboxWrapper.GetChild(new ElementSelector(".govuk-checkboxes__input")) ?? throw new ArgumentNullException("could not find input"))
-                                            .GetAttribute("value")!))
-                                .ToList());
-                });
-    }
+         => DocumentQueryClient.QueryMany(
+                args: Facets,
+                mapper: (facet)
+                    => new Facet(
+                        Name: facet.GetChild(new ElementSelector("legend"))!.Text.Trim(),
+                        FacetValues:
+                        _checkboxWithLabelComponent.GetCheckboxesFromPart(facet)
+                            .Select((checkboxWithLabel) => new FacetValue(checkboxWithLabel.Label, checkboxWithLabel.Value))));
 
     public FilterComponent ApplyFacet(FacetValue applyFacet)
     {

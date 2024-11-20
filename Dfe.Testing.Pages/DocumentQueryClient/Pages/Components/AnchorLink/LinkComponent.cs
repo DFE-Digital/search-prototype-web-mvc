@@ -17,11 +17,11 @@ public sealed class LinkComponent
 
     public Link GetLink(IElementSelector selector, IElementSelector? scope = null)
         => _documentQueryClientAccessor.DocumentQueryClient.Query(
-            args: new ElementQueryArguments(selector, scope),
+            args: new QueryRequest(selector, scope),
             mapper: MapToLink);
 
     public IEnumerable<Link> GetMultipleLinks(IElementSelector selector, IElementSelector? scope = null)
         => _documentQueryClientAccessor.DocumentQueryClient.QueryMany(
-            args: new ElementQueryArguments(selector, scope),
+            args: new QueryRequest(selector, scope),
             mapper: MapToLink);
 }

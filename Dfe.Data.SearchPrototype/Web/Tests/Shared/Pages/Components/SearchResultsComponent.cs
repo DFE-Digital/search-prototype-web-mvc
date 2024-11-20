@@ -15,13 +15,13 @@ public sealed class SearchResultsComponent : ComponentBase
 
     public string GetResultsHeading()
         => DocumentQueryClient.Query(
-            new ElementQueryArguments(
+            new QueryRequest(
                 query: new ElementSelector("#search-results-count"), scope: Container),
                 mapper: (documentPart) => documentPart.Text.Trim());
 
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
-            new ElementQueryArguments(
+            new QueryRequest(
                 query: new ElementSelector("#establishment-search-results > div"), scope: Container),
                 mapper:
                     (documentPart) => new EstablishmentSearchResult(

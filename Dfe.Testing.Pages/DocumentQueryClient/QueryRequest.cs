@@ -1,9 +1,9 @@
 ﻿namespace Dfe.Testing.Pages.DocumentQueryClient;
-public class ElementQueryArguments
+public class QueryRequest
 {
     public IElementSelector Query { get; }
     public IElementSelector? Scope { get; }
-    public ElementQueryArguments(
+    public QueryRequest(
         IElementSelector query,
         IElementSelector? scope = null)
     {

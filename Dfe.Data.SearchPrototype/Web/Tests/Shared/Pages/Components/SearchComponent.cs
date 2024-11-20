@@ -9,19 +9,19 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 public sealed class SearchComponent : ComponentBase
 {
     internal static ElementSelector Container => new("#search-establishments-form");
-    internal static ElementQueryArguments SearchInput => new(query: new ElementSelector("#searchKeyWord"), scope: Container);
-    internal static ElementQueryArguments Heading => new(
+    internal static QueryRequest SearchInput => new(query: new ElementSelector("#searchKeyWord"), scope: Container);
+    internal static QueryRequest Heading => new(
         query: new ElementSelector("#search-page-search-establishments-form-label"),
         scope: Container);
-    internal static ElementQueryArguments SubHeading => new(
+    internal static QueryRequest SubHeading => new(
         query: new ElementSelector("#searchKeyWord-hint"),
         scope: Container);
 
-    internal static ElementQueryArguments NoSearchResultsHeading => new(
+    internal static QueryRequest NoSearchResultsHeading => new(
         query: new ElementSelector("#no-results"),
         scope: Container);
 
-    internal static ElementQueryArguments SearchButton => new(
+    internal static QueryRequest SearchButton => new(
         query: new ElementSelector("#search"),
         scope: Container);
 

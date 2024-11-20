@@ -8,7 +8,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
         _htmlDocument = document;
     }
 
-    public void Run(ElementQueryArguments args, Action<IDocumentPart> handler)
+    public void Run(QueryRequest args, Action<IDocumentPart> handler)
     {
         if (args.Scope == null)
         {
@@ -24,7 +24,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
                 QueryForElementInScope(scope, args.Query)));
     }
 
-    public TResult Query<TResult>(ElementQueryArguments queryArgs, Func<IDocumentPart, TResult> Mapper)
+    public TResult Query<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> Mapper)
     {
         IElement element = queryArgs.Scope == null ?
             QueryForElementInScope(_htmlDocument, queryArgs.Query) :
@@ -38,7 +38,7 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
     }
 
 
-    public IEnumerable<TResult> QueryMany<TResult>(ElementQueryArguments queryArgs, Func<IDocumentPart, TResult> Mapper)
+    public IEnumerable<TResult> QueryMany<TResult>(QueryRequest queryArgs, Func<IDocumentPart, TResult> Mapper)
     {
         IEnumerable<IElement> elements = queryArgs.Scope == null ?
             QueryForMultipleElementsFromScope(scope: _htmlDocument, selector: queryArgs.Query) :
@@ -97,10 +97,14 @@ internal class AngleSharpDocumentQueryClient : IDocumentQueryClient
             set => _element.TextContent = value;
         }
 
+        public string TagName => throw new NotImplementedException();
+
         public void Click()
         {
             throw new NotImplementedException("Clicking is not available with an AngleSharp client");
         }
+
+        public bool HasAttribute(string attributeName) => GetAttribute(attributeName) != null;
 
         public string? GetAttribute(string attributeName)
         {

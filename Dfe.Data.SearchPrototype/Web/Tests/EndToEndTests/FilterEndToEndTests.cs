@@ -42,10 +42,8 @@ public sealed class FilterEndToEndTests : BaseEndToEndTest
         displayedFacetsAfterApplying.Select(t => t.Name).Should().BeEquivalentTo(facetsAvailable.Select(t => t.Name));
 
         // the selected facet should have been applied and be the only facetValue displayed in the facet
-        homePage.Filters.GetDisplayedFacets()
-            .Where(t => t.Name == facetBeingApplied.Name)
-            .Single().FacetValues
-            .Should().BeEquivalentTo(new[] { facetValueToApply });
+        var actualFacetBeingApplied = homePage.Filters.GetDisplayedFacets().Where(t => t.Name == facetBeingApplied.Name).ToList();
+        actualFacetBeingApplied.Single().FacetValues.Should().BeEquivalentTo(new[] { facetValueToApply });
 
         homePage.Search.SearchResults.GetResults().Should().NotBeNullOrEmpty();
     }

@@ -2,6 +2,7 @@
 public interface IDocumentPart
 {
     string Text { get; set;  }
+    bool HasAttribute(string attributeName);
     string? GetAttribute(string attributeName);
     IDictionary<string, string> GetAttributes();
     IEnumerable<IDocumentPart> GetChildren();
