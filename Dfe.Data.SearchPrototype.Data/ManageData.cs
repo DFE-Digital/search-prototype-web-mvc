@@ -1,5 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.Data.Configuration;
-using Dfe.Data.SearchPrototype.Data.models;
+using Dfe.Data.SearchPrototype.Data.Models;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 

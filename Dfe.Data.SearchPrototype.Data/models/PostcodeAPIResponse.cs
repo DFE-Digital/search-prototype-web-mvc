@@ -1,7 +1,7 @@
 ﻿
 using System.Text.Json.Serialization;
 
-namespace Dfe.Data.SearchPrototype.Data.models;
+namespace Dfe.Data.SearchPrototype.Data.Models;
 
 public class APIResult
 {

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Dfe.Data.SearchPrototype.Data.models;
+using Dfe.Data.SearchPrototype.Data.Models;
 
 namespace Dfe.Data.SearchPrototype.Data;
 
