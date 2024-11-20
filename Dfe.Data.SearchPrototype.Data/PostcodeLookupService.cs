@@ -13,25 +13,24 @@ public class PostcodeLookupService
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<IEnumerable<GeoLocation?>?> LookupPostcodes(IEnumerable<string> postcodes)
+    public async Task<IEnumerable<GeoLocation>> LookupPostcodes(IEnumerable<string> postcodes)
     {
         var client = _httpClientFactory.CreateClient("PostcodeLookupAPI");
         var jsonPayload = JsonSerializer.Serialize(new { postcodes = postcodes });
-        HttpResponseMessage response = await client.PostAsync("postcodes", new StringContent(jsonPayload, Encoding.UTF8, "application/json"));
+        using (HttpResponseMessage response = await client.PostAsync("postcodes", new StringContent(jsonPayload, Encoding.UTF8, "application/json")))
+        {
+            var geoLocations = new List<GeoLocation>();
 
-        PostcodeApiResponse? result = null;
-        try
-        {
             response.EnsureSuccessStatusCode();
-            if(response.Content is object)
+            if (response.Content is object)
             {
-                result = await response.Content.ReadFromJsonAsync<PostcodeApiResponse>();
+                PostcodeApiResponse? result = await response.Content.ReadFromJsonAsync<PostcodeApiResponse>();
+                geoLocations = result?.Result?
+                    .Where(apiResult => apiResult.Result != null)
+                    .Select(apiResult => apiResult.Result!)
+                    .ToList() ?? new List<GeoLocation>();
             }
+            return geoLocations;
         }
-        finally
-        {
-            response.Dispose();
-        }
-        return result?.Result?.Select(x => x.Result);
     }
 }

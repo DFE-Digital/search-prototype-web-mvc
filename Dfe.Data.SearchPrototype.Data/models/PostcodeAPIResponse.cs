@@ -5,7 +5,6 @@ namespace Dfe.Data.SearchPrototype.Data.Models;
 
 public class APIResult
 {
-    //public string? query { get; set; }
     [JsonPropertyName("result")]
     public GeoLocation? Result { get; set; }
 }

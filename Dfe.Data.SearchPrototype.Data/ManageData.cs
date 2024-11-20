@@ -33,7 +33,7 @@ public class ManageData
                     var establishmentsOut = new { value = new List<EstablishmentOut>() };
                     foreach (var establishment in batch)
                     {
-                        var geolocation = geoLocations?.FirstOrDefault(geoLocation => geoLocation?.postcode == establishment.POSTCODE);
+                        var geolocation = geoLocations.FirstOrDefault(geoLocation => geoLocation.postcode == establishment.POSTCODE);
                         if (geolocation != null)
                         {
                             var establishmentOut = new EstablishmentOut(latitude: geolocation.latitude, longitude: geolocation.longitude)
