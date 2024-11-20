@@ -1,4 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 using Dfe.Testing.Pages.Pages;
 using Xunit;
 using Xunit.Abstractions;
@@ -15,9 +16,11 @@ public sealed class SearchUITests : BaseUITest
     [Fact]
     public async Task SearchPageLoads()
     {
+        UIApplicationOptions options = GetTestService<UIApplicationOptions>();
+
         HttpRequestMessage request = new()
         {
-            RequestUri = new("https://searchprototype.azurewebsites.net/")
+            RequestUri = new Uri(options.BaseUrl, "/")
         };
 
         var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(request);

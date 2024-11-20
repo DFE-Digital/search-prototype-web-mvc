@@ -47,10 +47,8 @@
     <ProjectReference Include="..\Dfe.Data.SearchPrototype.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.test.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+  	<Copy SourceFiles="Web.Integration.UI.Tests\test.ui.settings.json" DestinationFolder="$(OutDir)" />
+  </Target>
+	
 </Project>

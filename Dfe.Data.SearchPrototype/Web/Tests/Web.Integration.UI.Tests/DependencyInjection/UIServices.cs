@@ -2,6 +2,9 @@
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using Dfe.Testing.Pages;
+using Microsoft.Extensions.Configuration;
+using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
+using Microsoft.Extensions.Options;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.DependencyInjection;
 
@@ -16,13 +19,20 @@ internal sealed class UIServices
     
     private UIServices()
     {
+        IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile("test.ui.settings.json", optional: false)
+                .Build();
+
         IServiceCollection services = new ServiceCollection()
             .AddTransient<SearchComponent>()
             .AddTransient<NavigationBarComponent>()
             .AddTransient<HomePage>()
             .AddTransient<SearchResultsComponent>()
             .AddTransient<FilterComponent>()
-            .AddWebDriver();
+            .AddWebDriver()
+            // application options
+            .Configure<UIApplicationOptions>(config.GetRequiredSection("ApplicationOptions"))
+                .AddSingleton(sp => sp.GetRequiredService<IOptions<UIApplicationOptions>>().Value); ;
     
         _serviceProvider = services.BuildServiceProvider();
     }

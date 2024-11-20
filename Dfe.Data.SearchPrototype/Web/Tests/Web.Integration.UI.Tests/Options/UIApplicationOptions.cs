@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.SearchPrototype.Web.Tests.EndToEndTests.Options;
+﻿namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 
 public sealed class UIApplicationOptions
 {
