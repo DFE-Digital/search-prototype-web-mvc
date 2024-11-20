@@ -1,4 +1,4 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.EndToEndTests.DependencyInjection;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -11,7 +11,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests
         
         public BaseUITest(ITestOutputHelper testOutputHelper)
         {
-            _serviceScope = Services.Instance.CreateScope();
+            _serviceScope = UIServices.Instance.CreateScope();
             TestOutputHelper = testOutputHelper;
         }
 

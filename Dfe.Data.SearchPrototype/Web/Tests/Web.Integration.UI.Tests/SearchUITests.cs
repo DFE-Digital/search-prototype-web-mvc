@@ -1,6 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
-using Dfe.Testing.Pages.Pages;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages;
 using Xunit;
 using Xunit.Abstractions;
 
