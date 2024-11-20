@@ -1,6 +1,7 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
 using Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.UI.Tests.Options;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,5 +25,11 @@ public sealed class SearchUITests : BaseUITest
         };
 
         var homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(request);
+
+        var searchSubHeadingText = homePage.Search.GetSubheading();
+        searchSubHeadingText.Should().Be("Search establishments");
+
+        var searchInput = homePage.Search.GetSearchInput();
+        searchInput.Should().NotBeNull();
     }
 }
