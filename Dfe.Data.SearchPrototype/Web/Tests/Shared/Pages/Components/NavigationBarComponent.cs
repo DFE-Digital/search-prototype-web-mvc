@@ -1,4 +1,5 @@
-﻿using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
+﻿using Dfe.Testing.Pages.DocumentQueryClient;
+using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.AnchorLink;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
@@ -7,16 +8,22 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 public sealed class NavigationBarComponent : PagePartBase
 {
     internal static ElementSelector Container => new("#navigation-bar");
-    private readonly LinkComponent _linkCommand;
+    internal static QueryRequest Heading => new(
+        query: new ElementSelector("#navigation-bar-service-name-link"),
+        scope: Container);
+
+    internal static QueryRequest Home => new QueryRequest(query: new ElementSelector("#home-link"), scope: Container);
+
+    private readonly AnchorLinkComponentFactory _linkCommand;
 
     public NavigationBarComponent(
         IDocumentQueryClientAccessor documentQueryClientAccessor,
-        LinkComponent linkCommand) : base(documentQueryClientAccessor)
+        AnchorLinkComponentFactory linkCommand) : base(documentQueryClientAccessor)
     {
         _linkCommand = linkCommand;
     }
 
-    public Link GetHome() => _linkCommand.GetLink(selector: new ElementSelector("#home-link"), scope: Container);
+    public AnchorLink GetHome() => _linkCommand.Get(Home);
 
-    public Link GetHeading() => _linkCommand.GetLink(selector: new ElementSelector("#navigation-bar-service-name-link"), scope: Container);
+    public AnchorLink GetHeading() => _linkCommand.Get(Heading);
 }

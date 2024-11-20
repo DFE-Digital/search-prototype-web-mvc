@@ -15,7 +15,7 @@ internal static class DependencyInjection
             // Pages
             .AddScoped<IPageFactory, PageFactory>()
             // Common Components
-            .AddTransient<LinkComponent>()
+            .AddTransient<AnchorLinkComponentFactory>()
             .AddTransient<FormComponentFactory>()
             .AddTransient<FieldSetComponentFactory>()
             .AddTransient<CheckboxWithLabelComponentFactory>()

@@ -41,7 +41,7 @@ public sealed class FilterComponent : PagePartBase
     }
 
     public IEnumerable<Facet> GetDisplayedFacets()
-        => _formComponent.GetMany().Single().FieldSets
+        => _formComponent.Get().FieldSets
                 .Select(
                     (fieldSet) => new Facet(
                         Name: fieldSet.Legend,
