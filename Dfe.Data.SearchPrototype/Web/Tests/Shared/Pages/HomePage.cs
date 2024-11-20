@@ -1,6 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
-using Dfe.Testing.Pages.Pages;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages;
 using OpenQA.Selenium;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;

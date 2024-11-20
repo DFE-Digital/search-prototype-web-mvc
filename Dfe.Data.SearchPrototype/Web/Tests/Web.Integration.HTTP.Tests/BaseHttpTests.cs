@@ -9,7 +9,7 @@ public abstract class BaseHttpTest : IDisposable
 
     protected BaseHttpTest(ITestOutputHelper testOutputHelper)
     {
-        _serviceScope = TestServices.Instance.CreateScope();
+        _serviceScope = HttpTestServices.Instance.CreateScope();
         TestOutputHelper = testOutputHelper;
     }
 

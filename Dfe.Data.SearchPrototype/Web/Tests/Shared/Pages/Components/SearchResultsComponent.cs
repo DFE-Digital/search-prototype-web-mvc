@@ -1,8 +1,8 @@
 ﻿using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 using Dfe.Testing.Pages.DocumentQueryClient;
-using Dfe.Testing.Pages.Pages.Components;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components.ValueObject;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 public sealed class SearchResultsComponent : ComponentBase
@@ -15,16 +15,16 @@ public sealed class SearchResultsComponent : ComponentBase
 
     public string GetResultsHeading()
         => DocumentQueryClient.Query(
-            new QueryArgs(
+            new QueryRequest(
                 query: new ElementSelector("#search-results-count"), scope: Container),
                 mapper: (documentPart) => documentPart.Text.Trim());
 
     public IEnumerable<EstablishmentSearchResult> GetResults()
         => DocumentQueryClient.QueryMany(
-            args: new QueryArgs(
-                query: new ElementSelector("#establishment-search-results > ul"), scope: Container),
-                mapper: (documentPart) 
-                    => new EstablishmentSearchResult(
+            new QueryRequest(
+                query: new ElementSelector("#establishment-search-results > div"), scope: Container),
+                mapper:
+                    (documentPart) => new EstablishmentSearchResult(
                             Name: documentPart.GetChild(new ElementSelector("h4"))!.Text.Trim(),
                             Urn: documentPart.GetChild(new ElementSelector("li:nth-of-type(2) > span"))!.Text.Trim(),
                             TypeOfEstablishment: documentPart.GetChild(new ElementSelector("li:nth-of-type(4) > span"))!.Text.Trim(),

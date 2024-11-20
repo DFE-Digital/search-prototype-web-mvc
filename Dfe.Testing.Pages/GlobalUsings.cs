@@ -9,8 +9,6 @@ global using Dfe.Testing.Pages.DocumentQueryClient.Provider.AngleSharp;
 global using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 global using Dfe.Testing.Pages.Extensions;
 global using Dfe.Testing.Pages.Http;
-global using Dfe.Testing.Pages.Pages;
-global using Dfe.Testing.Pages.Pages.Components.AnchorLink;
 global using Dfe.Testing.Pages.WebApplicationFactory;
 global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Mvc.Testing;

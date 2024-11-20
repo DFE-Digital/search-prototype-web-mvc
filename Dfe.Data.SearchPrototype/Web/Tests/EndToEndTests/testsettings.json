@@ -1,0 +1,14 @@
+{
+  "ApplicationOptions": {
+    "Scheme": "https",
+    "Port": 7042,
+    "Domain": "localhost"
+  },
+  "WebDriverClientSessionOptions": {
+    "BrowserName": "chrome",
+    "PageLoadTimeout": 30,
+    "RequestTimeout": 45,
+    "EnableNetworkInterception": false,
+    "EnableVerboseLogging": false
+  }
+}
