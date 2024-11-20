@@ -1,11 +1,6 @@
-﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+﻿using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages;
+using Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared;
 

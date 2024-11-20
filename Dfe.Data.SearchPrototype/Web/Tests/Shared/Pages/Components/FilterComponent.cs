@@ -2,14 +2,14 @@
 using Dfe.Testing.Pages.DocumentQueryClient;
 using Dfe.Testing.Pages.DocumentQueryClient.Accessor;
 using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components;
-using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.CheckboxInput;
+using Dfe.Testing.Pages.DocumentQueryClient.Pages.Components.Form;
 using Dfe.Testing.Pages.DocumentQueryClient.Selector;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.Pages.Components;
 
 public sealed class FilterComponent : ComponentBase
 {
-    private readonly CheckboxWithLabelComponent _checkboxWithLabelComponent;
+    private readonly FormComponent _formComponent;
 
     internal static IElementSelector FiltersContainer => new ElementSelector("#filters-container");
 
@@ -34,23 +34,20 @@ public sealed class FilterComponent : ComponentBase
             scope: FiltersContainer);
 
     public FilterComponent(
-        IDocumentQueryClientAccessor documentQueryClientAccessor, 
-        CheckboxWithLabelComponent checkboxWithLabelComponent) : base(documentQueryClientAccessor)
+        IDocumentQueryClientAccessor documentQueryClientAccessor,
+        FormComponent formComponent) : base(documentQueryClientAccessor)
     {
-        _checkboxWithLabelComponent = checkboxWithLabelComponent;
+        _formComponent = formComponent;
     }
 
     public IEnumerable<Facet> GetDisplayedFacets()
-         => DocumentQueryClient.QueryMany(
-                args: Facets,
-                mapper: (facet)
-                    => new Facet(
-                        Name: facet.GetChild(new ElementSelector("legend"))!.Text.Trim(),
-                        FacetValues:
-                        _checkboxWithLabelComponent.GetCheckboxesFromPart(facet)
-                            .Select((checkboxWithLabel) => new FacetValue(checkboxWithLabel.Label, checkboxWithLabel.Value))));
+        => _formComponent.Get().FieldSets
+                .Select((fieldSet) => new Facet(
+                    Name: fieldSet.Legend,
+                    FacetValues: fieldSet.Checkboxes.Select(
+                        (checkbox) => new FacetValue(checkbox.Label, checkbox.Value))));
 
-    public FilterComponent ApplyFacet(FacetValue applyFacet)
+    public FilterComponent ApplyFacetValue(FacetValue applyFacet)
     {
         DocumentQueryClient.Run(
             FacetValueByValue(applyFacet), (part) => part.Click());

@@ -3,6 +3,9 @@
 public sealed class CheckboxWithLabelComponent
 {
     private readonly IDocumentQueryClientAccessor _documentQueryClientAccessor;
+    internal static IElementSelector Checkbox => new ElementSelector(".govuk-checkboxes__item");
+    internal static IElementSelector Input => new ElementSelector(".govuk-checkboxes__input");
+    internal static IElementSelector Label => new ElementSelector(".govuk-checkboxes__label");
 
     public CheckboxWithLabelComponent(IDocumentQueryClientAccessor documentQueryClientAccessor)
     {
@@ -14,21 +17,22 @@ public sealed class CheckboxWithLabelComponent
     private static Func<IDocumentPart, CheckboxWithLabel> MapCheckboxes =>
         (checkboxItemWithLabel) =>
         {
+            var checkboxItem = checkboxItemWithLabel.GetChild(Input) ?? throw new ArgumentNullException(nameof(Input));
+            var checkboxLabel = checkboxItemWithLabel.GetChild(Label) ?? throw new ArgumentNullException(nameof(Label));
+
             return new CheckboxWithLabel()
             {
                 TagName = "",
-                Name = checkboxItemWithLabel.GetChild(new ElementSelector(".govuk-checkboxes__input"))?.GetAttribute("name") ?? throw new ArgumentNullException("name")!,
-                Label = checkboxItemWithLabel.GetChild(new ElementSelector(".govuk-checkboxes__label"))?.Text ?? throw new ArgumentNullException("label"),
-                Value = checkboxItemWithLabel.GetChild(new ElementSelector(".govuk-checkboxes__input"))?.GetAttribute("value") ?? throw new ArgumentNullException("value"),
-                Checked = checkboxItemWithLabel.GetChild(new ElementSelector(".govuk-checkboxes__input"))?.HasAttribute("checked") ?? throw new ArgumentNullException("checked")
+                Name = checkboxItem.GetAttribute("name") ?? throw new ArgumentNullException($"no name of {nameof(checkboxItem)}")!,
+                Label = checkboxLabel.Text ?? throw new ArgumentNullException($"no label on {nameof(checkboxItem)}"),
+                Value = checkboxItem.GetAttribute("value") ?? throw new ArgumentNullException($"no value on {nameof(checkboxItem)}"),
+                Checked = checkboxItem.HasAttribute("checked")
             };
         };
 
     public IEnumerable<CheckboxWithLabel> GetCheckboxes(IElementSelector? scope = null)
     {
-        IElementSelector checkboxWithLabelSelector = new ElementSelector(".govuk-checkboxes__item");
-
-        QueryRequest queryRequest = new(checkboxWithLabelSelector, scope);
+        QueryRequest queryRequest = new(Checkbox, scope);
 
         return _documentQueryClientAccessor.DocumentQueryClient.QueryMany(
                 args: queryRequest,
@@ -37,7 +41,7 @@ public sealed class CheckboxWithLabelComponent
 
     public IEnumerable<CheckboxWithLabel> GetCheckboxesFromPart(IDocumentPart? part)
         => part?
-            .GetChildren(new ElementSelector(".govuk-checkboxes__item"))
-            ?.Select(MapCheckboxes)
+            .GetChildren(Checkbox)?
+            .Select(MapCheckboxes)
             .ToList() ?? throw new ArgumentNullException(nameof(part));
 }

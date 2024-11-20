@@ -38,7 +38,7 @@ internal sealed class WebDriverDocumentQueryClient : IDocumentQueryClient
         ArgumentNullException.ThrowIfNull(mapper);
         IDocumentPart? documentPartToMap =
             WebDriverDocumentPart.Create(
-                queryArgs.Query == null ?
+                queryArgs.Scope == null ?
                     _webDriverAdaptor.FindElement(queryArgs.Query!) :
                     _webDriverAdaptor.FindElement(queryArgs.Scope!)
                         .FindElement(

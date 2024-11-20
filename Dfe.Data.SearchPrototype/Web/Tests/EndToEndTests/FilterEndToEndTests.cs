@@ -32,7 +32,7 @@ public sealed class FilterEndToEndTests : BaseEndToEndTest
         List<Facet> facetsNotBeingApplied = facetsAvailable.Where(t => t.Name != facetBeingApplied.Name).ToList();
 
         // Act
-        homePage.Filters.ApplyFacet(facetValueToApply).SubmitFilters();
+        homePage.Filters.ApplyFacetValue(facetValueToApply).SubmitFilters();
 
         // Assert
 
@@ -65,8 +65,8 @@ public sealed class FilterEndToEndTests : BaseEndToEndTest
         FacetValue secondFacetWithAnyFacetValue = facetsAvailable[1].FacetValues.First();
 
         homePage.Filters
-            .ApplyFacet(firstFacetWithAnyFacetValue)
-            .ApplyFacet(secondFacetWithAnyFacetValue)
+            .ApplyFacetValue(firstFacetWithAnyFacetValue)
+            .ApplyFacetValue(secondFacetWithAnyFacetValue)
             .SubmitFilters();
 
         // Guard to check the facetValues are selected
