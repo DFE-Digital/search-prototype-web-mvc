@@ -30,7 +30,7 @@
                 </button>
             </li>
             <li class="govuk-pagination__item
-                @(Model.CurrentPageInLowerPagingBoundary ? "govuk-visually-hidden" : "")">
+                @(Model.PageSequenceIncludesFirstPage ? "govuk-visually-hidden" : "")">
                 <button type="submit"
                         name="PageNumber"
                         value=@Model.FirstPageNumber
@@ -40,7 +40,7 @@
                 </button>
             </li>
             <li class="govuk-pagination__item govuk-pagination__item--ellipses
-                @(Model.CurrentPageInLowerPagingThreshold ? "govuk-visually-hidden" : "")"
+                @(!Model.HasMoreLowerPagesAvailable ? "govuk-visually-hidden" : "")"
                 id="previousEllipsis">
                 &ctdot;
             </li>
@@ -74,11 +74,11 @@
                 }
             }
             <li class="govuk-pagination__item govuk-pagination__item--ellipses
-                @(Model.CurrentPageInUpperPagingThreshold ? "govuk-visually-hidden" : "")">
+                @(!Model.HasMoreUpperPagesAvailable ? "govuk-visually-hidden" : "")">
                 &ctdot;
             </li>
             <li class="govuk-pagination__item
-                @(Model.CurrentPageInUpperPagingBoundary ? "govuk-visually-hidden" : "")">
+                @(Model.PageSequenceIncludesLastPage ? "govuk-visually-hidden" : "")">
                 <button type="submit"
                         name="PageNumber"
                         value=@Model.TotalNumberOfPages

@@ -70,27 +70,27 @@
         /// Determines whether the current page falls within the lower paging
         /// boundary, given the total number of pages.
         /// </summary>
-        public bool CurrentPageInLowerPagingBoundary =>
-            pager.IsCurrentPageInLowerPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public bool PageSequenceIncludesFirstPage =>
+            pager.PageSequenceIncludesFirstPage(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the lower paging threshold.
         /// </summary>
-        public bool CurrentPageInLowerPagingThreshold =>
-            pager.IsCurrentPageInLowerPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool HasMoreLowerPagesAvailable =>
+            pager.HasMoreLowerPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging
         /// boundary, given the total number of pages provisioned.
         /// </summary>
-        public bool CurrentPageInUpperPagingBoundary =>
-            pager.IsCurrentPageInUpperPagingBoundary(CurrentPageNumber, TotalNumberOfPages);
+        public bool PageSequenceIncludesLastPage =>
+            pager.PageSequenceIncludesLastPage(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging threshold.
         /// </summary>
-        public bool CurrentPageInUpperPagingThreshold =>
-            pager.IsCurrentPageInUpperPagingThreshold(CurrentPageNumber, TotalNumberOfPages);
+        public bool HasMoreUpperPagesAvailable =>
+            pager.HasMoreUpperPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Gets the total number of pages.

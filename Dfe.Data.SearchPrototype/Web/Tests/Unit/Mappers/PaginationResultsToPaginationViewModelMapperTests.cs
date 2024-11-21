@@ -38,10 +38,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             response.Should().NotBeNull();
             response.CurrentPageSequence.Should().Equal([1, 2, 3, 4, 5]);
             response.IsFirstPage.Should().BeTrue();
-            response.CurrentPageInLowerPagingBoundary.Should().BeTrue();
-            response.CurrentPageInLowerPagingThreshold.Should().BeTrue();
-            response.CurrentPageInUpperPagingBoundary.Should().BeFalse();
-            response.CurrentPageInUpperPagingThreshold.Should().BeFalse();
+            response.PageSequenceIncludesFirstPage.Should().BeTrue();
+            response.HasMoreLowerPagesAvailable.Should().BeFalse();
+            response.PageSequenceIncludesLastPage.Should().BeFalse();
+            response.HasMoreUpperPagesAvailable.Should().BeTrue();
         }
 
         [Theory]
@@ -57,10 +57,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             response.Should().NotBeNull();
             response.CurrentPageSequence.Should().Equal(expectedPageSequence);
             response.IsFirstPage.Should().BeFalse();
-            response.CurrentPageInLowerPagingBoundary.Should().BeTrue();
-            response.CurrentPageInLowerPagingThreshold.Should().BeTrue();
-            response.CurrentPageInUpperPagingBoundary.Should().BeFalse();
-            response.CurrentPageInUpperPagingThreshold.Should().BeFalse();
+            response.PageSequenceIncludesFirstPage.Should().BeTrue();
+            response.HasMoreLowerPagesAvailable.Should().BeFalse();
+            response.PageSequenceIncludesLastPage.Should().BeFalse();
+            response.HasMoreUpperPagesAvailable.Should().BeTrue();
         }
 
         [Theory]
@@ -75,10 +75,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             response.Should().NotBeNull();
             response.CurrentPageSequence.Should().Equal(expectedPageSequence);
             response.IsFirstPage.Should().BeFalse();
-            response.CurrentPageInLowerPagingBoundary.Should().BeFalse();
-            response.CurrentPageInLowerPagingThreshold.Should().BeFalse();
-            response.CurrentPageInUpperPagingBoundary.Should().BeTrue();
-            response.CurrentPageInUpperPagingThreshold.Should().BeTrue();
+            response.PageSequenceIncludesFirstPage.Should().BeFalse();
+            response.HasMoreLowerPagesAvailable.Should().BeTrue();
+            response.PageSequenceIncludesLastPage.Should().BeTrue();
+            response.HasMoreUpperPagesAvailable.Should().BeFalse();
         }
 
         [Theory]
@@ -94,10 +94,10 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             response.Should().NotBeNull();
             response.CurrentPageSequence.Should().Equal(expectedPageSequence);
             response.IsFirstPage.Should().BeFalse();
-            response.CurrentPageInLowerPagingBoundary.Should().BeFalse();
-            response.CurrentPageInLowerPagingThreshold.Should().BeFalse();
-            response.CurrentPageInUpperPagingBoundary.Should().BeFalse();
-            response.CurrentPageInUpperPagingThreshold.Should().BeFalse();
+            response.PageSequenceIncludesFirstPage.Should().BeFalse();
+            response.HasMoreLowerPagesAvailable.Should().BeTrue();
+            response.PageSequenceIncludesLastPage.Should().BeFalse();
+            response.HasMoreUpperPagesAvailable.Should().BeTrue();
         }
     }
 }

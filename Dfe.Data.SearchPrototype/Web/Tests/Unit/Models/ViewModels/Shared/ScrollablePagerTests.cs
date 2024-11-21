@@ -6,8 +6,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
 {
     public sealed class ScrollablePagerTests
     {
-        [Fact]
-        public void IsCurrentPageInUpperPagingBoundary_CurrentPageInUpperBoundary_ReturnsTrue()
+        [Theory]
+        [InlineData(9,13,true)]
+        [InlineData(1, 5, false)]
+        [InlineData(10,13,false)]
+        public void HasMoreUpperPagesAvailable_ReturnsExpected(int currentPageNumber, int totalNumberOfPages, bool expected)
         {
             // arrange
             ScrollablePager scrollablePager = new();
@@ -15,14 +18,17 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             // act
             bool result =
                 scrollablePager
-                    .IsCurrentPageInUpperPagingBoundary(currentPageNumber: 12, totalNumberOfPages: 13);
+                    .HasMoreUpperPagesAvailable(currentPageNumber, totalNumberOfPages);
 
             // assert
-            result.Should().BeTrue();
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void IsCurrentPageOnUpperPagingThreshold_CurrentPageOnUpperThreshold_ReturnsTrue()
+        [Theory]
+        [InlineData(8,13,false)]
+        [InlineData(1, 5, true)]
+        [InlineData(12,13, true)]
+        public void PageSequenceIncludesLastPage_ReturnsExpected(int currentPageNumber, int totalNumberOfPages, bool expected)
         {
             // arrange
             ScrollablePager scrollablePager = new();
@@ -30,14 +36,16 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             // act
             bool result =
                 scrollablePager
-                    .IsCurrentPageInUpperPagingThreshold(currentPageNumber: 10, totalNumberOfPages: 13);
+                    .PageSequenceIncludesLastPage(currentPageNumber, totalNumberOfPages);
 
             // assert
-            result.Should().BeTrue();
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void IsCurrentPageInUpperPagingBoundary_TotalPageNumberEqualsPageSequenceWidth_ReturnsTrue()
+        [Theory]
+        [InlineData(1,13,true)]
+        [InlineData(4,13,false)]
+        public void PageSequenceIncludesFirstPage_ReturnsExpected(int currentPageNumber, int totalNumberOfPages, bool expected )
         {
             // arrange
             ScrollablePager scrollablePager = new();
@@ -45,14 +53,16 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             // act
             bool result =
                 scrollablePager
-                    .IsCurrentPageInUpperPagingBoundary(currentPageNumber: 1, totalNumberOfPages: 5);
+                    .PageSequenceIncludesFirstPage(currentPageNumber, totalNumberOfPages);
 
             // assert
-            result.Should().BeTrue();
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void IsCurrentPageOnUpperPagingThreshold_TotalPageNumberEqualsPageSequenceWidth_ReturnsTrue()
+        [Theory]
+        [InlineData(2,13,false)]
+        [InlineData(5,13,true)]
+        public void HasMoreLowerPagesAvailable_ReturnsExpected(int currentPageNumber, int totalNumberOfPages, bool expected)
         {
             // arrange
             ScrollablePager scrollablePager = new();
@@ -60,101 +70,12 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             // act
             bool result =
                 scrollablePager
-                    .IsCurrentPageInUpperPagingThreshold(currentPageNumber: 1, totalNumberOfPages: 5);
+                    .HasMoreLowerPagesAvailable(currentPageNumber, totalNumberOfPages);
 
             // assert
-            result.Should().BeTrue();
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void IsCurrentPageInUpperPagingBoundary_CurrentPageNotInUpperBoundary_ReturnsFalse()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            bool result =
-                scrollablePager
-                    .IsCurrentPageInUpperPagingBoundary(currentPageNumber: 8, totalNumberOfPages: 13);
-
-            // assert
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsCurrentPageInUpperPagingThreshold_CurrentPageNotInUpperThreshold_ReturnsFalse()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            bool result =
-                scrollablePager
-                    .IsCurrentPageInUpperPagingThreshold(currentPageNumber: 9, totalNumberOfPages: 13);
-
-            // assert
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsCurrentPageInLowerPagingBoundary_CurrentPageInLowerBoundary_ReturnsTrue()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            bool result =
-                scrollablePager
-                    .IsCurrentPageInLowerPagingBoundary(currentPageNumber: 1, totalNumberOfPages: 13);
-
-            // assert
-            result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void IsCurrentPageInLowerPagingThreshold_CurrentPageInLowerPagingThreshold_ReturnsTrue()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            bool result =
-                scrollablePager
-                    .IsCurrentPageInLowerPagingThreshold(currentPageNumber: 2, totalNumberOfPages: 13);
-
-            // assert
-            result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void IsCurrentPageInLowerPagingBoundary_CurrentPageNotInLowerBoundary_ReturnsFalse()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            bool result =
-                scrollablePager
-                    .IsCurrentPageInLowerPagingBoundary(currentPageNumber: 4, totalNumberOfPages: 13);
-
-            // assert
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsCurrentPageInLowerPagingThreshold_CurrentPageNotInLowerPagingThreshold_ReturnsFalse()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            bool result =
-                scrollablePager
-                    .IsCurrentPageInLowerPagingThreshold(currentPageNumber: 5, totalNumberOfPages: 13);
-
-            // assert
-            result.Should().BeFalse();
-        }
 
         [Fact]
         public void GetPageSequence_CurrentPageWithinUpperBoundary_ReturnsExpectedPageSequence()

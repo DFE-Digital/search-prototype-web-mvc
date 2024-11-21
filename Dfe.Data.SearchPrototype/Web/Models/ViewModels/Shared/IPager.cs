@@ -20,7 +20,7 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls within the lower paging bounds).
         /// </returns>
-        public bool IsCurrentPageInLowerPagingBoundary(int currentPageNumber, int totalNumberOfPages);
+        public bool PageSequenceIncludesFirstPage(int currentPageNumber, int totalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the lower paging threshold.
@@ -36,7 +36,7 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls in the lower paging threshold).
         /// </returns>
-        public bool IsCurrentPageInLowerPagingThreshold(int currentPageNumber, int totalNumberOfPages);
+        public bool HasMoreLowerPagesAvailable(int currentPageNumber, int totalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging boundary.
@@ -52,7 +52,7 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls within the upper paging bounds).
         /// </returns>
-        public bool IsCurrentPageInUpperPagingBoundary(int currentPageNumber, int totalNumberOfPages);
+        public bool PageSequenceIncludesLastPage(int currentPageNumber, int totalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging threshold.
@@ -68,7 +68,7 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls on the upper paging threshold).
         /// </returns>
-        public bool IsCurrentPageInUpperPagingThreshold(int currentPageNumber, int totalNumberOfPages);
+        public bool HasMoreUpperPagesAvailable(int currentPageNumber, int totalNumberOfPages);
 
         /// <summary>
         /// Determines the current page sequence to return given the current page number and total number of pages.

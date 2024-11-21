@@ -15,14 +15,15 @@
         private const int PageSequencePaddingSize = 2;
 
         /// <summary>
-        /// Used to determine if FirstPageNumber should be displayed ahead of PageSequence
-        /// Checks if the first page of PageSequence is less than pageSequencePaddingSize(2)
-        /// if < 2 example: 1 2 3 4 5 [no FirstPageNumber, PageSequence (5 buttons, starting with < 2 so already covered FirstPage)
-        /// if == 2 example: 1 2 3 4 5 6 [FirstPageNumber and PageSequence(5 buttons, starting with == 2)]
-        /// if > 2 example: 1 ... 5 6 7 8 9 [FirstPageNumber, Ellipsis, PageSequence(5buttons, starting with > 2)].
+        /// Determines whether the current page falls within the lower paging boundary,
+        /// i.e. less than 2 (given the constrained page sequence padding size).
+        /// Used to display "first page button" if current page is at least 3 
+        /// "first page button ... 3 4 5 6 7 ...last page button"
+        /// Determines if the first page of page sequence is less than pageSequencePaddingSize(2)
+        /// 2 3 4 5 6
         /// </summary>
         /// <param name="currentPageNumber">
-        /// The current page selected.
+        /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
         /// The total number of pages available.
@@ -31,20 +32,21 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls within the lower paging bounds).
         /// </returns>
-        public bool IsCurrentPageInLowerPagingBoundary(
+        public bool PageSequenceIncludesFirstPage(
             int currentPageNumber, int totalNumberOfPages) =>
                 GetFirstPageInSequence(currentPageNumber, totalNumberOfPages) < PageSequencePaddingSize;
 
         /// <summary>
-        /// Used to determine if Ellipsis should be displayed in front of the PageSequence
-        /// Essentially if between FirstPageNumber and first number of PageSequence is > 0 the ellipsis would show
-        /// suggesting there is more "hidden"  pages in between.
-        /// Checks if the first page of page sequence is less than pageSequencePaddingSize(2) + 1
-        /// if < 3 example: 1 2 3 4 5 6 [checks for FirstPageNumber as above, NO ELLIPSIS, PageSequence]
-        /// if ==  3 || > 3 example: 1 ... 3 4 5 6 7 or: 1 ... 6 7 8 9 10
+        /// Determines whether the current page falls on the lower paging threshold,
+        /// i.e. is equal to padding size + 1 (given the constrained page sequence padding size of 2).
+        ///  /// Determines if the first page of page sequence is less than pageSequencePaddingSize(2) + 1
+        ///  to display elipsis in front 
+        ///  i.e page sequence 3 4 5 6 7 would be " 1 ... 3 4 5 6 7 ... last page"
+        ///  if less than no elipsis would show
+        ///  
         /// </summary>
         /// <param name="currentPageNumber">
-        /// The current page selected.
+        /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
         /// The total number of pages available.
@@ -53,27 +55,17 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls in the lower paging threshold).
         /// </returns>
-        public bool IsCurrentPageInLowerPagingThreshold(
+        public bool HasMoreLowerPagesAvailable(
             int currentPageNumber, int totalNumberOfPages) =>
-                GetFirstPageInSequence(currentPageNumber, totalNumberOfPages) < PageSequencePaddingSize + 1;
+                !(GetFirstPageInSequence(currentPageNumber, totalNumberOfPages) < PageSequencePaddingSize + 1);
 
         /// <summary>
-        /// Used to determine if LastPageNumber should be displayed following PageSequence
-        /// First checks if the CurrentPgeNumber is > totalNumberOfPages - pageSequencePaddingSize(2) + 1
-        /// examples:
-        /// currentPageNumber 66 > 68-3:   64 65 66 67 68 [this is just PageSequence(5 buttons with last number == totalNumberOfPages) 
-        /// no need to add LastPageNumber again]
-        /// currentPageNumber 65 == 68-3:  63 64 65 66 67 68 [PageSequence (5 buttons) followed by LastPageNumber]
-        /// currentPageNumber 64 < 68-3:   62 63 64 65 66 ... 68 [PageSequence, ellipsis, LastPageNumber]
-        /// Esentially if there is 3 or more pages available after CurrentPageNumber, the lastPageNumber will be displayed
-        /// PageSequence covers 2 pages following current page so we only need to add last page if more than 2
-        /// Second checks if totalNumberOfPages == 5
-        /// example:
-        /// total number of pages == 5 : 1 2 3 4 5 no need for last page to be displayed again (5)
-        /// Essentially since our PageSequence is 5, we know all pages would already be displayed.
+        /// Determines whether the current page falls within the upper paging boundary,
+        /// i.e. less than total number of pages - 2 (given the constrained page sequence padding size),
+        /// or whether the total number of pages equals the page sequence width ((padding size * 2) + 1).
         /// </summary>
         /// <param name="currentPageNumber">
-        /// The current page selected.
+        /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
         /// The total number of pages available.
@@ -82,26 +74,20 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls within the upper paging bounds).
         /// </returns>
-        public bool IsCurrentPageInUpperPagingBoundary(
+        /// // TODO CML method doesn't describe the logic used
+        public bool PageSequenceIncludesLastPage(
             int currentPageNumber, int totalNumberOfPages) =>
                 (currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize + 1))) ||
                 (totalNumberOfPages == ((PageSequencePaddingSize * 2) + 1));
 
         /// <summary>
-        /// Used to determine if ellipsis should be displayed following PageSequence
-        /// Checks if CurrentPageNumber > TotalNumberOfPages - 4
-        /// examples:
-        /// currentPageNumber 66 > 68-4:   64 65 66 67 68 
-        /// [this is just PageSequence, no need for ellipsis 
-        /// as there is no hidden page numbers between LastPageNumber and last page within PageSequence (67 and 68)]
-        /// currentPageNumber 64 == 68-4:  62 63 64 65 66 ... 68 
-        /// [PageSequence (5 buttons) Ellipsis to suggest missing pages between 66 and 68, followed by LastPageNumber]
-        /// currentPageNumber 63 < 68-4:   61 62 63 64 65 ... 68 [PageSequence, Ellipsis to suggest missing pages between 65 and 68, LastPageNumber]
-        /// Then checks if TotalNumberOfPages == 5 (Our PageSequence length)
-        /// as our pageSequence would cover all pages 1 2 3 4 5 we would not have to add anything after that.
+        /// Determines whether the current page falls within the upper paging threshold,
+        /// i.e. is equal to the total number of pages - 2 * padding size (given the constrained
+        /// page sequence padding size of 2), or whether the total number of pages equals the
+        /// page sequence width ((padding size * 2) + 1).
         /// </summary>
         /// <param name="currentPageNumber">
-        /// The current page selected.
+        /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
         /// The total number of pages available.
@@ -110,10 +96,11 @@
         /// True or false based on whether the condition is met (i.e. the
         /// current page falls on the upper paging threshold).
         /// </returns>
-        public bool IsCurrentPageInUpperPagingThreshold(
+        /// TODo CML - redo logic
+        public bool HasMoreUpperPagesAvailable(
             int currentPageNumber, int totalNumberOfPages) =>
-                (currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize * 2))) ||
-                (totalNumberOfPages == ((PageSequencePaddingSize * 2) + 1));
+                !((currentPageNumber > (totalNumberOfPages - (PageSequencePaddingSize * 2))) ||
+                (totalNumberOfPages == ((PageSequencePaddingSize * 2) + 1)));
 
         /// <summary>
         /// Determines the current page sequence to return given the current page number and total number of pages.
@@ -123,7 +110,7 @@
         /// the page sequence is adjusted accordingly to ensure the current page number is assigned to the correct sequence ordering.
         /// </summary>
         /// <param name="currentPageNumber">
-        /// The current page selected.
+        /// The current page selected through the pagination provisioned.
         /// </param>
         /// <param name="totalNumberOfPages">
         /// The total number of pages available.
