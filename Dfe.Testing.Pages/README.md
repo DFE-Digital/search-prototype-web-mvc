@@ -98,9 +98,137 @@ public sealed class MyTestClass : BaseTest
 }
 ```
 
+## Creating and using an application component
 
-- Adding your application components into DI
-- Example test
+When building PageModels you want to:
+
+- Add your types into your tests DependencyInjection
+
+```cs
+    services....
+    services.AddTransient<HomePage>();
+```
+
+- Compose your PageModel of other PageComponents
+
+```cs
+
+services.AddTransient<SearchComponent>();
+services.AddTransient<FilterComponent>();
+
+public sealed class HomePage
+{
+    public HomePage(
+        NavigationBarComponent navBar,
+        SearchComponent search, 
+        FilterComponent filter)
+    {
+        Search = search ?? throw new ArgumentNullException(nameof(search));
+        Filter = filter ?? throw new ArgumentNullException(nameof(filter));
+        NavBar = navBar ?? throw new ArgumentNullException(nameof(navBar));
+    }
+
+    // Can reuse these across PageModels
+    public NavigationBarComponent NavBar { get; }
+    public SearchComponent Search { get; }
+    public FilterComponent Filter { get; }
+}
+```
+
+- Expose the types that your tests need, which are not coupled to a testing library e.g
+
+
+```cs
+homePage.GetHeading().Should().Be("Heading"); 
+
+public sealed class HomePage
+{
+    public string GetHeading() => ...
+}
+```
+
+## You could expose a GDSComponent
+
+```cs
+// GDSComponent provided by the library
+GDSTextInput textInput = new()
+{
+    Name = "searchKeyWord",
+    Value = "",
+    PlaceHolder = "Search by keyword",
+    Type = "text"
+};
+homePage.TextInput.Should().Be(textInput);
+
+public sealed class HomePage{
+    
+    public Input GetSearchInput() => _textInputFactory.Create();
+}
+
+public record Input
+{
+    public required string Name { get; init; }
+    public required string Value { get; init; }
+    public required string? PlaceHolder { get; init; } = null;
+    public required string? Type { get; init; } = null;
+}
+
+```
+
+## or a custom application type
+
+```cs
+
+// CUSTOM COMPLEX APPLICATION TYPE
+public record Facet(string Name, IEnumerable<FacetValue> FacetValues);
+public record FacetValue(string Label, string Value);
+
+homePage.GetDisplayedFacets().Should().Be(new[]
+{
+    new Facet
+    (
+        Name: "Facet name",
+        FacetValues: []
+    ),
+    new Facet
+    (
+        Name: "Facet name",
+        FacetValues: []
+    )
+})
+
+public sealed class HomePage
+{
+    public IEnumerable<Facet> GetDisplayedFacets()
+        => _formFactory.Get().FieldSets
+                .Select(
+                    (fieldSet) => new Facet(
+                        Name: fieldSet.Legend,
+                        FacetValues: fieldSet.Checkboxes.Select(
+                         (checkbox) => new FacetValue(checkbox.Label,   checkbox.Value))));
+}
+
+```
+
+## Using your PageModels
+
+When using the PageModels you want to create them using the `PageFactory` which sets up your pages to use the `IDocumentQueryClient` configured.
+
+```cs
+public sealed class MyTestClass : BaseTest{
+
+[Fact]
+public async Task MyTest()
+{
+    HttpRequestMessage homePageRequest = new()
+    {
+        Uri = new("/")
+    }
+    HomePage homePage = await GetTestService<IPageFactory>().CreatePageAsync<HomePage>(homePageRequest);
+}
+}
+
+```
 
 ## Common terms and abstractions
 
@@ -115,5 +243,3 @@ public sealed class MyTestClass : BaseTest
 - GDSComponents that we provide
 
 ## Writing an PageModel for an application
-
-## Configuring a provider
