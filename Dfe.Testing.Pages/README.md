@@ -1,9 +1,14 @@
-## What problems is the library solving?
+# Who is this library for
 
-<link to GDSComponents> and common among all consumers
-- Removing reliance on specific test tools in test suites
-- Providing patterns for reuseable PageModels through PageComponents
-- Enable sharing PageModels among different types of tests (Presentation layer tests, Integration Tests, EndToEnd tests)
+This library is targeted to support .NET Developers and Testers
+
+## What problems is the library solving
+
+- Removing dependencies on specific test tools in Pages and Tests allowing the library to abstract
+
+- By reducing coupling to test tools in Pages and Tests allows sharing Pages among different types of tests (Presentation layer tests, Integration Tests, EndToEnd tests)
+
+- Demonstrate patterns for reuseable PageModels using PageComponents and [GDSComponents](https://design-system.service.gov.uk/components/) as they should be used as the building blocks for all CivilService web applications
 
 ## Using the library
 
