@@ -167,12 +167,13 @@ GDSTextInput textInput = new()
 };
 homePage.TextInput.Should().Be(textInput);
 
-public sealed class HomePage{
+public sealed class HomePage
+{
     
-    public Input GetSearchInput() => _textInputFactory.Create();
+    public GDSTextInput  GetSearchInput() => _textInputFactory.Create();
 }
 
-public record Input
+public record GDSTextInput
 {
     public required string Name { get; init; }
     public required string Value { get; init; }
