@@ -7,108 +7,67 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
 {
     public sealed class PaginationTests
     {
-        [Fact]
-        public void PreviousPageNumber_WithCurrentPageGreaterThanOne_ReturnsPrevious()
+        [Theory]
+        [InlineData(2, 1)]
+        [InlineData(1, null)]
+        public void PreviousPageNumber_ReturnsExpected(int currentPageNumber, int? expected)
         {
             // arrange
             Pagination pagination = new(new Mock<IPager>().Object)
             {
-                CurrentPageNumber = 2
+                CurrentPageNumber = currentPageNumber
             };
 
             // act
             int? result = pagination.PreviousPageNumber;
 
             // assert
-            result.Should().Be(1);
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void PreviousPageNumber_WithCurrentPageEqualToOne_ReturnsOne()
+        [Theory]
+        [InlineData(120, 10, 11, 12)]
+        [InlineData(120, 10, 12, null)]
+        public void NextPageNumber_ReturnsExpected(
+            int totalRecordCount,
+            int recordsPerPage,
+            int currentPageNumber,
+            int? expected)
         {
             // arrange
             Pagination pagination = new(new Mock<IPager>().Object)
             {
-                CurrentPageNumber = 1
-            };
-
-            // act
-            int? result = pagination.PreviousPageNumber;
-            bool isFirstPage = pagination.IsFirstPage;
-            // assert
-            result.Should().Be(null);
-            isFirstPage.Should().BeTrue();
-        }
-
-        [Fact]
-        public void NextPageNumber_WithCurrentPageNotLast_ReturnsNext()
-        {
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = 120,
-                RecordsPerPage = 10,
-                CurrentPageNumber = 11
+                TotalRecordCount = totalRecordCount,
+                RecordsPerPage = recordsPerPage,
+                CurrentPageNumber = currentPageNumber
             };
 
             // act
             int? result = pagination.NextPageNumber;
 
             // assert
-            result.Should().Be(12);
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void NextPageNumber_WithCurrentPageEqualToLast_ReturnsLastPage()
+        [Theory]
+        [InlineData(123, 10, 13)]
+        [InlineData(9, 10, 1)]
+        public void TotalNumberOfPages_ReturnsExpected(int totalRecordCount,
+            int recordsPerPage,
+            int? expected)
         {
             // arrange
             Pagination pagination = new(new Mock<IPager>().Object)
             {
-                TotalRecordCount = 120,
-                RecordsPerPage = 10,
-                CurrentPageNumber = 12
-            };
-
-            // act
-            int? result = pagination.NextPageNumber;
-            bool isLastPage = pagination.IsLastPage; 
-            // assert
-            result.Should().Be(null);
-            isLastPage.Should().BeTrue();
-        }
-
-        [Fact]
-        public void TotalNumberOfPages_WithTotalRecordsGreaterThanRecordsPerPage_ReturnsMultiplePages()
-        {
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = 123,
-                RecordsPerPage = 10
+                TotalRecordCount = totalRecordCount,
+                RecordsPerPage = recordsPerPage
             };
 
             // act
             int result = pagination.TotalNumberOfPages;
 
             // assert
-            result.Should().Be(13);
-        }
-
-        [Fact]
-        public void TotalNumberOfPages_WithTotalRecordsLessThanRecordsPerPage_ReturnsOnePage()
-        {
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = 9,
-                RecordsPerPage = 10
-            };
-
-            // act
-            int result = pagination.TotalNumberOfPages;
-
-            // assert
-            result.Should().Be(1);
+            result.Should().Be(expected);
         }
 
         [Fact]
@@ -149,8 +108,13 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             exception.Message.Should().Be("The page size must be greater than zero.");
         }
 
-        [Fact]
-        public void IsPageable_WithMoreThanOnePage_ReturnsTrue()
+        [Theory]
+        [InlineData(20, 10, true)]
+        [InlineData(10, 10, false)]
+        [InlineData(9, 10, false)]
+        public void IsPageable_ReturnsExpected(int totalRecordCount,
+            int recordsPerPage,
+            bool expected)
         {
             // arrange
             Mock<IPager> mockPager = new();
@@ -158,115 +122,62 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
 
             Pagination pagination = new(mockPager.Object)
             {
-                TotalRecordCount = 20,
-                RecordsPerPage = 10
+                TotalRecordCount = totalRecordCount,
+                RecordsPerPage = recordsPerPage
             };
 
             // act
             bool result = pagination.IsPageable;
 
             // assert
-            result.Should().BeTrue();
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void IsPageable_WithExactlyOnePage_ReturnsFalse()
+        [Theory]
+        [InlineData(20, 10, 2, true)]
+        [InlineData(20, 10, 1, false)]
+        public void IsLastPage_ReturnsExpected(
+            int totalRecordCount,
+            int recordsPerPage,
+            int currentPageNumber,
+            bool expected)
         {
-            // arrange
-            Mock<IPager> mockPager = new();
-            mockPager.Setup(pager => pager.GetPageSequence(It.IsAny<int>(), It.IsAny<int>())).Returns([1]);
-
-            Pagination pagination = new(mockPager.Object)
-            {
-                TotalRecordCount = 10,
-                RecordsPerPage = 10
-            };
-
-            // act
-            bool result = pagination.IsPageable;
-
-            // assert
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsLastPage_WithCurrentPageSetToLast_ReturnsTrue()
-        {
-            // arrange
-
             // arrange
             Pagination pagination = new(new Mock<IPager>().Object)
             {
-                TotalRecordCount = 20,
-                RecordsPerPage = 10,
-                CurrentPageNumber = 2
+                TotalRecordCount = totalRecordCount,
+                RecordsPerPage = recordsPerPage,
+                CurrentPageNumber = currentPageNumber
             };
 
             // act
             bool result = pagination.IsLastPage;
 
             // assert
-            result.Should().BeTrue();
+            result.Should().Be(expected);
         }
 
-        [Fact]
-        public void IsLastPage_WithCurrentPageNotSetToLast_ReturnsFalse()
+        [Theory]
+        [InlineData(20, 10, 1, true)]
+        [InlineData(20, 10, 2, false)]
+        public void IsFirstPage_ReturnsExpected(int totalRecordCount,
+            int recordsPerPage,
+            int currentPageNumber,
+            bool expected)
         {
-            // arrange
-
             // arrange
             Pagination pagination = new(new Mock<IPager>().Object)
             {
-                TotalRecordCount = 20,
-                RecordsPerPage = 10,
-                CurrentPageNumber = 1
-            };
-
-            // act
-            bool result = pagination.IsLastPage;
-
-            // assert
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsFirstPage_WithCurrentPageSetToFirst_ReturnsTrue()
-        {
-            // arrange
-
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = 20,
-                RecordsPerPage = 10,
-                CurrentPageNumber = 1
+                TotalRecordCount = totalRecordCount,
+                RecordsPerPage = recordsPerPage,
+                CurrentPageNumber = currentPageNumber
             };
 
             // act
             bool result = pagination.IsFirstPage;
 
             // assert
-            result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void IsFirstPage_WithCurrentPageNotSetToFirst_ReturnsFalse()
-        {
-            // arrange
-
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = 20,
-                RecordsPerPage = 10,
-                CurrentPageNumber = 2
-            };
-
-            // act
-            bool result = pagination.IsFirstPage;
-
-            // assert
-            result.Should().BeFalse();
+            result.Should().Be(expected);
         }
     }
 }

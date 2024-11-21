@@ -1,5 +1,6 @@
 ﻿using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
@@ -76,44 +77,23 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             result.Should().Be(expected);
         }
 
-
-        [Fact]
-        public void GetPageSequence_CurrentPageWithinUpperBoundary_ReturnsExpectedPageSequence()
+        [Theory]
+        [InlineData(50, 52, new int[] { 48, 49, 50, 51, 52 })]
+        [InlineData(51, 52, new int[] { 48, 49, 50, 51, 52 })]
+        [InlineData(2, 52, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(3, 52, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(22, 52, new int[] { 20, 21, 22, 23, 24 })]
+        public void GetPageSequence_ReturnsExpected(
+            int currentPageNumber, int totalNumberOfPages, int[] expected)
         {
             // arrange
             ScrollablePager scrollablePager = new();
 
             // act
-            int[] result = scrollablePager.GetPageSequence(currentPageNumber: 50, totalNumberOfPages: 52);
+            int[] result = scrollablePager.GetPageSequence(currentPageNumber, totalNumberOfPages);
 
             // assert
-            result.Should().HaveCount(5).And.Equal([48, 49, 50, 51, 52]);
-        }
-
-        [Fact]
-        public void GetPageSequence_CurrentPageWithinLowerBoundary_ReturnsExpectedPageSequence()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            int[] result = scrollablePager.GetPageSequence(currentPageNumber: 2, totalNumberOfPages: 52);
-
-            // assert
-            result.Should().HaveCount(5).And.Equal([1, 2, 3, 4, 5]);
-        }
-
-        [Fact]
-        public void GetPageSequence_CurrentPageOutsideOfLowerAndUpperBoundaries_ReturnsExpectedPageSequence()
-        {
-            // arrange
-            ScrollablePager scrollablePager = new();
-
-            // act
-            int[] result = scrollablePager.GetPageSequence(currentPageNumber: 22, totalNumberOfPages: 52);
-
-            // assert
-            result.Should().HaveCount(5).And.Equal([20, 21, 22, 23, 24]);
+            result.Should().Equal(expected);
         }
     }
 }

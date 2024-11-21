@@ -25,7 +25,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
         }
 
         [Fact]
-        public void MapFrom_WithCurrentPageAsFirstPage()
+        public void MapFrom_PopulatesPaginationAsExpected()
         {
             // arrange
             const int currentPage = 1;
@@ -36,12 +36,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 
             // assert
             response.Should().NotBeNull();
-            response.CurrentPageSequence.Should().Equal([1, 2, 3, 4, 5]);
-            response.IsFirstPage.Should().BeTrue();
-            response.PageSequenceIncludesFirstPage.Should().BeTrue();
-            response.HasMoreLowerPagesAvailable.Should().BeFalse();
-            response.PageSequenceIncludesLastPage.Should().BeFalse();
-            response.HasMoreUpperPagesAvailable.Should().BeTrue();
+            response.CurrentPageNumber.Should().Be(currentPage);
+            response.TotalRecordCount.Should().Be(totalRecordCount);
+            response.RecordsPerPage.Should().Be(10);
         }
 
         [Theory]
@@ -56,7 +53,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             // assert
             response.Should().NotBeNull();
             response.CurrentPageSequence.Should().Equal(expectedPageSequence);
-            response.IsFirstPage.Should().BeFalse();
             response.PageSequenceIncludesFirstPage.Should().BeTrue();
             response.HasMoreLowerPagesAvailable.Should().BeFalse();
             response.PageSequenceIncludesLastPage.Should().BeFalse();
@@ -74,7 +70,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             // assert
             response.Should().NotBeNull();
             response.CurrentPageSequence.Should().Equal(expectedPageSequence);
-            response.IsFirstPage.Should().BeFalse();
             response.PageSequenceIncludesFirstPage.Should().BeFalse();
             response.HasMoreLowerPagesAvailable.Should().BeTrue();
             response.PageSequenceIncludesLastPage.Should().BeTrue();
@@ -93,7 +88,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             // assert
             response.Should().NotBeNull();
             response.CurrentPageSequence.Should().Equal(expectedPageSequence);
-            response.IsFirstPage.Should().BeFalse();
             response.PageSequenceIncludesFirstPage.Should().BeFalse();
             response.HasMoreLowerPagesAvailable.Should().BeTrue();
             response.PageSequenceIncludesLastPage.Should().BeFalse();
