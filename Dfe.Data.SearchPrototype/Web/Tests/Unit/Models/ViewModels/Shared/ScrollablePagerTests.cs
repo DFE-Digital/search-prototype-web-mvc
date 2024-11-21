@@ -8,9 +8,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
     public sealed class ScrollablePagerTests
     {
         [Theory]
-        [InlineData(9,13,true)]
+        [InlineData(9, 13, true)]
+        [InlineData(10, 13, false)]
         [InlineData(1, 5, false)]
-        [InlineData(10,13,false)]
         public void HasMoreUpperPagesAvailable_ReturnsExpected(int currentPageNumber, int totalNumberOfPages, bool expected)
         {
             // arrange
@@ -27,8 +27,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
 
         [Theory]
         [InlineData(8,13,false)]
+        [InlineData(10, 13, false)]
+        [InlineData(12, 13, true)]
         [InlineData(1, 5, true)]
-        [InlineData(12,13, true)]
         public void PageSequenceIncludesLastPage_ReturnsExpected(int currentPageNumber, int totalNumberOfPages, bool expected)
         {
             // arrange
@@ -54,15 +55,17 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             // act
             bool result =
                 scrollablePager
-                    .PageSequenceIncludesFirstPage(currentPageNumber, totalNumberOfPages);
+                    .PageSequenceIncludesFirstPage(currentPageNumber, totalNumberOfPages); // TODO CML this shouldn't need to know how many pages there are.
 
             // assert
             result.Should().Be(expected);
         }
 
         [Theory]
-        [InlineData(2,13,false)]
-        [InlineData(5,13,true)]
+        [InlineData(2, 13, false)]
+        [InlineData(3, 13, false)]
+        [InlineData(4, 13, false)]
+        [InlineData(5, 13, true)]
         public void HasMoreLowerPagesAvailable_ReturnsExpected(int currentPageNumber, int totalNumberOfPages, bool expected)
         {
             // arrange
@@ -71,7 +74,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             // act
             bool result =
                 scrollablePager
-                    .HasMoreLowerPagesAvailable(currentPageNumber, totalNumberOfPages);
+                    .HasMoreLowerPagesAvailable(currentPageNumber, totalNumberOfPages); // TODO CML this shouldn't need to know how many pages there are.
 
             // assert
             result.Should().Be(expected);

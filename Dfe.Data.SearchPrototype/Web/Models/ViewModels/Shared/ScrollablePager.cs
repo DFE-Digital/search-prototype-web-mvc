@@ -34,7 +34,7 @@
         /// </returns>
         public bool PageSequenceIncludesFirstPage(
             int currentPageNumber, int totalNumberOfPages) =>
-                GetFirstPageInSequence(currentPageNumber, totalNumberOfPages) < PageSequencePaddingSize;
+                GetFirstPageInSequence(currentPageNumber, totalNumberOfPages) == 1;
 
         /// <summary>
         /// Determines whether the current page falls on the lower paging threshold,
