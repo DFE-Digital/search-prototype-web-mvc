@@ -1,7 +1,7 @@
 ﻿namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
-/// The search requests defining model bound view response logic predicated on the status of user input.
+/// Encapsulates the user selections on the page for model binding to the controller method parameter.
 /// </summary>
 public class SearchRequest
 {
