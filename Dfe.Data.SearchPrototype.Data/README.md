@@ -14,13 +14,8 @@ Assuming your index is already setup (if not, see the "Index" section below):
    - Alternatively, download and extract the "All establishment data/establishment fields CSV" file from [the GIAS web UI](https://www.get-information-schools.service.gov.uk/Downloads)
 2. Update local configuration/secrets to point to your local copy of the CSV file and include connection details for your Azure Search service
    - See the "Configuration" section below
-3. Rename columns which include brackets
-   - This is because the CSV parser does not handle brackets well when creating the C# dynamic object
-   - e.g., "Establishment Status (Name)" should be renamed to "Establishment Status", 
-     which then becomes `record.Establishment Status` within `Dfe.Data.SearchPrototype.Data.DocumentBatchHelpers.ConvertBatchToJson`
-   - See the "Reference index field to data" section below
-4. Run the app to read data from the CSV and push the data to your Azure Search service
-   - This will happen in batches of 1000 records at a time (as per Azure Search API limits) - see also `Dfe.Data.SearchPrototype.Data.ManageData.BatchSize`
+3. Run the app to read data from the CSV and push the data to your Azure Search service
+   - This will happen in batches of 99 records at a time (as per Postcode API lookup limits) - see also `Dfe.Data.SearchPrototype.Data.ManageData.BatchSize`
 
 ## Azure AI/Cognitive Search Index
 
