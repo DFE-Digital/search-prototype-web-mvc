@@ -17,6 +17,7 @@
 
 @if (Model.IsPageable)
 {
+    <input type="hidden" name="RecordsPerPage" value=@Model.RecordsPerPage />
     <nav id="pagination" class="govuk-pagination" role="navigation" aria-label="results-pagination">
         <ul class="govuk-pagination__list">
             <li class="govuk-pagination__item
