@@ -40,10 +40,11 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(establishmentResults), Times.Once());
             mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(facetsAndSelectedFacets), Times.Once());
+            mockPaginationMapper.Verify(mapper => mapper.MapFrom(new (1, 10)), Times.Once());
         }
 
         [Fact]
-        public void CreateViewModel_NullEstablishmentResultParam_CallsMappers()
+        public void CreateViewModel_NullEstablishmentResultParam_NoCallsToMappers()
         {
             // arrange
             Mock<IMapper<EstablishmentResults?, List<SearchPrototype.Web.Models.ViewModels.Establishment>?>> mockEstablishmentResultsToEstablishmentsViewModelMapper =
@@ -69,6 +70,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Never());
             mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(facetsAndSelectedFacets), Times.Never());
+            mockPaginationMapper.Verify(mapper => mapper.MapFrom(new(1, 10)), Times.Never());
         }
 
         [Fact]
@@ -99,6 +101,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(establishmentResults), Times.Once());
             mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(facetsAndSelectedFacets), Times.Once());
+            mockPaginationMapper.Verify(mapper => mapper.MapFrom(new(1, 10)), Times.Once());
         }
     }
 }
