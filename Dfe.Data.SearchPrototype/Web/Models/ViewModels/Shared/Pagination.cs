@@ -3,7 +3,7 @@
     /// <summary>
     /// View model to describe and assign pagination related presentation concerns.
     /// </summary>
-    public sealed class Pagination(IPager pager)
+    public sealed class Pagination(IPager _pager)
     {
         /// <summary>
         /// Establishes the current page number.
@@ -64,33 +64,33 @@
         /// based on the current page and the total number of pages available.
         /// </summary>
         public int[] CurrentPageSequence =>
-            pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
+            _pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the lower paging
         /// boundary, given the total number of pages.
         /// </summary>
         public bool PageSequenceIncludesFirstPage =>
-            pager.PageSequenceIncludesFirstPage(CurrentPageNumber, TotalNumberOfPages);
+            _pager.PageSequenceIncludesFirstPage(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the lower paging threshold.
         /// </summary>
         public bool HasMoreLowerPagesAvailable =>
-            pager.HasMoreLowerPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
+            _pager.HasMoreLowerPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging
         /// boundary, given the total number of pages provisioned.
         /// </summary>
         public bool PageSequenceIncludesLastPage =>
-            pager.PageSequenceIncludesLastPage(CurrentPageNumber, TotalNumberOfPages);
+            _pager.PageSequenceIncludesLastPage(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Determines whether the current page falls within the upper paging threshold.
         /// </summary>
         public bool HasMoreUpperPagesAvailable =>
-            pager.HasMoreUpperPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
+            _pager.HasMoreUpperPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
 
         /// <summary>
         /// Gets the total number of pages.
