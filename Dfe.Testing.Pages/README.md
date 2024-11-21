@@ -10,6 +10,13 @@ This library is targeted to support .NET Developers and Testers
 
 - Demonstrate patterns for reuseable PageModels using PageComponents and [GDSComponents](https://design-system.service.gov.uk/components/) as they should be used as the building blocks for all CivilService web applications
 
+## Common terms and abstractions
+
+- `IDocumentQueryClientProvider`
+- `IDocumentQueryClient`
+- `PagePartBase`
+- `IPageFactory`
+
 ## Using the library
 
 The Dfe.Testing.Pages library supports the below providers
@@ -229,17 +236,3 @@ public async Task MyTest()
 }
 
 ```
-
-## Common terms and abstractions
-
-- `IDocumentQueryClientProvider`
-- `IDocumentQueryClient`
-- `PagePartBase`
-- `IPageFactory`
-
-## PageModels should be structued
-
-- Custom components that an application uses
-- GDSComponents that we provide
-
-## Writing an PageModel for an application
