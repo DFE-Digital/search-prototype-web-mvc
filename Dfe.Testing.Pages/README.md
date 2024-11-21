@@ -36,8 +36,10 @@ services.AddWebDriver();
 In order to use the library you will need to setup [DependencyInjection](TODO LINK) inside of your tests and register the provider you want for that test suite. Below is an example of how you setup DependencyInjection.
 
 ```cs
-// This is a Singleton that wraps the DependencyInjection container allowing for the services to be configured and built once.
-// A scope is a child scope of the root DependencyInjection container, when you resolve through a scope, after you dispose of the scope - `Scoped` dependencies are disposed of.
+// This uses the Singleton pattern that wraps the DependencyInjection container allowing for the services to be configured and built once. 
+// The `IServiceProvider` once built, is delegated responsibility for creating registered implementations of types and managing their lifetimes.
+
+// An `IServiceScope` is a child scope of the root DependencyInjection container, when you resolve through a scope, after you dispose of the scope - `Scoped` dependencies are disposed of.
 .AddSingleton<TImplementation>()
 .AddScoped<TInterface, TImplementation>();
 _scope.Resolve<TInterface>();
@@ -165,6 +167,7 @@ GDSTextInput textInput = new()
     PlaceHolder = "Search by keyword",
     Type = "text"
 };
+
 homePage.TextInput.Should().Be(textInput);
 
 public sealed class HomePage
