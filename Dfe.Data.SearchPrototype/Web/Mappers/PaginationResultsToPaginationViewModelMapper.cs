@@ -32,7 +32,6 @@ public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), 
     public PaginationResultsToPaginationViewModelMapper(IPager pager, IOptions<PaginationOptions> paginationOptions)
     {
         _pager = pager;
-        ArgumentNullException.ThrowIfNull(paginationOptions.Value);
         _paginationOptions = paginationOptions.Value;
     }
 

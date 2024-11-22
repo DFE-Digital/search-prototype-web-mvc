@@ -10,15 +10,13 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
 {
     public sealed class PaginationResultsToPaginationViewModelMapperTests
     {
-        private readonly PaginationResultsToPaginationViewModelMapper _mapper;
         private PaginationOptions _options = new();
+        private IOptions<PaginationOptions> _paginationOptions;
 
         public PaginationResultsToPaginationViewModelMapperTests()
         {
-            IOptions<PaginationOptions> paginationOptions =
+            _paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(_options);
-
-            _mapper = new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
         }
 
         [Fact]
@@ -28,6 +26,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             const int currentPage = 1;
             const int totalRecordCount = 113;
             _options.RecordsPerPage = 10;
+            var _mapper = new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), _paginationOptions);
 
             // act
             Pagination response = _mapper.MapFrom(input: (currentPage, totalRecordCount));

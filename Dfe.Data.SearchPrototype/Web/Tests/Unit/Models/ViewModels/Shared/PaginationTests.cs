@@ -52,6 +52,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
         [Theory]
         [InlineData(123, 10, 13)]
         [InlineData(9, 10, 1)]
+        [InlineData(0, 10, 0)]
+        [InlineData(10, 0, 0)]
         public void TotalNumberOfPages_ReturnsExpected(int totalRecordCount,
             int recordsPerPage,
             int? expected)
@@ -68,44 +70,6 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
 
             // assert
             result.Should().Be(expected);
-        }
-
-        [Fact]
-        public void TotalNumberOfPages_WithTotalRecordCountZero_ThrowsArgumentException()
-        {
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = 0,
-                RecordsPerPage = 10
-            };
-
-            // act, assert
-            Action failedAction =
-                () => _ = pagination.TotalNumberOfPages;
-
-            ArgumentException exception = Assert.Throws<ArgumentException>(failedAction);
-
-            exception.Message.Should().Be("The record count must be greater than zero.");
-        }
-
-        [Fact]
-        public void TotalNumberOfPages_WithRecordsPerPageZero_ThrowsArgumentException()
-        {
-            // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = 10,
-                RecordsPerPage = 0
-            };
-
-            // act, assert
-            Action failedAction =
-                () => _ = pagination.TotalNumberOfPages;
-
-            ArgumentException exception = Assert.Throws<ArgumentException>(failedAction);
-
-            exception.Message.Should().Be("The page size must be greater than zero.");
         }
 
         [Theory]

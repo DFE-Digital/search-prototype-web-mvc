@@ -104,12 +104,8 @@
         /// </exception>
         private int GetTotalNumberOfPages()
         {
-            if (TotalRecordCount == 0) {
-                throw new ArgumentException("The record count must be greater than zero.");
-            }
-
             if (RecordsPerPage == 0){
-                throw new ArgumentException("The page size must be greater than zero.");
+                return 0;
             }
 
             return (TotalRecordCount / RecordsPerPage) + (TotalRecordCount % RecordsPerPage > 0 ? 1 : 0);
