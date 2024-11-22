@@ -60,6 +60,7 @@ public class HomeControllerTests
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
+        viewModel.Pagination!.RecordsPerPage.Should().Be(10);
     }
 
     [Fact]
@@ -98,6 +99,7 @@ public class HomeControllerTests
         viewModel.SearchItems.Should().BeNull();
         viewModel.HasResults.Should().BeFalse();
         viewModel.SearchResultsCount.Should().Be(0);
+        viewModel.Pagination.Should().BeNull();
     }
 
     [Fact]

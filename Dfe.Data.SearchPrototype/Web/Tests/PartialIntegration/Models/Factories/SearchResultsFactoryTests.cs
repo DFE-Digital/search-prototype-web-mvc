@@ -49,6 +49,9 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             result.SearchResultsCount.Should().BeGreaterThanOrEqualTo(1);
             result.HasResults.Should().BeTrue();
             result.Facets.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<SearchPrototype.Web.Models.ViewModels.Facet>>();
+            result.Pagination!.CurrentPageNumber.Should().Be(1);
+            result.Pagination!.TotalRecordCount.Should().Be(10);
+            result.Pagination!.RecordsPerPage.Should().Be(10);
         }
 
         [Fact]
@@ -84,6 +87,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             result.SearchResultsCount.Should().Be(0);
             result.HasResults.Should().BeFalse();
             result.Facets.Should().BeNull();
+            result.Pagination.Should().BeNull();
         }
 
         [Fact]
