@@ -1,8 +1,5 @@
 ﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.ServiceAdapters;
 using Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests.Extensions;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Options;
-using Dfe.Data.SearchPrototype.Web.Tests.Shared.SearchServiceAdapter.Resources;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -61,32 +58,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.AcceptanceTests
         /// <param name="services">
         /// The contract for a collection of application services.
         /// </param>
-        private void ConfigureServices(IServiceCollection services)
-        {
-            //// Remove registration of the default ISearchServiceAdapter (i.e. CognitiveSearchServiceAdapter).
-            //var searchServiceAdapterDescriptor =
-            //        services.SingleOrDefault(
-            //            serviceDescriptor => serviceDescriptor.ServiceType ==
-            //                typeof(ISearchServiceAdapter));
-
-            //services.Remove(searchServiceAdapterDescriptor!);
-
-            //// Register our dummy search service adapter.
-            //services.AddSingleton<IJsonFileLoader, JsonFileLoader>();
-            //services.AddScoped(
-            //    typeof(ISearchServiceAdapter),
-            //    typeof(DummySearchServiceAdapter<Infrastructure.DataTransferObjects.Establishment>));
-
-            //string fileName =
-            //    new ConfigurationBuilder()
-            //            .SetBasePath(Directory.GetCurrentDirectory())
-            //                .AddJsonFile("appsettings.test.json", false)
-            //                    .Build()["dummySearchServiceAdapter:fileName"]!;
-
-            //services.AddOptions<DummySearchServiceAdapterOptions>()
-            //    .Configure((options) =>
-            //        options.FileName = fileName);
-        }
+        private void ConfigureServices(IServiceCollection services) { }
+     
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or

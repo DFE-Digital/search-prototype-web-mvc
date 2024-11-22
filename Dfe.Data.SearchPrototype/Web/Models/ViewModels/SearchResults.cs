@@ -37,6 +37,11 @@ public sealed class SearchResults
     public int SearchResultsCount => SearchItems?.Count ?? 0;
 
     /// <summary>
+    /// Determines whether there are filters in the results
+    /// </summary>
+    public bool HasFilters => Facets?.Count > 0 ? true : false;
+
+    /// <summary>
     /// View model to deal with pagination for search results.
     /// </summary>
     public Pagination? Pagination { get; set; }

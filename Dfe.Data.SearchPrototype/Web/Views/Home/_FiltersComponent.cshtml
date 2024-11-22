@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer;
+@using Dfe.Data.SearchPrototype.Web.Models.ViewModels
+@model SearchResults
+
+<div id="filters-container" class="govuk-grid-column-one-third">
+    <h3 id="filters-heading">Filters</h3>
+    <button id="filters-button" type="submit" class="govuk-button" data-module="govuk-button">
+        Apply filters
+    </button>
+    <button id="clearFilters" type="submit" name="ClearFilters" value="true" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+        Clear filters
+    </button>
+    @if (Model.Facets is not null && Model.Facets.Any())
+    {
+        foreach (var facet in Model.Facets)
+        {
+            <govuk-checkboxes name="selectedFacets[@facet.Name]">
+                <govuk-checkboxes-fieldset id="FacetName-@facet.Name">
+                    <govuk-checkboxes-fieldset-legend id="@facet.Name" class="govuk-fieldset__legend--s">
+                        @Localizer[facet.Name]
+                    </govuk-checkboxes-fieldset-legend>
+
+                    @foreach (var facetValue in facet.Values)
+                    {
+                        <govuk-checkboxes-item checked="@facetValue.IsSelected" value="@facetValue.Value">
+                            @facetValue.Value (@facetValue.Count)
+                        </govuk-checkboxes-item>
+                    }
+                </govuk-checkboxes-fieldset>
+            </govuk-checkboxes>
+        }
+    }
+    else
+    {
+        <p>No filters available</p>
+    }
+</div>
