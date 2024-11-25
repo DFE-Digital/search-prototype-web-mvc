@@ -27,7 +27,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
@@ -65,7 +65,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
@@ -101,7 +101,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
@@ -136,7 +136,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             IOptions<PaginationOptions> paginationOptions =
                 IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
             IMapper<(int, int), Pagination> _paginationMapper =
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions);
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(

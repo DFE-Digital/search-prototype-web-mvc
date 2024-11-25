@@ -3,8 +3,17 @@
     /// <summary>
     /// View model to describe and assign pagination related presentation concerns.
     /// </summary>
-    public sealed class Pagination(IPager _pager)
+    public sealed class Pagination
     {
+
+        private int[] _currentPageSequence;
+        public int[] CurrentPageSequence => _currentPageSequence;
+
+        private int _totalNumberOfPages;
+        public int TotalNumberOfPages => _totalNumberOfPages;
+
+        private const int PageSequencePaddingSize = 2;
+
         /// <summary>
         /// Establishes the current page number.
         /// </summary>
@@ -21,31 +30,14 @@
         public int RecordsPerPage { get; set; }
 
         /// <summary>
-        /// Determines the previous page number and defaults to one
-        /// if the current page is the first page.
+        /// Sets the default first page number to 1.
         /// </summary>
-        public int? PreviousPageNumber => (CurrentPageNumber > 1) ? CurrentPageNumber - 1 : null;
-
-        /// <summary>
-        /// Determines the previous page number and defaults
-        /// to the last page number if the current page is the last page.
-        /// </summary>
-        public int? NextPageNumber => (CurrentPageNumber < TotalNumberOfPages) ? CurrentPageNumber + 1 : null;
-
-        /// <summary>
-        /// Determines the total number of pages available for pagination.
-        /// </summary>
-        public int TotalNumberOfPages => GetTotalNumberOfPages();
+        public int FirstPageNumber => 1;
 
         /// <summary>
         /// Determines whether pagination can be applied i.e. page sequence length has values.
         /// </summary>
-        public bool IsPageable => TotalNumberOfPages > 1;
-
-        /// <summary>
-        /// Sets the default first page number to 1.
-        /// </summary>
-        public int FirstPageNumber => 1;
+        public bool IsPageable => _totalNumberOfPages > 1;
 
         /// <summary>
         /// Determines whether the current page is the last page in the sequence.
@@ -60,37 +52,75 @@
         public bool IsFirstPage => PreviousPageNumber == null;
 
         /// <summary>
-        /// Determines the current page sequence (i.e. array of page numbers)
-        /// based on the current page and the total number of pages available.
+        /// Determines the previous page number and defaults to one
+        /// if the current page is the first page.
         /// </summary>
-        public int[] CurrentPageSequence =>
-            _pager.GetPageSequence(CurrentPageNumber, TotalNumberOfPages);
+        public int? PreviousPageNumber => (CurrentPageNumber > 1) ? CurrentPageNumber - 1 : null;
 
         /// <summary>
-        /// Determines whether the current page falls within the lower paging
-        /// boundary, given the total number of pages.
+        /// Determines the previous page number and defaults
+        /// to the last page number if the current page is the last page.
         /// </summary>
+        public int? NextPageNumber => (CurrentPageNumber < _totalNumberOfPages) ? CurrentPageNumber + 1 : null;
+
+
+        /// <summary>
+        /// Determines if FirstPage button should be displayed
+        /// </summary>
+        /// <returns>
+        /// True or false based on whether the condition is met.
+        /// </returns>
         public bool PageSequenceIncludesFirstPage =>
-            _pager.PageSequenceIncludesFirstPage(CurrentPageNumber, TotalNumberOfPages);
+               _currentPageSequence[0] == 1;
 
         /// <summary>
-        /// Determines whether the current page falls within the lower paging threshold.
+        /// Determines if the front ellipsis should be displayed.
         /// </summary>
+        /// <returns>
+        /// True or false based on whether the condition is met.
+        /// </returns>
         public bool HasMoreLowerPagesAvailable =>
-            _pager.HasMoreLowerPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
-
+                !(_currentPageSequence[0] < PageSequencePaddingSize + 1);
         /// <summary>
-        /// Determines whether the current page falls within the upper paging
-        /// boundary, given the total number of pages provisioned.
+        /// Determines if LastPage button should be displayed.
         /// </summary>
+        /// <returns>
+        /// True or false based on whether the condition is met
+        /// </returns>
+
         public bool PageSequenceIncludesLastPage =>
-            _pager.PageSequenceIncludesLastPage(CurrentPageNumber, TotalNumberOfPages);
+                _currentPageSequence.Contains(TotalNumberOfPages);
 
         /// <summary>
-        /// Determines whether the current page falls within the upper paging threshold.
+        /// Determines if the end ellipsis should be displayed.
         /// </summary>
+        /// <param name="CurrentPageNumber">
+        /// The current page selected.
+        /// </param>
+        /// <param name="TotalNumberOfPages">
+        /// The total number of pages available.
+        /// </param>
+        /// <returns>
+        /// True or false based on whether the condition is met.
+        /// </returns>
         public bool HasMoreUpperPagesAvailable =>
-            _pager.HasMoreUpperPagesAvailable(CurrentPageNumber, TotalNumberOfPages);
+                (CurrentPageNumber <= (TotalNumberOfPages - (PageSequencePaddingSize * 2))) &&
+                (TotalNumberOfPages != ((PageSequencePaddingSize * 2) + 1));
+
+        public Pagination()
+        {
+        // this is only needed to pass Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories.SearchResultsFactoryTests
+        /// as I'm not sure whats best way to do it
+        }
+        public Pagination(int currentPageNumber, int totalRecordCount, int recordsPerPage)
+        {
+            CurrentPageNumber = currentPageNumber;
+            TotalRecordCount = totalRecordCount;
+            RecordsPerPage = recordsPerPage;
+
+            _totalNumberOfPages = GetTotalNumberOfPages();
+            _currentPageSequence = GetPageSequence(CurrentPageNumber, _totalNumberOfPages);
+        }
 
         /// <summary>
         /// Gets the total number of pages.
@@ -110,5 +140,47 @@
 
             return (TotalRecordCount / RecordsPerPage) + (TotalRecordCount % RecordsPerPage > 0 ? 1 : 0);
         }
+        /// <summary>
+        /// Determines the current page sequence to return given the current page number and total number of pages.
+        /// This method ensures the page selected is maintained in the middle of the sequence if it does not fall on,
+        /// or within the lower or upper bounds, thus giving the impression that the pages are scrolling forwards or
+        /// backwards depending on the selection made. If the page falls on or within the lower or upper bounds,
+        /// the page sequence is adjusted accordingly to ensure the current page number is assigned to the correct sequence ordering.
+        /// </summary>
+        /// <param name="currentPageNumber">
+        /// The current page selected.
+        /// </param>
+        /// <param name="totalNumberOfPages">
+        /// The total number of pages available.
+        /// </param>
+        /// <returns>
+        /// An integer array which represents the pages to be contained within a given pagination sequence.
+        /// </returns>
+        private int[] GetPageSequence(int currentPageNumber, int totalNumberOfPages)
+        {
+            int[] lowerPagePadding =
+                Enumerable.Range(1, PageSequencePaddingSize).ToArray();
+            int[] upperPagePadding =
+                Enumerable.Range(totalNumberOfPages - PageSequencePaddingSize + 1, PageSequencePaddingSize).ToArray();
+
+            const int pageSequenceSize = (PageSequencePaddingSize * 2);
+            int firstSequencePageNumber = currentPageNumber - PageSequencePaddingSize;
+            int sequencePageCount = pageSequenceSize + 1;
+
+            if (lowerPagePadding.Contains(currentPageNumber))
+            {
+                firstSequencePageNumber = 1;
+                sequencePageCount =
+                    (totalNumberOfPages <= pageSequenceSize) ? totalNumberOfPages : sequencePageCount;
+            }
+            else if (upperPagePadding.Contains(currentPageNumber))
+            {
+                firstSequencePageNumber = totalNumberOfPages - pageSequenceSize;
+            }
+
+            return Enumerable.Range(firstSequencePageNumber, sequencePageCount).ToArray();
+        }
     }
+
+    
 }

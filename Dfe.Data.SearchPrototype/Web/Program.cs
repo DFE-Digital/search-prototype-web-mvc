@@ -33,7 +33,7 @@ builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<Models.ViewMod
 builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, FacetsAndSelectedFacetsToFacetsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>?>, SelectedFacetsToFilterRequestsMapper>();
 builder.Services.AddSingleton<IMapper<(int, int), Pagination>, PaginationResultsToPaginationViewModelMapper>();
-builder.Services.AddSingleton<IPager, ScrollablePager>();
+//builder.Services.AddSingleton<IPager, ScrollablePager>();
 builder.Services.AddOptions<AzureSearchOptions>()
     .Validate(azureSearchOptions => !string.IsNullOrEmpty(azureSearchOptions.SearchIndex), "Search index must be valid")
     .Validate(azureSearchOptions => azureSearchOptions.Size > 0, "Results size should not be 0")

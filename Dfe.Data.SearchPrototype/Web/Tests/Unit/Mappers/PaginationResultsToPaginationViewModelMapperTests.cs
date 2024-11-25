@@ -26,7 +26,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Mappers
             const int currentPage = 1;
             const int totalRecordCount = 113;
             _options.RecordsPerPage = 10;
-            var _mapper = new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), _paginationOptions);
+            var _mapper = new PaginationResultsToPaginationViewModelMapper(_paginationOptions);
 
             // act
             Pagination response = _mapper.MapFrom(input: (currentPage, totalRecordCount));

@@ -46,7 +46,7 @@ public class HomeControllerTests
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
                     new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
+                    new PaginationResultsToPaginationViewModelMapper(paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -85,7 +85,7 @@ public class HomeControllerTests
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
                     new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
+                    new PaginationResultsToPaginationViewModelMapper(paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -127,7 +127,7 @@ public class HomeControllerTests
             new SearchResultsFactory(
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions)
             ),
             new SelectedFacetsToFilterRequestsMapper());
 
@@ -176,7 +176,7 @@ public class HomeControllerTests
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
                     new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                    new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
+                    new PaginationResultsToPaginationViewModelMapper(paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -229,7 +229,7 @@ public class HomeControllerTests
             new SearchResultsFactory(
                 new EstablishmentResultsToEstablishmentsViewModelMapper(),
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
-                new PaginationResultsToPaginationViewModelMapper(new ScrollablePager(), paginationOptions)
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions)
             ),
             new SelectedFacetsToFilterRequestsMapper());
 

@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
 using Dfe.Data.SearchPrototype.Web.Options;
 using Microsoft.Extensions.Options;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Dfe.Data.SearchPrototype.Web.Mappers;
 
@@ -12,7 +13,7 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers;
 /// </summary>
 public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), Pagination>
 {
-    private readonly IPager _pager;
+
     private readonly PaginationOptions _paginationOptions;
 
     /// <summary>
@@ -29,9 +30,8 @@ public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), 
     /// Provides the configuration options used by the underlying pagination
     /// view-model, i.e. number of records per-page.
     /// </param>
-    public PaginationResultsToPaginationViewModelMapper(IPager pager, IOptions<PaginationOptions> paginationOptions)
+    public PaginationResultsToPaginationViewModelMapper(IOptions<PaginationOptions> paginationOptions)
     {
-        _pager = pager;
         _paginationOptions = paginationOptions.Value;
     }
 
@@ -47,10 +47,13 @@ public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), 
     /// <returns>
     /// A configured <see cref="Pagination"/> view-model instance.
     /// </returns>
-    public Pagination MapFrom((int, int) input) =>
-        new(_pager){
-            CurrentPageNumber = input.Item1,
-            TotalRecordCount = input.Item2,
-            RecordsPerPage = _paginationOptions.RecordsPerPage
-        };
+    public Pagination MapFrom((int, int) input) 
+       {
+        Pagination pagination = new Pagination(
+            currentPageNumber: input.Item1,
+            totalRecordCount: input.Item2,
+            recordsPerPage: _paginationOptions.RecordsPerPage
+            );
+        return pagination;
+    }
 }

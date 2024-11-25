@@ -23,7 +23,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
-                PaginationMapperTestDouble.MockFor(new Pagination(new ScrollablePager()));
+                PaginationMapperTestDouble.MockFor(new Pagination());
 
             SearchResultsFactory searchResultsFactory =
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
@@ -40,7 +40,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(establishmentResults), Times.Once());
             mockEstablishmentFacetsToFacetsViewModelMapper.Verify(mapper => mapper.MapFrom(facetsAndSelectedFacets), Times.Once());
-            mockPaginationMapper.Verify(mapper => mapper.MapFrom(new (1, 10)), Times.Once());
+            mockPaginationMapper.Verify(mapper => mapper.MapFrom(new(1, 10)), Times.Once());
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
-                PaginationMapperTestDouble.MockFor(new Pagination(new ScrollablePager()));
+                PaginationMapperTestDouble.MockFor(new Pagination());
 
             SearchResultsFactory searchResultsFactory =
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
@@ -65,7 +65,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
             FacetsAndSelectedFacets facetsAndSelectedFacets = FacetsAndSelectedFacetsTestDouble.Create();
 
             //act
-            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets, totalNumberOfEstablishments: 10, currentPageNumber:1);
+            searchResultsFactory.CreateViewModel(establishmentResults, facetsAndSelectedFacets, totalNumberOfEstablishments: 10, currentPageNumber: 1);
 
             // verify
             mockEstablishmentResultsToEstablishmentsViewModelMapper.Verify(mapper => mapper.MapFrom(It.IsAny<EstablishmentResults?>()), Times.Never());
@@ -84,12 +84,12 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
-                PaginationMapperTestDouble.MockFor(new Pagination(new ScrollablePager()));
+                PaginationMapperTestDouble.MockFor(new Pagination());
 
             EstablishmentResults establishmentResults = EstablishmentResultsTestDouble.Create();
             FacetsAndSelectedFacets facetsAndSelectedFacets = null!;
 
-            
+
             SearchResultsFactory searchResultsFactory =
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
                     mockEstablishmentFacetsToFacetsViewModelMapper.Object,

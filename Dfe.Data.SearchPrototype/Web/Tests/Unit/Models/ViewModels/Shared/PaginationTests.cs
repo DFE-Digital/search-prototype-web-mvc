@@ -13,10 +13,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
         public void PreviousPageNumber_ReturnsExpected(int currentPageNumber, int? expected)
         {
             // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                CurrentPageNumber = currentPageNumber
-            };
+            Pagination pagination = new(currentPageNumber, totalRecordCount : 30, recordsPerPage:10);
 
             // act
             int? result = pagination.PreviousPageNumber;
@@ -35,12 +32,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             int? expected)
         {
             // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = totalRecordCount,
-                RecordsPerPage = recordsPerPage,
-                CurrentPageNumber = currentPageNumber
-            };
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage);
 
             // act
             int? result = pagination.NextPageNumber;
@@ -59,11 +51,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             int? expected)
         {
             // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = totalRecordCount,
-                RecordsPerPage = recordsPerPage
-            };
+            Pagination pagination = new(currentPageNumber : 1, totalRecordCount, recordsPerPage);
 
             // act
             int result = pagination.TotalNumberOfPages;
@@ -81,14 +69,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             bool expected)
         {
             // arrange
-            Mock<IPager> mockPager = new();
-            mockPager.Setup(pager => pager.GetPageSequence(It.IsAny<int>(), It.IsAny<int>())).Returns([1, 2, 3, 4, 5]);
-
-            Pagination pagination = new(mockPager.Object)
-            {
-                TotalRecordCount = totalRecordCount,
-                RecordsPerPage = recordsPerPage
-            };
+            Pagination pagination = new(currentPageNumber: 1, totalRecordCount, recordsPerPage);
 
             // act
             bool result = pagination.IsPageable;
@@ -107,12 +88,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             bool expected)
         {
             // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = totalRecordCount,
-                RecordsPerPage = recordsPerPage,
-                CurrentPageNumber = currentPageNumber
-            };
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage);
 
             // act
             bool result = pagination.IsLastPage;
@@ -130,18 +106,106 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.ViewModels.Shared
             bool expected)
         {
             // arrange
-            Pagination pagination = new(new Mock<IPager>().Object)
-            {
-                TotalRecordCount = totalRecordCount,
-                RecordsPerPage = recordsPerPage,
-                CurrentPageNumber = currentPageNumber
-            };
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage);
 
             // act
             bool result = pagination.IsFirstPage;
 
             // assert
             result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(9, 130, true)]
+        [InlineData(10, 130, false)]
+        [InlineData(1, 50, false)]
+        [InlineData(2, 30, false)]
+        public void HasMoreUpperPagesAvailable_ReturnsExpected(int currentPageNumber, int totalRecordCount, bool expected)
+        {
+            // arrange
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage:10);
+
+            // act
+            bool result =
+                pagination
+                    .HasMoreUpperPagesAvailable;
+
+            // assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(8, 130, false)]
+        [InlineData(10, 130, false)]
+        [InlineData(12, 130, true)]
+        [InlineData(1, 50, true)]
+        public void PageSequenceIncludesLastPage_ReturnsExpected(int currentPageNumber, int totalRecordCount, bool expected)
+        {
+            // arrange
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage: 10);
+
+            // act
+            bool result =
+                pagination
+                    .PageSequenceIncludesLastPage;
+
+            // assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(1, 130, true)]
+        [InlineData(4, 130, false)]
+        public void PageSequenceIncludesFirstPage_ReturnsExpected(int currentPageNumber, int totalRecordCount, bool expected)
+        {
+            // arrange
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage: 10);
+
+            // act
+            bool result =
+                pagination
+                    .PageSequenceIncludesFirstPage;
+
+            // assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(2, 130, false)]
+        [InlineData(3, 130, false)]
+        [InlineData(4, 130, false)]
+        [InlineData(5, 130, true)]
+        public void HasMoreLowerPagesAvailable_ReturnsExpected(int currentPageNumber, int totalRecordCount, bool expected)
+        {
+            // arrange
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage: 10);
+
+            // act
+            bool result =
+                pagination
+                    .HasMoreLowerPagesAvailable;
+
+            // assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(50, 520, new int[] { 48, 49, 50, 51, 52 })]
+        [InlineData(51, 520, new int[] { 48, 49, 50, 51, 52 })]
+        [InlineData(2, 520, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(3, 520, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(22, 520, new int[] { 20, 21, 22, 23, 24 })]
+        public void GetPageSequence_ReturnsExpected(
+            int currentPageNumber, int totalRecordCount, int[] expected)
+        {
+            // arrange
+            Pagination pagination = new(currentPageNumber, totalRecordCount, recordsPerPage: 10);
+
+            // act
+            int[] result = pagination.CurrentPageSequence;
+
+            // assert
+            result.Should().Equal(expected);
         }
     }
 }
