@@ -34,14 +34,15 @@ builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, Fa
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>?>, SelectedFacetsToFilterRequestsMapper>();
 builder.Services.AddSingleton<IMapper<(int, int), Pagination>, PaginationResultsToPaginationViewModelMapper>();
 builder.Services.AddSingleton<IPager, ScrollablePager>();
+builder.Services.AddOptions<AzureSearchOptions>()
+    .Validate(azureSearchOptions => !string.IsNullOrEmpty(azureSearchOptions.SearchIndex), "Search index must be valid")
+    .Validate(azureSearchOptions => azureSearchOptions.Size > 0, "Results size should not be 0")
+    .ValidateOnStart();
 builder.Services.AddOptions<PaginationOptions>()
     .Configure<IOptions<AzureSearchOptions>>(
-        (paginationOptions, azureSearchOptions) => {
-            ArgumentNullException.ThrowIfNull(azureSearchOptions.Value);
-            paginationOptions.RecordsPerPage = azureSearchOptions.Value.Size;
-        });
-//
-//
+        (paginationOptions, azureSearchOptions) => { paginationOptions.RecordsPerPage = azureSearchOptions.Value.Size; });
+
+
 // End of IOC container registrations
 
 var app = builder.Build();

@@ -7,38 +7,16 @@ public static class SearchByKeywordResponseTestDouble
 {
     public static SearchByKeywordResponse Create() => CreateWith(new Bogus.Faker().Random.Int(11, 66));
 
-    public static SearchByKeywordResponse CreateWith(int establishmentResultsCount, int pageNumber = 0)
+    public static SearchByKeywordResponse CreateWith(int establishmentResultsCount)
     {
-        List<Establishment> establishmentResults = new();
-        Dictionary<int, List<PageSequence>> pageChunks = new();
-        List<PageSequence> currentPageSequences = new();
-        if (pageNumber > 0)
-        {
-            List<int> rawRecordCount = Enumerable.Range(1, establishmentResultsCount).ToList();
+        List<Establishment> establishmentResults = Enumerable.Range(0, 10)
+            .Select(_ => EstablishmentTestDouble.Create())
+            .ToList();
 
-            pageChunks = rawRecordCount.Select((x, i) => new PageSequence{RecordNumber = i})
-                .GroupBy(x => x.RecordNumber / 10).ToDictionary(x => x.Key, y => y.ToList());
-        }
+        List<EstablishmentFacet> facetResults = Enumerable.Range(0, 10)
+            .Select(i => EstablishmentFacetTestDouble.Create(i.ToString()))
+            .ToList();
 
-        if (pageChunks.Any())
-        {
-            currentPageSequences = pageChunks[pageNumber - 1];
-        }
-
-        int numberOfResultsPerPage = (currentPageSequences.Any()) ? currentPageSequences.Count : 10;
-
-        for (int i = 0; i < numberOfResultsPerPage; i++)
-        {
-            establishmentResults.Add(EstablishmentTestDouble.Create());
-        }
-
-        List<EstablishmentFacet> facetResults = new();
-
-        for (int i = 0; i < numberOfResultsPerPage; i++)
-        {
-            facetResults.Add(EstablishmentFacetTestDouble.Create(i.ToString()));
-
-        }
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
             EstablishmentResults = new EstablishmentResults(establishmentResults),
@@ -46,10 +24,7 @@ public static class SearchByKeywordResponseTestDouble
             TotalNumberOfEstablishments = establishmentResultsCount
         };
     }
-    internal class PageSequence
-    {
-        public int RecordNumber { get; set; }
-    }
+
     public static SearchByKeywordResponse CreateWithOneResult()
     {
         List<Establishment> establishmentResults = new() {
