@@ -29,7 +29,7 @@ public class PaginationPresentationTests : SharedTestFixture
         // arrange
         const int CurrentPageNumber = 1;
 
-        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 76, pageNumber: CurrentPageNumber);
+        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 76);
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
 
@@ -113,7 +113,7 @@ public class PaginationPresentationTests : SharedTestFixture
         // arrange
         const int CurrentPageNumber = 21;
 
-        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 302, pageNumber: CurrentPageNumber);
+        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 302);
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
 
@@ -196,7 +196,7 @@ public class PaginationPresentationTests : SharedTestFixture
         // arrange
         const int CurrentPageNumber = 15;
 
-        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 157, pageNumber: CurrentPageNumber);
+        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 157);
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
 
@@ -279,7 +279,7 @@ public class PaginationPresentationTests : SharedTestFixture
         // arrange
         const int CurrentPageNumber = 2;
 
-        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 24, pageNumber: CurrentPageNumber);
+        var useCaseResponse = SearchByKeywordResponseTestDouble.CreateWith(establishmentResultsCount: 24);
         _useCase.Setup(useCase => useCase.HandleRequest(It.IsAny<SearchByKeywordRequest>()))
             .ReturnsAsync(useCaseResponse);
 
