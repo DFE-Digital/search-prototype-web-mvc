@@ -101,13 +101,13 @@
         /// </returns>
         public bool HasMoreLowerPagesAvailable =>
                 !(_currentPageSequence[0] < PageSequencePaddingSize + 1);
+
         /// <summary>
         /// Determines if LastPage button should be displayed.
         /// </summary>
         /// <returns>
         /// True or false based on whether the condition is met
         /// </returns>
-
         public bool PageSequenceIncludesLastPage =>
                 _currentPageSequence.Contains(TotalNumberOfPages);
 
@@ -124,8 +124,7 @@
         /// True or false based on whether the condition is met.
         /// </returns>
         public bool HasMoreUpperPagesAvailable =>
-                (CurrentPageNumber <= (TotalNumberOfPages - (PageSequencePaddingSize * 2))) &&
-                (TotalNumberOfPages != ((PageSequencePaddingSize * 2) + 1));
+            _currentPageSequence.Last() < TotalNumberOfPages - 1;
 
         public Pagination(int currentPageNumber, int totalRecordCount, int recordsPerPage)
         {

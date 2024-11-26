@@ -22,7 +22,7 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithCurrentPageInLowerPaddingBoundary_ShowsCorrectPaginationElements()
+    public async Task Pagination_CurrentPageIs1_ShowsCorrectPaginationElements()
     {
         //The result of this test should create the following sequence: 1,2,3,4,5 ... 8 next>>
         //
@@ -106,7 +106,7 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithCurrentPageOutsideLowerAndUpperBoundary_ShowsCorrectPaginationElements()
+    public async Task Pagination_HasMoreLowerAndUpperPagesAvailable_ShowsCorrectPaginationElements()
     {
         //The result of this test should create the following sequence: <<previous 1 ... 19,20,21,22,23 ... 31 next>>
         //
@@ -189,7 +189,7 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithCurrentPageInsideUpperBoundary_ShowsCorrectPaginationElements()
+    public async Task Pagination_HasNoMoreUpperPagesAvailable_ShowsCorrectPaginationElements()
     {
         //The result of this test should create the following sequence: <<previous 1 ... 12 13 14 15 16
         //
@@ -243,7 +243,7 @@ public class PaginationPresentationTests : SharedTestFixture
         IElement? page14Button = pageNumber14ListItem?.Children.First(element => element.Id == "pageNumber-14");
         page14Button?.TextContent.Should().Contain("14");
 
-        // button 15
+        // button 15, current page number
         IHtmlListItemElement? pageNumber15ListItem = paginationListItems[6] as IHtmlListItemElement;
         pageNumber15ListItem?.ClassName.Should().Contain("govuk-pagination__item--current");
         IElement? currentPageLabelElement = pageNumber15ListItem?.Children.First(element => element.Id == $"pageNumber-{CurrentPageNumber}");
@@ -272,7 +272,7 @@ public class PaginationPresentationTests : SharedTestFixture
     }
 
     [Fact]
-    public async Task Pagination_WithTotalPagesLessThan5_ShowsCorrectPaginationElements()
+    public async Task Pagination_TotalPageNumberLessThan5_ShowsCorrectPaginationElements()
     {
         //The result of this test should create the following sequence: 1 2 3
         //

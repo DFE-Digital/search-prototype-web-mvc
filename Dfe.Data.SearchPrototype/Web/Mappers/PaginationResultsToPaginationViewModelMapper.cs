@@ -2,7 +2,6 @@
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
 using Dfe.Data.SearchPrototype.Web.Options;
 using Microsoft.Extensions.Options;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Dfe.Data.SearchPrototype.Web.Mappers;
 
