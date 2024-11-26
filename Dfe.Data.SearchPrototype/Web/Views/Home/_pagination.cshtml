@@ -1,0 +1,103 @@
+﻿@using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+@model Pagination
+
+@* @* partial view for pagination*@
+<style>
+    button.paginationButton {
+        background: none;
+        border: none;
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 17px;
+        padding-block: 0px;
+        padding-inline: 0px;
+    }
+</style>
+
+@if (Model.IsPageable)
+{
+    <input type="hidden" name="RecordsPerPage" value=@Model.RecordsPerPage />
+    <nav id="pagination" class="govuk-pagination" role="navigation" aria-label="results-pagination">
+        <ul class="govuk-pagination__list">
+            <li class="govuk-pagination__item
+                @(Model.IsFirstPage ? "govuk-visually-hidden" : "")">
+                <button type="submit"
+                        name="PageNumber"
+                        value=@Model.PreviousPageNumber
+                        class="paginationButton"
+                        id="previous-page">
+                    « previous
+                </button>
+            </li>
+            <li class="govuk-pagination__item
+                @(Model.PageSequenceIncludesFirstPage ? "govuk-visually-hidden" : "")">
+                <button type="submit"
+                        name="PageNumber"
+                        value=@Model.FirstPageNumber
+                        class="paginationButton"
+                        id="first-page">
+                    @Model.FirstPageNumber
+                </button>
+            </li>
+            <li class="govuk-pagination__item govuk-pagination__item--ellipses
+                @(!Model.HasMoreLowerPagesAvailable ? "govuk-visually-hidden" : "")"
+                id="previousEllipsis">
+                &ctdot;
+            </li>
+            @foreach (var pageNumber in Model.CurrentPageSequence)
+            {
+                if (pageNumber > 0)
+                {
+                    <li class="govuk-pagination__item
+                        @(pageNumber == Model.CurrentPageNumber ? "govuk-pagination__item--current" : "")">
+                        @{
+                            if (pageNumber != Model.CurrentPageNumber)
+                            {
+                                <button type="submit"
+                                        name="PageNumber"
+                                        value=@pageNumber
+                                        id="pageNumber-@pageNumber"
+                                        class="paginationButton">
+                                    @pageNumber
+                                </button>
+                            }
+                            else
+                            {
+                                <label class="govuk-link govuk-pagination__link"
+                                       style="color: white; cursor:text;"
+                                       id="pageNumber-@pageNumber">
+                                    @pageNumber
+                                </label>
+                            }
+                        }
+                    </li>
+                }
+            }
+            <li class="govuk-pagination__item govuk-pagination__item--ellipses
+                @(!Model.HasMoreUpperPagesAvailable ? "govuk-visually-hidden" : "")">
+                &ctdot;
+            </li>
+            <li class="govuk-pagination__item
+                @(Model.PageSequenceIncludesLastPage ? "govuk-visually-hidden" : "")">
+                <button type="submit"
+                        name="PageNumber"
+                        value=@Model.TotalNumberOfPages
+                        class="paginationButton"
+                        id="pageNumber-@Model.TotalNumberOfPages">
+                    @Model.TotalNumberOfPages
+                </button>
+            </li>
+            <li class="govuk-pagination__item
+                @(Model.IsLastPage ? "govuk-visually-hidden" : "")">
+                <button type="submit"
+                        name="PageNumber"
+                        value=@Model.NextPageNumber
+                        class="paginationButton"
+                        id="next-page">
+                    next »
+                </button>
+            </li>
+        </ul>
+    </nav>
+}

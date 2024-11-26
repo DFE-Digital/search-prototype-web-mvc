@@ -1,14 +1,11 @@
 ﻿namespace Dfe.Data.SearchPrototype.Web.Models;
 
 /// <summary>
-/// The search requests defining model bound view response logic predicated on the status of user input.
+/// Encapsulates the user selections on the page for model binding to the controller method parameter.
 /// </summary>
 public class SearchRequest
 {
-    /// <summary>
-    /// The search keyword provisioned by binding to user input.
-    /// </summary>
-    public string? SearchKeyword { get; set; }
+    private Dictionary<string, List<string>>? _selectedFacets;
 
     /// <summary>
     /// The dictionary of selected facets (grouped by facet name key) provisioned
@@ -24,6 +21,31 @@ public class SearchRequest
         set { _selectedFacets = value; }
     }
 
-    private Dictionary<string, List<string>>? _selectedFacets;
+    /// <summary>
+    /// The search keyword provisioned by binding to user input.
+    /// </summary>
+    public string? SearchKeyword { get; set; }
+
+    /// <summary>
+    /// The number of records per page (derived indirectly from appsettings)
+    /// </summary>
+    public int RecordsPerPage { get; set; }
+
+    /// <summary>
+    /// The current page
+    /// </summary>
+    public int PageNumber { get; set; } = 1;
+
+    /// <summary>
+    /// Indicates that the 'Clear filters' button was pressed
+    /// </summary>
     public bool ClearFilters { get; set; }
+
+    /// <summary>
+    /// The offset is used to skip the defined number of records retrieved
+    /// on a search request. We set page number -1 to ensure the first page
+    /// is not skipped, etc (so we'll have (1-1) * 20 = 0, which ensures no
+    /// values are ignored in the first instance.
+    /// </summary>
+    public int Offset => (PageNumber - 1) * RecordsPerPage;
 }

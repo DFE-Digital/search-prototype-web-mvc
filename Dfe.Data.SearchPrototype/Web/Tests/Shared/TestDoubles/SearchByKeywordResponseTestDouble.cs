@@ -1,28 +1,27 @@
-﻿using Azure.Search.Documents.Models;
-using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
+﻿using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 
 public static class SearchByKeywordResponseTestDouble
 {
-    public static SearchByKeywordResponse Create()
-    {
-        List<Establishment> establishmentResults = new();
-        for (int i = 0; i < new Bogus.Faker().Random.Int(2, 10); i++)
-        {
-            establishmentResults.Add(EstablishmentTestDouble.Create());
-        }
+    public static SearchByKeywordResponse Create() => CreateWith(new Bogus.Faker().Random.Int(11, 66));
 
-        List<EstablishmentFacet> facetResults = new();
-        for (int i = 0; i < new Bogus.Faker().Random.Int(2, 10); i++)
-        {
-            facetResults.Add(EstablishmentFacetTestDouble.Create(i.ToString()));
-        }
+    public static SearchByKeywordResponse CreateWith(int establishmentResultsCount)
+    {
+        List<Establishment> establishmentResults = Enumerable.Range(0, 10)
+            .Select(_ => EstablishmentTestDouble.Create())
+            .ToList();
+
+        List<EstablishmentFacet> facetResults = Enumerable.Range(0, 10)
+            .Select(i => EstablishmentFacetTestDouble.Create(i.ToString()))
+            .ToList();
+
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
             EstablishmentResults = new EstablishmentResults(establishmentResults),
-            EstablishmentFacetResults = new EstablishmentFacets(facetResults)
+            EstablishmentFacetResults = new EstablishmentFacets(facetResults),
+            TotalNumberOfEstablishments = establishmentResultsCount
         };
     }
 
@@ -37,7 +36,8 @@ public static class SearchByKeywordResponseTestDouble
         return new SearchByKeywordResponse(status: SearchResponseStatus.Success)
         {
             EstablishmentResults = new EstablishmentResults(establishmentResults),
-            EstablishmentFacetResults = new EstablishmentFacets(facetResults)
+            EstablishmentFacetResults = new EstablishmentFacets(facetResults),
+            TotalNumberOfEstablishments = 1
         };
     }
 

@@ -22,12 +22,18 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// Encapsulates the request objects necessary to attempt a valid mapping
         /// of the required collection of <see cref="Facet"/> view models.
         /// </param>
+        /// <param name="totalNumberOfEstablishments">
+        /// The Total Count returned from Establishment search gives us a total
+        /// of all available records which correlates with the given search criteria.
+        /// </param>
         /// <returns>
         /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
         /// establishment result and facet result mappers.
         /// </returns>
         public ViewModels.SearchResults CreateViewModel(
             EstablishmentResults? establishmentResults,
-            FacetsAndSelectedFacets facetsAndSelectedFacets);
+            FacetsAndSelectedFacets facetsAndSelectedFacets,
+            int totalNumberOfEstablishments,
+            int currentPageNumber);
     }
 }

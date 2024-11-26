@@ -1,10 +1,13 @@
 ﻿using Dfe.Data.SearchPrototype.Common.Mappers;
+using Dfe.Data.SearchPrototype.Infrastructure.Tests.TestDoubles.Shared;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
-using ViewModels =  Dfe.Data.SearchPrototype.Web.Models.ViewModels;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+using Dfe.Data.SearchPrototype.Web.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Xunit;
 using Establishment = Dfe.Data.SearchPrototype.Web.Models.ViewModels.Establishment;
 using SearchResults = Dfe.Data.SearchPrototype.Web.Models.ViewModels.SearchResults;
@@ -19,26 +22,36 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
-                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create());
+                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create(),
+                    totalNumberOfEstablishments: 10,
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();
             result.SearchItems.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<Establishment>>();
             result.SearchResultsCount.Should().BeGreaterThanOrEqualTo(1);
             result.HasResults.Should().BeTrue();
-            result.Facets.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<ViewModels.Facet>>();
+            result.Facets.Should().HaveCountGreaterThanOrEqualTo(1).And.BeOfType<List<SearchPrototype.Web.Models.ViewModels.Facet>>();
+            result.Pagination!.CurrentPageNumber.Should().Be(1);
+            result.Pagination!.TotalRecordCount.Should().Be(10);
+            result.Pagination!.RecordsPerPage.Should().Be(10);
         }
 
         [Fact]
@@ -47,19 +60,26 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: null!,
-                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create());
+                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.Create(),
+                    totalNumberOfEstablishments: 10,
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();
@@ -67,6 +87,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             result.SearchResultsCount.Should().Be(0);
             result.HasResults.Should().BeFalse();
             result.Facets.Should().BeNull();
+            result.Pagination.Should().BeNull();
         }
 
         [Fact]
@@ -75,19 +96,26 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
-                    facetsAndSelectedFacets: null!);
+                    facetsAndSelectedFacets: null!,
+                    totalNumberOfEstablishments: 10,
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();
@@ -103,19 +131,26 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegration.Models.Factories
             // arrange
             IMapper<EstablishmentResults?, List<Establishment>?> establishmentResultsToEstablishmentsViewModelMapper =
                 new EstablishmentResultsToEstablishmentsViewModelMapper();
-            IMapper<FacetsAndSelectedFacets, List<ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
+            IMapper<FacetsAndSelectedFacets, List<SearchPrototype.Web.Models.ViewModels.Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper =
                 new FacetsAndSelectedFacetsToFacetsViewModelMapper();
+            IOptions<PaginationOptions> paginationOptions =
+                IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+            IMapper<(int, int), Pagination> _paginationMapper =
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions);
 
             ISearchResultsFactory searchResultsFactory =
                 new SearchResultsFactory(
                     establishmentResultsToEstablishmentsViewModelMapper,
-                    _facetsAndSelectedFacetsToFacetsViewModelMapper);
+                    _facetsAndSelectedFacetsToFacetsViewModelMapper,
+                    _paginationMapper);
 
             // act
             SearchResults? result =
                 searchResultsFactory.CreateViewModel(
                     establishmentResults: EstablishmentResultsTestDouble.Create(),
-                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.CreateWith(establishmentFacets: null!, selectedFacets: null!));
+                    facetsAndSelectedFacets: FacetsAndSelectedFacetsTestDouble.CreateWith(establishmentFacets: null!, selectedFacets: null!),
+                    totalNumberOfEstablishments: 10,
+                    currentPageNumber: 1);
 
             // assert
             result.Should().NotBeNull().And.BeOfType<SearchResults>();

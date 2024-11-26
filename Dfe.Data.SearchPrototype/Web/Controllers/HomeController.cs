@@ -54,31 +54,36 @@ public class HomeController : Controller
     /// The action method that composes the view model based on the <see cref="SearchRequest"/> posted from for apply
     /// filters submission which includes the search keyword and selected facet values used to apply filtering.
     /// </summary>
-    /// <param name="searchRequestViewModel">
+    /// <param name="searchRequest">
     /// Encapsulates the search keyword and selected facets used to apply filtering.
     /// </param>
     /// <returns>
     /// An IActionResult contract that represents the result of this action method.
     /// </returns>
     [HttpGet]
-    public async Task<IActionResult> Index(SearchRequest searchRequestViewModel)
+    public async Task<IActionResult> Index(SearchRequest searchRequest)
     {
-        if (string.IsNullOrEmpty(searchRequestViewModel.SearchKeyword))
+        if (string.IsNullOrEmpty(searchRequest.SearchKeyword))
         {
             return View();
         }
-        ViewBag.SearchQuery = searchRequestViewModel.SearchKeyword;
+
+        ViewBag.SearchQuery = searchRequest.SearchKeyword;
 
         SearchByKeywordResponse response =
-            await _searchByKeywordUseCase.HandleRequest(new SearchByKeywordRequest(
-                    searchKeyword: searchRequestViewModel.SearchKeyword!,
-                    filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequestViewModel.SelectedFacets)));
+            await _searchByKeywordUseCase.HandleRequest(
+                new SearchByKeywordRequest(
+                    searchKeyword: searchRequest.SearchKeyword!,
+                    filterRequests: _selectedFacetsToFilterRequestsMapper.MapFrom(searchRequest.SelectedFacets),
+                    offset: searchRequest.Offset));
 
         SearchResults viewModel =
             _searchResultsFactory.CreateViewModel(
                 response.EstablishmentResults,
                 new FacetsAndSelectedFacets(
-                    response.EstablishmentFacetResults, searchRequestViewModel.SelectedFacets));
+                    response.EstablishmentFacetResults, searchRequest.SelectedFacets),
+                    response.TotalNumberOfEstablishments,
+                    searchRequest.PageNumber);
 
         return View(viewModel);
     }

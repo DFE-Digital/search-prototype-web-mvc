@@ -31,8 +31,7 @@ public class HomeControllerTests
 
         SearchByKeywordResponse response = new(status: SearchResponseStatus.Success)
         {
-            EstablishmentResults =
-            new EstablishmentResults([])
+            EstablishmentResults = new EstablishmentResults([])
         };
 
         IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> mockUseCase =
@@ -71,7 +70,12 @@ public class HomeControllerTests
 
         await controller.Index(new SearchRequest() { SearchKeyword = "KDM" });
 
-        mockSearchResultsFactory.Verify(factory => factory.CreateViewModel(It.IsAny<EstablishmentResults?>(), It.IsAny<FacetsAndSelectedFacets>()), Times.Once());
+        mockSearchResultsFactory.Verify(factory =>
+            factory.CreateViewModel(
+                It.IsAny<EstablishmentResults?>(),
+                It.IsAny<FacetsAndSelectedFacets>(),
+                It.IsAny<int>(),
+                It.IsAny<int>()), Times.Once());
     }
 
     [Fact]

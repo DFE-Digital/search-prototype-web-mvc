@@ -2,6 +2,7 @@
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
 
 namespace Dfe.Data.SearchPrototype.Web.Models.Factories
 {
@@ -14,6 +15,7 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
     {
         private readonly IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> _establishmentResultsToEstablishmentsViewModelMapper;
         private readonly IMapper<FacetsAndSelectedFacets, List<Facet>?> _facetsAndSelectedFacetsToFacetsViewModelMapper;
+        private readonly IMapper<(int, int), Pagination> _paginationResultsToPaginationViewModelMapper;
 
         /// <summary>
         /// The following dependencies are mappers which facilitate the transformation from the use-case response to the required view model.
@@ -28,10 +30,12 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// </param>
         public SearchResultsFactory(
             IMapper<EstablishmentResults?, List<ViewModels.Establishment>?> establishmentResultsToEstablishmentsViewModelMapper,
-            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper)
+            IMapper<FacetsAndSelectedFacets, List<Facet>?> facetsAndSelectedFacetsToFacetsViewModelMapper,
+            IMapper<(int, int), Pagination> paginationResultsToPaginationViewModelMapper)
         {
             _establishmentResultsToEstablishmentsViewModelMapper = establishmentResultsToEstablishmentsViewModelMapper;
             _facetsAndSelectedFacetsToFacetsViewModelMapper = facetsAndSelectedFacetsToFacetsViewModelMapper;
+            _paginationResultsToPaginationViewModelMapper = paginationResultsToPaginationViewModelMapper;
         }
 
         /// <summary>
@@ -50,13 +54,19 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
         /// Encapsulates the request objects necessary to attempt a valid mapping
         /// of the required collection of <see cref="Facet"/> view models.
         /// </param>
+        /// <param name="facetsAndSelectedFacets">
+        /// The Total Count returned from Establishment search gives us a total
+        /// of all available records which correlates with the given search criteria.
+        /// </param>
         /// <returns>
         /// The <see cref="ViewModels.SearchResults"/> generated as a result of combining the
         /// establishment result and facet result mappers.
         /// </returns>
         public ViewModels.SearchResults CreateViewModel(
             EstablishmentResults? establishmentResults,
-            FacetsAndSelectedFacets facetsAndSelectedFacets) =>
+            FacetsAndSelectedFacets facetsAndSelectedFacets,
+            int totalNumberOfEstablishments,
+            int currentPageNumber) =>
                 (establishmentResults?.Establishments.Count > 0) ?
                    new(){
                         SearchItems =
@@ -64,7 +74,10 @@ namespace Dfe.Data.SearchPrototype.Web.Models.Factories
                                 .MapFrom(establishmentResults),
                         Facets =
                             _facetsAndSelectedFacetsToFacetsViewModelMapper
-                                .MapFrom(facetsAndSelectedFacets)
+                                .MapFrom(facetsAndSelectedFacets),
+                        Pagination =
+                            _paginationResultsToPaginationViewModelMapper
+                                .MapFrom((currentPageNumber, totalNumberOfEstablishments))
                    }
                    : new(); // default.
     }

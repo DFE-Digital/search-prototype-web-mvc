@@ -5,15 +5,18 @@ using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Tests.SearchForEstablishments.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Controllers;
 using Dfe.Data.SearchPrototype.Web.Mappers;
+using Dfe.Data.SearchPrototype.Web.Models;
+using Dfe.Data.SearchPrototype.Web.Models.Factories;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+using Dfe.Data.SearchPrototype.Web.Options;
 using Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests.TestDoubles;
 using Dfe.Data.SearchPrototype.Web.Tests.Shared.TestDoubles;
-using Dfe.Data.SearchPrototype.Web.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
-using Dfe.Data.SearchPrototype.Web.Models.Factories;
 
 namespace Dfe.Data.SearchPrototype.Web.Tests.PartialIntegrationTests;
 
@@ -25,7 +28,7 @@ public class HomeControllerTests
     public async Task Index_WithSearchTerm_ReturnsModel()
     {
         // arrange
-        SearchForEstablishments.Models.SearchResults stubSearchResults = new() {
+        SearchResults stubSearchResults = new() {
             Establishments = EstablishmentResultsTestDouble.Create() };
 
         ISearchServiceAdapter mockSearchServiceAdapter =
@@ -33,13 +36,17 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase = new (
             mockSearchServiceAdapter,
-            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+            SearchByKeywordCriteriaTestDouble.Create());
+
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
 
         HomeController controller =
             new(_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    new PaginationResultsToPaginationViewModelMapper(paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -53,13 +60,14 @@ public class HomeControllerTests
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);
+        viewModel.Pagination!.RecordsPerPage.Should().Be(10);
     }
 
     [Fact]
     public async Task Index_WithNoResults_ReturnsNoSearchResultsOnModel()
     {
         // arrange
-        SearchForEstablishments.Models.SearchResults stubSearchResults = new() {
+        SearchResults stubSearchResults = new() {
             Establishments = EstablishmentResultsTestDouble.CreateWithNoResults() };
 
         ISearchServiceAdapter mockSearchServiceAdapter =
@@ -67,13 +75,17 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase =
             new (mockSearchServiceAdapter,
-                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+                SearchByKeywordCriteriaTestDouble.Create());
+
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
 
         HomeController controller =
             new(_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    new PaginationResultsToPaginationViewModelMapper(paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -87,13 +99,14 @@ public class HomeControllerTests
         viewModel.SearchItems.Should().BeNull();
         viewModel.HasResults.Should().BeFalse();
         viewModel.SearchResultsCount.Should().Be(0);
+        viewModel.Pagination.Should().BeNull();
     }
 
     [Fact]
     public async Task SearchWithFilters_WithSearchRequestAndNoMatchingSelectedFacets_ReturnsModelNoFacetsSelected()
     {
         // arrange
-        SearchForEstablishments.Models.SearchResults stubSearchResults =
+        SearchResults stubSearchResults =
             new () {
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.Create()
@@ -104,13 +117,17 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase =
             new (mockSearchServiceAdapter,
-                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
-        
+                SearchByKeywordCriteriaTestDouble.Create());
+
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
+
         var controller =
             new HomeController(_logger.Object, useCase,
             new SearchResultsFactory(
-                    new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions)
             ),
             new SelectedFacetsToFilterRequestsMapper());
 
@@ -138,7 +155,7 @@ public class HomeControllerTests
         // arrange
         const string FacetValueKey = "Facet_1";
 
-        SearchForEstablishments.Models.SearchResults stubSearchResults =
+        SearchResults stubSearchResults =
             new(){
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.CreateWithNoResults()
@@ -149,13 +166,17 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase =
             new (mockSearchServiceAdapter,
-                IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+                SearchByKeywordCriteriaTestDouble.Create());
+
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
 
         HomeController controller =
             new (_logger.Object, useCase,
                 new SearchResultsFactory(
                     new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
+                    new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                    new PaginationResultsToPaginationViewModelMapper(paginationOptions)
                 ),
                 new SelectedFacetsToFilterRequestsMapper());
 
@@ -179,7 +200,7 @@ public class HomeControllerTests
 
     [Fact]
     public async Task SearchWithFilters_WithSearchRequestAndMatchingSelectedFacets_ReturnsModelWithMatchingFacetSelected()
-{
+    {
         // arrange
         const string FacetValueKey = "Facet_1";
 
@@ -187,7 +208,7 @@ public class HomeControllerTests
             EstablishmentFacetTestDouble.CreateWith(
                 facetName: FacetValueKey, facetResultValue: FacetValueKey, facetResultCount: 1);
 
-        SearchForEstablishments.Models.SearchResults stubSearchResults =
+        SearchResults stubSearchResults =
             new(){
                 Establishments = EstablishmentResultsTestDouble.Create(),
                 Facets = EstablishmentFacetsTestDouble.CreateWith([testEstablishmentFacet])
@@ -198,14 +219,18 @@ public class HomeControllerTests
 
         SearchByKeywordUseCase useCase = new(
             mockSearchServiceAdapter,
-            IOptionsTestDouble.IOptionsMockFor(SearchByKeywordCriteriaTestDouble.Create()));
+            SearchByKeywordCriteriaTestDouble.Create());
+
+        IOptions<PaginationOptions> paginationOptions =
+            IOptionsTestDouble.IOptionsMockFor(new PaginationOptions() { RecordsPerPage = 10 });
 
         var controller =
             new HomeController(_logger.Object, useCase,
             new SearchResultsFactory(
-                    new EstablishmentResultsToEstablishmentsViewModelMapper(),
-                    new FacetsAndSelectedFacetsToFacetsViewModelMapper()
-                ),
+                new EstablishmentResultsToEstablishmentsViewModelMapper(),
+                new FacetsAndSelectedFacetsToFacetsViewModelMapper(),
+                new PaginationResultsToPaginationViewModelMapper(paginationOptions)
+            ),
             new SelectedFacetsToFilterRequestsMapper());
 
         // act
@@ -220,7 +245,7 @@ public class HomeControllerTests
         // assert
         var viewResult = Assert.IsType<ViewResult>(result);
         var viewModel = Assert.IsType<Models.ViewModels.SearchResults>(viewResult.Model);
-        
+
         viewModel.SearchItems.Should().NotBeEmpty();
         viewModel.HasResults.Should().BeTrue();
         viewModel.SearchResultsCount.Should().Be(stubSearchResults.Establishments.Establishments.Count);

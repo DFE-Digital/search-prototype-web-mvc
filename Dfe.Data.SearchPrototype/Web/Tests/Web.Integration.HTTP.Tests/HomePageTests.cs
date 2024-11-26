@@ -82,7 +82,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
             var resultsPage = await formResponse.GetDocumentAsync();
 
             var searchResultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
-            searchResultsNumber.Should().Contain("Result");
+            searchResultsNumber.Should().Contain("result");
 
             resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().BeLessThan(100);
         }
@@ -106,8 +106,8 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
 
             var resultsPage = await formResponse.GetDocumentAsync();
 
-            resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("Results");
-            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().Be(100);
+            resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria).Should().Contain("results");
+            resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria).Count().Should().Be(10);
         }
 
         [Theory]
@@ -133,7 +133,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Web.Integration.HTTP.Tests
             var resultsPage = await formResponse.GetDocumentAsync();
 
             var resultsNumber = resultsPage.GetElementText(HomePage.SearchResultsNumber.Criteria);
-            resultsNumber.Should().Contain("Results");
+            resultsNumber.Should().Contain("results");
 
             var resultsHeadingsText = resultsPage.GetMultipleElements(HomePage.SearchResultsHeadings.Criteria);
             resultsHeadingsText.Should().HaveCountGreaterThan(1);

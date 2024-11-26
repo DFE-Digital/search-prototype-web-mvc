@@ -16,9 +16,7 @@ public class SearchPagePresentationTests : SharedTestFixture
 {
     private const string homeUri = "http://localhost";
 
-    public SearchPagePresentationTests(WebApplicationFactory<Program> factory) :base(factory)
-    {
-        
+    public SearchPagePresentationTests(WebApplicationFactory<Program> factory) :base(factory){
     }
 
     [Fact]
@@ -53,7 +51,7 @@ public class SearchPagePresentationTests : SharedTestFixture
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
-            .TextContent.Should().Be("1 Result");
+            .TextContent.Should().Be("1 of 1 result");
         resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
             .GetMultipleElements(HomePage.SearchResultsHeadings.Criteria)
             .Count().Should().Be(1);
@@ -72,7 +70,7 @@ public class SearchPagePresentationTests : SharedTestFixture
 
         // assert
         resultsPage.QuerySelector(HomePage.SearchResultsNumber.Criteria)!
-            .TextContent.Should().Contain("Results");
+            .TextContent.Should().Contain("results");
         resultsPage.QuerySelector(HomePage.SearchResultsContainer.Criteria)!
             .GetMultipleElements(HomePage.SearchResultsHeadings.Criteria)
             .Count().Should().Be(useCaseResponse.EstablishmentResults!.Establishments.Count);

@@ -1,20 +1,24 @@
 using Dfe.Data.Common.Infrastructure.CognitiveSearch;
 using Dfe.Data.SearchPrototype.Common.Mappers;
 using Dfe.Data.SearchPrototype.Infrastructure;
+using Dfe.Data.SearchPrototype.Infrastructure.Options;
 using Dfe.Data.SearchPrototype.SearchForEstablishments;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.ByKeyword.Usecase;
 using Dfe.Data.SearchPrototype.SearchForEstablishments.Models;
 using Dfe.Data.SearchPrototype.Web.Mappers;
 using Dfe.Data.SearchPrototype.Web.Models.Factories;
 using Dfe.Data.SearchPrototype.Web.Models.ViewModels;
+using Dfe.Data.SearchPrototype.Web.Models.ViewModels.Shared;
+using Dfe.Data.SearchPrototype.Web.Options;
 using GovUk.Frontend.AspNetCore;
+using Microsoft.Extensions.Options;
 using Models = Dfe.Data.SearchPrototype.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
-    .AddViewLocalization(options => { options.ResourcesPath = "Resources"; });
+    .AddViewLocalization(options => options.ResourcesPath = "Resources" );
 builder.Services.AddGovUkFrontend();
 
 // Start of IOC container registrations
@@ -22,14 +26,22 @@ builder.Services.AddGovUkFrontend();
 //
 builder.Services.AddDefaultSearchFilterServices(builder.Configuration);
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
+builder.Services.AddCognitiveSearchAdaptorServices();
 builder.Services.AddSearchForEstablishmentServices(builder.Configuration);
 builder.Services.AddScoped<ISearchResultsFactory, SearchResultsFactory>();
 builder.Services.AddSingleton<IMapper<EstablishmentResults?, List<Models.ViewModels.Establishment>?>, EstablishmentResultsToEstablishmentsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<FacetsAndSelectedFacets, List<Facet>?>, FacetsAndSelectedFacetsToFacetsViewModelMapper>();
 builder.Services.AddSingleton<IMapper<Dictionary<string, List<string>>, IList<FilterRequest>?>, SelectedFacetsToFilterRequestsMapper>();
-//
-//
+builder.Services.AddSingleton<IMapper<(int, int), Pagination>, PaginationResultsToPaginationViewModelMapper>();
+builder.Services.AddOptions<AzureSearchOptions>()
+    .Validate(azureSearchOptions => !string.IsNullOrEmpty(azureSearchOptions.SearchIndex), "Search index must be valid")
+    .Validate(azureSearchOptions => azureSearchOptions.Size > 0, "Results size should not be 0")
+    .ValidateOnStart();
+builder.Services.AddOptions<PaginationOptions>()
+    .Configure<IOptions<AzureSearchOptions>>(
+        (paginationOptions, azureSearchOptions) => { paginationOptions.RecordsPerPage = azureSearchOptions.Value.Size; });
+
+
 // End of IOC container registrations
 
 var app = builder.Build();

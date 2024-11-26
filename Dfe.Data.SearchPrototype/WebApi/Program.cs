@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen();
 //
 builder.Services.AddDefaultSearchFilterServices(builder.Configuration);
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
-builder.Services.AddCognitiveSearchAdaptorServices(builder.Configuration);
+builder.Services.AddCognitiveSearchAdaptorServices();
 builder.Services.AddSearchForEstablishmentServices(builder.Configuration);
 builder.Services.AddSingleton<IMapper<SearchRequest, IList<FilterRequest>?>, SearchRequestToFilterRequestsMapper>();
 //
