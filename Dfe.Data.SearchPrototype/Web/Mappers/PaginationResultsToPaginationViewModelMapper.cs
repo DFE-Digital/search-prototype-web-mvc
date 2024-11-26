@@ -13,7 +13,6 @@ namespace Dfe.Data.SearchPrototype.Web.Mappers;
 /// </summary>
 public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), Pagination>
 {
-
     private readonly PaginationOptions _paginationOptions;
 
     /// <summary>
@@ -22,10 +21,6 @@ public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), 
     /// and the number of records, and derived pages available), and the pagination options used
     /// by the underlying pagination view-model, i.e. number of records per-page.
     /// </summary>
-    /// <param name="pager">
-    /// Provides functionality to allow paging to work in the manner defined
-    /// by the underlying implementation following the contract described.
-    /// </param>
     /// <param name="paginationOptions">
     /// Provides the configuration options used by the underlying pagination
     /// view-model, i.e. number of records per-page.
@@ -49,7 +44,7 @@ public class PaginationResultsToPaginationViewModelMapper : IMapper<(int, int), 
     /// </returns>
     public Pagination MapFrom((int, int) input) 
        {
-        Pagination pagination = new Pagination(
+        Pagination pagination = new (
             currentPageNumber: input.Item1,
             totalRecordCount: input.Item2,
             recordsPerPage: _paginationOptions.RecordsPerPage

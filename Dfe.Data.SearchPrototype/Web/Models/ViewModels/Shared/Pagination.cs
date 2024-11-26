@@ -5,13 +5,33 @@
     /// </summary>
     public sealed class Pagination
     {
+        ///<summary>
+        /// Establishes current page sequence
+        /// initialized within constructor
+        /// </summary>
         private int[] _currentPageSequence;
 
+        ///<summary>
+        /// Establishes total number of pages
+        /// initialized within constructor
+        /// </summary>
         private int _totalNumberOfPages;
 
+        ///<summary>
+        /// Padding size needed on both sides of current page number
+        /// </summary>
         private const int PageSequencePaddingSize = 2;
 
+        ///<summary>
+        /// Establishes current page sequence
+        /// initialized within constructor
+        /// </summary>
         public int[] CurrentPageSequence => _currentPageSequence;
+
+        ///<summary>
+        /// Establishes total number of pages
+        /// initialized within constructor
+        /// </summary>
         public int TotalNumberOfPages => _totalNumberOfPages;
 
         /// <summary>
@@ -123,10 +143,6 @@
         /// <returns>
         /// The calculated number of pages available.
         /// </returns>
-        /// <exception cref="ArgumentException">
-        /// Thrown if either we have a total record count of zero, or records per-page
-        /// configured to zero.
-        /// </exception>
         private int GetTotalNumberOfPages()
         {
             if (RecordsPerPage == 0){
