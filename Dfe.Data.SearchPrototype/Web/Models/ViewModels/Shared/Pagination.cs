@@ -5,14 +5,14 @@
     /// </summary>
     public sealed class Pagination
     {
-
         private int[] _currentPageSequence;
-        public int[] CurrentPageSequence => _currentPageSequence;
 
         private int _totalNumberOfPages;
-        public int TotalNumberOfPages => _totalNumberOfPages;
 
         private const int PageSequencePaddingSize = 2;
+
+        public int[] CurrentPageSequence => _currentPageSequence;
+        public int TotalNumberOfPages => _totalNumberOfPages;
 
         /// <summary>
         /// Establishes the current page number.
@@ -107,11 +107,6 @@
                 (CurrentPageNumber <= (TotalNumberOfPages - (PageSequencePaddingSize * 2))) &&
                 (TotalNumberOfPages != ((PageSequencePaddingSize * 2) + 1));
 
-        public Pagination()
-        {
-        // this is only needed to pass Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories.SearchResultsFactoryTests
-        /// as I'm not sure whats best way to do it
-        }
         public Pagination(int currentPageNumber, int totalRecordCount, int recordsPerPage)
         {
             CurrentPageNumber = currentPageNumber;

@@ -23,7 +23,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
-                PaginationMapperTestDouble.MockFor(new Pagination());
+                PaginationMapperTestDouble.MockFor(new Pagination(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
 
             SearchResultsFactory searchResultsFactory =
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
@@ -54,7 +54,7 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
-                PaginationMapperTestDouble.MockFor(new Pagination());
+                PaginationMapperTestDouble.MockFor(new Pagination(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
 
             SearchResultsFactory searchResultsFactory =
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
@@ -84,16 +84,16 @@ namespace Dfe.Data.SearchPrototype.Web.Tests.Unit.Models.Factories
                 FacetsAndSelectedFacetsToFacetsViewModelMapperTestDouble.MockFor([]);
 
             Mock<IMapper<(int, int), Pagination>> mockPaginationMapper =
-                PaginationMapperTestDouble.MockFor(new Pagination());
+                PaginationMapperTestDouble.MockFor(new Pagination(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
 
             EstablishmentResults establishmentResults = EstablishmentResultsTestDouble.Create();
             FacetsAndSelectedFacets facetsAndSelectedFacets = null!;
-
 
             SearchResultsFactory searchResultsFactory =
                 new(mockEstablishmentResultsToEstablishmentsViewModelMapper.Object,
                     mockEstablishmentFacetsToFacetsViewModelMapper.Object,
                     mockPaginationMapper.Object);
+
             //act
             searchResultsFactory.CreateViewModel(
                 establishmentResults, facetsAndSelectedFacets, totalNumberOfEstablishments: 10, currentPageNumber: 1);
